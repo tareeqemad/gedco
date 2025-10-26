@@ -1,0 +1,134 @@
+/* Simple RTL Icons Fix */
+
+/* Reset and fix ul-check lists */
+ul.ul-check {
+    list-style: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+ul.ul-check li {
+    position: relative !important;
+    padding-right: 25px !important;
+    padding-left: 0 !important;
+    margin-bottom: 8px !important;
+    list-style: none !important;
+}
+
+ul.ul-check li:before {
+    content: "✓" !important;
+    position: absolute !important;
+    right: 0 !important;
+    top: 0 !important;
+    color: #ff6b35 !important;
+    font-size: 16px !important;
+    font-weight: bold !important;
+    line-height: 1.2 !important;
+    width: 16px !important;
+    text-align: center !important;
+}
+
+/* Fix contact icons in sidebar */
+#extra-content .widget > div {
+    position: relative !important;
+    padding-right: 25px !important;
+    padding-left: 0 !important;
+    margin-bottom: 10px !important;
+}
+
+#extra-content .widget > div i {
+    position: absolute !important;
+    right: 0 !important;
+    top: 0 !important;
+    color: rgba(255, 255, 255, 0.5) !important;
+    font-size: 14px !important;
+    width: 16px !important;
+    text-align: center !important;
+    line-height: 1.2 !important;
+}
+
+/* RTL specific fixes */
+html[dir="rtl"] ul.ul-check {
+    list-style: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+html[dir="rtl"] ul.ul-check li {
+    position: relative !important;
+    padding-right: 25px !important;
+    padding-left: 0 !important;
+    margin-bottom: 8px !important;
+    list-style: none !important;
+}
+
+html[dir="rtl"] ul.ul-check li:before {
+    content: "✓" !important;
+    position: absolute !important;
+    right: 0 !important;
+    top: 0 !important;
+    color: #ff6b35 !important;
+    font-size: 16px !important;
+    font-weight: bold !important;
+    line-height: 1.2 !important;
+    width: 16px !important;
+    text-align: center !important;
+}
+
+html[dir="rtl"] #extra-content .widget > div {
+    position: relative !important;
+    padding-right: 25px !important;
+    padding-left: 0 !important;
+    margin-bottom: 10px !important;
+}
+
+html[dir="rtl"] #extra-content .widget > div i {
+    position: absolute !important;
+    right: 0 !important;
+    top: 0 !important;
+    color: rgba(255, 255, 255, 0.5) !important;
+    font-size: 14px !important;
+    width: 16px !important;
+    text-align: center !important;
+    line-height: 1.2 !important;
+}
+
+/* Additional fixes for better compatibility */
+.ul-check li {
+    position: relative !important;
+    padding-right: 25px !important;
+    padding-left: 0 !important;
+    margin-bottom: 8px !important;
+    list-style: none !important;
+}
+
+.ul-check li:before {
+    content: "✓" !important;
+    position: absolute !important;
+    right: 0 !important;
+    top: 0 !important;
+    color: #ff6b35 !important;
+    font-size: 16px !important;
+    font-weight: bold !important;
+    line-height: 1.2 !important;
+    width: 16px !important;
+    text-align: center !important;
+}
+
+#extra-content .widget > div {
+    position: relative !important;
+    padding-right: 25px !important;
+    padding-left: 0 !important;
+    margin-bottom: 10px !important;
+}
+
+#extra-content .widget > div i {
+    position: absolute !important;
+    right: 0 !important;
+    top: 0 !important;
+    color: rgba(255, 255, 255, 0.5) !important;
+    font-size: 14px !important;
+    width: 16px !important;
+    text-align: center !important;
+    line-height: 1.2 !important;
+}

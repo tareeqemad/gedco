@@ -1,0 +1,142 @@
+/* RTL Icons Fix - Additional CSS for better icon positioning */
+
+/* Force RTL positioning for all check icons */
+html[dir="rtl"] .ul-check {
+    list-style: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+html[dir="rtl"] .ul-check li {
+    position: relative !important;
+    padding-right: 25px !important;
+    padding-left: 0 !important;
+    margin-bottom: 8px !important;
+    list-style: none !important;
+    display: block !important;
+}
+
+html[dir="rtl"] .ul-check li:before {
+    content: "\f00c" !important;
+    font-family: "Font Awesome 6 Free" !important;
+    font-weight: 900 !important;
+    position: absolute !important;
+    right: 0 !important;
+    top: 0 !important;
+    color: #ff6b35 !important;
+    font-size: 14px !important;
+    line-height: 1.2 !important;
+    width: 16px !important;
+    text-align: center !important;
+    display: block !important;
+    z-index: 1 !important;
+}
+
+/* Force RTL positioning for contact icons in sidebar */
+html[dir="rtl"] #extra-content .widget > div {
+    position: relative !important;
+    padding-right: 25px !important;
+    padding-left: 0 !important;
+    margin-bottom: 10px !important;
+    display: block !important;
+}
+
+html[dir="rtl"] #extra-content .widget > div i {
+    position: absolute !important;
+    right: 0 !important;
+    top: 0 !important;
+    color: rgba(255, 255, 255, 0.5) !important;
+    font-size: 14px !important;
+    width: 16px !important;
+    text-align: center !important;
+    line-height: 1.2 !important;
+    display: block !important;
+    z-index: 1 !important;
+}
+
+/* Specific targeting for contact icons */
+html[dir="rtl"] #extra-content .widget div i.icofont-phone,
+html[dir="rtl"] #extra-content .widget div i.icofont-location-pin,
+html[dir="rtl"] #extra-content .widget div i.icofont-envelope {
+    position: absolute !important;
+    right: 0 !important;
+    top: 0 !important;
+    color: rgba(255, 255, 255, 0.5) !important;
+    font-size: 14px !important;
+    width: 16px !important;
+    text-align: center !important;
+    line-height: 1.2 !important;
+    display: block !important;
+    z-index: 1 !important;
+}
+
+/* Specific targeting for contact icons */
+html[dir="rtl"] #extra-content .widget div i.icofont-phone,
+html[dir="rtl"] #extra-content .widget div i.icofont-location-pin,
+html[dir="rtl"] #extra-content .widget div i.icofont-envelope {
+    position: absolute !important;
+    right: 0 !important;
+    top: 0 !important;
+    color: rgba(255, 255, 255, 0.5) !important;
+    font-size: 14px !important;
+    width: 16px !important;
+    text-align: center !important;
+    line-height: 1.2 !important;
+}
+
+/* Ensure parent divs have proper positioning */
+html[dir="rtl"] #extra-content .widget div:has(i.icofont-phone),
+html[dir="rtl"] #extra-content .widget div:has(i.icofont-location-pin),
+html[dir="rtl"] #extra-content .widget div:has(i.icofont-envelope) {
+    position: relative !important;
+    padding-right: 25px !important;
+    padding-left: 0 !important;
+    margin-bottom: 10px !important;
+}
+
+/* Override any conflicting styles */
+html[dir="rtl"] .ul-check {
+    list-style: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+html[dir="rtl"] .ul-check li {
+    display: block !important;
+    position: relative !important;
+    padding-right: 25px !important;
+    padding-left: 0 !important;
+    margin-bottom: 8px !important;
+    list-style: none !important;
+}
+
+/* Ensure icons are visible */
+html[dir="rtl"] .ul-check li:before {
+    display: block !important;
+    content: "\f00c" !important;
+    font-family: "Font Awesome 6 Free" !important;
+    font-weight: 900 !important;
+    position: absolute !important;
+    right: 0 !important;
+    top: 0 !important;
+    color: #ff6b35 !important;
+    font-size: 14px !important;
+    line-height: 1.2 !important;
+    width: 16px !important;
+    text-align: center !important;
+    z-index: 1 !important;
+}
+
+/* Contact icons visibility */
+html[dir="rtl"] #extra-content .widget div i {
+    display: block !important;
+    position: absolute !important;
+    right: 0 !important;
+    top: 0 !important;
+    color: rgba(255, 255, 255, 0.5) !important;
+    font-size: 14px !important;
+    width: 16px !important;
+    text-align: center !important;
+    line-height: 1.2 !important;
+    z-index: 1 !important;
+}

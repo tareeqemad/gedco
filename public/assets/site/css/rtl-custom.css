@@ -1,0 +1,503 @@
+/* ================================================== */
+/* RTL Custom Styles for LogiXpress Template */
+/* ================================================== */
+
+/* RTL Base Styles */
+html[dir="rtl"] {
+    direction: rtl;
+}
+
+html[dir="rtl"] body {
+    direction: rtl;
+    text-align: right;
+    font-family: 'Cairo', 'Tajawal', 'Noto Sans Arabic', 'Arial', sans-serif;
+}
+
+/* RTL Typography */
+html[dir="rtl"] h1,
+html[dir="rtl"] h2,
+html[dir="rtl"] h3,
+html[dir="rtl"] h4,
+html[dir="rtl"] h5,
+html[dir="rtl"] h6 {
+    text-align: right;
+    font-family: 'Cairo', 'Tajawal', 'Noto Sans Arabic', 'Arial', sans-serif;
+}
+
+html[dir="rtl"] p {
+    text-align: right;
+}
+
+/* RTL Navigation */
+html[dir="rtl"] #mainmenu {
+    text-align: right;
+}
+
+html[dir="rtl"] #mainmenu li {
+    float: right;
+}
+
+html[dir="rtl"] #mainmenu ul {
+    right: 0;
+    left: auto;
+}
+
+/* RTL Header */
+html[dir="rtl"] .de-flex {
+    flex-direction: row-reverse;
+}
+
+html[dir="rtl"] .header-col-mid {
+    text-align: right;
+}
+
+html[dir="rtl"] .menu_side_area {
+    text-align: left;
+}
+
+/* RTL Buttons */
+html[dir="rtl"] .btn-main {
+    text-align: center;
+}
+
+/* RTL Forms */
+html[dir="rtl"] .form-underline {
+    text-align: right;
+}
+
+html[dir="rtl"] input[type="text"],
+html[dir="rtl"] input[type="email"],
+html[dir="rtl"] input[type="tel"],
+html[dir="rtl"] textarea {
+    text-align: right;
+}
+
+/* RTL Icons */
+html[dir="rtl"] .fa-arrow-right:before {
+    content: "\f060"; /* left arrow */
+}
+
+html[dir="rtl"] .fa-arrow-left:before {
+    content: "\f061"; /* right arrow */
+}
+
+/* RTL Swiper Navigation */
+html[dir="rtl"] .swiper-button-next {
+    right: auto;
+    left: 10px;
+}
+
+html[dir="rtl"] .swiper-button-prev {
+    left: auto;
+    right: 10px;
+}
+
+html[dir="rtl"] .swiper-button-next:after {
+    content: "prev";
+}
+
+html[dir="rtl"] .swiper-button-prev:after {
+    content: "next";
+}
+
+/* RTL Cards and Content */
+html[dir="rtl"] .card {
+    text-align: right;
+}
+
+html[dir="rtl"] .card-body {
+    text-align: right;
+}
+
+/* RTL Lists */
+html[dir="rtl"] ul {
+    padding-right: 0;
+    padding-left: 20px;
+}
+
+html[dir="rtl"] .ul-check li:before {
+    right: -20px;
+    left: auto;
+}
+
+/* RTL Check Icons - General */
+html[dir="rtl"] .ul-check li {
+    position: relative;
+    padding-right: 25px;
+    padding-left: 0;
+    list-style: none;
+}
+
+html[dir="rtl"] .ul-check li:before {
+    content: "\f00c";
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    position: absolute;
+    right: 0;
+    top: 0;
+    color: #ff6b35;
+    font-size: 14px;
+}
+
+/* RTL Check Icons in Sidebar */
+html[dir="rtl"] #extra-content .ul-check li {
+    position: relative;
+    padding-right: 25px;
+    padding-left: 0;
+}
+
+html[dir="rtl"] #extra-content .ul-check li:before {
+    content: "\f00c";
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    position: absolute;
+    right: 0;
+    top: 0;
+    color: #ff6b35;
+    font-size: 14px;
+}
+
+/* RTL Contact Icons in Sidebar */
+html[dir="rtl"] #extra-content .widget > div {
+    position: relative;
+    padding-right: 25px;
+    padding-left: 0;
+    margin-bottom: 10px;
+}
+
+html[dir="rtl"] #extra-content .widget > div i {
+    position: absolute;
+    right: 0;
+    top: 0;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 14px;
+    width: 16px;
+    text-align: center;
+}
+
+/* RTL Contact Icons - Specific targeting */
+html[dir="rtl"] #extra-content .widget div:has(i.icofont-phone),
+html[dir="rtl"] #extra-content .widget div:has(i.icofont-location-pin),
+html[dir="rtl"] #extra-content .widget div:has(i.icofont-envelope) {
+    position: relative;
+    padding-right: 25px;
+    padding-left: 0;
+    margin-bottom: 10px;
+}
+
+html[dir="rtl"] #extra-content .widget div:has(i.icofont-phone) i,
+html[dir="rtl"] #extra-content .widget div:has(i.icofont-location-pin) i,
+html[dir="rtl"] #extra-content .widget div:has(i.icofont-envelope) i {
+    position: absolute;
+    right: 0;
+    top: 0;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 14px;
+    width: 16px;
+    text-align: center;
+}
+
+/* RTL Contact Icons - Fallback for older browsers */
+html[dir="rtl"] #extra-content .widget div i.icofont-phone,
+html[dir="rtl"] #extra-content .widget div i.icofont-location-pin,
+html[dir="rtl"] #extra-content .widget div i.icofont-envelope {
+    position: absolute;
+    right: 0;
+    top: 0;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 14px;
+    width: 16px;
+    text-align: center;
+}
+
+html[dir="rtl"] #extra-content .widget div:has(i.icofont-phone),
+html[dir="rtl"] #extra-content .widget div:has(i.icofont-location-pin),
+html[dir="rtl"] #extra-content .widget div:has(i.icofont-envelope) {
+    position: relative;
+    padding-right: 25px;
+    padding-left: 0;
+    margin-bottom: 10px;
+}
+
+/* RTL Services Icons Fix */
+html[dir="rtl"] .ul-check {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+html[dir="rtl"] .ul-check li {
+    position: relative;
+    padding-right: 25px;
+    padding-left: 0;
+    margin-bottom: 8px;
+    list-style: none;
+}
+
+html[dir="rtl"] .ul-check li:before {
+    content: "\f00c";
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    position: absolute;
+    right: 0;
+    top: 0;
+    color: #ff6b35;
+    font-size: 14px;
+    line-height: 1.2;
+}
+
+/* RTL Footer */
+html[dir="rtl"] .widget {
+    text-align: right;
+}
+
+html[dir="rtl"] .widget ul {
+    text-align: right;
+}
+
+/* RTL Social Icons */
+html[dir="rtl"] .social-icons {
+    text-align: right;
+}
+
+/* RTL Testimonials */
+html[dir="rtl"] .testimonial-content {
+    text-align: right;
+}
+
+/* RTL Accordion */
+html[dir="rtl"] .accordion-section-title {
+    text-align: right;
+}
+
+html[dir="rtl"] .accordion-section-content {
+    text-align: right;
+}
+
+/* RTL Counters */
+html[dir="rtl"] .de_count {
+    text-align: center;
+}
+
+/* RTL Images */
+html[dir="rtl"] .w-50px {
+    margin-left: 10px;
+    margin-right: 0;
+}
+
+/* RTL Spacing Adjustments */
+html[dir="rtl"] .me-4 {
+    margin-left: 1.5rem !important;
+    margin-right: 0 !important;
+}
+
+html[dir="rtl"] .ms-4 {
+    margin-right: 1.5rem !important;
+    margin-left: 0 !important;
+}
+
+html[dir="rtl"] .ps-100 {
+    padding-right: 100px !important;
+    padding-left: 0 !important;
+}
+
+/* RTL Absolute Positioning */
+html[dir="rtl"] .abs {
+    right: 0;
+    left: auto;
+}
+
+html[dir="rtl"] .end-0 {
+    right: 0 !important;
+    left: auto !important;
+}
+
+html[dir="rtl"] .start-0 {
+    left: 0 !important;
+    right: auto !important;
+}
+
+/* RTL Flexbox Adjustments */
+html[dir="rtl"] .d-flex {
+    flex-direction: row-reverse;
+}
+
+html[dir="rtl"] .justify-content-between {
+    flex-direction: row-reverse;
+}
+
+/* RTL Text Alignment */
+html[dir="rtl"] .text-lg-end {
+    text-align: right !important;
+}
+
+html[dir="rtl"] .text-center {
+    text-align: center !important;
+}
+
+/* RTL Border Adjustments */
+html[dir="rtl"] .border-top {
+    border-right: 1px solid;
+    border-left: none;
+}
+
+/* RTL Animation Adjustments */
+html[dir="rtl"] .fadeInRight {
+    animation-name: fadeInLeft;
+}
+
+html[dir="rtl"] .fadeInLeft {
+    animation-name: fadeInRight;
+}
+
+/* RTL Custom Animations */
+@keyframes fadeInRight {
+    from {
+        opacity: 0;
+        transform: translate3d(100%, 0, 0);
+    }
+    to {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+    }
+}
+
+@keyframes fadeInLeft {
+    from {
+        opacity: 0;
+        transform: translate3d(-100%, 0, 0);
+    }
+    to {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+    }
+}
+
+/* RTL Responsive Adjustments */
+@media (max-width: 768px) {
+    html[dir="rtl"] .de-flex {
+        flex-direction: column;
+    }
+    
+    html[dir="rtl"] .header-col-mid {
+        text-align: center;
+    }
+    
+    html[dir="rtl"] .menu_side_area {
+        text-align: center;
+    }
+}
+
+/* RTL Custom Overrides */
+html[dir="rtl"] .container {
+    direction: rtl;
+}
+
+html[dir="rtl"] .row {
+    direction: rtl;
+}
+
+html[dir="rtl"] [class*="col-"] {
+    direction: rtl;
+}
+
+/* RTL Logo Adjustments */
+html[dir="rtl"] #logo {
+    text-align: right;
+}
+
+/* RTL Menu Adjustments */
+html[dir="rtl"] .mega {
+    right: 0;
+    left: auto;
+}
+
+/* RTL Button Groups */
+html[dir="rtl"] .btn-group {
+    flex-direction: row-reverse;
+}
+
+/* RTL Progress Bars */
+html[dir="rtl"] .progress {
+    direction: rtl;
+}
+
+/* RTL Tables */
+html[dir="rtl"] table {
+    direction: rtl;
+}
+
+html[dir="rtl"] th,
+html[dir="rtl"] td {
+    text-align: right;
+}
+
+/* RTL Modal */
+html[dir="rtl"] .modal-content {
+    text-align: right;
+}
+
+/* RTL Dropdown */
+html[dir="rtl"] .dropdown-menu {
+    right: 0;
+    left: auto;
+    text-align: right;
+}
+
+/* RTL Carousel */
+html[dir="rtl"] .carousel-control-prev {
+    right: 0;
+    left: auto;
+}
+
+html[dir="rtl"] .carousel-control-next {
+    left: 0;
+    right: auto;
+}
+
+/* RTL Pagination */
+html[dir="rtl"] .pagination {
+    justify-content: center;
+}
+
+/* RTL Breadcrumb */
+html[dir="rtl"] .breadcrumb {
+    direction: rtl;
+}
+
+html[dir="rtl"] .breadcrumb-item + .breadcrumb-item::before {
+    content: "\\";
+    transform: scaleX(-1);
+}
+
+/* RTL Alert */
+html[dir="rtl"] .alert {
+    text-align: right;
+}
+
+/* RTL Badge */
+html[dir="rtl"] .badge {
+    text-align: center;
+}
+
+/* RTL Close Button */
+html[dir="rtl"] .btn-close {
+    right: auto;
+    left: 0.75rem;
+}
+
+/* RTL Offcanvas */
+html[dir="rtl"] .offcanvas {
+    right: 0;
+    left: auto;
+}
+
+html[dir="rtl"] .offcanvas-start {
+    right: 0;
+    left: auto;
+}
+
+html[dir="rtl"] .offcanvas-end {
+    left: 0;
+    right: auto;
+}
