@@ -21,16 +21,16 @@
                             <li>
                                 <a class="menu-item" href="{{ route('site.services') }}">الخدمات</a>
                                 <ul>
-                                    <li><a href="{{ route('site.services') }}">تبرع للشركة</a></li>
                                     <li><a href="{{ route('site.services') }}">الخدمات الالكترونية</a></li>
                                     <li><a href="{{ route('site.services') }}">المواصفات والمقايس</a></li>
+
                                 </ul>
                             </li>
 
                             <li>
                                 <a class="menu-item" href="#">الشركة</a>
                                 <ul>
-                                    <li><a href="{{ route('site.about') }}">من نحن</a></li>
+                                    <li><a href="#contact-footer"">من نحن</a></li>
                                     <li><a href="{{ route('site.team') }}">فريقنا</a></li>
                                     <li><a href="{{ route('site.careers') }}">الوظائف</a></li>
                                 </ul>
@@ -51,10 +51,19 @@
                     </div>
 
                     <div class="de-flex-col">
-                        {{-- زر القائمة الجانبية إن وجد --}}
-                        <div id="btn-extra">
+                        <div class="menu_side_area">
+                            <a href="https://gazaappeal.gedco.ps/ar/losses" target="_blank"
+                               class="btn-main btn-line fx-slide donate-btn">
+                                <i class="fa-solid fa-hand-holding-heart"></i>
+                                <span>تبرع للشركة</span>
+                            </a>
+                            <span id="menu-btn"></span>
+                        </div>
+                        {{--
+                           <div id="btn-extra">
                             <span></span><span></span>
                         </div>
+                         --}}
                     </div>
                 </div>
             </div></div>

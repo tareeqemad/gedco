@@ -59,6 +59,7 @@
 <script src="{{ asset('assets/site/js/swiper.js') }}"></script>
 <script src="{{ asset('assets/site/js/custom-swiper-1.js') }}"></script>
 <script src="{{ asset('assets/site/js/custom-marquee.js') }}"></script>
+<script src="{{ asset('assets/site/js/custom.js') }}"></script>
 
 @stack('scripts')
 </body>

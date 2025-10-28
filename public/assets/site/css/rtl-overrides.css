@@ -848,3 +848,288 @@ html, body, button, input, select, textarea {
     font-size: 14px;        /* اختياري */
     line-height: 1.6;       /* اختياري */
 }
+
+/* يمنع أي فراغ أسفل الصورة */
+.hero-video { line-height: 0; }
+
+/* ارتفاع مرن: من 240px إلى 520px حسب العرض */
+.hero-video .thumb {
+    height: clamp(240px, 55vw, 520px);
+    object-fit: cover;
+}
+
+/* لو المتصفح يدعم aspect-ratio نخليه 16:9 بدقة */
+@supports (aspect-ratio: 16/9) {
+    .hero-video { aspect-ratio: 16/9; height: auto; }
+    .hero-video .thumb { height: 100%; }
+}
+
+/* تعتيم خفيف بدلاً من bg-dark اللي كانت بتعمل شريط أسود */
+.hero-overlay {
+    position: absolute; inset: 0;
+    background: rgba(0,0,0,.25); /* عدّل الشفافية لو حاب */
+    pointer-events: none;
+}
+
+/* سكشن العنوان — قلّل الـpadding */
+.section-compact { padding-top: 2rem; padding-bottom: 2rem; }
+
+
+/* ===== YouTube Popup Clean CSS ===== */
+
+
+.hero-video {
+    line-height: 0;
+    margin: 0;
+}
+
+/* === Modal === */
+.yt-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 1050;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.yt-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, .8);
+}
+
+.yt-dialog {
+    position: relative;
+    z-index: 1;
+    width: min(92vw, 960px);
+}
+
+.yt-close {
+    position: absolute;
+    top: -14px;
+    right: -14px;
+    width: 36px;
+    height: 36px;
+    border: 0;
+    border-radius: 50%;
+    background: #fff;
+    cursor: pointer;
+    font-size: 22px;
+    line-height: 36px;
+}
+
+/* === Video frame === */
+.yt-frame-wrap {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16/9;
+    background: #000;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.yt-frame-wrap iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+}
+
+
+
+
+
+/* خلفية أقل ارتفاع */
+.footer-compact{
+    background:#0f0f0f;
+    padding:18px 0 8px;     /* ↓ قلّلنا البادينج */
+}
+.subfooter-compact{
+    border-top:1px solid rgba(255,255,255,.08);
+    margin-top:10px;
+    padding:8px 0;          /* ↓ أصغر */
+    background:#0f0f0f;
+    color:#bbb;
+    font-size:13px;
+}
+
+/* عنوان وكتلة التواصل */
+.footer-title{font-size:18px;font-weight:800;letter-spacing:.2px;}
+#contact-footer .contact-list li{
+    padding:8px 0;                              /* ↓ أقل */
+    border-bottom:1px solid rgba(255,255,255,.08);
+}
+#contact-footer .contact-list li:last-child{border-bottom:none}
+
+#contact-footer .label{
+    display:inline-flex;align-items:center;gap:8px;
+    font-size:13px;opacity:.7;margin-bottom:3px;
+}
+#contact-footer .value{
+    display:block;font-size:16px;font-weight:600;line-height:1.5;
+}
+
+/* أيقونات صغيرة قبل التسميات */
+#contact-footer .i{width:16px;height:16px;fill:none;stroke:#bbb;stroke-width:2}
+
+/* سوشيال بمحاذاة العنوان (يمين) */
+.footer-social{display:flex;gap:10px;align-items:center}
+.footer-social a{color:#cfcfcf;font-size:18px;opacity:.9}
+.footer-social a:hover{color:#fff}
+
+/* الروابط */
+.link-contrast{color:#fff;text-decoration:none;transition:color .2s}
+.link-contrast:hover{color:#ffa72b}
+
+/* إصلاح LTR داخل RTL للأرقام/الإيميل */
+.keep-ltr{direction:ltr;unicode-bidi:bidi-override;white-space:nowrap}
+#contact-footer .contact-list li {
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255,255,255,.08);
+}
+#contact-footer .contact-list li:last-child {
+    border-bottom: none;
+}
+
+/* تحسين محاذاة الشعار والوصف */
+@media (min-width: 768px) {
+    .pe-md-4 {
+        padding-right: 1.5rem !important;
+    }
+}
+
+
+.footer-compact {
+    background: #0f0f0f;
+    padding: 1.5rem 0 1rem;
+    font-family: inherit;
+}
+
+/* السطر السفلي */
+.subfooter-compact {
+    border-top: 1px solid rgba(255, 255, 255, .08);
+    margin-top: 1rem;
+    padding: 0.5rem 0;
+    background: #0f0f0f;
+    color: #bbb;
+    font-size: 12px;
+}
+
+
+
+/* عنوان الفوتر */
+.footer-title {
+    font-size: 24px;
+    font-weight: 800;
+    letter-spacing: .2px;
+    margin: 0;
+}
+
+/* قائمة التواصل */
+#contact-footer .contact-list li {
+    padding: 0.5rem 0;
+}
+#contact-footer .contact-list li:not(:last-child) {
+    border-bottom: 1px solid rgba(255, 255, 255, .08);
+}
+
+/* التسميات */
+#contact-footer .label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    opacity: .7;
+    margin-bottom: 3px;
+}
+#contact-footer .value {
+    display: block;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.5;
+}
+
+/* أيقونات SVG */
+#contact-footer .i {
+    width: 16px;
+    height: 16px;
+    fill: none;
+    stroke: #bbb;
+    stroke-width: 2;
+}
+
+/* السوشيال */
+.footer-social {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+.footer-social a {
+    color: #cfcfcf;
+    font-size: 18px;
+    opacity: .9;
+    transition: color .2s, opacity .2s;
+}
+.footer-social a:hover {
+    color: #fff;
+    opacity: 1;
+}
+
+/* روابط متوهجة */
+.link-contrast {
+    color: #fff;
+    text-decoration: none;
+    transition: color .2s;
+}
+.link-contrast:hover {
+    color: #ffa72b;
+}
+
+/* إصلاح اتجاه النصوص اللاتينية (إيميل، هاتف) */
+.keep-ltr {
+    direction: ltr;
+    unicode-bidi: bidi-override;
+    white-space: nowrap;
+}
+
+/* تحسين المسافات على الشاشات المتوسطة */
+@media (min-width: 768px) {
+    .pe-md-4 {
+        padding-right: 1.5rem !important;
+    }
+}
+
+
+
+:root {
+    --brand: #e6532e; /* لون شعار GEDCO - عدّله لو عندك كود أدق */
+}
+
+/* خليه دايمًا زر ملوّن */
+.menu_side_area .donate-btn {
+    font-family: inherit;
+    background: var(--brand);
+    color: #fff;
+    border: 2px solid var(--brand);
+    border-radius: 10px;
+    padding: 10px 20px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    transition: all .25s ease;
+    box-shadow: 0 2px 10px rgba(0,0,0,.15); /* يوضح فوق الصور */
+}
+
+/* هوفر عكسي أنيق */
+.menu_side_area .donate-btn:hover {
+    background: #fff;
+    color: var(--brand);
+    border-color: var(--brand);
+    transform: translateY(-2px);
+}
+
+/* حجم الأيقونة */
+.menu_side_area .donate-btn i { font-size: 16px; }
