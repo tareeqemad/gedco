@@ -16,7 +16,7 @@ class RolesAndPermissionsSeeder extends Seeder
             // Users
             'users.view', 'users.create', 'users.edit', 'users.delete',
             'sliders.view', 'sliders.create', 'sliders.edit', 'sliders.delete',
-
+            'jobs.view', 'jobs.create', 'jobs.edit', 'jobs.delete',
             // Permissions (لوحة الصلاحيات نفسها)
             'permissions.view', 'permissions.create', 'permissions.edit', 'permissions.delete',
 

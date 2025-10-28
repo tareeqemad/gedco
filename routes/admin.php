@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\PermissionController;
+use App\Http\Controllers\Admin\JobController;
 
 
 use App\Http\Controllers\Admin\Site\SiteSettingController;
@@ -55,6 +56,11 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::resource('sliders', SliderController::class)
             ->names('sliders')
             ->middleware('permission:sliders.view|sliders.create|sliders.edit|sliders.delete');
+
+
+        Route::resource('jobs', JobController::class)
+            ->names('jobs')
+            ->middleware('permission:jobs.view|jobs.create|jobs.edit|jobs.delete');
 
 
         //(services/company)

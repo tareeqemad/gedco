@@ -29,6 +29,7 @@
                 $usersOpen = request()->routeIs('admin.users.*');
                 $footerOpen = request()->routeIs('admin.footer-links.*');
                 $socialOpen = request()->routeIs('admin.social-links.*');
+                $jobsOpen = request()->routeIs('admin.jobs.*');
             @endphp
 
             <ul class="main-menu">
@@ -77,6 +78,33 @@
                             <i class="bi bi-images side-menu__icon"></i>
                             <span class="side-menu__label">السلايدر</span>
                         </a>
+                    </li>
+                @endcan
+                @can('jobs.view')
+                    <li class="slide has-sub {{ $jobsOpen ? 'open' : '' }}">
+                        <a href="javascript:void(0);" class="side-menu__item {{ $jobsOpen ? 'active' : '' }}">
+                            <i class="bi bi-briefcase side-menu__icon"></i> {{-- أيقونة الوظائف --}}
+                            <span class="side-menu__label">الوظائف</span>
+                            <i class="fe fe-chevron-right side-menu__angle"></i>
+                        </a>
+
+                        <ul class="slide-menu child1" style="{{ $jobsOpen ? 'display:block' : '' }}">
+                            <li class="slide side-menu__label1"><a href="javascript:void(0)">الوظائف</a></li>
+
+                            <li class="slide">
+                                <a href="{{ route('admin.jobs.index') }}"
+                                   class="side-menu__item {{ request()->routeIs('admin.jobs.index') ? 'active' : '' }}">
+                                    قائمة الوظائف
+                                </a>
+                            </li>
+
+                            <li class="slide">
+                                <a href="{{ route('admin.jobs.create') }}"
+                                   class="side-menu__item {{ request()->routeIs('admin.jobs.create') ? 'active' : '' }}">
+                                    إضافة وظيفة
+                                </a>
+                            </li>
+                        </ul>
                     </li>
                 @endcan
 

@@ -703,3 +703,148 @@ html[dir="rtl"] #extra-content .widget div i.icofont-envelope {
     text-align: center !important;
     line-height: 1.2 !important;
 }
+
+.subtitle {
+    font-family: 'Cairo', sans-serif;
+    font-size: 1.5rem;       /* حجم مناسب للعناوين الثانوية */
+    font-weight: 600;        /* يعطيه ثقل بسيط */
+    line-height: 1.4;
+    letter-spacing: 0.5px;   /* فراغ خفيف بين الحروف */
+    margin-bottom: 1rem;
+}
+
+
+/* وسط العنوان داخل البانر إجباري */
+#subheader .container { text-align: center !important; }
+
+#subheader h1.split {
+    float: none !important;
+    display: inline-block !important;
+    margin: 0 auto !important;
+    text-align: center !important;
+    position: relative !important;
+}
+
+/* لو عند .split pseudo-elements تتحكم بالموقع */
+#subheader h1.split::before,
+#subheader h1.split::after {
+    right: auto !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+}
+
+
+#subheader .crumb{
+    direction: rtl;                 /* مهم */
+    display: inline-flex;           /* عشان يتمركز بسهولة */
+    align-items: center;
+    justify-content: center;
+    gap: 0;                         /* هنضيف الفواصل يدويًا */
+    padding: 0;
+    margin: .25rem 0 0;
+}
+
+/* عناصر الـ li */
+#subheader .crumb li{
+    list-style: none;
+    display: inline-flex;
+    align-items: center;
+    color: #fff;
+}
+
+/* الروابط */
+#subheader .crumb li a{
+    color: #fff;
+    text-decoration: none;
+    opacity: .9;
+}
+
+/* السهم بين العناصر – RTL: سهم لليسار ‹ */
+#subheader .crumb li + li::before{
+    content: "\2039";               /* ‹ */
+    display: inline-block;
+    margin: 0 .6rem;                /* مسافة يمين ويسار السهم */
+    opacity: .8;
+    line-height: 1;
+}
+
+/* العنصر الحالي */
+#subheader .crumb li.active{
+    font-weight: 700;
+    opacity: 1;
+}
+
+/* إلغاء أي سهام/فواصل افتراضية من القالب */
+#subheader .crumb li::after{
+    content: none !important;
+}
+
+
+/* القوائم المنسدلة */
+.navbar-nav li {
+    position: relative;
+}
+
+.navbar-nav li ul {
+    position: absolute;
+    top: 100%;
+    right: 0; /* لأنك RTL */
+    min-width: 180px;
+    background-color: #fff;
+    border-top: 3px solid var(--main-color, #f37021); /* خُطّ الموقع */
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+    padding: 8px 0;
+    margin: 0;
+    list-style: none;
+    display: none;
+    z-index: 999;
+}
+
+.navbar-nav li:hover > ul {
+    display: block;
+}
+
+/* العناصر داخل القائمة */
+.navbar-nav li ul li {
+    width: 100%;
+}
+
+.navbar-nav li ul li a {
+    display: block;
+    padding: 8px 15px;
+    color: #333;
+    text-decoration: none;
+    font-size: 14px;
+    transition: all 0.2s ease-in-out;
+}
+
+.navbar-nav li ul li a:hover {
+    background-color: var(--main-color, #f37021);
+    color: #fff;
+}
+
+html, body, button, input, select, textarea {
+    font-family: 'Cairo', 'Segoe UI', Tahoma, Arial, sans-serif !important;
+}
+
+#mainmenu, #mainmenu * {
+    font-family: inherit !important;
+}
+
+.navbar, .navbar *,.navbar-nav, .navbar-nav * {
+    font-family: inherit !important;
+}
+
+.header-static ul, .header-static li, .header-static a {
+    font-family: inherit !important;
+}
+
+.mega, .mega *,.sb-menu, .sb-menu * {
+    font-family: inherit !important;
+}
+
+.navbar-nav li ul,
+#mainmenu li ul {
+    font-size: 14px;        /* اختياري */
+    line-height: 1.6;       /* اختياري */
+}

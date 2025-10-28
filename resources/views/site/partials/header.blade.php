@@ -32,7 +32,6 @@
                                 <ul>
                                     <li><a href="{{ route('site.about') }}">من نحن</a></li>
                                     <li><a href="{{ route('site.team') }}">فريقنا</a></li>
-                                    <li><a href="{{ route('site.certifications') }}">الشهادات</a></li>
                                     <li><a href="{{ route('site.careers') }}">الوظائف</a></li>
                                 </ul>
                             </li>
@@ -40,12 +39,14 @@
                             <li>
                                 <a class="menu-item" href="#">الاعلانات</a>
                                 <ul>
-                                    <li><a href="{{ route('site.track') }}">الوظائف</a></li>
-                                    <li><a href="{{ route('site.booking') }}">العطائات</a></li>
+                                    <li><a href="{{ route('site.jobs') }}">الوظائف</a></li>
+                                    <li><a href="{{ route('site.tenders') }}">العطائات</a></li>
                                 </ul>
                             </li>
+                            <li>
+                                <a class="menu-item" href="#contact-footer">اتصل بنا</a>
+                            </li>
 
-                            <li><a class="menu-item" href="{{ route('site.contact') }}">اتصل بنا</a></li>
                         </ul>
                     </div>
 

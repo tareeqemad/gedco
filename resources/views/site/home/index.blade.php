@@ -22,7 +22,7 @@
                                     <div class="sw-caption">
                                         <div class="container">
                                             <div class="row gx-5 align-items-center justify-content-center text-center">
-                                                <div class="col-lg-10">
+                                                <div class="col-lg-10 d-flex justify-content-center align-items-center text-center">
                                                     <div class="sw-text-wrapper">
                                                         @if($s->title)
                                                             <h2 class="animated text-uppercase anim-order-1">
@@ -120,7 +120,7 @@
                     </div>
 
                     <div class="col-lg-6">
-                        <img src="{{ asset('assets/site/images/sudos.webp') }}" class="w-100" alt="Sea Cargo Logistics Service">
+                        <img src="{{ asset('assets/site/images/c3.webp') }}" class="w-100" alt="Sea Cargo Logistics Service">
                     </div>
                 </div>
 
@@ -200,24 +200,17 @@
                 <div class="row g-0">
                     <div class="col-lg-6">
                         <div class="relative overflow-hidden">
-                            <img src="{{ asset('assets/site/images/misc/s5.webp') }}" class="w-100" alt="">
+                            <img src="{{ asset('assets/site/images/s5.webp') }}" class="w-100" alt="">
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div class="h-100 relative bg-dark p-5 text-light">
-                            <div class="subtitle">تتبع شحنتك</div>
-                            <h2 class="split">تتبع سريع</h2>
-
-                            <div class="row align-items-center justify-content-end">
-                                <div class="col-md-9 col-sm-8">
-                                    <div class="hover-underline">
-                                        <input class="form-underline mb-0 no-border fs-18" id='order_id' name='order_id' placeholder="أدخل رقم طلبك هنا..." type='text'>
-                                    </div>
-                                </div>
-                                <div class="col-md-3 col-sm-4">
-                                    <a class="btn-main bg-white text-dark fx-slide w-100" href="{{ route('site.track') }}"><span>تتبع</span></a>
-                                </div>
-                            </div>
+                            <div class="subtitle">رحلة جديدة… بجذور قديمة</div>
+                            <h2 class="split">نعود لننير غزة</h2>
+                            <p class="mb-4 fs-5">
+                                منذ 20 عامًا ونحن معكم… واليوم نبدأ مرحلة جديدة من الخدمة،
+                                بثبات، وإصرار، وطاقـة لا تنطفئ ⚡
+                            </p>
 
                             <img src="{{ asset('assets/site/images/misc/c2.webp') }}" class="w-50 abs bottom-0 end-0" alt="">
                         </div>
@@ -290,7 +283,7 @@
                 </div>
             </div>
         </section>
-
+        https://www.facebook.com/reel/850163197536696
         {{-- ========= Why Choose Us ========= --}}
         <section class="bg-dark text-light">
             <div class="container">

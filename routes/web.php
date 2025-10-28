@@ -2,13 +2,12 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Site\HomeController;
-use App\Http\Controllers\ProfileController;
-
+use App\Http\Controllers\Site\JobsController;
+use App\Http\Controllers\Site\TendersController;
 
 Route::prefix('/')->name('site.')->group(function () {
     Route::get('/', [HomeController::class, 'index'])->name('home');
 
-    // لو هتفعل الصفحات دي لاحقًا:
     Route::view('/services', 'site.services.index')->name('services');
     Route::view('/blog', 'site.blog.index')->name('blog');
     Route::view('/contact', 'site.contact.index')->name('contact');
@@ -17,8 +16,11 @@ Route::prefix('/')->name('site.')->group(function () {
     Route::view('/about', 'site.about.index')->name('about');
     Route::view('/team', 'site.team.index')->name('team');
     Route::view('/careers', 'site.careers.index')->name('careers');
-    Route::view('/certifications', 'site.certifications.index')->name('certifications');
+
+    // هنا التعديل: الاسم يكون 'certifications' فقط
+    Route::get('/jobs', [JobsController::class, 'index'])->name('jobs');
+    Route::get('/tenders', [TendersController::class, 'index'])->name('tenders');
+
 });
 
-// تضمين ملفات المسارات الإضافية
-require __DIR__.'/admin.php';  // مسارات لوحة التحكم
+require __DIR__.'/admin.php';

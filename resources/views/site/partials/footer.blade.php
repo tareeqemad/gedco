@@ -90,7 +90,7 @@
                 </div>
             </div>
 
-            <div class="col-md-6">
+            <div class="col-md-6" id="contact-footer">
                 <div class="d-flex align-items-center justify-content-between">
                     <h2 style="display:none;">تواصل معنا</h2>
                     <img src="{{ asset('assets/site/images/ui/up-right-arrow.webp') }}" class="w-60px op-5" alt="" style="display:none;">
