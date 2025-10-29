@@ -88,45 +88,59 @@
 
 
         {{-- ========= About ========= --}}
-        <section class="relative">
+        <section class="relative py-5" id="who-us">
             <div class="container">
-                <div class="row">
-                    <div class="col-lg-6">
-                        <div class="subtitle s2 mb-3">من نحن</div>
-                        <h2 class="split">لوجستيات الشحن البحري العالمية التي يمكنك الوثوق بها</h2>
+                <div class="row align-items-center g-4">
 
-                        <p>
-                            تقدم لوجي إكسبرس حلول شحن بحري موثوقة وفعالة من حيث التكلفة وفي الوقت المحدد
-                            للشركات من جميع الأحجام. من الحاويات الكاملة إلى الشحنات المجمعة،
-                            نحن نربط الموانئ الأمريكية مثل لونج بيتش وهيوستن وميامي بمراكز التجارة الدولية
-                            عبر آسيا وأوروبا والشرق الأوسط.
+                    <!-- العمود الأول: النص -->
+                    <div class="col-lg-6 text-end">
+                        <div class="d-flex align-items-center justify-content-end mb-3">
+                            <span class="badge bg-orange text-white px-3 py-2 fs-6 shadow-sm">من نحن</span>
+                        </div>
+
+                        <h3 class="mb-2 fw-bold text-orange">
+                            شركة توزيع كهرباء محافظات غزة
+                        </h3>
+
+                        <h3 class="mb-3 text-orange fw-semibold fs-5">
+                            نبني النور من جديد... ونواصل العطاء بثبات وأمل
+                        </h3>
+
+                        <p class="text-muted mb-3">
+                            في قلب التحديات والدمار الذي أصاب قطاع غزة، تواصل شركة توزيع كهرباء محافظات غزة أداء رسالتها الوطنية بإصرار لا يلين.
+                            نمدّ شرايين النور في كل بيت ومؤسسة، لنقول إن الحياة مستمرة، وإن الأمل لا ينطفئ.
+                            نؤمن أن الكهرباء ليست مجرد طاقة، بل رمز للاستمرار والبناء، ولهذا نعمل على تطوير شبكات التوزيع وتحسين جودة الخدمة رغم الظروف الصعبة.
                         </p>
 
-                        <div class="row g-4">
-                            <div class="col-md-5">
-                                <ul class="ul-check text-dark">
-                                    <li>حاويات كاملة</li>
-                                    <li>حاويات جزئية</li>
-                                    <li>بضائع مقطعة ومشاريع</li>
+                        <p class="text-muted mb-4">
+                            تسعى الشركة للارتقاء بخدماتها إلى المستويات الإقليمية والعالمية، وتحقيق رضا المواطنين من خلال أداء مهني وإبداعي،
+                            بروح العمل الجماعي والمسؤولية، وبالتعاون مع مؤسسات المجتمع المحلي والهيئات الدولية.
+                        </p>
+
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <ul class="ul-check m-0">
+                                    <li>⚡ استمرار النور رغم الصعاب</li>
+                                    <li>💡 تطوير مستمر وإعادة إعمار بطاقة الأمل</li>
                                 </ul>
                             </div>
-
-                            <div class="col-md-5">
-                                <ul class="ul-check text-dark">
-                                    <li>التخليص الجمركي</li>
-                                    <li>تسليم من الميناء إلى الباب</li>
-                                    <li>تتبع البضائع في الوقت الفعلي</li>
+                            <div class="col-md-6">
+                                <ul class="ul-check m-0">
+                                    <li>👷‍♂️ كوادر وطنية مخلصة ومؤهلة</li>
+                                    <li>🤝 شفافية في العمل وثقة المجتمع</li>
                                 </ul>
                             </div>
                         </div>
                     </div>
 
+                    <!-- العمود الثاني: الصورة -->
                     <div class="col-lg-6">
-                        <img src="{{ asset('assets/site/images/c3.webp') }}" class="w-100"
-                             alt="Sea Cargo Logistics Service">
+                        <img src="{{ asset('assets/site/images/c3.webp') }}"
+                             class="w-100 rounded-3 shadow-sm"
+                             alt="شركة توزيع كهرباء محافظات غزة">
                     </div>
-                </div>
 
+                </div>
             </div>
         </section>
 
@@ -212,16 +226,14 @@
                                 بثبات، وإصرار، وطاقـة لا تنطفئ ⚡
                             </p>
 
-                            <img src="{{ asset('assets/site/images/misc/c2.webp') }}" class="w-50 abs bottom-0 end-0"
-                                 alt="">
-                        </div>
+                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
         {{-- ========= Services ========= --}}
-        <section class="pt-50 pb-50">
+        <section class="pt-50 pb-50" id="services">
             <div class="container">
                 <div class="row g-4 justify-content-center">
                     <div class="col-lg-7 text-center">
@@ -233,38 +245,38 @@
                 </div>
                 <div class="row g-4">
                     <div class="col-lg-3 col-md-6">
-                        <a href="{{ route('site.services') }}" class="d-block hover relative">
-                            <img src="{{ asset('assets/site/images/icons-color/1.png') }}"
+                        <a href="http://213.244.76.228/bill" target="_blank" class="d-block hover relative">
+                            <img src="{{ asset('assets/site/images/services/s1.png') }}"
                                  class="w-70px mb-3 hover-jello infinite" alt="">
-                            <h4>النقل البري</h4>
+                            <h4>الخدمات الالكترونية</h4>
                             <p>نقل بري موثوق للشحنات عبر الولايات المتحدة مع خيارات أسطول مرنة.</p>
                         </a>
                     </div>
 
                     <div class="col-lg-3 col-md-6">
-                        <a href="{{ route('site.services') }}" class="d-block hover relative">
-                            <img src="{{ asset('assets/site/images/icons-color/2.png') }}"
+                        <a href="#" class="d-block hover relative">
+                            <img src="{{ asset('assets/site/images/services/s2.png') }}"
                                  class="w-70px mb-3 hover-jello infinite" alt="">
-                            <h4>الشحن الجوي</h4>
+                            <h4>المواصفات والمقاييس</h4>
                             <p>تسليم سريع للبضائع الحساسة للوقت باستخدام الطرق الجوية العالمية مع التتبع في الوقت
                                 الفعلي.</p>
                         </a>
                     </div>
 
                     <div class="col-lg-3 col-md-6">
-                        <a href="{{ route('site.services') }}" class="d-block hover relative">
-                            <img src="{{ asset('assets/site/images/icons-color/3.png') }}"
+                        <a href="https://gazaappeal.gedco.ps/" target="_blank" class="d-block hover relative">
+                            <img src="{{ asset('assets/site/images/services/s3.png') }}"
                                  class="w-70px mb-3 hover-jello infinite" alt="">
-                            <h4>الشحن البحري</h4>
+                            <h4>التبرع</h4>
                             <p>حل شحن فعال من حيث التكلفة للبضائع السائبة مع خدمات شحن بحري دولية موثوقة.</p>
                         </a>
                     </div>
 
                     <div class="col-lg-3 col-md-6">
-                        <a href="{{ route('site.services') }}" class="d-block hover relative">
-                            <img src="{{ asset('assets/site/images/icons-color/4.png') }}"
+                        <a href="{{ route('site.jobs') }}" class="d-block hover relative">
+                            <img src="{{ asset('assets/site/images/services/s4.png') }}"
                                  class="w-70px mb-3 hover-jello infinite" alt="">
-                            <h4>النقل بالسكك الحديدية</h4>
+                            <h4>الوظائف</h4>
                             <p>خيار نقل بالسكك الحديدية فعال وصديق للبيئة مثالي للشحنات الثقيلة لمسافات طويلة.</p>
                         </a>
                     </div>
@@ -295,82 +307,89 @@
             </a>
         </section>
         {{-- ========= Why Choose Us ========= --}}
-        <section id="section-why-choose-us" class="text-dark">
+        <section id="section-why-choose-us" class="text-dark py-5 bg-light">
             <div class="container">
-                <div class="row g-4 justify-content-center">
-                    <div class="col-lg-7 text-center">
-                        <div class="subtitle wow fadeInUp">Why Choose Us</div>
-                        <h2 class="split" data-wow-delay=".2s">Trusted Logistics Partner for Worldwide Shipping</h2>
+                <!-- العنوان الرئيسي -->
+                <div class="row justify-content-center mb-5 text-center">
+                    <div class="col-lg-9">
+                        <div class="why-subtitle fw-bold mb-3 d-flex justify-content-center align-items-center gap-2">
+                            <i class="bi bi-lightning-charge-fill text-orange"></i>
+                            <span class="badge bg-orange text-white px-3 py-2 fs-6 shadow-sm">لماذا تختارنا</span>
+                        </div>
+
+                        <h2 class="why-tagline mb-3">
+                            شريكك الموثوق في الخدمة الكهربائية
+                        </h2>
+
+                        <p class="text-muted why-desc">
+                            نقدّم لك الأفضل لأننا نؤمن بحقك في خدمة كهربائية آمنة، موثوقة، ومتطورة.
+                            في شركة توزيع كهرباء محافظات غزة، نسعى لأن نكون الشريك الذي تعتمد عليه في كل لحظة.
+                        </p>
                     </div>
                 </div>
+
+                <!-- العناصر -->
                 <div class="row g-4">
                     <div class="col-lg-4 col-md-6">
-                        <div class="relative">
-                            <i class="abs fs-24 p-4 bg-color icon_check rounded-1 text-light"></i>
-                            <div class="ps-100">
-                                <h4>لوجستيات خبيرة</h4>
-                                <p>يتمتع متخصصونا بعقود من الخبرة في الشحن والتخليص الجمركي، مما يضمن حلول سلسلة توريد
-                                    سلسة وفعالة عالمياً.</p>
+                        <div class="feature-box h-100 position-relative">
+                            <div class="icon-wrapper">
+                                <i class="bi bi-lightning-charge-fill"></i>
+                            </div>
+                            <div class="content">
+                                <h5>خدمة كهرباء مستقرة وآمنة</h5>
+                                <p>نضمن تزويد طاقة كهربائية مستقرة وآمنة لجميع المشتركين، وبأسعار اقتصادية تراعي احتياجات المواطنين، مع التزام دائم بالجودة والاستقرار.</p>
                             </div>
                         </div>
                     </div>
 
                     <div class="col-lg-4 col-md-6">
-                        <div class="relative">
-                            <i class="abs fs-24 p-4 bg-color icon_check rounded-1 text-light"></i>
-                            <div class="ps-100">
-                                <h4>التزام بالتسليم السريع</h4>
-                                <p>نفهم إلحاح كل شحنة ونعمل بسرعة. الطرق المحسنة وتكنولوجيا التتبع تضمن التسليم في الوقت
-                                    المحدد دون تأخير غير ضروري.</p>
+                        <div class="feature-box h-100 position-relative">
+                            <div class="icon-wrapper">
+                                <i class="bi bi-shield-check"></i>
+                            </div>
+                            <div class="content">
+                                <h5>التزام بالموثوقية والشفافية</h5>
+                                <p>نلتزم بالوضوح والشفافية في جميع تعاملاتنا، دون أي رسوم خفية، مع سياسات مالية وإدارية تضمن رضا وثقة المشتركين.</p>
                             </div>
                         </div>
                     </div>
 
                     <div class="col-lg-4 col-md-6">
-                        <div class="relative">
-                            <i class="abs fs-24 p-4 bg-color icon_check rounded-1 text-light"></i>
-                            <div class="ps-100">
-                                <h4>سياسة تسعير شفافة</h4>
-                                <p>تسعيرنا واضح ومتنافس وسهل الفهم لجميع العملاء. نضمن عدم وجود رسوم مخفية وشفافية مالية
-                                    كاملة في كل مرة.</p>
+                        <div class="feature-box h-100 position-relative">
+                            <div class="icon-wrapper">
+                                <i class="bi bi-cpu"></i>
+                            </div>
+                            <div class="content">
+                                <h5>حلول تقنية متقدمة</h5>
+                                <p>نواكب التطور في مجال توزيع الكهرباء عبر استخدام أحدث التقنيات العالمية لضمان أداء أفضل واستدامة في الخدمة.</p>
                             </div>
                         </div>
                     </div>
 
                     <div class="col-lg-4 col-md-6">
-                        <div class="relative">
-                            <i class="abs fs-24 p-4 bg-color icon_check rounded-1 text-light"></i>
-                            <div class="ps-100">
-                                <h4>معالجة موثوقة للبضائع</h4>
-                                <p>كل شحنة يتم إدارتها بدقة وعناية لتجنب المخاطر. من التعبئة إلى التحميل، نضمن وصول
-                                    بضائعك بأمان وسلامة.</p>
+                        <div class="feature-box h-100 position-relative">
+                            <div class="icon-wrapper">
+                                <i class="bi bi-people-fill"></i>
+                            </div>
+                            <div class="content">
+                                <h5>كوادر وطنية متميزة</h5>
+                                <p>نعتمد على كفاءات وطنية خبيرة ومؤهلة، تمتاز بروح الانتماء والمسؤولية لضمان استمرارية الخدمة في كل الظروف.</p>
                             </div>
                         </div>
                     </div>
 
                     <div class="col-lg-4 col-md-6">
-                        <div class="relative">
-                            <i class="abs fs-24 p-4 bg-color icon_check rounded-1 text-light"></i>
-                            <div class="ps-100">
-                                <h4>حلول شاملة</h4>
-                                <p>نغطي كل خطوة في اللوجستيات بما في ذلك التخزين والتوزيع والشحن. خدماتنا المتكاملة تجعل
-                                    إدارة سلسلة التوريد بسيطة وفعالة.</p>
+                        <div class="feature-box h-100 position-relative">
+                            <div class="icon-wrapper">
+                                <i class="bi bi-graph-up-arrow"></i>
                             </div>
-                        </div>
-                    </div>
-
-                    <div class="col-lg-4 col-md-6">
-                        <div class="relative">
-                            <i class="abs fs-24 p-4 bg-color icon_check rounded-1 text-light"></i>
-                            <div class="ps-100">
-                                <h4>ضمان الرضا</h4>
-                                <p>ثقتك هي أولويتنا القصوى عبر جميع الشحنات. ندعم خدماتنا بدعم استجابة وضمان قوي لرضا
-                                    العملاء.</p>
+                            <div class="content">
+                                <h5>تحسين مستمر للخدمة</h5>
+                                <p>نسعى دائمًا لتطوير أنظمتنا التشغيلية والفنية بما يعزز رضا المشتركين ويحقق أفضل معايير الجودة في قطاع توزيع الكهرباء.</p>
                             </div>
                         </div>
                     </div>
                 </div>
-
             </div>
         </section>
 

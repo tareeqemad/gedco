@@ -1133,3 +1133,174 @@ html, body, button, input, select, textarea {
 
 /* حجم الأيقونة */
 .menu_side_area .donate-btn i { font-size: 16px; }
+
+
+
+/* ===== المتغيّرات العامة ===== */
+:root{
+    --orange-hex: #fd7e14;
+    --primary-hex:#14213d;
+    --card-shadow: 0 6px 18px rgba(0,0,0,.06);
+    --card-shadow-hover: 0 10px 24px rgba(253,126,20,.20);
+}
+
+/* لون مساعد */
+.text-orange{ color: var(--orange-hex) !important; }
+
+/* ===== عناوين سكشن لماذا تختارنا ===== */
+#section-why-choose-us .why-subtitle{
+    font-size: 1.6rem;
+    color: var(--primary-hex);
+    text-align: center;
+}
+#section-why-choose-us .why-subtitle::after{
+    content: "";
+    display: inline-block;
+    width: .5rem; height: .5rem;
+    background: var(--orange-hex);
+    border-radius: 50%;
+    margin-inline-start: .5rem;
+    vertical-align: middle;
+}
+#section-why-choose-us .why-title{
+    color: var(--primary-hex);
+    font-weight: 800;
+    line-height: 1.2;
+    font-size: clamp(2rem, 4.2vw, 3.25rem);
+    margin: .25rem 0;
+}
+#section-why-choose-us .why-tagline{
+    color: var(--orange-hex);
+    font-weight: 800;
+    line-height: 1.25;
+    font-size: clamp(1.25rem, 2.6vw, 2rem);
+    margin-bottom: 1rem;
+    text-align: center;
+}
+#section-why-choose-us .why-desc{
+    max-width: 58ch;
+    margin-inline: auto;
+    line-height: 1.8;
+    text-align: center;
+    font-size: 1rem;
+    color: #5f6b7a;
+}
+
+/* ===== بطاقات المزايا ===== */
+#section-why-choose-us .feature-box{
+    position: relative;
+    background: #fff;
+    border-radius: 16px;
+    padding: 30px;
+    box-shadow: var(--card-shadow);
+    transition: transform .25s ease, box-shadow .25s ease, background-color .25s ease;
+    text-align: start;
+}
+#section-why-choose-us .feature-box:hover{
+    transform: translateY(-6px);
+    box-shadow: var(--card-shadow-hover);
+}
+#section-why-choose-us .feature-box h5{
+    color: var(--primary-hex);
+    font-weight: 800;
+    margin-bottom: .5rem;
+}
+#section-why-choose-us .feature-box p{
+    color: #5f6b7a;
+    line-height: 1.75;
+    font-size: .95rem;
+    margin: 0;
+}
+
+/* ===== شارة الأيقونة الدائرية ===== */
+#section-why-choose-us .icon-wrapper{
+    position: absolute;
+    inset-inline-start: 22px; /* RTL: يسار */
+    top: -16px;
+    width: 44px; height: 44px;
+    background-color: var(--orange-hex);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: #fff;
+    box-shadow: 0 4px 10px rgba(253,126,20,.35);
+    z-index: 2;
+}
+#section-why-choose-us .icon-wrapper i{
+    font-size: 20px;
+    line-height: 1;
+}
+@media (max-width: 575.98px){
+    #section-why-choose-us .icon-wrapper{
+        top: -12px;
+        inset-inline-start: 18px;
+        width: 40px; height: 40px;
+    }
+}
+
+#section-why-choose-us .badge.bg-orange {
+    background-color: var(--orange-hex) !important;
+    font-weight: 700;
+    border-radius: 6px;
+    letter-spacing: 0.3px;
+}
+
+
+/* ===== سكشن من نحن ===== */
+/* شارة "من نحن" */
+#who-us .badge.bg-orange {
+    background-color: var(--orange-hex) !important;
+    font-weight: 700;
+    border-radius: 6px;
+    letter-spacing: 0.3px;
+}
+
+/* العناوين */
+#who-us h2 {
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+    color: var(--primary-hex);
+    line-height: 1.3;
+}
+#who-us h3 {
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    color: var(--orange-hex);
+}
+
+/* الفقرات */
+#who-us p {
+    color: #5f6b7a;
+    line-height: 1.8;
+    font-size: 1rem;
+}
+
+/* القوائم */
+#who-us .ul-check {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+#who-us .ul-check li {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    font-weight: 600;
+    color: #2d3b50;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+/* الصورة */
+#who-us img {
+    object-fit: cover;
+    border-radius: 16px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+}
+
+/* في الشاشات الصغيرة: الصورة فوق والنص تحت */
+@media (max-width: 992px) {
+    #who-us .row {
+        flex-direction: column !important;
+    }
+    #who-us .text-end {
+        text-align: center !important;
+    }
+}

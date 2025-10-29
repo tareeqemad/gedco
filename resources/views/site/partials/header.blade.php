@@ -19,10 +19,10 @@
                             <li><a class="menu-item" href="{{ route('site.home') }}">الرئيسية</a></li>
 
                             <li>
-                                <a class="menu-item" href="{{ route('site.services') }}">الخدمات</a>
+                                <a class="menu-item" href="#services">الخدمات</a>
                                 <ul>
-                                    <li><a href="{{ route('site.services') }}">الخدمات الالكترونية</a></li>
-                                    <li><a href="{{ route('site.services') }}">المواصفات والمقايس</a></li>
+                                    <li><a href="http://213.244.76.228/bill" target="_blank">الخدمات الالكترونية</a></li>
+                                    <li><a href="#">المواصفات والمقايس</a></li>
 
                                 </ul>
                             </li>
@@ -30,9 +30,10 @@
                             <li>
                                 <a class="menu-item" href="#">الشركة</a>
                                 <ul>
-                                    <li><a href="#contact-footer"">من نحن</a></li>
-                                    <li><a href="{{ route('site.team') }}">فريقنا</a></li>
-                                    <li><a href="{{ route('site.careers') }}">الوظائف</a></li>
+                                    <li><a href="#who-us"> من نحن</a></li>
+                                    <li><a href="#section-why-choose-us">لماذا تختارنا</a></li>
+                                    <li><a href="{{ route('site.jobs') }}">فريقنا</a></li>
+
                                 </ul>
                             </li>
 
@@ -52,7 +53,7 @@
 
                     <div class="de-flex-col">
                         <div class="menu_side_area">
-                            <a href="https://gazaappeal.gedco.ps/ar/losses" target="_blank"
+                            <a href="https://gazaappeal.gedco.ps/ar/donate" target="_blank"
                                class="btn-main btn-line fx-slide donate-btn">
                                 <i class="fa-solid fa-hand-holding-heart"></i>
                                 <span>تبرع للشركة</span>

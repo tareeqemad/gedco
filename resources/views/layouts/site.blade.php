@@ -8,7 +8,7 @@
     {{-- Meta --}}
     <meta name="description" content="@yield('meta_description','كهرباء غزة')">
     <meta name="keywords" content="@yield('meta_keywords','')">
-    <link rel="icon" type="image/webp" sizes="16x16" href="{{ asset('assets/site/images/icon.webp') }}">
+    <link rel="icon" type="image/x-icon" href="{{ asset('assets/site/images/icon.ico') }}">
 
       <link id="bootstrap" rel="stylesheet" href="{{ asset('assets/site/css/bootstrap.rtl.min.css') }}">
 
@@ -26,7 +26,6 @@
      <link rel="stylesheet" href="{{ asset('assets/site/css/custom.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/site/css/rtl-overrides.css') }}">
 
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
     @stack('styles')
 </head>
