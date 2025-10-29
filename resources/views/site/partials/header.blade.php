@@ -21,7 +21,7 @@
                             <li>
                                 <a class="menu-item" href="#services">الخدمات</a>
                                 <ul>
-                                    <li><a href="http://213.244.76.228/bill" target="_blank">الخدمات الالكترونية</a></li>
+                                    <li><a href="http://213.244.76.228/" target="_blank">الخدمات الالكترونية</a></li>
                                     <li><a href="#">المواصفات والمقايس</a></li>
 
                                 </ul>
@@ -32,7 +32,7 @@
                                 <ul>
                                     <li><a href="#who-us"> من نحن</a></li>
                                     <li><a href="#section-why-choose-us">لماذا تختارنا</a></li>
-                                    <li><a href="{{ route('site.jobs') }}">فريقنا</a></li>
+                                    <li><a href="#">فريقنا</a></li>
 
                                 </ul>
                             </li>
@@ -41,7 +41,7 @@
                                 <a class="menu-item" href="#">الاعلانات</a>
                                 <ul>
                                     <li><a href="{{ route('site.jobs') }}">الوظائف</a></li>
-                                    <li><a href="{{ route('site.tenders') }}">العطائات</a></li>
+                                    <li><a href="{{ route('site.tenders') }}">العطاءات</a></li>
                                 </ul>
                             </li>
                             <li>

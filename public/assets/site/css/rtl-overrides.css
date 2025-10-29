@@ -1304,3 +1304,17 @@ html, body, button, input, select, textarea {
         text-align: center !important;
     }
 }
+
+
+#who-us .row.align-items-start {
+    align-items: stretch !important;
+}
+
+#who-us .col-lg-6.text-end {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+}
+
+
+
