@@ -25,20 +25,30 @@ class SliderController extends Controller
     public function store(StoreSliderRequest $request)
     {
         $data = $request->validated();
-        // رفع صورة
+
+        // رفع الصورة
         if ($request->hasFile('bg_image')) {
             $data['bg_image'] = $request->file('bg_image')->store('sliders', 'public');
         }
+
         // ترميز bullets
         $data['bullets'] = array_values(array_filter($data['bullets'] ?? []));
         $data['is_active'] = (bool) $request->boolean('is_active');
 
-        Slider::create($data);
-        Cache::forget('home:sliders');
+        // ✅ تحديد الترتيب تلقائياً بناءً على آخر سجل
+        $lastOrder = \App\Models\Slider::max('sort_order');
+        $data['sort_order'] = is_null($lastOrder) ? 0 : $lastOrder + 1;
 
-        return redirect()->route('admin.sliders.index')->with('success','تمت الإضافة');
+        // إنشاء السجل
+        \App\Models\Slider::create($data);
+
+        // تنظيف الكاش
+        \Illuminate\Support\Facades\Cache::forget('home:sliders');
+
+        return redirect()
+            ->route('admin.sliders.index')
+            ->with('success', 'تمت الإضافة بنجاح.');
     }
-
     public function edit(Slider $slider)
     {
         return view('admin.site.sliders.edit', compact('slider'));

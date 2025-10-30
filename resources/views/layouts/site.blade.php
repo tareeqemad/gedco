@@ -17,6 +17,7 @@
     <link rel="stylesheet" href="{{ asset('assets/site/css/swiper-custom-1.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/site/css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/site/css/coloring.css') }}">
+    <link href="{{ asset('assets/admin/css/icons.css') }}" rel="stylesheet" >
 
      <link rel="stylesheet" href="{{ asset('assets/site/css/rtl-custom.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/site/css/rtl-fix-simple.css') }}">

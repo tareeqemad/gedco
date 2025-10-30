@@ -30,6 +30,8 @@
                 $footerOpen = request()->routeIs('admin.footer-links.*');
                 $socialOpen = request()->routeIs('admin.social-links.*');
                 $jobsOpen = request()->routeIs('admin.jobs.*');
+                $aboutOpen  = request()->routeIs('admin.about.*');
+                 $whyOpen    = request()->routeIs('admin.why.*');
             @endphp
 
             <ul class="main-menu">
@@ -78,6 +80,48 @@
                             <i class="bi bi-images side-menu__icon"></i>
                             <span class="side-menu__label">السلايدر</span>
                         </a>
+                    </li>
+                @endcan
+                @can('about.view')
+                    <li class="slide has-sub {{ $aboutOpen ? 'open' : '' }}">
+                        <a href="javascript:void(0);" class="side-menu__item {{ $aboutOpen ? 'active' : '' }}">
+                            <i class="bi bi-info-circle side-menu__icon"></i>
+                            <span class="side-menu__label">من نحن</span>
+                            <i class="fe fe-chevron-right side-menu__angle"></i>
+                        </a>
+
+                        <ul class="slide-menu child1" style="{{ $aboutOpen ? 'display:block' : '' }}">
+                            <li class="slide side-menu__label1"><a href="javascript:void(0)">من نحن</a></li>
+
+                            <li class="slide">
+                                <a href="{{ route('admin.about.index') }}"
+                                   class="side-menu__item {{ request()->routeIs('admin.about.index') ? 'active' : '' }}">
+                                    القائمة
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                @endcan
+                @can('why.view')
+                    <li class="slide has-sub {{ $whyOpen ? 'open' : '' }}">
+                        <a href="javascript:void(0);" class="side-menu__item {{ $whyOpen ? 'active' : '' }}">
+                            <i class="bi bi-lightning-charge side-menu__icon"></i>
+                            <span class="side-menu__label">لماذا تختارنا</span>
+                            <i class="fe fe-chevron-right side-menu__angle"></i>
+                        </a>
+
+                        <ul class="slide-menu child1" style="{{ $whyOpen ? 'display:block' : '' }}">
+                            <li class="slide side-menu__label1"><a href="javascript:void(0)">لماذا تختارنا</a></li>
+
+                            <li class="slide">
+                                <a href="{{ route('admin.why.index') }}"
+                                   class="side-menu__item {{ request()->routeIs('admin.why.index') ? 'active' : '' }}">
+                                    القائمة
+                                </a>
+                            </li>
+
+                          
+                        </ul>
                     </li>
                 @endcan
                 @can('jobs.view')

@@ -313,9 +313,7 @@
   });
   /* Choices JS */
 
-  /* footer year */
-  document.getElementById("year").innerHTML = new Date().getFullYear();
-  /* footer year */
+
 
   /* node waves */
   Waves.attach(".btn-wave", ["waves-light"]);

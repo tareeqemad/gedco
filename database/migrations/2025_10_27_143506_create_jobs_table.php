@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration {
     public function up(): void {
-        Schema::create('jobs', function (Blueprint $table) {
+        Schema::create('job_listings', function (Blueprint $table) {
             $table->id();
             $table->string('title');             // مثال: IATA (الاتحاد الدولي للنقل الجوي)
             $table->string('slug')->unique();    // اختياري لسيو/روابط
@@ -20,6 +20,6 @@ return new class extends Migration {
     }
 
     public function down(): void {
-        Schema::dropIfExists('jobs');
+        Schema::dropIfExists('job_listings');
     }
 };

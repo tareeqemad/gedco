@@ -15,4 +15,28 @@ class Slider extends Model
         'bullets'   => 'array',
         'is_active' => 'boolean',
     ];
+
+    public function getBgImageUrlAttribute(): string
+    {
+        $img = (string) $this->bg_image;
+
+        if (str_starts_with($img, 'http://') || str_starts_with($img, 'https://')) {
+            return $img;
+        }
+        if (str_starts_with($img, 'assets/') || str_starts_with($img, 'public/')) {
+            return asset($img);
+        }
+        if (str_starts_with($img, 'storage/')) {
+            return asset($img);
+        }
+        return asset('storage/'.$img);
+    }
+
+    public function getBulletsArrayAttribute(): array
+    {
+        if (is_array($this->bullets)) return $this->bullets;
+        $arr = json_decode($this->bullets ?? '[]', true);
+        return is_array($arr) ? $arr : [];
+    }
+
 }

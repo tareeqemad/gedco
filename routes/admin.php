@@ -1,10 +1,13 @@
 <?php
+
+use App\Http\Controllers\Admin\Site\WhyChooseUsController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\JobController;
+use App\Http\Controllers\Admin\Site\AboutUsController;
 
 
 use App\Http\Controllers\Admin\Site\SiteSettingController;
@@ -62,6 +65,15 @@ Route::prefix('admin')->name('admin.')->group(function () {
             ->names('jobs')
             ->middleware('permission:jobs.view|jobs.create|jobs.edit|jobs.delete');
 
+        Route::resource('about', AboutUsController::class)
+            ->names('about') // => admin.about.*
+            ->except(['show'])
+            ->middleware('permission:about.view|about.create|about.edit|about.delete');
+
+        Route::resource('why', WhyChooseUsController::class)
+            ->except(['show'])
+            ->names('why')
+            ->middleware('permission:why.view|why.create|why.edit|why.delete');
 
         //(services/company)
         Route::middleware('permission:footer-links.view')->get('/footer-links', [FooterLinkController::class, 'index'])->name('footer-links.index');
