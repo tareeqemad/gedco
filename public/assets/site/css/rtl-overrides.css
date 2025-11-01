@@ -1103,37 +1103,6 @@ html, body, button, input, select, textarea {
 
 
 
-:root {
-    --brand: #e6532e; /* لون شعار GEDCO - عدّله لو عندك كود أدق */
-}
-
-/* خليه دايمًا زر ملوّن */
-.menu_side_area .donate-btn {
-    font-family: inherit;
-    background: var(--brand);
-    color: #fff;
-    border: 2px solid var(--brand);
-    border-radius: 10px;
-    padding: 10px 20px;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    font-weight: 600;
-    transition: all .25s ease;
-    box-shadow: 0 2px 10px rgba(0,0,0,.15); /* يوضح فوق الصور */
-}
-
-/* هوفر عكسي أنيق */
-.menu_side_area .donate-btn:hover {
-    background: #fff;
-    color: var(--brand);
-    border-color: var(--brand);
-    transform: translateY(-2px);
-}
-
-/* حجم الأيقونة */
-.menu_side_area .donate-btn i { font-size: 16px; }
-
 
 
 /* ===== المتغيّرات العامة ===== */

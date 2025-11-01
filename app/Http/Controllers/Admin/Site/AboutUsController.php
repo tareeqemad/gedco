@@ -11,13 +11,14 @@ class AboutUsController extends Controller
 {
     public function index()
     {
+        // صفحة عرض "من نحن" (سجل وحيد)
         $about = AboutUs::first();
         return view('admin.site.about.index', compact('about'));
     }
 
     public function create()
     {
-        // لا يوجد سجل: جهّز أعمدة الميزات فاضية
+        // إنشاء السجل الأول
         $col1 = $col2 = [];
         return view('admin.site.about.create', compact('col1','col2'));
     }
@@ -26,17 +27,21 @@ class AboutUsController extends Controller
     {
         $data = $this->payload($request);
 
+        // رفع الصورة إن وُجدت
         if ($request->hasFile('image')) {
-            $data['image'] = $request->file('image')->store('site', 'public');
+            $data['image'] = $request->file('image')->store('site', 'public'); // مثال: site/abc.webp
         }
 
-        AboutUs::create($data);
+        $about = AboutUs::create($data);
 
-        return redirect()->route('admin.about.index')->with('success','تم الإنشاء بنجاح.');
+        return redirect()
+            ->route('admin.about.edit', $about)
+            ->with('success','تم الإنشاء بنجاح.');
     }
 
     public function edit(AboutUs $about)
     {
+        // تجهيز أعمدة الميزات للفورم
         [$col1, $col2] = $this->splitFeatures($about->features);
         return view('admin.site.about.edit', compact('about','col1','col2'));
     }
@@ -45,6 +50,7 @@ class AboutUsController extends Controller
     {
         $data = $this->payload($request);
 
+        // استبدال الصورة عند رفع جديدة
         if ($request->hasFile('image')) {
             if ($about->image && Storage::disk('public')->exists($about->image)) {
                 Storage::disk('public')->delete($about->image);
@@ -54,10 +60,29 @@ class AboutUsController extends Controller
 
         $about->update($data);
 
-        return redirect()->route('admin.about.index')->with('success','تم التحديث بنجاح.');
+        return redirect()
+            ->route('admin.about.index')
+            ->with('success','تم التحديث بنجاح.');
     }
 
-    // ===== Helpers =====
+    /**
+     * إزالة الصورة فقط (راوت: admin.about.remove-image)
+     * - تحذف الملف من التخزين إن وُجد
+     * - تضبط الحقل image = null
+     */
+    public function removeImage(AboutUs $about)
+    {
+        if ($about->image && Storage::disk('public')->exists($about->image)) {
+            Storage::disk('public')->delete($about->image);
+        }
+
+        $about->image = null;
+        $about->save();
+
+        return back()->with('success','تم إزالة الصورة بنجاح.');
+    }
+
+    /* ===================== Helpers ===================== */
 
     private function payload(AboutUsRequest $request): array
     {
@@ -71,7 +96,7 @@ class AboutUsController extends Controller
             'subtitle'    => $v['subtitle'] ?? null,
             'paragraph1'  => $v['paragraph1'],
             'paragraph2'  => $v['paragraph2'] ?? null,
-            // نخزّن Array — Laravel يحوله JSON تلقائيًا بفضل $casts
+            // نخزن Array — Laravel يحولها JSON تلقائياً عبر $casts بالموديل
             'features'    => [$col1, $col2],
         ];
     }

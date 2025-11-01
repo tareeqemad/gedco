@@ -590,7 +590,7 @@
 <!-- Custom JS -->
 <script src="{{ asset('assets/admin/js/custom.js') }}"></script>
 
-@stack('styles')
+@stack('scripts')
 </body>
 
 </html>

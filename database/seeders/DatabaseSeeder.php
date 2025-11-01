@@ -21,7 +21,8 @@ class DatabaseSeeder extends Seeder
             SlidersSeeder::class,
             FooterSeeder::class,
             AboutUsSeeder::class,
-            WhyChooseUsSeeder::class
+            WhyChooseUsSeeder::class,
+            ImpactStatSeeder::class
         ]);
     }
 }

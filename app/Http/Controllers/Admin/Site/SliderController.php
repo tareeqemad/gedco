@@ -19,7 +19,11 @@ class SliderController extends Controller
 
     public function create()
     {
-        return view('admin.site.sliders.create');
+        // نحسب آخر ترتيب للسلايدرات النشطة فقط
+        $nextOrder = Slider::where('is_active', true)->max('sort_order');
+        $nextOrder = is_null($nextOrder) ? 0 : $nextOrder + 1;
+
+        return view('admin.site.sliders.create', compact('nextOrder'));
     }
 
     public function store(StoreSliderRequest $request)
@@ -36,7 +40,7 @@ class SliderController extends Controller
         $data['is_active'] = (bool) $request->boolean('is_active');
 
         // ✅ تحديد الترتيب تلقائياً بناءً على آخر سجل
-        $lastOrder = \App\Models\Slider::max('sort_order');
+        $lastOrder = Slider::where('is_active', true)->max('sort_order');
         $data['sort_order'] = is_null($lastOrder) ? 0 : $lastOrder + 1;
 
         // إنشاء السجل
@@ -84,5 +88,13 @@ class SliderController extends Controller
         Cache::forget('home:sliders');
 
         return back()->with('success','تم الحذف');
+    }
+    public function deactivateImage(Slider $slider)
+    {
+        // فقط نُعطّل الصورة (نضع null في الداتابيز)
+        $slider->bg_image = null;
+        $slider->save();
+
+        return back()->with('success', 'تم إخفاء الصورة بنجاح');
     }
 }

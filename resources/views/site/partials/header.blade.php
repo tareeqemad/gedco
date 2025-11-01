@@ -53,12 +53,12 @@
 
                     <div class="de-flex-col">
                         <div class="menu_side_area">
-                            <a href="https://gazaappeal.gedco.ps/ar/donate" target="_blank"
-                               class="btn-main btn-line fx-slide donate-btn">
-                                <i class="fa-solid fa-hand-holding-heart"></i>
+                            <a href="https://gazaappeal.gedco.ps/ar/donate" target="_blank" rel="noopener"
+                               class="donate-btn d-inline-flex align-items-center justify-content-center gap-2 px-4 py-3 rounded-pill text-white fw-bold shadow-lg transition-all"
+                               style="background: linear-gradient(135deg, #dc3545, #c82333); font-size: 1rem; letter-spacing: 0.5px; text-decoration: none; min-width: 160px;">
+                                <i class="fa-solid fa-hand-holding-heart fs-5"></i>
                                 <span>تبرع للشركة</span>
                             </a>
-                            <span id="menu-btn"></span>
                         </div>
                         {{--
                            <div id="btn-extra">

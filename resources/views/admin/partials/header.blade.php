@@ -203,7 +203,7 @@
                 <a href="#" class="header-link dropdown-toggle" id="mainHeaderProfile" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
                     <div class="d-flex align-items-center">
                         <div class="me-sm-2 me-0">
-                            <img src="{{ asset('assets/admin/images/faces/2.jpg') }}" alt="img" width="32" height="32" class="rounded-circle">
+                            <img src="{{ auth()->user()->avatar_url }}" alt="profile" width="32" height="32" class="rounded-circle shadow-sm">
                         </div>
                         <div class="d-xl-block d-none">
                             <p class="fw-semibold mb-0 lh-1">{{ auth()->user()->name }}</p>
@@ -213,11 +213,11 @@
                 </a>
                 <!-- End::header-link|dropdown-toggle -->
                 <ul class="main-header-dropdown dropdown-menu pt-0 overflow-hidden header-profile-dropdown dropdown-menu-end" aria-labelledby="mainHeaderProfile">
-                    <li><a class="dropdown-item d-flex border-bottom" href="profile.html"><i class="far fa-user-circle fs-16 me-2 op-7"></i>Profile</a></li>
+                    <li><a class="dropdown-item d-flex border-bottom" href="{{ route('admin.profile.edit') }}"><i class="far fa-user-circle fs-16 me-2 op-7"></i>ملفي الشخصي </a></li>
                     <li>
                         <form method="POST" action="{{ route('admin.logout') }}" class="w-100">
                             @csrf
-                            <button type="submit" class="dropdown-item d-flex align-items-center w-100">
+                            <button type="submit" class="text-danger dropdown-item d-flex align-items-center w-100">
                                 <i class="bi bi-box-arrow-right me-2"></i>
                                 تسجيل الخروج
                             </button>

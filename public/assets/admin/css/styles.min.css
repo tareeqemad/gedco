@@ -5274,61 +5274,76 @@
     color: var(--text-muted) !important
 }
 
+
+
+
 .form-control {
-    border-color: var(--input-border);
-    color: var(--text-muted);
-    background-color: var(--custom-white);
+    border: 1px solid var(--input-border);
+    color: var(--input-text);
+    background-color: var(--input-bg);
     font-size: .875rem;
-    font-weight: var(--default-font-weight);
+    font-weight: var(--default-font-weight, 500);
     line-height: 1.6;
     border-radius: .35rem;
-    padding: .5rem .85rem
+    padding: .55rem .85rem;
+    transition: all .25s ease;
+}
+
+.form-control::placeholder {
+    color: var(--input-placeholder);
+    opacity: 1;
 }
 
 .form-control:focus {
-    box-shadow: none;
-    border-color: var(--input-border);
-    background-color: var(--custom-white);
-    box-shadow: 0 .0625rem .125rem 0 rgba(0, 0, 0, .05);
-    color: var(--default-text-color)
+    border-color: var(--input-focus);
+    background-color: var(--input-bg-focus);
+    box-shadow: 0 0 0 .15rem rgba(46, 140, 255, 0.25);
+    color: var(--input-text);
 }
 
 .form-label {
     font-size: .875rem;
     font-weight: 500;
-    color: var(--default-text-color)
+    color: var(--label-color);
 }
 
 .form-text {
-    color: var(--text-muted)
+    color: var(--text-muted);
 }
 
 .form-control-light {
-    background-color: rgb(var(--light-rgb));
-    border: 0
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--input-border);
+    color: var(--input-text);
 }
 
 .form-control-light:focus {
-    background-color: rgb(var(--light-rgb))
+    background-color: rgba(255, 255, 255, 0.08);
+    border-color: var(--input-focus);
+    color: #ffffff;
 }
 
+/* 🔵 النمط الأساسي (Primary fields) */
 .form-control-primary {
     background-color: var(--primary01);
-    border: 0;
-    color: var(--primary-color)
+    border: 1px solid var(--primary-color);
+    color: var(--primary-color);
 }
 
 .form-control-primary:focus {
-    background-color: var(--primary01);
-    color: var(--primary-color)
+    background-color: rgba(46, 140, 255, 0.15);
+    border-color: var(--primary-color);
+    color: #ffffff;
 }
 
 .form-input-color {
     height: 2.25rem;
     width: 2.25rem;
-    border-radius: 3px;
+    border-radius: 4px;
     overflow: hidden;
-    padding: 0
+    padding: 0;
+    border: 1px solid var(--input-border);
+    background-color: var(--input-bg);
 }
 
 .form-floating > .form-control:not(:-moz-placeholder-shown) ~ label {

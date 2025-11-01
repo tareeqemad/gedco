@@ -2,10 +2,6 @@
 
 @section('title', 'كهرباء غزة')
 @section('meta_description', 'الصفحة الرئيسة لكهرباء غزة')
-
-@push('styles')
-@endpush
-
 @section('content')
     <div class="no-bottom no-top" id="content">
         <div id="top"></div>
@@ -174,67 +170,92 @@
 
 
         {{-- ========= Counters ========= --}}
-        <section class="pt-0">
+        <section class="relative py-5 bg-white" id="impact-stats">
             <div class="container">
-                <div class="row g-4">
 
-                    <div class="col-md-2 col-sm-6 text-center">
-                        <div class="de_count">
-                            <h3 class="fs-40 mb-0">
-                                <span class="timer" dir="ltr" data-to="8" data-speed="3000">0</span>
-                            </h3>
-                            خسائر المباني
-                        </div>
+                <!-- العنوان + الجملة + الخط -->
+                <div class="mb-5" id="impact-heading" data-aos="fade-down" data-aos-delay="100">
+                    <div class="stack">
+                        <h3 class="title m-0">
+                            <i class="fas fa-chart-line ms-2 text-danger"></i>
+                            إحصائيات الخسائر
+                        </h3>
+                        <span class="subtitle">الأرقام تتحدث عن نفسها</span>
                     </div>
+                </div>
 
-                    <div class="col-md-2 col-sm-6 text-center">
-                        <div class="de_count">
-                            <h3 class="fs-40 mb-0">
-                                <span class="timer" dir="ltr" data-to="196.9" data-speed="3000">0</span>
-                            </h3>
-                            خسائر القطاع التجاري
+                <!-- الإحصائيات -->
+                <div class="row g-4 justify-content-center">
+                    @foreach($impactStats as $stat)
+                        @php
+                            $value = $stat->amount_usd;
+                            $title = $stat->title_ar;
+
+                            $icon = match(true) {
+                                str_contains($title, 'مباني') => 'fa-building',
+                                str_contains($title, 'تجاري') => 'fa-store',
+                                str_contains($title, 'شبكات') => 'fa-tower-broadcast',
+                                str_contains($title, 'مستودعات') => 'fa-warehouse',
+                                str_contains($title, 'مركبات') || str_contains($title, 'آليات') => 'fa-truck',
+                                str_contains($title, 'تشغيلية') => 'fa-cog',
+                                default => 'fa-chart-bar'
+                            };
+
+                            $color = $value >= 100_000_000 ? 'text-danger' :
+                                     ($value >= 10_000_000 ? 'text-warning' : 'text-success');
+
+                            // تنسيق الرقم + إخفاء الأصفار
+                            if ($value >= 1_000_000) {
+                                $formatted = rtrim(rtrim(number_format($value / 1_000_000, 2), '0'), '.');
+                                $unit = 'M';
+                            } elseif ($value >= 1_000) {
+                                $formatted = rtrim(rtrim(number_format($value / 1_000, 2), '0'), '.');
+                                $unit = 'K';
+                            } else {
+                                $formatted = number_format($value, 0);
+                                $unit = '';
+                            }
+                        @endphp
+
+                        <div class="col-lg-2 col-md-3 col-sm-4 col-6">
+                            <div class="counter-item p-4 rounded-4 h-100 d-flex flex-column justify-content-center shadow-sm bg-white"
+                                 style="min-height: 140px; border: 1px solid #eee; transition: all 0.35s ease;"
+                                 data-aos="zoom-in-up"
+                                 data-aos-delay="{{ $loop->index * 100 }}"
+                                 data-aos-duration="600">
+
+                                <div class="mb-2">
+                                    <i class="fas {{ $icon }} fa-2x {{ $color }}"></i>
+                                </div>
+
+                                <!-- رقم → M/K → $ -->
+                                <h3 class="fs-4 fw-bold text-dark mb-1 text-center" dir="ltr">
+                            <span class="timer" data-value="{{ $value }}" data-speed="1500" data-decimals="2">
+                                {{ $formatted }}
+                            </span>
+                                    @if($unit)
+                                        <span class="text-muted fs-5 ms-1">{{ $unit }}</span>
+                                    @endif
+                                    <span class="text-danger fs-5 ms-1">$</span>
+                                </h3>
+
+                                <p class="small text-muted mb-0 mt-2 fw-medium text-center" style="font-size: 0.8rem; line-height: 1.4;">
+                                    {{ $title }}
+                                </p>
+                            </div>
                         </div>
-                    </div>
+                    @endforeach
+                </div>
 
-                    <div class="col-md-2 col-sm-6 text-center">
-                        <div class="de_count">
-                            <h3 class="fs-40 mb-0">
-                                <span class="timer" dir="ltr" data-to="204" data-speed="3000">0</span>
-                            </h3>
-                            خسائر الشبكات
-                        </div>
-                    </div>
-
-                    <div class="col-md-2 col-sm-6 text-center">
-                        <div class="de_count">
-                            <h3 class="fs-40 mb-0">
-                                <span class="timer" dir="ltr" data-to="20" data-speed="3000">0</span>
-                            </h3>
-                            خسائر المستودعات
-                        </div>
-                    </div>
-
-                    <div class="col-md-2 col-sm-6 text-center">
-                        <div class="de_count">
-                            <h3 class="fs-40 mb-0">
-                                <span class="timer" dir="ltr" data-to="5.6" data-speed="3000">0</span>
-                            </h3>
-                            خسائر المركبات والآليات
-                        </div>
-                    </div>
-
-                    <div class="col-md-2 col-sm-6 text-center">
-                        <div class="de_count">
-                            <h3 class="fs-40 mb-0">
-                                <span class="timer" dir="ltr" data-to="16" data-speed="3000">0</span>
-                            </h3>
-                            الخسائر التشغيلية
-                        </div>
-                    </div>
-
+                <!-- الملاحظة -->
+                <div class="mt-5" data-aos="fade-up" data-aos-delay="300">
+                    <p class="text-muted small text-center">
+                        * الأرقام تقريبية وتُحدَّث دوريًا بناءً على التقارير الهندسية والمالية
+                    </p>
                 </div>
             </div>
         </section>
+
 
 
         {{-- ========= Track (split image/form) ========= --}}
@@ -262,46 +283,80 @@
         </section>
 
         {{-- ========= Services ========= --}}
-        <section class="pt-50 pb-50" id="services">
+        <section class="py-5 bg-white" id="services" dir="rtl">
             <div class="container">
-                <div class="row g-4 justify-content-center">
-                    <div class="col-lg-7 text-center">
-                        <div class="subtitle">خدماتنا</div>
-                        <h3 class="text-center">خدمات مصممة خصيصاً لكم</h3> <br>
-                        <p></p>
 
+                <!-- العنوان + الجملة + الخط (من اليسار) -->
+                <div class="mb-5" id="services-heading" data-aos="fade-right" data-aos-delay="100">
+                    <div style="display: flex; align-items: center; gap: 1rem;">
+                        <!-- الأيقونة الحلوة -->
+                        <div style="flex-shrink: 0;">
+                            <i class="fas fa-bolt fa-3x text-warning" style="filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));"></i>
+                        </div>
+
+                        <!-- النصوص -->
+                        <div>
+                            <div class="subtitle" style="color: #fd7e14; font-weight: 700; font-size: 1.8rem; margin-bottom: 0.25rem;">
+                                خدماتنا
+                            </div>
+                            <h3 style="margin: 0; font-weight: 600; font-size: 2rem;">
+                                خدمات مصممة خصيصاً لكم
+                            </h3>
+                            <div class="subtitle-line" style="position: relative; margin-top: 0.5rem;"></div>
+                        </div>
                     </div>
                 </div>
-                <div class="row g-4">
-                    <div class="col-lg-3 col-md-6">
-                        <a href="http://213.244.76.228/bill" target="_blank" class="d-block hover relative">
-                            <img src="{{ asset('assets/site/images/services/s1.png') }}"
-                                 class="w-70px mb-3 hover-jello infinite" alt="">
-                            <h4>الخدمات الالكترونية</h4>
+
+                <div style="display: flex; flex-wrap: wrap; gap: 1.5rem;">
+                    <!-- خدمة 1 -->
+                    <div style="flex: 1 1 250px; max-width: 300px;">
+                        <a href="http://213.244.76.228/bill" target="_blank" style="text-decoration: none; color: inherit; display: block;">
+                            <div class="service-card" style="text-align: center; padding: 1.5rem; border-radius: 1rem; height: 100%; display: flex; flex-direction: column; justify-content: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1); background: white; border: 1px solid #eee; transition: all 0.35s ease;"
+                                 data-aos="fade-up" data-aos-delay="100">
+
+                                <img src="{{ asset('assets/site/images/services/s1.png') }}"
+                                     style="width: 70px; height: 70px; margin: 0 auto 1rem; object-fit: contain;" alt="الخدمات الإلكترونية">
+                                <h4 style="margin: 0; font-weight: 700; color: #212529;" class="text-center">الخدمات الإلكترونية</h4>
+                            </div>
                         </a>
                     </div>
 
-                    <div class="col-lg-3 col-md-6">
-                        <a href="#" class="d-block hover relative">
-                            <img src="{{ asset('assets/site/images/services/s2.png') }}"
-                                 class="w-70px mb-3 hover-jello infinite" alt="">
-                            <h4>المواصفات والمقاييس</h4>
+                    <!-- خدمة 2 -->
+                    <div style="flex: 1 1 250px; max-width: 300px;">
+                        <a href="#" style="text-decoration: none; color: inherit; display: block;">
+                            <div class="service-card" style="text-align: center; padding: 1.5rem; border-radius: 1rem; height: 100%; display: flex; flex-direction: column; justify-content: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1); background: white; border: 1px solid #eee; transition: all 0.35s ease;"
+                                 data-aos="fade-up" data-aos-delay="200">
+
+                                <img src="{{ asset('assets/site/images/services/s2.png') }}"
+                                     style="width: 70px; height: 70px; margin: 0 auto 1rem; object-fit: contain;" alt="المواصفات والمقاييس">
+                                <h4 style="margin: 0; font-weight: 700; color: #212529;" class="text-center">المواصفات والمقاييس</h4>
+                            </div>
                         </a>
                     </div>
 
-                    <div class="col-lg-3 col-md-6">
-                        <a href="https://gazaappeal.gedco.ps/" target="_blank" class="d-block hover relative">
-                            <img src="{{ asset('assets/site/images/services/s3.png') }}"
-                                 class="w-70px mb-3 hover-jello infinite" alt="">
-                            <h4>التبرع</h4>
+                    <!-- خدمة 3 -->
+                    <div style="flex: 1 1 250px; max-width: 300px;">
+                        <a href="https://gazaappeal.gedco.ps/" target="_blank" style="text-decoration: none; color: inherit; display: block;">
+                            <div class="service-card" style="text-align: center; padding: 1.5rem; border-radius: 1rem; height: 100%; display: flex; flex-direction: column; justify-content: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1); background: white; border: 1px solid #eee; transition: all 0.35s ease;"
+                                 data-aos="fade-up" data-aos-delay="300">
+
+                                <img src="{{ asset('assets/site/images/services/s3.png') }}"
+                                     style="width: 70px; height: 70px; margin: 0 auto 1rem; object-fit: contain;" alt="التبرع">
+                                <h4 style="margin: 0; font-weight: 700; color: #212529;" class="text-center">التبرع</h4>
+                            </div>
                         </a>
                     </div>
 
-                    <div class="col-lg-3 col-md-6">
-                        <a href="{{ route('site.jobs') }}" class="d-block hover relative">
-                            <img src="{{ asset('assets/site/images/services/s4.png') }}"
-                                 class="w-70px mb-3 hover-jello infinite" alt="">
-                            <h4>اعلانات الوظائف</h4>
+                    <!-- خدمة 4 -->
+                    <div style="flex: 1 1 250px; max-width: 300px;">
+                        <a href="{{ route('site.jobs') }}" style="text-decoration: none; color: inherit; display: block;">
+                            <div class="service-card" style="text-align: center; padding: 1.5rem; border-radius: 1rem; height: 100%; display: flex; flex-direction: column; justify-content: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1); background: white; border: 1px solid #eee; transition: all 0.35s ease;"
+                                 data-aos="fade-up" data-aos-delay="400">
+
+                                <img src="{{ asset('assets/site/images/services/s4.png') }}"
+                                     style="width: 70px; height: 70px; margin: 0 auto 1rem; object-fit: contain;" alt="إعلانات الوظائف">
+                                <h4 style="margin: 0; font-weight: 700; color: #212529;" class="text-center">إعلانات الوظائف</h4>
+                            </div>
                         </a>
                     </div>
                 </div>
@@ -309,27 +364,39 @@
         </section>
 
         {{-- ========= Video Banner ========= --}}
-        <section class="p-0 m-0">
-            <a class="d-block js-youtube"
-               href="https://www.youtube.com/watch?v=02WimCJ02V8"
-               data-yt="02WimCJ02V8">
-                <div class="hero-video position-relative overflow-hidden" style="line-height:0; margin:0;">
-                    <img
-                        src="https://img.youtube.com/vi/02WimCJ02V8/maxresdefault.jpg"
-                        alt="Video thumbnail"
-                        class="thumb w-100 d-block"
-                        style="aspect-ratio:16/9; object-fit:cover; display:block;">
-                    <span class="hero-overlay"
-                          style="position:absolute; inset:0; background:rgba(0,0,0,.25); pointer-events:none;"></span>
-                    <span class="player position-absolute d-flex align-items-center justify-content-center"
-                          style="top:50%; left:50%; transform:translate(-50%,-50%);
-                   width:80px; height:80px; border-radius:50%;
-                   background:rgba(0,0,0,.6); color:#fff; font-size:42px;">
-        ▶
-      </span>
-                </div>
-            </a>
+        <section class="py-0" id="video-section">
+            <div class="container p-0">
+                <a class="d-block video-trigger position-relative"
+                   href="#"
+                   data-video-id="02WimCJ02V8"
+                   style="border-radius: 1rem; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.15); display: block; cursor: pointer;">
+
+                    <img src="https://img.youtube.com/vi/02WimCJ02V8/maxresdefault.jpg"
+                         alt="فيديو تعريفي"
+                         style="width: 100%; aspect-ratio: 16/9; object-fit: cover; transition: transform 0.4s ease;">
+
+                    <div style="position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.5));"></div>
+
+                    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90px; height: 90px; border-radius: 50%; background: rgba(220, 53, 69, 0.9); display: flex; align-items: center; justify-content: center; color: white; font-size: 38px; box-shadow: 0 8px 25px rgba(220, 53, 69, 0.4); transition: all 0.3s ease; animation: pulse-play 2s infinite;">
+                        <i class="fas fa-play" style="margin-left: 6px;"></i>
+                    </div>
+
+                    <div style="position: absolute; bottom: 1.5rem; left: 1.5rem; color: white; font-weight: 600; font-size: 1.1rem; text-shadow: 0 2px 4px rgba(0,0,0,0.5);">
+                        شاهد فيديو تعريفي عن خدماتنا
+                    </div>
+                </a>
+            </div>
         </section>
+
+        <!-- Popup (على قد الفيديو فقط) -->
+        <div id="video-popup" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 9999; align-items: center; justify-content: center; padding: 2rem;">
+            <div style="position: relative; width: 100%; max-width: 900px; aspect-ratio: 16/9; border-radius: 1rem; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.5); background: #000;">
+                <button id="close-video-popup" style="position: absolute; top: -15px; right: -15px; width: 50px; height: 50px; border-radius: 50%; background: #dc3545; color: white; font-size: 24px; font-weight: bold; border: none; display: flex; align-items: center; justify-content: center; z-index: 10000; box-shadow: 0 4px 15px rgba(220,53,69,0.5); cursor: pointer; transition: all 0.3s ease;">
+                    ×
+                </button>
+                <iframe id="youtube-player" width="100%" height="100%" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+        </div>
         {{-- ========= Why Choose Us ========= --}}
         @php
             $why = \App\Models\WhyChooseUs::where('is_active',true)->first();
@@ -376,4 +443,40 @@
     </div>
 @endsection
 @push('scripts')
+     <script>
+         document.addEventListener('DOMContentLoaded', () => {
+             const trigger = document.querySelector('.video-trigger');
+             const popup = document.getElementById('video-popup');
+             const iframe = document.getElementById('youtube-player');
+             const closeBtn = document.getElementById('close-video-popup');
+
+             if (!trigger || !popup || !iframe || !closeBtn) return;
+
+             const videoId = trigger.dataset.videoId;
+
+             trigger.addEventListener('click', (e) => {
+                 e.preventDefault();
+                 iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1&playsinline=1&iv_load_policy=3`;
+                 popup.style.display = 'flex';
+                 document.body.style.overflow = 'hidden';
+             });
+
+             const closePopup = () => {
+                 popup.style.display = 'none';
+                 iframe.src = '';
+                 document.body.style.overflow = 'auto';
+             };
+
+             closeBtn.addEventListener('click', closePopup);
+             popup.addEventListener('click', (e) => {
+                 if (e.target === popup) closePopup();
+             });
+
+             popup.querySelector('div').addEventListener('click', (e) => {
+                 e.stopPropagation();
+             });
+         });
+
+     </script>
+
 @endpush

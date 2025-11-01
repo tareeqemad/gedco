@@ -13,15 +13,14 @@
                         <i class="fas fa-bolt logo-fallback" id="logoFallback" style="display:none"></i>
                     </div>
                     <div class="company-name">كهرباء غزة</div>
-                    <div class="company-subtitle">GEDCO</div>
-                    <div class="company-description">نظام إدارة الكهرباء المتطور<br>لتوفير خدمة متميزة وآمنة</div>
+                    <div class="company-description">شبكة ذكية لخدمة افضل</div>
                 </div>
             </div>
 
             <div class="form-section">
                 <div class="welcome-text">
                     <h2>مرحباً بك</h2>
-                    <p>سجل دخولك للوصول إلى نظام إدارة الكهرباء</p>
+                    <p>سجل دخولك للوصول إلى النظام</p>
                 </div>
 
                 {{-- Laravel flashes/errors --}}
@@ -61,7 +60,10 @@
                             <input type="checkbox" id="remember" name="remember" {{ old('remember') ? 'checked' : '' }}>
                             <label for="remember">تذكرني</label>
                         </div>
-                        <a href="#" class="forgot-password">نسيت كلمة المرور؟</a>
+
+                        <!--<a href="#" class="forgot-password">نسيت كلمة المرور؟</a>-->
+
+
                     </div>
 
                     <button type="submit" class="login-btn" id="submitBtn">
@@ -95,7 +97,6 @@
                 });
             }
 
-            // no preventDefault — خليه يرسل طبيعي للـ route
             if(loginForm && submitBtn){
                 loginForm.addEventListener('submit',function(){
                     submitBtn.classList.add('loading');

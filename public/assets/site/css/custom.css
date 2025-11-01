@@ -1,0 +1,195 @@
+
+/* العنوان */
+
+#impact-heading .title {
+    margin: 0;
+    font-weight: 700;
+}
+
+/* الجملة */
+#impact-heading .subtitle {
+    position: relative;
+    display: inline-block;
+    color: #6c757d;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    font-weight: 500;
+}
+
+/* الخط يتمدد من اليمين */
+#impact-heading .subtitle::after {
+    content: "";
+    position: absolute;
+    bottom: -10px;
+    right: 0;
+    width: 0;
+    height: 3px;
+    background: #dc3545;
+    border-radius: 2px;
+    opacity: .85;
+    transition: width 0.6s ease;
+}
+
+#impact-heading[data-aos="fade-down"].aos-animate .subtitle::after {
+    width: 160px;
+}
+
+@media (max-width: 576px) {
+    #impact-heading[data-aos="fade-down"].aos-animate .subtitle::after {
+        width: 120px;
+    }
+}
+
+/* Hover على البطاقات */
+.counter-item {
+    background: white !important;
+    border: 1px solid #eee !important;
+    transition: all 0.35s ease;
+}
+
+.counter-item:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 28px rgba(220, 53, 69, 0.15) !important;
+    border-color: #dc3545 !important;
+}
+
+/* نبض خفيف للأرقام الكبيرة */
+.text-danger .timer {
+    animation: pulse-danger 2s infinite;
+}
+
+@keyframes pulse-danger {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+
+/******services****/
+
+/* الخط يتمدد من اليمين */
+#services-heading .subtitle-line::after {
+    content: "";
+    position: absolute;
+    bottom: -10px;
+    right: 0;
+    width: 0;
+    height: 3px;
+    background: #dc3545;
+    border-radius: 2px;
+    opacity: .85;
+    transition: width 0.6s ease;
+}
+
+#services-heading[data-aos="fade-right"].aos-animate .subtitle-line::after {
+    width: 160px;
+}
+
+@media (max-width: 576px) {
+    #services-heading[data-aos="fade-right"].aos-animate .subtitle-line::after {
+        width: 120px;
+    }
+}
+
+/* Hover */
+.service-card {
+    transition: all 0.35s ease;
+}
+
+.service-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 28px rgba(220, 53, 69, 0.15) !important;
+    border-color: #dc3545 !important;
+}
+
+.service-card img {
+    transition: transform 0.3s ease;
+}
+
+.service-card:hover img {
+    transform: scale(1.1);
+}
+
+
+/* نبض خفيف على زر البلاي */
+@keyframes pulse-play {
+    0%, 100% { transform: translate(-50%, -50%) scale(1); }
+    50% { transform: translate(-50%, -50%) scale(1.1); }
+}
+
+/* Hover على الصورة */
+#video-section a:hover img {
+    transform: scale(1.03);
+}
+
+@keyframes pulse-play {
+    0%, 100% { transform: translate(-50%, -50%) scale(1); }
+    50% { transform: translate(-50%, -50%) scale(1.1); }
+}
+
+@keyframes pulse-play {
+    0%, 100% { transform: translate(-50%, -50%) scale(1); }
+    50% { transform: translate(-50%, -50%) scale(1.1); }
+}
+
+#video-section a:hover img {
+    transform: scale(1.03);
+}
+
+#video-section a:hover > div[style*="background: rgba(220"] {
+    background: #dc3545 !important;
+    transform: translate(-50%, -50%) scale(1.15);
+}
+
+#close-video-popup:hover {
+    background: #c82333 !important;
+    transform: scale(1.1);
+}
+
+
+.donate-btn {
+    background: linear-gradient(135deg, #dc3545, #c82333) !important;
+    box-shadow: 0 6px 20px rgba(220, 53, 69, 0.3) !important;
+    transition: all 0.35s ease;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.donate-btn::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+    opacity: 0;
+    transition: opacity 0.35s ease;
+    z-index: -1;
+}
+
+.donate-btn:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 30px rgba(220, 53, 69, 0.45) !important;
+    background: linear-gradient(135deg, #e74c3c, #c0392b) !important;
+}
+
+.donate-btn:hover::before {
+    opacity: 1;
+}
+
+.donate-btn:active {
+    transform: translateY(-2px);
+}
+
+/* تحسين الأيقونة */
+.donate-btn i {
+    transition: transform 0.3s ease;
+}
+
+.donate-btn:hover i {
+    transform: scale(1.2) rotate(10deg);
+}
+
+.site-header{ border-bottom: 0 !important; }
+.site-header .container{ margin: 0 auto; }
+body { padding-top: 0; }
+
+

@@ -60,7 +60,102 @@
 <script src="{{ asset('assets/site/js/custom-swiper-1.js') }}"></script>
 <script src="{{ asset('assets/site/js/custom-marquee.js') }}"></script>
 <script src="{{ asset('assets/site/js/custom.js') }}"></script>
+<script>
+    (function () {
+        const header   = document.getElementById('site-header');
+        const menuBtn  = document.getElementById('menu-btn');
+        const mainMenu = document.getElementById('mainmenu');
+        if (!header || !menuBtn || !mainMenu) return;
 
+        const mqDesktop = window.matchMedia('(min-width: 992px)');
+
+        function setHeaderH() {
+            const h = header.offsetHeight || 64;
+            document.documentElement.style.setProperty('--header-h', h + 'px');
+        }
+
+        function updateHeaderState() {
+            const scrolled = window.scrollY > 40;
+            const desktop  = mqDesktop.matches;
+
+            header.classList.toggle('scrolled', desktop && scrolled);
+            header.classList.toggle('at-top',   desktop && !scrolled);
+
+            setHeaderH();
+            document.body.style.paddingTop = scrolled ? (header.offsetHeight + 'px') : '0px';
+        }
+
+        function toggleNav(force) {
+            const open = (typeof force === 'boolean') ? force : !header.classList.contains('nav-open');
+            header.classList.toggle('nav-open', open);
+            menuBtn.setAttribute('aria-expanded', String(open));
+            document.documentElement.classList.toggle('navlock', open);
+            document.body.classList.toggle('navlock', open);
+
+            setHeaderH();
+
+            if (!open) {
+                mainMenu.querySelectorAll('.open-sub').forEach(li => li.classList.remove('open-sub'));
+            }
+        }
+
+        menuBtn.addEventListener('click', () => toggleNav());
+
+        // أكورديون
+        function bindMobileSubmenus() {
+            const isMobile = !mqDesktop.matches;
+            mainMenu.querySelectorAll(':scope > li > a.menu-item').forEach(a => a.onclick = null);
+            if (!isMobile) return;
+
+            mainMenu.querySelectorAll(':scope > li').forEach(li => {
+                const a   = li.querySelector(':scope > a.menu-item');
+                const sub = li.querySelector(':scope > ul');
+                if (!a || !sub) return;
+
+                a.addEventListener('click', e => {
+                    if (!li.classList.contains('open-sub')) {
+                        e.preventDefault();
+                        li.classList.add('open-sub');
+                        mainMenu.querySelectorAll(':scope > li.open-sub').forEach(o => { if (o !== li) o.classList.remove('open-sub'); });
+                    } else {
+                        const href = a.getAttribute('href');
+                        if (href && href !== '#') toggleNav(false);
+                    }
+                });
+            });
+        }
+
+        // إغلاق عند الضغط خارج
+        document.addEventListener('click', e => {
+            if (!mqDesktop.matches && header.classList.contains('nav-open') && !header.contains(e.target)) {
+                toggleNav(false);
+            }
+        });
+
+        // إغلاق عند الضغط على X
+        header.addEventListener('click', e => {
+            if (e.target === header || e.target.closest('.site-header::after')) {
+                toggleNav(false);
+            }
+        });
+
+        // تشغيل
+        bindMobileSubmenus();
+        updateHeaderState();
+        window.addEventListener('scroll', updateHeaderState, { passive: true });
+        window.addEventListener('resize', () => {
+            bindMobileSubmenus();
+            updateHeaderState();
+            if (mqDesktop.matches) toggleNav(false);
+        });
+        window.addEventListener('load', updateHeaderState);
+        setTimeout(updateHeaderState, 150);
+
+        if ('ResizeObserver' in window) {
+            new ResizeObserver(updateHeaderState).observe(header);
+        }
+    })();
+</script>
 @stack('scripts')
 </body>
 </html>
