@@ -10,11 +10,12 @@ use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\JobController;
 use App\Http\Controllers\Admin\Site\AboutUsController;
 use App\Http\Controllers\Admin\Site\ImpactStatController;
+use App\Http\Controllers\Admin\AdvertisementController;
 use App\Http\Controllers\Admin\Site\SiteSettingController;
 use App\Http\Controllers\Admin\Site\FooterLinkController;
 use App\Http\Controllers\Admin\Site\SocialLinkController;
 use App\Http\Controllers\Admin\Site\SliderController;
-use App\Http\Controllers\Admin\RoleController; // تم إضافته
+use App\Http\Controllers\Admin\RoleController;
 
 Route::prefix('admin')->name('admin.')->group(function () {
 
@@ -103,6 +104,11 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::post('impact-stats/reorder', [ImpactStatController::class, 'reorder'])
             ->name('impact-stats.reorder')
             ->middleware('permission:impact-stats.edit');
+
+        Route::resource('advertisements', AdvertisementController::class)
+            ->parameters(['advertisements' => 'ID_ADVER'])
+            ->names('advertisements')
+            ->middleware('permission:advertisements.view|advertisements.create|advertisements.edit|advertisements.delete');
 
 
 

@@ -589,7 +589,7 @@
 
 <!-- Custom JS -->
 <script src="{{ asset('assets/admin/js/custom.js') }}"></script>
-
+@vite(['resources/js/app.js'])
 @stack('scripts')
 </body>
 

@@ -16,7 +16,7 @@ class Authenticate extends Middleware
             return null;
         }
 
-        // ✅ هذا هو السحر الحقيقي
+
         if ($request->is('admin*')) {
             return route('admin.login');
         }

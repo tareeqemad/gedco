@@ -13,7 +13,7 @@ class RolesAndPermissionsSeeder extends Seeder
     {
         app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
 
-        // === الأقسام العادية ===
+        // === الأقسام العادية (CRUD) ===
         $normalSections = [
             'users',
             'sliders',
@@ -21,9 +21,10 @@ class RolesAndPermissionsSeeder extends Seeder
             'about',
             'why',
             'impact-stats',
+            'advertisements', // 👈 جديد: صلاحيات CRUD كاملة لهذا القسم
         ];
 
-        // === الأقسام الخاصة بالسوبر أدمن فقط ===
+        // === الأقسام الخاصة بالسوبر أدمن فقط (CRUD) ===
         $superOnlySections = [
             'roles',
             'permissions',
@@ -45,7 +46,7 @@ class RolesAndPermissionsSeeder extends Seeder
         $permissions[] = 'impact-stats.toggle';
         $permissions[] = 'impact-stats.reorder';
 
-        // 2) صلاحيات الأقسام الحصرية للسوبر أدمن
+        // 2) صلاحيات الأقسام الحصرية للسوبر أدمن (CRUD)
         foreach ($superOnlySections as $section) {
             $permissions[] = "{$section}.view";
             $permissions[] = "{$section}.create";
@@ -56,21 +57,21 @@ class RolesAndPermissionsSeeder extends Seeder
         // 3) إعدادات الموقع
         $permissions[] = 'site-settings.edit';
 
-        // إنشاء الصلاحيات
+        // إنشاء الصلاحيات (إن وُجدت من قبل لا تتكرر)
         foreach ($permissions as $p) {
             Permission::firstOrCreate(['name' => $p, 'guard_name' => 'web']);
         }
 
-        // الأدوار
+        // إنشاء الأدوار
         $super  = Role::firstOrCreate(['name' => 'super-admin', 'guard_name' => 'web']);
         $admin  = Role::firstOrCreate(['name' => 'admin', 'guard_name' => 'web']);
         $editor = Role::firstOrCreate(['name' => 'editor', 'guard_name' => 'web']);
         $viewer = Role::firstOrCreate(['name' => 'viewer', 'guard_name' => 'web']);
 
-        // 1) Super Admin: الكل
+        // 1) Super Admin: كل الصلاحيات
         $super->syncPermissions(Permission::all());
 
-        // 2) Admin: كل شيء ما عدا الأقسام الحصرية
+        // 2) Admin: كل شيء ما عدا الأقسام الحصرية (roles/permissions/footer-links/social-links)
         $adminPermissions = Permission::whereNotIn('name', [
             'roles.view', 'roles.create', 'roles.edit', 'roles.delete',
             'permissions.view', 'permissions.create', 'permissions.edit', 'permissions.delete',
@@ -86,7 +87,7 @@ class RolesAndPermissionsSeeder extends Seeder
         })->get();
         $admin->syncPermissions($adminPermissions);
 
-        // ⚠️ إصلاح التجميع للـ Editor حتى لا تفلت orWhere خارج notIn
+        // 3) Editor: عرض + إنشاء/تعديل + toggle/reorder (بدون الأقسام الحصرية)
         $editorPermissions = Permission::whereNotIn('name', [
             'roles.view', 'roles.create', 'roles.edit', 'roles.delete',
             'permissions.view', 'permissions.create', 'permissions.edit', 'permissions.delete',
@@ -96,24 +97,25 @@ class RolesAndPermissionsSeeder extends Seeder
             $q->where('name', 'like', '%.view')
                 ->orWhere('name', 'like', '%.create')
                 ->orWhere('name', 'like', '%.edit')
-                ->orWhere('name', 'like', '%.toggle')   // يعتبر ضمن صلاحيات التحرير
-                ->orWhere('name', 'like', '%.reorder'); // ترتيب أيضاً للمحرر
+                ->orWhere('name', 'like', '%.toggle')
+                ->orWhere('name', 'like', '%.reorder');
         })->get();
         $editor->syncPermissions($editorPermissions);
 
-        // Viewer: عرض فقط (مع استثناءات الأقسام الحصرية)
+        // 4) Viewer: عرض فقط (مع استثناء عرض الأقسام الحصرية)
         $viewerPermissions = Permission::whereNotIn('name', [
             'roles.view', 'permissions.view',
             'footer-links.view', 'social-links.view',
         ])->where('name', 'like', '%.view')->get();
         $viewer->syncPermissions($viewerPermissions);
 
-        // تعيين الدور للمستخدم الأول
+        // تعيين الدور للمستخدم الأول (إن لم يكن سوبر)
         $firstUser = User::first();
         if ($firstUser && !$firstUser->hasRole('super-admin')) {
             $firstUser->assignRole('super-admin');
         }
 
+        // ترقية أي مستخدم is_admin=true إلى admin إن لم يملك دورًا
         User::where('is_admin', true)
             ->whereDoesntHave('roles', fn($q) => $q->whereIn('name', ['super-admin', 'admin']))
             ->each(fn($u) => $u->assignRole('admin'));

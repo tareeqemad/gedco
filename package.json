@@ -21,6 +21,7 @@
     },
     "dependencies": {
         "aos": "^2.3.4",
-        "sortablejs": "^1.15.6"
+        "sortablejs": "^1.15.6",
+        "sweetalert2": "^11.26.3"
     }
 }

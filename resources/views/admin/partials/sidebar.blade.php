@@ -82,16 +82,34 @@
                     </li>
                 @endcan
 
-                @can('jobs.view')
-                    <li class="slide has-sub {{ $isOpen('admin.jobs.*') }}">
-                        <a href="javascript:void(0);" class="side-menu__item {{ $isActive('admin.jobs.*') }}">
-                            <i class="bi bi-briefcase side-menu__icon"></i>
-                            <span class="side-menu__label">الوظائف</span>
+                @can('advertisements.view')
+                    <li class="slide has-sub {{ $isOpen('admin.advertisements.*') }}">
+                        <a href="javascript:void(0);" class="side-menu__item {{ $isActive('admin.advertisements.*') }}">
+                            <i class="bi bi-megaphone side-menu__icon"></i>
+                            <span class="side-menu__label">الإعلانات والوظائف</span>
                             <i class="fe fe-chevron-left side-menu__angle"></i>
                         </a>
-                        <ul class="slide-menu child1" style="{{ $isOpen('admin.jobs.*') ? 'display:block' : '' }}">
-                            <li class="slide"><a href="{{ route('admin.jobs.index') }}" class="side-menu__item {{ $isActive('admin.jobs.index') }}">قائمة الوظائف</a></li>
-                            <li class="slide"><a href="{{ route('admin.jobs.create') }}" class="side-menu__item {{ $isActive('admin.jobs.create') }}">إضافة وظيفة</a></li>
+
+                        <ul class="slide-menu child1" style="{{ $isOpen('admin.advertisements.*') ? 'display:block' : '' }}">
+
+                            @can('advertisements.view')
+                                <li class="slide">
+                                    <a href="{{ route('admin.advertisements.index') }}"
+                                       class="side-menu__item {{ $isActive('admin.advertisements.index') }}">
+                                        القائمة
+                                    </a>
+                                </li>
+                            @endcan
+
+                            @can('advertisements.create')
+                                <li class="slide">
+                                    <a href="{{ route('admin.advertisements.create') }}"
+                                       class="side-menu__item {{ $isActive('admin.advertisements.create') }}">
+                                        إضافة إعلان
+                                    </a>
+                                </li>
+                            @endcan
+
                         </ul>
                     </li>
                 @endcan
