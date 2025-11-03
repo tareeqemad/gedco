@@ -5,7 +5,8 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Cache\RateLimiting\Limit;
-use Illuminate\Http\Request; // <-- هذا كان ناقص
+use Illuminate\Http\Request;
+use Illuminate\Pagination\Paginator; // مهم
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -18,11 +19,9 @@ class AppServiceProvider extends ServiceProvider
     {
         RateLimiter::for('login', function (Request $request) {
             $email = (string) $request->input('email');
-
-            return [
-                // 5 محاولات بالدقيقة لنفس (الإيميل + IP)
-                Limit::perMinute(5)->by($email.'|'.$request->ip()),
-            ];
+            return [ Limit::perMinute(5)->by($email.'|'.$request->ip()), ];
         });
+
+        Paginator::useBootstrapFive();
     }
 }

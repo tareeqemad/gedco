@@ -40,12 +40,12 @@
                             <li>
                                 <a class="menu-item" href="#">الاعلانات</a>
                                 <ul>
-                                    <li><a href="{{ route('site.jobs') }}">الوظائف</a></li>
+                                    <li><a href="{{ route('site.advertisements.index') }}">الإعلانات والوظائف</a></li>
                                     <li><a href="{{ route('site.tenders') }}">العطاءات</a></li>
                                 </ul>
                             </li>
                             <li>
-                                <a class="menu-item" href="#contact-footer">اتصل بنا</a>
+                                <a class="menu-item" href="{{ route('site.home') }}#contact-footer">اتصل بنا</a>
                             </li>
 
                         </ul>
@@ -53,18 +53,20 @@
 
                     <div class="de-flex-col">
                         <div class="menu_side_area">
-                            <a href="https://gazaappeal.gedco.ps/ar/donate" target="_blank" rel="noopener"
-                               class="donate-btn d-inline-flex align-items-center justify-content-center gap-2 px-4 py-3 rounded-pill text-white fw-bold shadow-lg transition-all"
-                               style="background: linear-gradient(135deg, #dc3545, #c82333); font-size: 1rem; letter-spacing: 0.5px; text-decoration: none; min-width: 160px;">
-                                <i class="fa-solid fa-hand-holding-heart fs-5"></i>
-                                <span>تبرع للشركة</span>
+                            <a href="https://gazaappeal.gedco.ps/ar/donate" target="_blank" rel="noopener" class="donate-btn-epic">
+                                <span class="donate-btn-content">
+                                    <i class="fa-solid fa-hand-holding-heart"></i>
+                                    <span class="donate-text">تبرع الآن</span>
+                                </span>
+                                <span class="donate-btn-glow"></span>
+                                <span class="donate-btn-particles"></span>
                             </a>
+                            <div id="menu-btn">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
                         </div>
-                        {{--
-                           <div id="btn-extra">
-                            <span></span><span></span>
-                        </div>
-                         --}}
                     </div>
                 </div>
             </div></div>

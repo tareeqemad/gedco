@@ -497,10 +497,378 @@ html[dir="rtl"] #mainmenu > li > ul li a:hover {
     background-color: #ff6b35 !important;
 }
 
-/* Disable Logo Click */
+/* ====== تحسين الشعار - Professional & Corporate Logo ====== */
+#logo {
+    position: relative;
+    z-index: 1000;
+}
+
 #logo a {
-    pointer-events: none !important;
-    cursor: default !important;
+    pointer-events: auto !important;
+    cursor: pointer !important;
+    display: inline-block;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+/* تحسين رسمي واحترافي للشعار */
+#logo img {
+    position: relative;
+    height: 60px !important;
+    width: auto !important;
+    max-width: none !important;
+    filter:
+        drop-shadow(0 3px 8px rgba(0, 0, 0, 0.3))
+        drop-shadow(0 1px 3px rgba(0, 0, 0, 0.2))
+        brightness(1.05)
+        contrast(1.03);
+    transition: all 0.3s ease;
+    animation: logoFloatAnimation 3s ease-in-out infinite;
+}
+
+/* حركة نبض خفيف للشعار */
+@keyframes logoFloatAnimation {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+#logo a:hover img {
+    filter:
+        drop-shadow(0 4px 12px rgba(0, 0, 0, 0.35))
+        drop-shadow(0 2px 5px rgba(255, 107, 0, 0.25))
+        brightness(1.08)
+        contrast(1.05);
+    transform: scale(1.02);
+}
+
+/* في حالة الـ scroll - بدون أي ظل على الخلفية البيضاء */
+header.scroll #logo img,
+header.scroll.header-mobile #logo img,
+header.scroll-light.scroll #logo img {
+    filter: none !important;
+    -webkit-filter: none !important;
+}
+
+header.scroll #logo a:hover img,
+header.scroll.header-mobile #logo a:hover img,
+header.scroll-light.scroll #logo a:hover img {
+    filter: none !important;
+    -webkit-filter: none !important;
+    transform: scale(1.02);
+}
+
+/* للموبايل */
+@media (max-width: 991px) {
+    #logo img {
+        height: 52px !important;
+    }
+}
+
+@media (max-width: 576px) {
+    #logo img {
+        height: 46px !important;
+    }
+}
+
+/* ========================================
+   تحسين النصوص في السلايدر للموبايل
+   ======================================== */
+
+@media (max-width: 991px) {
+    .slider-bullets {
+        padding-bottom: 1rem !important;
+    }
+
+    .slider-bullets .d-flex {
+        justify-content: space-between !important;
+        gap: 0.5rem !important;
+    }
+
+    .slider-bullets .bullet-item {
+        flex: 1 !important;
+        min-width: 0 !important;
+    }
+
+    .slider-bullets .bullet-item h6 {
+        font-size: 0.7rem !important;
+        padding: 0.4rem 0.5rem !important;
+        white-space: normal !important;
+        line-height: 1.3 !important;
+        word-wrap: break-word !important;
+    }
+}
+
+@media (max-width: 576px) {
+    .slider-bullets .bullet-item h6 {
+        font-size: 0.65rem !important;
+        padding: 0.3rem 0.4rem !important;
+    }
+}
+
+/* توسيط النصوص في السلايدر */
+.sw-caption {
+    text-align: center !important;
+}
+
+.sw-caption .row {
+    justify-content: center !important;
+}
+
+.sw-caption h2,
+.sw-caption h1,
+.sw-caption p,
+.sw-caption .btn {
+    text-align: center !important;
+}
+
+.sw-text-wrapper {
+    text-align: center !important;
+}
+
+/* ========================================
+   كاردات إحصائيات احترافية - Professional Cards
+   ======================================== */
+
+#impact-stats .counter-item {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    cursor: pointer;
+    background: linear-gradient(135deg, #ffffff 0%, #fafafa 100%) !important;
+    border: none !important;
+    box-shadow:
+        0 4px 15px rgba(0, 0, 0, 0.08),
+        0 1px 4px rgba(0, 0, 0, 0.05) !important;
+    border-radius: 16px !important;
+}
+
+/* خلفية متدرجة برتقالية خفيفة */
+#impact-stats .counter-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg,
+    #ff6b35 0%,
+    #ff8c5a 50%,
+    #ff6b35 100%);
+    background-size: 200% 100%;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    z-index: 1;
+    border-radius: 16px 16px 0 0;
+}
+
+#impact-stats .counter-item:hover::before {
+    opacity: 1;
+    animation: gradientMove 2s linear infinite;
+}
+
+@keyframes gradientMove {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 200% 50%; }
+}
+
+/* تأثير الـ hover - رفع الكارد */
+#impact-stats .counter-item:hover {
+    transform: translateY(-10px);
+    box-shadow:
+        0 20px 40px rgba(255, 107, 0, 0.15),
+        0 10px 25px rgba(0, 0, 0, 0.1),
+        0 0 0 1px rgba(255, 107, 0, 0.1) !important;
+}
+
+/* الأيقونة */
+#impact-stats .counter-item .mb-2 {
+    position: relative;
+    margin-bottom: 1rem !important;
+}
+
+/* تكبير الأيقونة عند الـ hover */
+#impact-stats .counter-item:hover .fa {
+    transform: scale(1.2) rotate(8deg);
+    filter: drop-shadow(0 6px 12px rgba(255, 107, 0, 0.3));
+}
+
+#impact-stats .counter-item .fa {
+    transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    position: relative;
+    z-index: 1;
+}
+
+/* تأثير على الأرقام */
+#impact-stats .counter-item:hover h3 {
+    color: #ff6b35 !important;
+    transform: scale(1.08);
+}
+
+#impact-stats .counter-item h3 {
+    transition: all 0.3s ease;
+    position: relative;
+    z-index: 1;
+}
+
+/* تأثير على النص */
+#impact-stats .counter-item:hover p {
+    color: #222 !important;
+    font-weight: 500;
+}
+
+#impact-stats .counter-item p {
+    transition: all 0.3s ease;
+    position: relative;
+    z-index: 1;
+    color: #666;
+}
+
+/* نقاط ديكورية */
+#impact-stats .counter-item::after {
+    content: '';
+    position: absolute;
+    bottom: -50px;
+    right: -50px;
+    width: 100px;
+    height: 100px;
+    background: radial-gradient(
+        circle,
+        rgba(255, 107, 0, 0.05) 0%,
+        transparent 70%
+    );
+    transition: all 0.5s ease;
+    z-index: 0;
+}
+
+#impact-stats .counter-item:hover::after {
+    bottom: -30px;
+    right: -30px;
+    opacity: 0.8;
+}
+
+/* تأثير pulsing خفيف على الأيقونات الحمراء (القيم الكبيرة) */
+@keyframes iconPulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.75;
+    }
+}
+
+#impact-stats .counter-item .text-danger {
+    animation: iconPulse 2.5s ease-in-out infinite;
+}
+
+#impact-stats .counter-item:hover .text-danger {
+    animation: none;
+    opacity: 1 !important;
+}
+
+/* ========================================
+   كاردات الخدمات - نفس أسلوب كاردات الإحصائيات
+   ======================================== */
+
+.service-card {
+    position: relative !important;
+    overflow: hidden !important;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    cursor: pointer !important;
+    background: linear-gradient(135deg, #ffffff 0%, #fafafa 100%) !important;
+    border: none !important;
+    box-shadow:
+        0 4px 15px rgba(0, 0, 0, 0.08),
+        0 1px 4px rgba(0, 0, 0, 0.05) !important;
+    border-radius: 16px !important;
+}
+
+/* خط برتقالي من تحت */
+.service-card::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg,
+    #ff6b35 0%,
+    #ff8c5a 50%,
+    #ff6b35 100%);
+    background-size: 200% 100%;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    z-index: 1;
+    border-radius: 0 0 16px 16px;
+}
+
+.service-card:hover::before {
+    opacity: 1;
+    animation: gradientMove 2s linear infinite;
+}
+
+@keyframes gradientMove {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 200% 50%; }
+}
+
+/* رفع الكارد عند الـ hover */
+.service-card:hover {
+    transform: translateY(-10px) !important;
+    box-shadow:
+        0 20px 40px rgba(255, 107, 0, 0.15),
+        0 10px 25px rgba(0, 0, 0, 0.1),
+        0 0 0 1px rgba(255, 107, 0, 0.1) !important;
+}
+
+/* تكبير الأيقونة عند الـ hover */
+.service-card:hover img {
+    transform: scale(1.2) rotate(8deg) !important;
+    filter: drop-shadow(0 6px 12px rgba(255, 107, 0, 0.3)) !important;
+}
+
+.service-card img {
+    transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55) !important;
+    position: relative !important;
+    z-index: 1 !important;
+}
+
+/* تأثير على النص */
+.service-card:hover h4 {
+    color: #ff6b35 !important;
+    transform: scale(1.05) !important;
+}
+
+.service-card h4 {
+    transition: all 0.3s ease !important;
+    position: relative !important;
+    z-index: 1 !important;
+}
+
+/* نقاط ديكورية */
+.service-card::after {
+    content: '';
+    position: absolute;
+    bottom: -50px;
+    right: -50px;
+    width: 100px;
+    height: 100px;
+    background: radial-gradient(
+        circle,
+        rgba(255, 107, 0, 0.05) 0%,
+        transparent 70%
+    );
+    transition: all 0.5s ease;
+    z-index: 0;
+}
+
+.service-card:hover::after {
+    bottom: -30px;
+    right: -30px;
+    opacity: 0.8;
 }
 
 /* Hide Arrow in Footer */
@@ -941,18 +1309,726 @@ html, body, button, input, select, textarea {
 
 
 
-/* خلفية أقل ارتفاع */
-.footer-compact{
-    background:#0f0f0f;
-    padding:18px 0 8px;     /* ↓ قلّلنا البادينج */
+/* ========================================
+   Footer Modern - تصميم جديد compact
+   ======================================== */
+
+.footer-modern {
+    background:
+        linear-gradient(135deg, rgba(255,107,53,0.03) 0%, transparent 50%),
+        linear-gradient(to right, #0a0a0a 0%, #1a1a1a 50%, #0a0a0a 100%);
+    padding: 1.25rem 0;
+    color: #e0e0e0;
+    font-size: 0.85rem;
+    border-top: 3px solid rgba(255,107,53,0.4);
+    position: relative;
+    overflow: hidden;
 }
-.subfooter-compact{
-    border-top:1px solid rgba(255,255,255,.08);
-    margin-top:10px;
-    padding:8px 0;          /* ↓ أصغر */
-    background:#0f0f0f;
-    color:#bbb;
-    font-size:13px;
+
+/* خط ثابت برتقالي */
+.footer-modern::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(90deg,
+    rgba(255,107,53,0.2) 0%,
+    rgba(255,107,53,0.5) 50%,
+    rgba(255,107,53,0.2) 100%
+    );
+    z-index: 1;
+}
+
+/* لمعة متحركة على الخط */
+.footer-modern::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 30%;
+    height: 3px;
+    background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(255,107,53,0.6) 20%,
+    rgba(255,107,53,1) 50%,
+    rgba(255,107,53,0.6) 80%,
+    transparent 100%
+    );
+    box-shadow:
+        0 0 15px rgba(255,107,53,0.9),
+        0 0 30px rgba(255,107,53,0.6);
+    animation: borderShine 4s linear infinite;
+    z-index: 2;
+}
+
+@keyframes borderShine {
+    0% {
+        left: -30%;
+    }
+    100% {
+        left: 100%;
+    }
+}
+
+/* لوقو في الوسط - تصميم احترافي */
+.footer-logo-wrapper {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+}
+
+
+.footer-logo-glow {
+    height: 48px;
+    position: relative;
+    z-index: 2;
+    filter:
+        drop-shadow(0 0 12px rgba(255,107,53,0.7))
+        drop-shadow(0 0 25px rgba(255,107,53,0.5))
+        drop-shadow(0 0 40px rgba(255,107,53,0.3))
+        brightness(1.15);
+    transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    cursor: pointer;
+    animation: logoFloat 4s ease-in-out infinite;
+}
+
+@keyframes logoFloat {
+    0%, 100% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-5px);
+    }
+}
+
+.footer-logo-glow:hover {
+    filter:
+        drop-shadow(0 0 18px rgba(255,107,53,1))
+        drop-shadow(0 0 35px rgba(255,107,53,0.7))
+        drop-shadow(0 0 50px rgba(255,107,53,0.5))
+        brightness(1.4);
+    transform: scale(1.2) rotate(8deg) translateY(-8px);
+    animation-play-state: paused;
+}
+
+/* معلومات التواصل */
+.footer-contacts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    align-items: center;
+}
+
+.footer-contacts .contact-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: rgba(255,255,255,0.85);
+    text-decoration: none;
+    font-size: 0.8rem;
+    padding: 0.35rem 0.75rem;
+    background: rgba(255,255,255,0.05);
+    border-radius: 20px;
+    border: 1px solid rgba(255,255,255,0.05);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    white-space: nowrap;
+    position: relative;
+    overflow: hidden;
+}
+
+/* تأثير لمعة عند Hover */
+.footer-contacts .contact-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+    transition: left 0.5s ease;
+}
+
+.footer-contacts .contact-item:hover::before {
+    left: 100%;
+}
+
+.footer-contacts .contact-item:hover {
+    background: linear-gradient(135deg, rgba(255,107,53,0.2), rgba(255,107,53,0.1));
+    border-color: rgba(255,107,53,0.3);
+    color: #fff;
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(255,107,53,0.2);
+}
+
+.footer-contacts .contact-item i {
+    font-size: 0.75rem;
+    color: rgba(255,107,53,0.8);
+    transition: all 0.3s ease;
+}
+
+.footer-contacts .contact-item:hover i {
+    color: #ff6b35;
+    transform: scale(1.2) rotate(5deg);
+}
+
+/* سوشيال ميديا - ترتيب أنيق */
+.footer-social-modern {
+    display: flex;
+    gap: 0.6rem;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    padding: 0.5rem;
+}
+
+.footer-social-modern a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,107,53,0.2);
+    color: #fff;
+    font-size: 0.9rem;
+    transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    position: relative;
+    overflow: hidden;
+}
+
+/* دائرة متوهجة خلف الأيقونة */
+.footer-social-modern a::before {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,107,53,0.4), transparent);
+    transition: all 0.4s ease;
+    z-index: 0;
+}
+
+.footer-social-modern a:hover::before {
+    width: 200%;
+    height: 200%;
+}
+
+.footer-social-modern a i {
+    position: relative;
+    z-index: 1;
+}
+
+.footer-social-modern a:hover {
+    background: linear-gradient(135deg, #ff6b35, #f57c00);
+    border-color: #ff6b35;
+    transform: translateY(-5px) scale(1.2);
+    box-shadow:
+        0 8px 20px rgba(255,107,53,0.4),
+        0 0 25px rgba(255,107,53,0.3);
+}
+
+/* تأثير دوران مختلف لكل أيقونة */
+.footer-social-modern a:nth-child(1):hover {
+    transform: translateY(-5px) scale(1.2) rotate(-10deg);
+}
+
+.footer-social-modern a:nth-child(2):hover {
+    transform: translateY(-5px) scale(1.2) rotate(10deg);
+}
+
+.footer-social-modern a:nth-child(3):hover {
+    transform: translateY(-5px) scale(1.2) rotate(-10deg);
+}
+
+.footer-social-modern a:nth-child(4):hover {
+    transform: translateY(-5px) scale(1.2) rotate(10deg);
+}
+
+.footer-social-modern a:nth-child(5):hover {
+    transform: translateY(-5px) scale(1.2) rotate(-10deg);
+}
+
+/* تأثير نبض */
+@keyframes pulse {
+    0%, 100% { transform: translateY(-5px) scale(1.2); }
+    50% { transform: translateY(-7px) scale(1.25); }
+}
+
+.footer-social-modern a:hover {
+    animation: pulse 0.8s ease-in-out infinite;
+}
+
+/* حقوق النشر */
+.footer-copyright {
+    color: rgba(255,255,255,0.5);
+    font-size: 0.7rem;
+    text-align: center;
+    position: relative;
+    padding-top: 0.5rem;
+}
+
+/* خط ديكوري تحت حقوق النشر */
+.footer-copyright::after {
+    content: '';
+    position: absolute;
+    bottom: -0.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(255,107,53,0.6), transparent);
+}
+
+/* تأثير توهج للنص */
+.footer-copyright:hover {
+    color: rgba(255,255,255,0.8);
+    text-shadow: 0 0 10px rgba(255,107,53,0.3);
+}
+
+/* Responsive */
+@media (max-width: 991px) {
+    .footer-modern {
+        padding: 1rem 0;
+    }
+
+    .footer-contacts {
+        justify-content: center;
+    }
+
+    .footer-modern .col-lg-3,
+    .footer-modern .col-lg-5,
+    .footer-modern .col-lg-2 {
+        text-align: center;
+    }
+
+    .footer-logo-wrapper {
+        margin: 1rem 0;
+        padding: 1rem;
+    }
+
+
+    .footer-logo-glow {
+        height: 40px;
+    }
+
+    .footer-social-modern {
+        justify-content: center;
+    }
+}
+
+@media (max-width: 576px) {
+    .footer-modern {
+        padding: 0.75rem 0;
+        font-size: 0.75rem;
+    }
+
+    .footer-contacts .contact-item {
+        font-size: 0.7rem;
+        padding: 0.25rem 0.6rem;
+    }
+
+    .footer-social-modern a {
+        width: 28px;
+        height: 28px;
+        font-size: 0.75rem;
+    }
+
+    .footer-logo-wrapper {
+        padding: 0.75rem;
+    }
+
+
+    .footer-logo-glow {
+        height: 32px !important;
+    }
+}
+
+/* ========================================
+   زر التبرع الخرافي - Epic Compact
+   ======================================== */
+
+.donate-btn-epic {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 28px;
+    background: linear-gradient(135deg, #ff6b35 0%, #f57c00 50%, #ff6b35 100%);
+    background-size: 200% 200%;
+    border-radius: 30px;
+    color: #fff;
+    font-weight: 600;
+    font-size: 1rem;
+    text-decoration: none;
+    overflow: hidden;
+    box-shadow:
+        0 6px 20px rgba(255,107,53,0.5),
+        0 0 30px rgba(255,107,53,0.3);
+    transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    animation: donateGradient 3s ease infinite;
+    z-index: 1;
+    border: none;
+}
+
+@keyframes donateGradient {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+/* محتوى الزر */
+.donate-btn-content {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    position: relative;
+    z-index: 3;
+}
+
+.donate-btn-content i {
+    font-size: 1.1rem;
+    animation: heartBeat 1.5s ease-in-out infinite;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+}
+
+@keyframes heartBeat {
+    0%, 100% { transform: scale(1); }
+    10%, 30% { transform: scale(1.1); }
+    20%, 40% { transform: scale(1); }
+}
+
+.donate-text {
+    letter-spacing: 0.3px;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+/* توهج خلفي متحرك */
+.donate-btn-glow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%);
+    border-radius: 30px;
+    animation: glowPulse 2s ease-in-out infinite;
+    z-index: 1;
+}
+
+@keyframes glowPulse {
+    0%, 100% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 0.5;
+    }
+    50% {
+        transform: translate(-50%, -50%) scale(1.2);
+        opacity: 1;
+    }
+}
+
+/* جزيئات متحركة */
+.donate-btn-particles::before,
+.donate-btn-particles::after {
+    content: '✨';
+    position: absolute;
+    font-size: 1rem;
+    color: rgba(255,255,255,0.8);
+    animation: particles 3s ease-in-out infinite;
+    z-index: 2;
+}
+
+.donate-btn-particles::before {
+    top: -3px;
+    right: 8px;
+    animation-delay: 0s;
+}
+
+.donate-btn-particles::after {
+    bottom: -3px;
+    left: 8px;
+    animation-delay: 1.5s;
+}
+
+@keyframes particles {
+    0%, 100% {
+        transform: translateY(0) scale(0);
+        opacity: 0;
+    }
+    50% {
+        transform: translateY(-15px) scale(1);
+        opacity: 1;
+    }
+}
+
+/* Hover - التأثير الخرافي */
+.donate-btn-epic:hover {
+    transform: translateY(-4px) scale(1.05);
+    box-shadow:
+        0 12px 35px rgba(255,107,53,0.7),
+        0 0 50px rgba(255,107,53,0.5),
+        0 0 80px rgba(255,107,53,0.3);
+    animation-play-state: paused;
+}
+
+.donate-btn-epic:hover .donate-btn-content i {
+    animation-play-state: running;
+    transform: scale(1.2) rotate(10deg);
+}
+
+.donate-btn-epic:hover .donate-text {
+    letter-spacing: 0.6px;
+}
+
+/* تأثير ضغط */
+.donate-btn-epic:active {
+    transform: translateY(-2px) scale(1.03);
+    box-shadow:
+        0 6px 20px rgba(255,107,53,0.6),
+        0 0 35px rgba(255,107,53,0.4);
+}
+
+/* Shine effect */
+.donate-btn-epic::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg,
+    transparent,
+    rgba(255,255,255,0.4),
+    transparent
+    );
+    transition: left 0.7s;
+    z-index: 2;
+}
+
+.donate-btn-epic:hover::before {
+    left: 100%;
+}
+
+/* منع تغيير اللون عند الضغط */
+.donate-btn-epic,
+.donate-btn-epic:link,
+.donate-btn-epic:visited,
+.donate-btn-epic:focus,
+.donate-btn-epic:active {
+    color: #fff !important;
+    outline: none !important;
+}
+
+.donate-btn-epic:focus-visible {
+    outline: 2px solid rgba(255,255,255,0.5);
+    outline-offset: 3px;
+}
+
+.donate-btn-epic .donate-text,
+.donate-btn-epic:active .donate-text,
+.donate-btn-epic:focus .donate-text,
+.donate-btn-epic:visited .donate-text {
+    color: #fff !important;
+}
+
+/* Responsive */
+@media (max-width: 991px) {
+    .donate-btn-epic {
+        display: none !important;
+    }
+}
+
+/* ========================================
+   تحسينات السلايدر للموبايل
+   ======================================== */
+
+@media (max-width: 991px) {
+    /* النص في الوسط */
+    .sw-caption {
+        text-align: center !important;
+        padding: 0 20px !important;
+    }
+
+    .sw-caption .row {
+        justify-content: center !important;
+    }
+
+    .sw-caption .col-lg-6 {
+        max-width: 100% !important;
+    }
+
+    /* العنوان */
+    .sw-text-wrapper h2 {
+        font-size: 1.5rem !important;
+        line-height: 1.3 !important;
+        margin-bottom: 1rem !important;
+        padding: 0 10px !important;
+    }
+
+    /* الوصف */
+    .sw-caption p {
+        font-size: 0.9rem !important;
+        line-height: 1.5 !important;
+        margin-bottom: 1rem !important;
+        padding: 0 15px !important;
+    }
+
+    /* الزر */
+    .sw-caption .btn-main {
+        font-size: 0.9rem !important;
+        padding: 10px 24px !important;
+    }
+
+    /* ارتفاع السلايدر */
+    .mh-800 {
+        min-height: 500px !important;
+        max-height: 600px !important;
+    }
+
+    .swiper-slide {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+}
+
+@media (max-width: 576px) {
+    .sw-text-wrapper h2 {
+        font-size: 1.2rem !important;
+        line-height: 1.2 !important;
+    }
+
+    .sw-caption p {
+        font-size: 0.85rem !important;
+    }
+
+    .mh-800 {
+        min-height: 400px !important;
+        max-height: 500px !important;
+    }
+}
+
+/* ========================================
+   قسم الخدمات - Responsive
+   ======================================== */
+
+@media (max-width: 991px) {
+    /* العنوان في الوسط */
+    #services-heading {
+        text-align: center !important;
+    }
+
+    #services-heading > div {
+        flex-direction: column !important;
+        text-align: center !important;
+        gap: 0.75rem !important;
+    }
+
+    #services-heading .subtitle {
+        font-size: 1.3rem !important;
+    }
+
+    #services-heading h3 {
+        font-size: 1.5rem !important;
+    }
+
+    #services-heading .fas {
+        font-size: 2rem !important;
+    }
+
+    /* الخدمات */
+    #services > div > div:nth-child(2) {
+        justify-content: center !important;
+    }
+
+    .service-card {
+        max-width: 100% !important;
+    }
+}
+
+@media (max-width: 576px) {
+    #services-heading .subtitle {
+        font-size: 1.1rem !important;
+    }
+
+    #services-heading h3 {
+        font-size: 1.2rem !important;
+    }
+
+    .service-card {
+        padding: 1rem !important;
+    }
+
+    .service-card img {
+        width: 60px !important;
+        height: 60px !important;
+    }
+
+    .service-card h4 {
+        font-size: 0.95rem !important;
+    }
+}
+
+/* ========================================
+   قسم "نعود لننير غزة" - Responsive
+   ======================================== */
+
+@media (max-width: 991px) {
+    /* النص في الوسط */
+    .journey-section {
+        text-align: center !important;
+        padding: 2.5rem 1.5rem !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: center !important;
+        align-items: center !important;
+    }
+
+    .journey-section .subtitle {
+        font-size: 1rem !important;
+        margin-bottom: 0.75rem !important;
+        text-align: center !important;
+    }
+
+    .journey-section h2.split {
+        font-size: 1.6rem !important;
+        margin-bottom: 1rem !important;
+        text-align: center !important;
+        width: 100% !important;
+    }
+
+    .journey-section p.fs-5 {
+        font-size: 0.95rem !important;
+        line-height: 1.6 !important;
+        padding: 0 15px !important;
+        text-align: center !important;
+        max-width: 100% !important;
+    }
+}
+
+@media (max-width: 576px) {
+    .journey-section {
+        padding: 2rem 1rem !important;
+    }
+
+    .journey-section .subtitle {
+        font-size: 0.9rem !important;
+    }
+
+    .journey-section h2.split {
+        font-size: 1.3rem !important;
+        line-height: 1.3 !important;
+    }
+
+    .journey-section p.fs-5 {
+        font-size: 0.85rem !important;
+        line-height: 1.5 !important;
+        padding: 0 10px !important;
+    }
 }
 
 /* عنوان وكتلة التواصل */
@@ -1001,20 +2077,44 @@ html, body, button, input, select, textarea {
 }
 
 
-.footer-compact {
-    background: #0f0f0f;
-    padding: 1.5rem 0 1rem;
-    font-family: inherit;
+/* Footer Responsive - حجم ملائم */
+@media (max-width: 767px) {
+    .footer-compact {
+        padding: 1.25rem 0 0.5rem !important;  /* أصغر على الموبايل */
+    }
+
+    .subfooter-compact {
+        margin-top: 0.75rem !important;
+        padding: 0.6rem 0 !important;
+    }
+
+    .footer-compact img {
+        height: 24px !important;  /* شعار أصغر */
+    }
+
+    .footer-compact p {
+        font-size: 0.75rem !important;
+    }
 }
 
-/* السطر السفلي */
-.subfooter-compact {
-    border-top: 1px solid rgba(255, 255, 255, .08);
-    margin-top: 1rem;
-    padding: 0.5rem 0;
-    background: #0f0f0f;
-    color: #bbb;
-    font-size: 12px;
+/* Footer Social Icons - صغيرة وأنيقة */
+.footer-compact .footer-social a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.08);
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+    margin: 0 2px;
+}
+
+.footer-compact .footer-social a:hover {
+    background: linear-gradient(135deg, rgba(220,53,69,0.8), rgba(200,35,51,0.8));
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 4px 12px rgba(220,53,69,0.3);
 }
 
 
@@ -1285,5 +2385,46 @@ html, body, button, input, select, textarea {
     justify-content: space-between !important;
 }
 
+/* توسيط قسم إحصائيات الخسائر على الجوال */
+@media (max-width: 767px) {
+    #impact-heading {
+        text-align: center !important;
+    }
+
+    #impact-heading .stack {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+
+    #impact-heading .stack .title {
+        text-align: center !important;
+        justify-content: center !important;
+    }
+
+    #impact-heading .stack .subtitle {
+        text-align: center !important;
+    }
+
+    /* توسيط قسم من نحن على الجوال */
+    #who-us .col-lg-6.text-end {
+        text-align: center !important;
+    }
+
+    #who-us .col-lg-6.text-end .d-flex {
+        justify-content: center !important;
+    }
+
+    #who-us .col-lg-6.text-end h2,
+    #who-us .col-lg-6.text-end h3,
+    #who-us .col-lg-6.text-end p {
+        text-align: center !important;
+    }
+
+    #who-us .col-lg-6.text-end .badge {
+        display: inline-block !important;
+    }
+}
 
 

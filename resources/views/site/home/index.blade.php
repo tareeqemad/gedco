@@ -49,14 +49,14 @@
                                     </div>
 
                                     @if(!empty($s->bullets_array))
-                                        <div class="abs w-100 bottom-0 z-2 pb-5 sm-hide">
+                                        <div class="abs w-100 bottom-0 z-2 pb-5 slider-bullets">
                                             <div class="container">
                                                 <div class="row">
                                                     <div class="col-lg-12">
-                                                        <div class="d-flex justify-content-between text-center">
+                                                        <div class="d-flex justify-content-between text-center flex-wrap">
                                                             @foreach($s->bullets_array as $b)
                                                                 @if(!empty($b))
-                                                                    <div class="relative">
+                                                                    <div class="relative bullet-item">
                                                                         <h6 class="mb-0">{{ $b }}</h6>
                                                                     </div>
                                                                 @endif
@@ -224,7 +224,7 @@
                                  data-aos-delay="{{ $loop->index * 100 }}"
                                  data-aos-duration="600">
 
-                                <div class="mb-2">
+                                <div class="mb-2 text-center">
                                     <i class="fas {{ $icon }} fa-2x {{ $color }}"></i>
                                 </div>
 
@@ -268,7 +268,7 @@
                         </div>
                     </div>
                     <div class="col-lg-6">
-                        <div class="h-100 relative bg-dark p-5 text-light">
+                        <div class="h-100 relative bg-dark p-5 text-light journey-section">
                             <div class="subtitle">رحلة جديدة… بجذور قديمة</div>
                             <h2 class="split">نعود لننير غزة</h2>
                             <p class="mb-4 fs-5">
@@ -276,7 +276,7 @@
                                 بثبات، وإصرار، وطاقـة لا تنطفئ ⚡
                             </p>
 
-                         </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -443,40 +443,40 @@
     </div>
 @endsection
 @push('scripts')
-     <script>
-         document.addEventListener('DOMContentLoaded', () => {
-             const trigger = document.querySelector('.video-trigger');
-             const popup = document.getElementById('video-popup');
-             const iframe = document.getElementById('youtube-player');
-             const closeBtn = document.getElementById('close-video-popup');
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const trigger = document.querySelector('.video-trigger');
+            const popup = document.getElementById('video-popup');
+            const iframe = document.getElementById('youtube-player');
+            const closeBtn = document.getElementById('close-video-popup');
 
-             if (!trigger || !popup || !iframe || !closeBtn) return;
+            if (!trigger || !popup || !iframe || !closeBtn) return;
 
-             const videoId = trigger.dataset.videoId;
+            const videoId = trigger.dataset.videoId;
 
-             trigger.addEventListener('click', (e) => {
-                 e.preventDefault();
-                 iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1&playsinline=1&iv_load_policy=3`;
-                 popup.style.display = 'flex';
-                 document.body.style.overflow = 'hidden';
-             });
+            trigger.addEventListener('click', (e) => {
+                e.preventDefault();
+                iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1&playsinline=1&iv_load_policy=3`;
+                popup.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+            });
 
-             const closePopup = () => {
-                 popup.style.display = 'none';
-                 iframe.src = '';
-                 document.body.style.overflow = 'auto';
-             };
+            const closePopup = () => {
+                popup.style.display = 'none';
+                iframe.src = '';
+                document.body.style.overflow = 'auto';
+            };
 
-             closeBtn.addEventListener('click', closePopup);
-             popup.addEventListener('click', (e) => {
-                 if (e.target === popup) closePopup();
-             });
+            closeBtn.addEventListener('click', closePopup);
+            popup.addEventListener('click', (e) => {
+                if (e.target === popup) closePopup();
+            });
 
-             popup.querySelector('div').addEventListener('click', (e) => {
-                 e.stopPropagation();
-             });
-         });
+            popup.querySelector('div').addEventListener('click', (e) => {
+                e.stopPropagation();
+            });
+        });
 
-     </script>
+    </script>
 
 @endpush
