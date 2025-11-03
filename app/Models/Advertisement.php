@@ -9,11 +9,11 @@ class Advertisement extends Model
 {
     protected $table = 'advertisements';
     protected $primaryKey = 'ID_ADVER';
-    public $incrementing = true;        // المفتاح أوتو (AUTO_INCREMENT)
+    public $incrementing = true;
     protected $keyType = 'int';
     public $timestamps = false;
 
-    // لا تمرّر ID_ADVER مع الإنشاء — خليه يتولّد من الداتابيز
+
     protected $fillable = [
         'TITLE','TITLE_E','DATE_NEWS','BODY','BODY_E','PDF',
         'INSERT_USER','UPDATE_USER','INSERT_DATE','UPDATE_DATE','WORD','DATE_NEWS1',
@@ -22,7 +22,7 @@ class Advertisement extends Model
     protected $casts = [
         'DATE_NEWS'   => 'datetime',
         'INSERT_DATE' => 'datetime',
-        'UPDATE_DATE' => 'datetime',
+        'UPDATE_DATE' => 'datetime', // مهم!
         'DATE_NEWS1'  => 'datetime',
     ];
 

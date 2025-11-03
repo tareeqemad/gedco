@@ -16,6 +16,7 @@ use App\Http\Controllers\Admin\Site\FooterLinkController;
 use App\Http\Controllers\Admin\Site\SocialLinkController;
 use App\Http\Controllers\Admin\Site\SliderController;
 use App\Http\Controllers\Admin\RoleController;
+use App\Http\Controllers\Admin\HomeVideoController;
 
 Route::prefix('admin')->name('admin.')->group(function () {
 
@@ -110,6 +111,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
             ->names('advertisements')
             ->middleware('permission:advertisements.view|advertisements.create|advertisements.edit|advertisements.delete');
 
+        Route::get('/home-video',  [HomeVideoController::class,'edit'])->name('homeVideo.edit');
+        Route::put('/home-video',  [HomeVideoController::class,'update'])->name('homeVideo.update');
 
 
         Route::post('logout', [AuthController::class, 'destroy'])->name('logout');

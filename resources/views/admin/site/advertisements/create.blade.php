@@ -65,13 +65,37 @@
                                         @error('DATE_NEWS') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
                                     </div>
 
-                                    <!-- المحتوى -->
+                                    <!-- المحتوى (Quill) -->
                                     <div class="mb-4">
                                         <label class="form-label fw-medium text-secondary d-flex align-items-center gap-1">
                                             <i class="ri-file-text-line fs-6 text-success"></i>
                                             محتوى الإعلان
                                         </label>
-                                        <div id="editor" class="border rounded-3 shadow-sm" style="min-height: 280px;"></div>
+
+                                        <!-- غلاف ثابت يمنع تمدد المحرر ويخلي السكول داخلي -->
+                                        <div class="quill-shell border rounded-3 shadow-sm">
+                                            <div id="quill-toolbar">
+                                                <span class="ql-formats">
+                                                    <select class="ql-header"></select>
+                                                </span>
+                                                <span class="ql-formats">
+                                                    <button class="ql-bold"></button>
+                                                    <button class="ql-italic"></button>
+                                                    <button class="ql-underline"></button>
+                                                    <button class="ql-link"></button>
+                                                </span>
+                                                <span class="ql-formats">
+                                                    <button class="ql-list" value="ordered"></button>
+                                                    <button class="ql-list" value="bullet"></button>
+                                                </span>
+                                                <span class="ql-formats">
+                                                    <button class="ql-undo" type="button">↶</button>
+                                                    <button class="ql-redo" type="button">↷</button>
+                                                </span>
+                                            </div>
+                                            <div id="quill-editor"></div>
+                                        </div>
+
                                         <textarea name="BODY" id="bodyInput" class="d-none">{{ old('BODY') }}</textarea>
                                         @error('BODY') <div class="invalid-feedback d-block mt-2">{{ $message }}</div> @enderror
                                         <div class="form-text text-muted small mt-1"><span id="wordCount">0</span> كلمة</div>
@@ -84,10 +108,15 @@
                                             ملف PDF (اختياري)
                                         </label>
                                         <div class="border border-2 border-dashed rounded-3 p-4 text-center bg-light-subtle position-relative overflow-hidden" id="dropZone">
-                                            <input type="file" name="PDF" id="pdfInput" class="d-none" accept="application/pdf">
+                                            <input type="file" name="PDF" id="pdfInput" class="visually-hidden" accept="application/pdf">
                                             <div class="text-primary">
                                                 <i class="ri-upload-cloud-2-line fs-1 mb-2 d-block"></i>
-                                                <p class="mb-1 fw-medium">اسحب الملف هنا أو <span class="text-primary cursor-pointer" id="browseLink">اختر ملف</span></p>
+                                                <p class="mb-1 fw-medium">
+                                                    اسحب الملف هنا أو
+                                                    <label for="pdfInput" class="text-primary m-0" style="text-decoration: underline; cursor: pointer;">
+                                                        اختر ملف
+                                                    </label>
+                                                </p>
                                                 <small class="text-muted">PDF • حتى 10 ميجابايت</small>
                                             </div>
                                         </div>
@@ -141,176 +170,138 @@
     </div>
 
     @push('styles')
-        <link href="https://cdn.jsdelivr.net/npm/@ckeditor/ckeditor5-build-classic@41.0.0/build/ckeditor.css" rel="stylesheet">
+        {{-- Quill CSS من مجلد الأصول لديك --}}
+        <link rel="stylesheet" href="{{ asset('assets/admin/libs/quill/quill.snow.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/admin/libs/quill/quill.bubble.css') }}">
         <style>
-            :root {
-                --primary: #4361ee;
-                --info: #3f83f8;
-                --success: #10b981;
-                --danger: #ef4444;
+            :root{
+                --primary:#4361ee; --info:#3f83f8; --success:#10b981; --danger:#ef4444;
             }
-            .ck-editor__editable { min-height: 280px; }
-            .form-control:focus { box-shadow: 0 0 0 0.2rem rgba(67, 97, 238, 0.15); }
-            #dropZone.dragover { background: #ebf2ff !important; border-color: var(--primary) !important; }
-            .btn-primary { background: var(--primary); border: none; }
-            .btn-primary:hover { background: #3b56d7; }
-            .nav-tabs .nav-link { font-size: 0.875rem; border: none; color: #6c757d; }
-            .nav-tabs .nav-link.active { color: var(--primary); font-weight: 600; border-bottom: 2px solid var(--primary); }
-            .nav-tabs .nav-link:hover { color: var(--primary); }
-            .focus-ring-primary:focus { --bs-focus-ring-color: rgba(67, 97, 238, 0.25); }
-            .focus-ring-info:focus { --bs-focus-ring-color: rgba(63, 131, 248, 0.25); }
+
+            /* غلاف ثابت لمحرر Quill */
+            .quill-shell{
+                height: 420px;          /* عدّلها حسب رغبتك */
+                background:#fff;
+                border-radius:.5rem;
+                overflow:hidden;        /* يمنع تمدد المحرر خارج الكارد */
+            }
+            /* اجعل محرر Quill يملأ الغلاف */
+            .quill-shell .ql-toolbar{
+                border-top-left-radius:.5rem;
+                border-top-right-radius:.5rem;
+            }
+            .quill-shell .ql-container{
+                height: calc(100% - 42px); /* 42 تقريبًا ارتفاع التولبار */
+                border-bottom-left-radius:.5rem;
+                border-bottom-right-radius:.5rem;
+            }
+            .quill-shell .ql-editor{
+                height: 100%;
+                overflow-y: auto;       /* السكول داخلي */
+                direction: rtl;         /* RTL */
+                text-align: right;
+            }
+
+            .form-control:focus{ box-shadow:0 0 0 0.2rem rgba(67,97,238,0.15);}
+            #dropZone{ cursor:pointer;}
+            #dropZone.dragover{ background:#ebf2ff!important; border-color:var(--primary)!important;}
+            .btn-primary{ background:var(--primary); border:none;}
+            .btn-primary:hover{ background:#3b56d7;}
+            .nav-tabs .nav-link{ font-size:.875rem; border:none; color:#6c757d;}
+            .nav-tabs .nav-link.active{ color:var(--primary); font-weight:600; border-bottom:2px solid var(--primary);}
+            .nav-tabs .nav-link:hover{ color:var(--primary);}
+            .focus-ring-primary:focus{ --bs-focus-ring-color: rgba(67,97,238,.25);}
+            .focus-ring-info:focus{ --bs-focus-ring-color: rgba(63,131,248,.25);}
+
+            /* أزرار undo/redo البسيطة */
+            #quill-toolbar .ql-undo, #quill-toolbar .ql-redo{
+                border: 1px solid #ced4da; border-radius:.375rem; padding:0 .5rem; line-height:26px;
+                background:#fff; cursor:pointer;
+            }
         </style>
     @endpush
 
     @push('scripts')
-        <script src="https://cdn.ckeditor.com/ckeditor5/41.0.0/classic/ckeditor.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        {{-- Quill JS --}}
+        <script src="{{ asset('assets/admin/libs/quill/quill.min.js') }}"></script>
+
+        {{-- SweetAlert2 --}}
+        <script src="{{ asset('assets/admin/libs/sweetalert2/sweetalert2.min.js') }}"></script>
+
         <script>
             document.addEventListener('DOMContentLoaded', function () {
-                let editor;
                 let draftTimeout;
 
-                // CKEditor
-                ClassicEditor
-                    .create(document.querySelector('#editor'), {
-                        toolbar: ['heading', '|', 'bold', 'italic', 'link', '|', 'bulletedList', 'numberedList', '|', 'undo', 'redo'],
-                        language: 'ar',
-                        placeholder: 'اكتب محتوى الإعلان هنا...'
-                    })
-                    .then(newEditor => {
-                        editor = newEditor;
-                        const savedDraft = localStorage.getItem('ad_draft');
-                        if (savedDraft) {
-                            const draft = JSON.parse(savedDraft);
-                            if (draft.body) editor.setData(draft.body);
-                        }
-                        editor.model.document.on('change:data', updateAllPreviews);
-                        updateWordCount();
-                        updateAllPreviews();
-                    })
-                    .catch(err => console.error(err));
+                // تهيئة Quill
+                const quill = new Quill('#quill-editor', {
+                    theme: 'snow',
+                    modules: {
+                        toolbar: { container: '#quill-toolbar' },
+                        history: { delay: 500, maxStack: 100, userOnly: true }
+                    },
+                    placeholder: 'اكتب محتوى الإعلان هنا...'
+                });
 
+                // أزرار Undo/Redo (إن وُجدت)
+                const undoBtn = document.querySelector('#quill-toolbar .ql-undo');
+                const redoBtn = document.querySelector('#quill-toolbar .ql-redo');
+                if (undoBtn) undoBtn.addEventListener('click', () => quill.history.undo());
+                if (redoBtn) redoBtn.addEventListener('click', () => quill.history.redo());
+
+                // عناصر النموذج
                 const titleInput = document.getElementById('titleInput');
-                const dateInput = document.getElementById('dateInput');
-                const pdfInput = document.getElementById('pdfInput');
-                const dropZone = document.getElementById('dropZone');
+                const dateInput  = document.getElementById('dateInput');
+                const pdfInput   = document.getElementById('pdfInput');
+                const dropZone   = document.getElementById('dropZone');
                 const pdfPreview = document.getElementById('pdfPreview');
-                const browseLink = document.getElementById('browseLink');
 
-                // تحديث عدد الأحرف
+                // تحميل مسودة
+                const savedDraft = localStorage.getItem('ad_draft');
+                if (savedDraft) {
+                    const d = JSON.parse(savedDraft);
+                    if (d.title) titleInput.value = d.title;
+                    if (d.date)  dateInput.value  = d.date;
+                    if (d.body)  quill.root.innerHTML = d.body;
+                }
+                updateAllPreviews();
+                updateWordCount();
+
+                // تحديث العداد
                 titleInput.addEventListener('input', () => {
                     document.getElementById('titleCount').textContent = titleInput.value.length;
-                    updateAllPreviews();
-                    autoSaveDraft();
+                    updateAllPreviews(); autoSaveDraft();
                 });
+                dateInput.addEventListener('change', () => { updateAllPreviews(); autoSaveDraft(); });
 
-                dateInput.addEventListener('change', () => {
-                    updateAllPreviews();
-                    autoSaveDraft();
-                });
-
-                // رفع PDF: Drag & Drop أو اختيار
-                browseLink.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    pdfInput.click();
-                });
-
-                ['dragover', 'dragenter'].forEach(e => dropZone.addEventListener(e, ev => {
-                    ev.preventDefault();
-                    dropZone.classList.add('dragover');
-                }));
-
-                ['dragleave', 'dragend', 'drop'].forEach(e => dropZone.addEventListener(e, ev => {
-                    ev.preventDefault();
-                    dropZone.classList.remove('dragover');
-                }));
-
-                dropZone.addEventListener('drop', e => {
-                    e.preventDefault();
-                    const file = e.dataTransfer.files[0];
-                    if (file) {
-                        const dt = new DataTransfer();
-                        dt.items.add(file);
-                        pdfInput.files = dt.files;
-                        handlePDFFile(file);
-                    }
-                });
-
-                pdfInput.addEventListener('change', () => {
-                    const file = pdfInput.files[0];
-                    if (file) handlePDFFile(file);
-                });
-
-                // التعامل مع الملف (رفع فقط، بدون معاينة)
-                function handlePDFFile(file) {
-                    if (file.type !== 'application/pdf') {
-                        Swal.fire('خطأ', 'يرجى رفع ملف PDF فقط', 'error');
-                        pdfInput.value = '';
-                        pdfPreview.innerHTML = '';
-                        return;
-                    }
-                    if (file.size > 10 * 1024 * 1024) {
-                        Swal.fire('خطأ', 'حجم الملف لا يتجاوز 10 ميجابايت', 'error');
-                        pdfInput.value = '';
-                        pdfPreview.innerHTML = '';
-                        return;
-                    }
-
-                    // أعد تعيين الملف للإرسال
-                    const dt = new DataTransfer();
-                    dt.items.add(file);
-                    pdfInput.files = dt.files;
-
-                    // عرض اسم الملف فقط
-                    pdfPreview.innerHTML = `
-                        <div class="alert alert-success d-flex align-items-center gap-2 p-2 mb-0 rounded">
-                            <i class="ri-file-pdf-line fs-5"></i>
-                            <div>
-                                <strong>${file.name}</strong><br>
-                                <small>${(file.size / 1024 / 1024).toFixed(2)} ميجابايت</small>
-                            </div>
-                            <button type="button" class="btn-close btn-close-sm ms-auto" onclick="removePDF()"></button>
-                        </div>`;
-
-                    autoSaveDraft();
-                }
-
-                window.removePDF = function() {
-                    pdfInput.value = '';
-                    pdfPreview.innerHTML = '';
-                    autoSaveDraft();
-                };
+                // تغييرات المحرر
+                quill.on('text-change', () => { updateAllPreviews(); updateWordCount(); autoSaveDraft(); });
 
                 function updateWordCount() {
-                    if (!editor) return;
-                    const text = editor.getData().replace(/<[^>]*>/g, ' ').trim();
+                    const text = quill.getText().trim();
                     const words = text ? text.split(/\s+/).length : 0;
                     document.getElementById('wordCount').textContent = words;
                 }
 
-                // المعاينة الفورية (بدون PDF)
                 function updateAllPreviews() {
-                    const title = titleInput.value || 'عنوان الإعلان';
-                    const date = dateInput.value ? new Date(dateInput.value).toLocaleDateString('ar-EG', { year: 'numeric', month: 'long', day: 'numeric' }) : 'تاريخ الخبر';
-                    const content = editor ? editor.getData() : '';
+                    const title   = titleInput.value || 'عنوان الإعلان';
+                    const date    = dateInput.value ? new Date(dateInput.value).toLocaleDateString('ar-EG', { year: 'numeric', month: 'long', day: 'numeric' }) : 'تاريخ الخبر';
+                    const content = quill.root.innerHTML;
 
                     const previewHTML = `
-                        <article class="p-3">
-                            <h5 class="fw-bold text-primary mb-2">${title}</h5>
-                            <div class="text-muted small mb-3 d-flex align-items-center gap-1">
-                                <i class="ri-calendar-line"></i> <span>${date}</span>
-                            </div>
-                            <div class="content-preview lh-lg text-dark" style="font-size: 0.95rem;">
-                                ${content || '<p class="text-muted small">ابدأ الكتابة لرؤية المعاينة هنا...</p>'}
-                            </div>
-                        </article>`;
+                <article class="p-3">
+                    <h5 class="fw-bold text-primary mb-2">${title}</h5>
+                    <div class="text-muted small mb-3 d-flex align-items-center gap-1">
+                        <i class="ri-calendar-line"></i> <span>${date}</span>
+                    </div>
+                    <div class="content-preview lh-lg text-dark" style="font-size: 0.95rem;">
+                        ${content || '<p class="text-muted small">ابدأ الكتابة لرؤية المعاينة هنا...</p>'}
+                    </div>
+                </article>`;
 
-                    ['livePreview', 'fullPreview'].forEach(id => {
+                    ['livePreview','fullPreview'].forEach(id => {
                         const el = document.getElementById(id);
                         if (el) el.innerHTML = previewHTML;
                     });
-
-                    updateWordCount();
                 }
 
                 function autoSaveDraft() {
@@ -318,43 +309,66 @@
                     draftTimeout = setTimeout(() => {
                         const draft = {
                             title: titleInput.value,
-                            date: dateInput.value,
-                            body: editor?.getData() || '',
-                            pdf: pdfInput.files[0]?.name || null
+                            date:  dateInput.value,
+                            body:  quill.root.innerHTML,
+                            pdf:   pdfInput.files[0]?.name || null
                         };
                         localStorage.setItem('ad_draft', JSON.stringify(draft));
-                    }, 800);
+                    }, 700);
                 }
 
-                // تحميل المسودة
-                const draft = localStorage.getItem('ad_draft');
-                if (draft) {
-                    const d = JSON.parse(draft);
-                    if (d.title) titleInput.value = d.title;
-                    if (d.date) dateInput.value = d.date;
-                    if (d.body && editor) editor.setData(d.body);
-                    updateAllPreviews();
-                }
-
-                // حفظ مسودة
-                document.getElementById('saveDraft').addEventListener('click', () => {
-                    autoSaveDraft();
-                    const toast = document.createElement('div');
-                    toast.className = 'position-fixed bottom-0 end-0 p-3';
-                    toast.innerHTML = `<div class="toast show align-items-center text-bg-success border-0" role="alert">
-                        <div class="d-flex"><div class="toast-body">تم حفظ المسودة</div><button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button></div>
-                    </div>`;
-                    document.body.appendChild(toast);
-                    setTimeout(() => toast.remove(), 3000);
+                // رفع PDF — سحب ونقر
+                dropZone.addEventListener('click', (e) => {
+                    if (!(e.target.closest('.btn-close'))) pdfInput.click();
+                });
+                ['dragover','dragenter'].forEach(type => dropZone.addEventListener(type, ev => {
+                    ev.preventDefault(); dropZone.classList.add('dragover');
+                }));
+                ['dragleave','dragend','drop'].forEach(type => dropZone.addEventListener(type, ev => {
+                    ev.preventDefault(); dropZone.classList.remove('dragover');
+                }));
+                dropZone.addEventListener('drop', e => {
+                    e.preventDefault();
+                    const file = e.dataTransfer.files?.[0];
+                    if (file) handlePDFFile(file);
+                });
+                pdfInput.addEventListener('change', () => {
+                    const file = pdfInput.files?.[0];
+                    if (file) handlePDFFile(file);
                 });
 
-                // عند الإرسال
+                function handlePDFFile(file) {
+                    if (file.type !== 'application/pdf') {
+                        Swal.fire('خطأ', 'يرجى رفع ملف PDF فقط', 'error');
+                        pdfInput.value = ''; pdfPreview.innerHTML = '';
+                        return;
+                    }
+                    if (file.size > 10 * 1024 * 1024) {
+                        Swal.fire('خطأ', 'حجم الملف لا يتجاوز 10 ميجابايت', 'error');
+                        pdfInput.value = ''; pdfPreview.innerHTML = '';
+                        return;
+                    }
+                    const dt = new DataTransfer(); dt.items.add(file); pdfInput.files = dt.files;
+                    pdfPreview.innerHTML = `
+                <div class="alert alert-success d-flex align-items-center gap-2 p-2 mb-0 rounded">
+                    <i class="ri-file-pdf-line fs-5"></i>
+                    <div>
+                        <strong>${file.name}</strong><br>
+                        <small>${(file.size/1024/1024).toFixed(2)} ميجابايت</small>
+                    </div>
+                    <button type="button" class="btn-close btn-close-sm ms-auto" onclick="removePDF()"></button>
+                </div>`;
+                    autoSaveDraft();
+                }
+                window.removePDF = function(){
+                    pdfInput.value = ''; pdfPreview.innerHTML = ''; autoSaveDraft();
+                };
+
+                // عند الإرسال — خزّن HTML داخل الحقل المخفي
                 document.getElementById('adForm').addEventListener('submit', function () {
-                    if (editor) document.getElementById('bodyInput').value = editor.getData();
+                    document.getElementById('bodyInput').value = quill.root.innerHTML;
                     localStorage.removeItem('ad_draft');
                 });
-
-                updateAllPreviews();
             });
         </script>
     @endpush

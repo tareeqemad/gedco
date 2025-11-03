@@ -21,7 +21,7 @@ class RolesAndPermissionsSeeder extends Seeder
             'about',
             'why',
             'impact-stats',
-            'advertisements', // 👈 جديد: صلاحيات CRUD كاملة لهذا القسم
+            'advertisements',
         ];
 
         // === الأقسام الخاصة بالسوبر أدمن فقط (CRUD) ===
@@ -42,11 +42,11 @@ class RolesAndPermissionsSeeder extends Seeder
             $permissions[] = "{$section}.delete";
         }
 
-        // 1-b) صلاحيات إضافية لقسم impact-stats
+        // 1-b) صلاحيات إضافية impact stats
         $permissions[] = 'impact-stats.toggle';
         $permissions[] = 'impact-stats.reorder';
 
-        // 2) صلاحيات الأقسام الحصرية للسوبر أدمن (CRUD)
+        // 2) صلاحيات الأقسام الحصرية للسوبر أدمن
         foreach ($superOnlySections as $section) {
             $permissions[] = "{$section}.view";
             $permissions[] = "{$section}.create";
@@ -54,70 +54,60 @@ class RolesAndPermissionsSeeder extends Seeder
             $permissions[] = "{$section}.delete";
         }
 
-        // 3) إعدادات الموقع
+        // ✅ جديد — permission لفيديو الصفحة الرئيسية
+        $permissions[] = 'home-video.edit';
+
+        // site settings
         $permissions[] = 'site-settings.edit';
 
-        // إنشاء الصلاحيات (إن وُجدت من قبل لا تتكرر)
         foreach ($permissions as $p) {
-            Permission::firstOrCreate(['name' => $p, 'guard_name' => 'web']);
+            Permission::firstOrCreate(['name' => $p, 'guard_name'=>'web']);
         }
 
-        // إنشاء الأدوار
-        $super  = Role::firstOrCreate(['name' => 'super-admin', 'guard_name' => 'web']);
-        $admin  = Role::firstOrCreate(['name' => 'admin', 'guard_name' => 'web']);
-        $editor = Role::firstOrCreate(['name' => 'editor', 'guard_name' => 'web']);
-        $viewer = Role::firstOrCreate(['name' => 'viewer', 'guard_name' => 'web']);
+        // roles
+        $super  = Role::firstOrCreate(['name'=>'super-admin','guard_name'=>'web']);
+        $admin  = Role::firstOrCreate(['name'=>'admin','guard_name'=>'web']);
+        $editor = Role::firstOrCreate(['name'=>'editor','guard_name'=>'web']);
+        $viewer = Role::firstOrCreate(['name'=>'viewer','guard_name'=>'web']);
 
-        // 1) Super Admin: كل الصلاحيات
+        // super admin
         $super->syncPermissions(Permission::all());
 
-        // 2) Admin: كل شيء ما عدا الأقسام الحصرية (roles/permissions/footer-links/social-links)
+        // admin
         $adminPermissions = Permission::whereNotIn('name', [
-            'roles.view', 'roles.create', 'roles.edit', 'roles.delete',
-            'permissions.view', 'permissions.create', 'permissions.edit', 'permissions.delete',
-            'footer-links.view', 'footer-links.create', 'footer-links.edit', 'footer-links.delete',
-            'social-links.view', 'social-links.create', 'social-links.edit', 'social-links.delete',
-        ])->where(function ($q) {
-            $q->where('name', 'like', '%.view')
-                ->orWhere('name', 'like', '%.create')
-                ->orWhere('name', 'like', '%.edit')
-                ->orWhere('name', 'like', '%.delete')
-                ->orWhere('name', 'like', '%.toggle')
-                ->orWhere('name', 'like', '%.reorder');
-        })->get();
+            'roles.view','roles.create','roles.edit','roles.delete',
+            'permissions.view','permissions.create','permissions.edit','permissions.delete',
+            'footer-links.view','footer-links.create','footer-links.edit','footer-links.delete',
+            'social-links.view','social-links.create','social-links.edit','social-links.delete',
+        ])->get();
         $admin->syncPermissions($adminPermissions);
 
-        // 3) Editor: عرض + إنشاء/تعديل + toggle/reorder (بدون الأقسام الحصرية)
+        // editor
         $editorPermissions = Permission::whereNotIn('name', [
-            'roles.view', 'roles.create', 'roles.edit', 'roles.delete',
-            'permissions.view', 'permissions.create', 'permissions.edit', 'permissions.delete',
-            'footer-links.view', 'footer-links.create', 'footer-links.edit', 'footer-links.delete',
-            'social-links.view', 'social-links.create', 'social-links.edit', 'social-links.delete',
-        ])->where(function ($q) {
-            $q->where('name', 'like', '%.view')
-                ->orWhere('name', 'like', '%.create')
-                ->orWhere('name', 'like', '%.edit')
-                ->orWhere('name', 'like', '%.toggle')
-                ->orWhere('name', 'like', '%.reorder');
+            'roles.view','roles.create','roles.edit','roles.delete',
+            'permissions.view','permissions.create','permissions.edit','permissions.delete',
+            'footer-links.view','footer-links.create','footer-links.edit','footer-links.delete',
+            'social-links.view','social-links.create','social-links.edit','social-links.delete',
+        ])->where(function($q){
+            $q->where('name','like','%.view')
+                ->orWhere('name','like','%.create')
+                ->orWhere('name','like','%.edit')
+                ->orWhere('name','like','%.toggle')
+                ->orWhere('name','like','%.reorder');
         })->get();
         $editor->syncPermissions($editorPermissions);
 
-        // 4) Viewer: عرض فقط (مع استثناء عرض الأقسام الحصرية)
+        // viewer
         $viewerPermissions = Permission::whereNotIn('name', [
-            'roles.view', 'permissions.view',
-            'footer-links.view', 'social-links.view',
-        ])->where('name', 'like', '%.view')->get();
+            'roles.view','permissions.view',
+            'footer-links.view','social-links.view',
+        ])->where('name','like','%.view')->get();
         $viewer->syncPermissions($viewerPermissions);
 
-        // تعيين الدور للمستخدم الأول (إن لم يكن سوبر)
+        // assign to first user
         $firstUser = User::first();
         if ($firstUser && !$firstUser->hasRole('super-admin')) {
             $firstUser->assignRole('super-admin');
         }
-
-        // ترقية أي مستخدم is_admin=true إلى admin إن لم يملك دورًا
-        User::where('is_admin', true)
-            ->whereDoesntHave('roles', fn($q) => $q->whereIn('name', ['super-admin', 'admin']))
-            ->each(fn($u) => $u->assignRole('admin'));
     }
 }

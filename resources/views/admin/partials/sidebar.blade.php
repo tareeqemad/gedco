@@ -142,6 +142,15 @@
                     </a>
                 </li>
 
+                @can('home-video.manage') {{-- غيّر اسم الصلاحية حسب نظامك --}}
+                <li class="slide {{ $isActive('admin.homeVideo.*') }}">
+                    <a href="{{ route('admin.homeVideo.edit') }}" class="side-menu__item {{ $isActive('admin.homeVideo.*') }}">
+                        <i class="bi bi-camera-video side-menu__icon"></i>
+                        <span class="side-menu__label">فيديو الصفحة الرئيسية</span>
+                    </a>
+                </li>
+                @endcan
+
                 @role('super-admin')
 
                 <li class="slide has-sub {{ $isOpen('admin.social-links.*') }}">

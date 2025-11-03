@@ -57,10 +57,12 @@
                 <div class="btn-group btn-group-sm">
                     <a href="{{ route('admin.advertisements.show', $ad) }}" class="btn btn-primary" title="عرض"><i class="ri-eye-line"></i></a>
                     <a href="{{ route('admin.advertisements.edit', $ad) }}" class="btn btn-warning" title="تعديل"><i class="ri-edit-line"></i></a>
-                    <form action="{{ route('admin.advertisements.destroy', $ad) }}" method="POST" style="display:inline" onsubmit="return confirmDelete(this)">
+                   {{--
+                      <form action="{{ route('admin.advertisements.destroy', $ad) }}" method="POST" style="display:inline" onsubmit="return confirmDelete(this)">
                         @csrf @method('DELETE')
                         <button type="submit" class="btn btn-danger" title="حذف"><i class="ri-delete-bin-line"></i></button>
-                    </form>
+                       </form>
+                   --}}
                 </div>
             </td>
         </tr>

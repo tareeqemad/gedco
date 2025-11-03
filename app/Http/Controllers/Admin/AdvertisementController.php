@@ -131,9 +131,9 @@ class AdvertisementController extends Controller
             ->with('success', 'تم إضافة الإعلان بنجاح');
     }
 
-    public function show(int $ID_ADVER)
+    public function show($id)
     {
-        $ad = Advertisement::findOrFail($ID_ADVER);
+        $ad = Advertisement::findOrFail($id);
         return view('admin.site.advertisements.show', compact('ad'));
     }
 
@@ -145,26 +145,39 @@ class AdvertisementController extends Controller
 
     public function update(Request $request, $id)
     {
-        $ad = Advertisement::findOrFail($id); // ← مهم جداً
+        $ad = Advertisement::findOrFail($id);
 
         $validated = $request->validate([
-            'TITLE'     => 'required|string|max:255',
-            'BODY'      => 'nullable|string',
-            'PDF'       => 'nullable|file|mimes:pdf|max:10240',
-            'DATE_NEWS' => 'required|date',
+            'TITLE'              => 'required|string|max:255',
+            'BODY'               => 'nullable|string',
+            'PDF'                => 'nullable|file|mimes:pdf|max:10240',
+            'DATE_NEWS'          => 'required|date',
+            'remove_current_pdf' => 'nullable|in:1',
         ]);
 
         $data = $request->only(['TITLE', 'BODY', 'DATE_NEWS']);
 
+        // حذف الملف القديم
+        if ($request->filled('remove_current_pdf') && $request->remove_current_pdf == '1') {
+            if ($ad->PDF) {
+                Storage::disk('public')->delete($ad->PDF);
+            }
+            $data['PDF'] = null;
+        }
+
         // رفع ملف جديد
         if ($request->hasFile('PDF')) {
-            // حذف القديم
             if ($ad->PDF) {
                 Storage::disk('public')->delete($ad->PDF);
             }
             $data['PDF'] = $request->file('PDF')->store('advertisements', 'public');
         }
 
+        // تحديث المستخدم + التاريخ (دائمًا)
+        $data['UPDATE_USER'] = Auth::user()->name ?? Auth::user()->email;
+        $data['UPDATE_DATE'] = now()->format('Y-m-d H:i:s');
+
+        // تحديث الكائن
         $ad->update($data);
 
         return redirect()->route('admin.advertisements.index')->with('success', 'تم التحديث بنجاح');
