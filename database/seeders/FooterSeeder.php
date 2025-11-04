@@ -13,9 +13,9 @@ class FooterSeeder extends Seeder
     {
         SiteSetting::query()->updateOrCreate(['id' => 1], [
             'footer_title_ar' => 'تواصل معنا',
-            'email'           => 'contact@logixpress.com',
-            'phone'           => '+929 333 9296',
-            'address_ar'      => '100 S Main St, New York, NY',
+            'email'           => 'info@gedco.ps',
+            'phone'           => '+970 566 700 055',
+            'address_ar'      => 'مكتب مؤقت النصر',
             'logo_white_path' => 'assets/site/images/logo-white.webp',
         ]);
 
@@ -50,11 +50,11 @@ class FooterSeeder extends Seeder
         }
 
         $socials = [
-            ['facebook','fa-brands fa-facebook-f','#'],
-            ['x','fa-brands fa-x-twitter','#'],
-            ['instagram','fa-brands fa-instagram','#'],
-            ['youtube','fa-brands fa-youtube','#'],
-            ['whatsapp','fa-brands fa-whatsapp','#'],
+            ['facebook','fa-brands fa-facebook-f','https://www.facebook.com/Gedcops  '],
+            ['x','fa-brands fa-x-twitter','https://x.com/electricitygaza'],
+            ['instagram','fa-brands fa-instagram','https://www.instagram.com/gedco_gaza/'],
+            ['youtube','fa-brands fa-youtube','https://www.youtube.com/@gedco3923'],
+            ['whatsapp','fa-brands fa-whatsapp','https://chat.whatsapp.com/CaVb370XvXD5NqMr83r4Vh?mode=wwt'],
         ];
         foreach ($socials as $i => [$platform, $icon, $url]) {
             SocialLink::updateOrCreate(
