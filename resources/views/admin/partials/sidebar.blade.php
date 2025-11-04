@@ -15,6 +15,7 @@
     <!-- Start::main-sidebar -->
     <div class="main-sidebar" id="sidebar-scroll">
         <nav class="main-menu-container nav nav-pills flex-column sub-open">
+
             <div class="slide-left" id="slide-left">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="#7b8191" width="24" height="24" viewBox="0 0 24 24">
                     <path d="M13.293 6.293 7.586 12l5.707 5.707 1.414-1.414L10.414 12l4.293-4.293z"></path>
@@ -22,14 +23,14 @@
             </div>
 
             @php
-                $segment = request()->segment(2);
                 $isActive = fn($routes) => request()->routeIs($routes) ? 'active' : '';
-                $isOpen = fn($routes) => request()->routeIs($routes) ? 'open' : '';
+                $isOpen   = fn($routes) => request()->routeIs($routes) ? 'open'   : '';
+                $show     = fn($routes) => request()->routeIs($routes) ? 'display:block' : '';
             @endphp
 
             <ul class="main-menu">
 
-                <!-- 1. لوحة التحكم -->
+                <!-- 1) لوحة التحكم -->
                 <li class="slide {{ $isActive('admin.dashboard') }}">
                     <a href="{{ route('admin.dashboard') }}" class="side-menu__item">
                         <i class="bi bi-house-door side-menu__icon"></i>
@@ -37,7 +38,7 @@
                     </a>
                 </li>
 
-                <!-- 2. المستخدمون -->
+                <!-- 2) المستخدمون -->
                 @can('users.view')
                     <li class="slide has-sub {{ $isOpen('admin.users.*') }}">
                         <a href="javascript:void(0);" class="side-menu__item {{ $isActive('admin.users.*') }}">
@@ -45,15 +46,27 @@
                             <span class="side-menu__label">المستخدمون</span>
                             <i class="fe fe-chevron-left side-menu__angle"></i>
                         </a>
-                        <ul class="slide-menu child1" style="{{ $isOpen('admin.users.*') ? 'display:block' : '' }}">
-                            <li class="slide"><a href="{{ route('admin.users.index') }}" class="side-menu__item {{ $isActive('admin.users.index') }}">قائمة المستخدمين</a></li>
-                            <li class="slide"><a href="{{ route('admin.users.create') }}" class="side-menu__item {{ $isActive('admin.users.create') }}">إضافة مستخدم</a></li>
+                        <ul class="slide-menu child1" style="{{ $show('admin.users.*') }}">
+                            <li class="slide">
+                                <a href="{{ route('admin.users.index') }}" class="side-menu__item {{ $isActive('admin.users.index') }}">
+                                    قائمة المستخدمين
+                                </a>
+                            </li>
+                            @can('users.create')
+                                <li class="slide">
+                                    <a href="{{ route('admin.users.create') }}" class="side-menu__item {{ $isActive('admin.users.create') }}">
+                                        إضافة مستخدم
+                                    </a>
+                                </li>
+                            @endcan
                         </ul>
                     </li>
                 @endcan
 
-                <!-- 3. إدارة المحتوى -->
-                <li class="slide__category"><span class="side-menu__label text-muted text-xs opacity-70">إدارة المحتوى</span></li>
+                <!-- 3) إدارة المحتوى -->
+                <li class="slide__category">
+                    <span class="side-menu__label text-muted text-xs opacity-70">إدارة المحتوى</span>
+                </li>
 
                 @can('sliders.view')
                     <li class="slide {{ $isActive('admin.sliders.*') }}">
@@ -82,6 +95,34 @@
                     </li>
                 @endcan
 
+                <!-- العطاءات -->
+                @can('tenders.view')
+                    <li class="slide has-sub {{ $isOpen('admin.tenders.*') }}">
+                        <a href="javascript:void(0);" class="side-menu__item {{ $isActive('admin.tenders.*') }}">
+                            <i class="bi bi-file-earmark-text side-menu__icon"></i>
+                            <span class="side-menu__label">العطاءات</span>
+                            <i class="fe fe-chevron-left side-menu__angle"></i>
+                        </a>
+                        <ul class="slide-menu child1" style="{{ $show('admin.tenders.*') }}">
+                            <li class="slide">
+                                <a href="{{ route('admin.tenders.index') }}"
+                                   class="side-menu__item {{ $isActive('admin.tenders.index') }}">
+                                    القائمة
+                                </a>
+                            </li>
+                            @can('tenders.create')
+                                <li class="slide">
+                                    <a href="{{ route('admin.tenders.create') }}"
+                                       class="side-menu__item {{ $isActive('admin.tenders.create') }}">
+                                        إضافة عطاء
+                                    </a>
+                                </li>
+                            @endcan
+                        </ul>
+                    </li>
+                @endcan
+
+                <!-- الإعلانات والوظائف -->
                 @can('advertisements.view')
                     <li class="slide has-sub {{ $isOpen('admin.advertisements.*') }}">
                         <a href="javascript:void(0);" class="side-menu__item {{ $isActive('admin.advertisements.*') }}">
@@ -89,18 +130,13 @@
                             <span class="side-menu__label">الإعلانات والوظائف</span>
                             <i class="fe fe-chevron-left side-menu__angle"></i>
                         </a>
-
-                        <ul class="slide-menu child1" style="{{ $isOpen('admin.advertisements.*') ? 'display:block' : '' }}">
-
-                            @can('advertisements.view')
-                                <li class="slide">
-                                    <a href="{{ route('admin.advertisements.index') }}"
-                                       class="side-menu__item {{ $isActive('admin.advertisements.index') }}">
-                                        القائمة
-                                    </a>
-                                </li>
-                            @endcan
-
+                        <ul class="slide-menu child1" style="{{ $show('admin.advertisements.*') }}">
+                            <li class="slide">
+                                <a href="{{ route('admin.advertisements.index') }}"
+                                   class="side-menu__item {{ $isActive('admin.advertisements.index') }}">
+                                    القائمة
+                                </a>
+                            </li>
                             @can('advertisements.create')
                                 <li class="slide">
                                     <a href="{{ route('admin.advertisements.create') }}"
@@ -109,19 +145,18 @@
                                     </a>
                                 </li>
                             @endcan
-
                         </ul>
                     </li>
                 @endcan
 
                 @can('impact-stats.view')
                     <li class="slide has-sub {{ $isOpen('admin.impact-stats.*') }}">
-                        <a href="javascript:void(0);" class="side-menu__item {{ $isActive('admin.site.impact-stats.*') }}">
+                        <a href="javascript:void(0);" class="side-menu__item {{ $isActive('admin.impact-stats.*') }}">
                             <i class="bi bi-graph-up-arrow side-menu__icon"></i>
                             <span class="side-menu__label">إحصائيات الخسائر</span>
                             <i class="fe fe-chevron-left side-menu__angle"></i>
                         </a>
-                        <ul class="slide-menu child1" style="{{ $isOpen('admin.impact-stats.*') ? 'display:block' : '' }}">
+                        <ul class="slide-menu child1" style="{{ $show('admin.impact-stats.*') }}">
                             <li class="slide">
                                 <a href="{{ route('admin.impact-stats.index') }}"
                                    class="side-menu__item {{ $isActive('admin.impact-stats.index') }}">
@@ -132,8 +167,10 @@
                     </li>
                 @endcan
 
-                <!-- 4. إعدادات الموقع -->
-                <li class="slide__category mt-3"><span class="side-menu__label text-muted text-xs opacity-70">إعدادات الموقع</span></li>
+                <!-- 4) إعدادات الموقع -->
+                <li class="slide__category mt-3">
+                    <span class="side-menu__label text-muted text-xs opacity-70">إعدادات الموقع</span>
+                </li>
 
                 <li class="slide {{ $isActive('admin.site-settings.*') }}">
                     <a href="{{ route('admin.site-settings.edit', 1) }}" class="side-menu__item">
@@ -142,16 +179,20 @@
                     </a>
                 </li>
 
-                @can('home-video.manage') {{-- غيّر اسم الصلاحية حسب نظامك --}}
-                <li class="slide {{ $isActive('admin.homeVideo.*') }}">
-                    <a href="{{ route('admin.homeVideo.edit') }}" class="side-menu__item {{ $isActive('admin.homeVideo.*') }}">
-                        <i class="bi bi-camera-video side-menu__icon"></i>
-                        <span class="side-menu__label">فيديو الصفحة الرئيسية</span>
-                    </a>
-                </li>
+                @can('home-video.edit')
+                    <li class="slide {{ $isActive('admin.homeVideo.*') }}">
+                        <a href="{{ route('admin.homeVideo.edit') }}" class="side-menu__item {{ $isActive('admin.homeVideo.*') }}">
+                            <i class="bi bi-camera-video side-menu__icon"></i>
+                            <span class="side-menu__label">فيديو الصفحة الرئيسية</span>
+                        </a>
+                    </li>
                 @endcan
 
+                <!-- 5) إدارة النظام (Super Admin فقط) -->
                 @role('super-admin')
+                <li class="slide__category mt-3">
+                    <span class="side-menu__label text-muted text-xs opacity-70">إدارة النظام</span>
+                </li>
 
                 <li class="slide has-sub {{ $isOpen('admin.social-links.*') }}">
                     <a href="javascript:void(0);" class="side-menu__item {{ $isActive('admin.social-links.*') }}">
@@ -159,16 +200,19 @@
                         <span class="side-menu__label">روابط التواصل</span>
                         <i class="fe fe-chevron-left side-menu__angle"></i>
                     </a>
-                    <ul class="slide-menu child1" style="{{ $isOpen('admin.social-links.*') ? 'display:block' : '' }}">
-                        <li class="slide"><a href="{{ route('admin.social-links.index') }}" class="side-menu__item {{ $isActive('admin.social-links.index') }}">القائمة</a></li>
-                        <li class="slide"><a href="{{ route('admin.social-links.create') }}" class="side-menu__item {{ $isActive('admin.social-links.create') }}">إضافة رابط</a></li>
+                    <ul class="slide-menu child1" style="{{ $show('admin.social-links.*') }}">
+                        <li class="slide">
+                            <a href="{{ route('admin.social-links.index') }}" class="side-menu__item {{ $isActive('admin.social-links.index') }}">
+                                القائمة
+                            </a>
+                        </li>
+                        <li class="slide">
+                            <a href="{{ route('admin.social-links.create') }}" class="side-menu__item {{ $isActive('admin.social-links.create') }}">
+                                إضافة رابط
+                            </a>
+                        </li>
                     </ul>
                 </li>
-                @endrole
-
-                <!-- 5. إدارة النظام (للسوبر أدمن فقط) -->
-                @role('super-admin')
-                <li class="slide__category mt-3"><span class="side-menu__label text-muted text-xs opacity-70">إدارة النظام</span></li>
 
                 <li class="slide {{ $isActive('admin.permissions.*') }}">
                     <a href="{{ route('admin.permissions.index') }}" class="side-menu__item">
@@ -183,9 +227,17 @@
                         <span class="side-menu__label">الأدوار</span>
                         <i class="fe fe-chevron-left side-menu__angle"></i>
                     </a>
-                    <ul class="slide-menu child1" style="{{ $isOpen('admin.roles.*') ? 'display:block' : '' }}">
-                        <li class="slide"><a href="{{ route('admin.roles.index') }}" class="side-menu__item {{ $isActive('admin.roles.index') }}">قائمة الأدوار</a></li>
-                        <li class="slide"><a href="{{ route('admin.roles.create') }}" class="side-menu__item {{ $isActive('admin.roles.create') }}">إضافة دور</a></li>
+                    <ul class="slide-menu child1" style="{{ $show('admin.roles.*') }}">
+                        <li class="slide">
+                            <a href="{{ route('admin.roles.index') }}" class="side-menu__item {{ $isActive('admin.roles.index') }}">
+                                قائمة الأدوار
+                            </a>
+                        </li>
+                        <li class="slide">
+                            <a href="{{ route('admin.roles.create') }}" class="side-menu__item {{ $isActive('admin.roles.create') }}">
+                                إضافة دور
+                            </a>
+                        </li>
                     </ul>
                 </li>
                 @endrole
@@ -197,6 +249,7 @@
                     <path d="M10.707 17.707 16.414 12l-5.707-5.707-1.414 1.414L13.586 12l-4.293 4.293z"></path>
                 </svg>
             </div>
+
         </nav>
     </div>
 </aside>

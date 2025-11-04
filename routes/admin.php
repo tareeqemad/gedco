@@ -11,12 +11,14 @@ use App\Http\Controllers\Admin\JobController;
 use App\Http\Controllers\Admin\Site\AboutUsController;
 use App\Http\Controllers\Admin\Site\ImpactStatController;
 use App\Http\Controllers\Admin\AdvertisementController;
+use App\Http\Controllers\Admin\TenderController;
 use App\Http\Controllers\Admin\Site\SiteSettingController;
 use App\Http\Controllers\Admin\Site\FooterLinkController;
 use App\Http\Controllers\Admin\Site\SocialLinkController;
 use App\Http\Controllers\Admin\Site\SliderController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\HomeVideoController;
+
 
 Route::prefix('admin')->name('admin.')->group(function () {
 
@@ -110,6 +112,13 @@ Route::prefix('admin')->name('admin.')->group(function () {
             ->parameters(['advertisements' => 'ID_ADVER'])
             ->names('advertisements')
             ->middleware('permission:advertisements.view|advertisements.create|advertisements.edit|advertisements.delete');
+
+        Route::resource('tenders', TenderController::class)
+            ->parameters(['tenders' => 'id'])
+            ->names('tenders')
+            ->middleware('permission:tenders.view|tenders.create|tenders.edit|tenders.delete');
+
+
 
         Route::get('/home-video',  [HomeVideoController::class,'edit'])->name('homeVideo.edit');
         Route::put('/home-video',  [HomeVideoController::class,'update'])->name('homeVideo.update');
