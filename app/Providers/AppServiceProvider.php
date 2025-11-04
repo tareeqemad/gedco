@@ -22,6 +22,8 @@ class AppServiceProvider extends ServiceProvider
             return [ Limit::perMinute(5)->by($email.'|'.$request->ip()), ];
         });
 
-        Paginator::useBootstrapFive();
+       /* Paginator::useBootstrapFive();*/
+        Paginator::defaultView('pagination.bootstrap-5');
+        Paginator::defaultSimpleView('pagination.bootstrap-5');
     }
 }

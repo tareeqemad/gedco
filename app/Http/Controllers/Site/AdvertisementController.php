@@ -10,7 +10,7 @@ class AdvertisementController extends Controller
 {
     public function index(Request $request)
     {
-        $advertisements = Advertisement::latest('DATE_NEWS')->paginate(9);
+        $advertisements = Advertisement::latest('DATE_NEWS')->paginate(6);
 
         if ($request->ajax()) {
             return response()->json([

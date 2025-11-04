@@ -1,6 +1,6 @@
-<div class="row g-4 justify-content-center" id="ads-grid">
+<div class="row g-2 justify-content-center" id="ads-grid" style="min-height: 850px;">
     @forelse($advertisements as $ad)
-        <div class="col-md-4 col-sm-6 col-12 text-center">
+        <div class="col-lg-4 col-md-6 col-sm-6 col-12 text-center">
             <a href="{{ route('site.advertisements.show', $ad->ID_ADVER) }}"
                target="_blank"
                class="d-block mb-3 text-decoration-none">
@@ -12,7 +12,7 @@
                 </div>
             </a>
 
-            <h4 class="mt-3 fw-bold text-dark">{!! \Illuminate\Support\Str::limit($ad->TITLE, 60) !!}</h4>
+            <h4 class="mt-3 fw-bold text-dark">{!! $ad->TITLE !!}</h4>
             <div class="text-muted small mb-2">
                 <i class="ri-calendar-line"></i>
                 {{ $ad->DATE_NEWS?->timezone('Asia/Hebron')->format('d/m/Y') }}
