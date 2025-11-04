@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\NewsController;
 use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\Site\WhyChooseUsController;
 use Illuminate\Support\Facades\Route;
@@ -118,6 +119,10 @@ Route::prefix('admin')->name('admin.')->group(function () {
             ->names('tenders')
             ->middleware('permission:tenders.view|tenders.create|tenders.edit|tenders.delete');
 
+        Route::resource('news', NewsController::class)
+            ->parameters(['news' => 'news']) // Route Model Binding على News $news
+            ->names('news')
+            ->middleware('permission:news.view|news.create|news.edit|news.delete');
 
 
         Route::get('/home-video',  [HomeVideoController::class,'edit'])->name('homeVideo.edit');

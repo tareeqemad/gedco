@@ -17,12 +17,12 @@ class SuperAdminSeeder extends Seeder
             [
                 'name'     => 'طارق البواب',
                 'email'    => 'tareqelbawab94@gmail.com',
-                'password' => Hash::make('tareq123'), // بدّلها فوراً
+                'password' => Hash::make('tareq123'),
             ],
             [
-                'name'     => 'فهيم المملوك',
-                'email'    => 'admin2@example.com',
-                'password' => Hash::make('password123'), // بدّلها
+                'name'     => 'محمد الكيلاني',
+                'email'    => 'mkilani@gedco.ps',
+                'password' => Hash::make('admin123'),
             ],
         ];
 
@@ -32,7 +32,7 @@ class SuperAdminSeeder extends Seeder
                 [
                     'name'     => $data['name'],
                     'password' => $data['password'],
-                    'is_admin' => true, // لو عندك العمود القديم
+                    'is_admin' => true,
                 ]
             );
 

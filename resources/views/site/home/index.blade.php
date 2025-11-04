@@ -2,6 +2,22 @@
 
 @section('title', 'كهرباء غزة')
 @section('meta_description', 'الصفحة الرئيسة لكهرباء غزة')
+
+@push('styles')
+    <style>
+
+        section.p-0 .container-fluid {
+            padding-left: 0 !important;
+            padding-right: 0 !important;
+            max-width: 100% !important;
+        }
+    #content {
+            flex: 1 0 auto;
+            overflow: visible;
+        }
+    </style>
+@endpush
+
 @section('content')
     <div class="no-bottom no-top" id="content">
         <div id="top"></div>
@@ -259,6 +275,7 @@
 
 
         {{-- ========= Track (split image/form) ========= --}}
+
         <section class="p-0">
             <div class="container-fluid relative z-1">
                 <div class="row g-0">
@@ -281,6 +298,8 @@
                 </div>
             </div>
         </section>
+
+
 
         {{-- ========= Services ========= --}}
         <section class="py-5 bg-white" id="services" dir="rtl">
@@ -349,7 +368,7 @@
 
                     <!-- خدمة 4 -->
                     <div style="flex: 1 1 250px; max-width: 300px;">
-                        <a href="{{ route('site.jobs') }}" style="text-decoration: none; color: inherit; display: block;">
+                        <a href="{{ route('site.advertisements.index') }}" style="text-decoration: none; color: inherit; display: block;">
                             <div class="service-card" style="text-align: center; padding: 1.5rem; border-radius: 1rem; height: 100%; display: flex; flex-direction: column; justify-content: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1); background: white; border: 1px solid #eee; transition: all 0.35s ease;"
                                  data-aos="fade-up" data-aos-delay="400">
 
@@ -364,29 +383,39 @@
         </section>
 
         {{-- ========= Video Banner ========= --}}
-        <section class="py-0" id="video-section">
-            <div class="container p-0">
-                <a class="d-block video-trigger position-relative"
-                   href="#"
-                   data-video-id="02WimCJ02V8"
-                   style="border-radius: 1rem; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.15); display: block; cursor: pointer;">
+        @if(($homeVideo['enabled'] ?? false) && !empty($homeVideo['id']))
+            @php
+                $vid     = $homeVideo['id'];
+                $caption = $homeVideo['caption'] ?? 'شاهد فيديو تعريفي عن خدماتنا';
+                // ملاحظة: بعض الفيديوهات ما إلها maxres، فبنجرّب maxres وإذا ما اشتغلت بيسحبها المتصفح لـ hqdefault تلقائي
+                $thumb   = "https://img.youtube.com/vi/{$vid}/maxresdefault.jpg";
+                $watch   = "https://www.youtube.com/watch?v={$vid}";
+            @endphp
 
-                    <img src="https://img.youtube.com/vi/02WimCJ02V8/maxresdefault.jpg"
-                         alt="فيديو تعريفي"
-                         style="width: 100%; aspect-ratio: 16/9; object-fit: cover; transition: transform 0.4s ease;">
+            <section class="py-0" id="video-section">
+                <div class="container p-0">
+                    <a class="d-block video-trigger position-relative"
+                       href="{{ $watch }}"
+                       data-video-id="{{ $vid }}"
+                       style="border-radius: 1rem; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.15); display: block; cursor: pointer;">
 
-                    <div style="position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.5));"></div>
+                        <img src="{{ $thumb }}"
+                             alt="{{ $caption }}"
+                             style="width: 100%; aspect-ratio: 16/9; object-fit: cover; transition: transform 0.4s ease;">
 
-                    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90px; height: 90px; border-radius: 50%; background: rgba(220, 53, 69, 0.9); display: flex; align-items: center; justify-content: center; color: white; font-size: 38px; box-shadow: 0 8px 25px rgba(220, 53, 69, 0.4); transition: all 0.3s ease; animation: pulse-play 2s infinite;">
-                        <i class="fas fa-play" style="margin-left: 6px;"></i>
-                    </div>
+                        <div style="position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.5));"></div>
 
-                    <div style="position: absolute; bottom: 1.5rem; left: 1.5rem; color: white; font-weight: 600; font-size: 1.1rem; text-shadow: 0 2px 4px rgba(0,0,0,0.5);">
-                        شاهد فيديو تعريفي عن خدماتنا
-                    </div>
-                </a>
-            </div>
-        </section>
+                        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90px; height: 90px; border-radius: 50%; background: rgba(220, 53, 69, 0.9); display: flex; align-items: center; justify-content: center; color: white; font-size: 38px; box-shadow: 0 8px 25px rgba(220, 53, 69, 0.4); transition: all 0.3s ease; animation: pulse-play 2s infinite;">
+                            <i class="fas fa-play" style="margin-left: 6px;"></i>
+                        </div>
+
+                        <div style="position: absolute; bottom: 1.5rem; left: 1.5rem; color: white; font-weight: 600; font-size: 1.1rem; text-shadow: 0 2px 4px rgba(0,0,0,0.5);">
+                            {{ $caption }}
+                        </div>
+                    </a>
+                </div>
+            </section>
+        @endif
 
         <!-- Popup (على قد الفيديو فقط) -->
         <div id="video-popup" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 9999; align-items: center; justify-content: center; padding: 2rem;">

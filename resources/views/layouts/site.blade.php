@@ -37,6 +37,24 @@
             max-width: 100vw !important;
         }
 
+
+        /* إخفاء الـ scrollbar في كل المتصفحات */
+        /* For Chrome, Safari, Edge */
+        ::-webkit-scrollbar {
+            width: 0px;
+            height: 0px;
+        }
+
+        /* For Firefox */
+        * {
+            scrollbar-width: none;
+        }
+
+        /* For IE and Edge (old) */
+        body {
+            -ms-overflow-style: none;
+        }
+
         /* Mobile Menu Overlay - خلفية شفافة معتمة */
         #mobile-menu-overlay {
             position: fixed;
@@ -278,27 +296,27 @@
                 display: none !important;
             }
 
-            /* خلفية داكنة ثابتة للهيدر على الموبايل */
+            /* خلفية داكنة ثابتة للهيدر على الموبايل - حجم أصغر */
             header.header-mobile {
                 background: #1a1a1a !important;
                 height: auto !important;
-                min-height: 70px !important;
-                padding: 12px 0 !important;
+                min-height: 55px !important; /* حجم أصغر */
+                padding: 8px 0 !important; /* padding أقل */
             }
 
             header.header-mobile.menu-open {
                 background: #1a1a1a !important;
                 height: auto !important;
-                min-height: 70px !important;
+                min-height: 55px !important;
                 overflow: visible !important;
-                padding: 12px 0 !important;
+                padding: 8px 0 !important;
             }
 
             /* منع تصغير الهيدر عند scroll */
             header.header-mobile.smaller,
             header.header-mobile.scrolled {
-                min-height: 70px !important;
-                padding: 12px 0 !important;
+                min-height: 55px !important;
+                padding: 8px 0 !important;
             }
 
             /* التأكد من ظهور الشعار كامل - حتى عند scroll */
@@ -316,16 +334,16 @@
 
             header.header-mobile #logo .logo-mobile {
                 display: block !important;
-                max-height: 50px !important;
-                height: 50px !important;
+                max-height: 40px !important; /* شعار أصغر */
+                height: 40px !important;
                 width: auto !important;
             }
 
             /* عند scroll - الشعار يظل بنفس الحجم */
             header.header-mobile.smaller #logo .logo-mobile,
             header.header-mobile.scrolled #logo .logo-mobile {
-                max-height: 50px !important;
-                height: 50px !important;
+                max-height: 40px !important;
+                height: 40px !important;
             }
         }
     </style>
@@ -492,6 +510,46 @@
     })();
 
     console.log('✅ Mobile menu system loaded!');
+
+    // إصلاح مشكلة التحويل بين الموبايل والديسكتوب
+    let lastWidth = window.innerWidth;
+    window.addEventListener('resize', function() {
+        const currentWidth = window.innerWidth;
+
+        // إذا تغير حجم الشاشة بشكل كبير (من موبايل لديسكتوب أو العكس)
+        if ((lastWidth <= 991 && currentWidth > 991) || (lastWidth > 991 && currentWidth <= 991)) {
+            // إعادة ضبط الستايلات
+            document.body.style.overflow = '';
+            document.documentElement.style.overflow = '';
+
+            // إعادة السكرول للأعلى
+            window.scrollTo(0, 0);
+
+            // إغلاق القائمة إذا كانت مفتوحة
+            const overlay = document.getElementById('mobile-menu-overlay');
+            if (overlay) {
+                overlay.classList.remove('active');
+            }
+
+            // تحديث كلاس الهيدر
+            const header = document.querySelector('header');
+            if (header) {
+                if (currentWidth <= 991) {
+                    header.classList.add('header-mobile');
+                } else {
+                    header.classList.remove('header-mobile');
+                }
+            }
+
+            // إعادة حساب ارتفاع الصفحة
+            setTimeout(function() {
+                document.body.style.minHeight = '';
+                document.documentElement.style.minHeight = '';
+            }, 100);
+        }
+
+        lastWidth = currentWidth;
+    });
 </script>
 @stack('scripts')
 </body>

@@ -95,6 +95,33 @@
                     </li>
                 @endcan
 
+                {{-- الأخبار --}}
+                @can('news.view')
+                    <li class="slide has-sub {{ $isOpen('admin.news.*') }}">
+                        <a href="javascript:void(0);" class="side-menu__item {{ $isActive('admin.news.*') }}">
+                            <i class="bi bi-newspaper side-menu__icon"></i>
+                            <span class="side-menu__label">الأخبار</span>
+                            <i class="fe fe-chevron-left side-menu__angle"></i>
+                        </a>
+                        <ul class="slide-menu child1" style="{{ $show('admin.news.*') }}">
+                            <li class="slide">
+                                <a href="{{ route('admin.news.index') }}"
+                                   class="side-menu__item {{ $isActive('admin.news.index') }}">
+                                    القائمة
+                                </a>
+                            </li>
+                            @can('news.create')
+                                <li class="slide">
+                                    <a href="{{ route('admin.news.create') }}"
+                                       class="side-menu__item {{ $isActive('admin.news.create') }}">
+                                        إضافة خبر
+                                    </a>
+                                </li>
+                            @endcan
+                        </ul>
+                    </li>
+                @endcan
+
                 <!-- العطاءات -->
                 @can('tenders.view')
                     <li class="slide has-sub {{ $isOpen('admin.tenders.*') }}">
@@ -153,7 +180,7 @@
                     <li class="slide has-sub {{ $isOpen('admin.impact-stats.*') }}">
                         <a href="javascript:void(0);" class="side-menu__item {{ $isActive('admin.impact-stats.*') }}">
                             <i class="bi bi-graph-up-arrow side-menu__icon"></i>
-                            <span class="side-menu__label">إحصائيات الخسائر</span>
+                            <span class="side-menu__label">إحصائيات</span>
                             <i class="fe fe-chevron-left side-menu__angle"></i>
                         </a>
                         <ul class="slide-menu child1" style="{{ $show('admin.impact-stats.*') }}">

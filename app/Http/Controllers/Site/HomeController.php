@@ -24,8 +24,6 @@ class HomeController extends Controller
             'caption' => SiteConfig::get('home_video_caption', 'شاهد فيديو تعريفي عن خدماتنا'),
         ];
 
-        return view('site.home.index', compact('about', 'sliders','impactStats'));
-
-
+        return view('site.home.index', compact('about', 'sliders', 'impactStats', 'homeVideo'));
     }
 }

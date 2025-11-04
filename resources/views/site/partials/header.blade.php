@@ -4,7 +4,6 @@
                 <div class="de-flex sm-pt10">
                     <div class="de-flex-col">
                         <div id="logo">
-                            {{-- خلي اللوجو يروح للهوم بدل index.html --}}
                             <a href="{{ route('site.home') }}">
                                 <img class="logo-main"   src="{{ asset('assets/site/images/logo-white.webp') }}" alt="">
                                 <img class="logo-scroll" src="{{ asset('assets/site/images/logo-dark.webp') }}"  alt="">
@@ -21,9 +20,8 @@
                             <li>
                                 <a class="menu-item" href="#services">الخدمات</a>
                                 <ul>
-                                    <li><a href="http://213.244.76.228/" target="_blank">الخدمات الالكترونية</a></li>
+                                    <li><a href="https://eservices.gedco.ps/" target="_blank">الخدمات الالكترونية</a></li>
                                     <li><a href="#">المواصفات والمقايس</a></li>
-
                                 </ul>
                             </li>
 
@@ -33,7 +31,6 @@
                                     <li><a href="#who-us"> من نحن</a></li>
                                     <li><a href="#section-why-choose-us">لماذا تختارنا</a></li>
                                     <li><a href="#">فريقنا</a></li>
-
                                 </ul>
                             </li>
 
@@ -41,13 +38,13 @@
                                 <a class="menu-item" href="#">الاعلانات</a>
                                 <ul>
                                     <li><a href="{{ route('site.advertisements.index') }}">الإعلانات والوظائف</a></li>
-                                    <li><a href="{{ route('site.tenders') }}">العطاءات</a></li>
+                                    <li><a href="#">العطاءات</a></li>
                                 </ul>
                             </li>
+
                             <li>
                                 <a class="menu-item" href="{{ route('site.home') }}#contact-footer">اتصل بنا</a>
                             </li>
-
                         </ul>
                     </div>
 

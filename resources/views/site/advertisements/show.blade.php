@@ -5,6 +5,15 @@
 
 @push('styles')
     <style>
+        /* نفس إعدادات الهيدر والصورة من صفحة الإعلانات */
+        header { position: fixed !important; top: 0 !important; width: 100% !important; transition: all .3s ease !important; }
+        header.smaller { position: fixed !important; top: 0 !important; }
+        section#subheader { margin-top: 8px !important; padding-top: 120px !important; padding-bottom: 80px !important; }
+        @media (max-width: 991px) {
+            section#subheader { margin-top: 25px !important; padding-top: 60px !important; padding-bottom: 60px !important; }
+            section#subheader .container { max-width: 100% !important; padding-left: 15px !important; padding-right: 15px !important; }
+        }
+
         :root {
             --primary: #0d6efd;
             --danger: #dc3545;
@@ -18,74 +27,159 @@
         }
 
         .content-preview {
-            line-height: 2;
-            font-size: 1.15rem;
-            color: #2c3e50;
-            text-align: justify;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 2.1 !important;
+            font-size: 1.15rem !important;
+            color: #1a202c !important;
+            text-align: right !important;
+            direction: rtl !important;
+            font-family: 'Cairo', 'Tajawal', 'Segoe UI', sans-serif !important;
+            font-weight: 500 !important;
+        }
+        .content-preview * {
+            font-family: 'Cairo', 'Tajawal', 'Segoe UI', sans-serif !important;
+            color: #1a202c !important;
         }
         .content-preview p {
-            margin-bottom: 1.4rem;
-            animation: fadeInUp 0.8s ease-out;
+            margin-bottom: 1.5rem !important;
+            text-align: justify !important;
+            font-size: 1.15rem !important;
+            line-height: 2.1 !important;
         }
-
-        /* ختم "إعلان رسمي" */
-        .official-stamp {
+        .content-preview span,
+        .content-preview div {
+            font-size: 1.15rem !important;
+            line-height: 2.1 !important;
+        }
+        .content-preview ul, .content-preview ol {
+            list-style: none;
+            padding: 0;
+            margin: 1.5rem 0;
+        }
+        .content-preview li {
+            margin-bottom: 1rem;
+            padding: 0.8rem 1.2rem;
+            padding-right: 3rem;
+            position: relative;
+            background: linear-gradient(to left, rgba(26,84,144,0.03), transparent);
+            border-right: 3px solid #ff6b35;
+            border-radius: 0 8px 8px 0;
+            transition: all 0.3s ease;
+            font-size: 1.15rem !important;
+            line-height: 2.1 !important;
+            font-family: 'Cairo', 'Tajawal', 'Segoe UI', sans-serif !important;
+        }
+        .content-preview li:hover {
+            background: linear-gradient(to left, rgba(26,84,144,0.05), transparent);
+            border-right-color: #1a5490;
+            transform: translateX(-3px);
+        }
+        .content-preview li::before {
+            content: '✓';
             position: absolute;
-            top: -15px;
-            right: -15px;
-            background: var(--danger);
-            color: white;
-            padding: 10px 20px;
-            border-radius: 50px;
-            font-size: 0.85rem;
-            font-weight: 700;
-            box-shadow: 0 6px 18px rgba(220, 53, 69, 0.4);
-            z-index: 10;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            animation: pulse 2s infinite;
-            transform: rotate(12deg);
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #ff6b35;
+            font-weight: bold;
+            font-size: 1.2rem;
         }
-        .official-stamp i {
-            font-size: 1.1rem;
-            animation: stamp 2s infinite;
+        .content-preview strong,
+        .content-preview b {
+            color: #1a5490;
+            font-weight: 800;
+            background: linear-gradient(120deg, #1a5490 0%, #2980b9 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 1.05em;
+        }
+        .content-preview h2,
+        .content-preview h3,
+        .content-preview h4 {
+            color: #1a5490;
+            font-weight: 700;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            line-height: 1.4;
+        }
+        .content-preview h2 { font-size: 1.5rem; }
+        .content-preview h3 { font-size: 1.3rem; }
+        .content-preview h4 { font-size: 1.15rem; }
+
+        /* نص إعلان رسمي أنيق */
+        .official-label {
+            display: inline-block;
+            padding: 6px 18px;
+            background: linear-gradient(135deg, rgba(220,53,69,0.1), rgba(255,107,53,0.1));
+            border: 2px solid #dc3545;
+            border-radius: 25px;
+            color: #dc3545;
+            font-size: 0.75rem;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 15px rgba(220,53,69,0.15);
+        }
+        .official-label::before {
+            content: '✓';
+            margin-left: 6px;
+            font-weight: bold;
         }
 
         .pdf-card {
             position: sticky;
             top: 1.5rem;
-            border-radius: 1rem;
+            border-radius: 20px;
             overflow: hidden;
-            box-shadow: 0 12px 30px rgba(0,0,0,.12);
-            transition: all .3s ease;
-            border: 1px solid #e9ecef;
+            background: linear-gradient(145deg, #ffffff, #f8fbff);
+            box-shadow:
+                0 20px 60px rgba(255,107,53,.12),
+                0 0 0 1px rgba(255,107,53,.1),
+                inset 0 1px 0 rgba(255,255,255,.9);
+            transition: all .4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 1px solid rgba(255,107,53,.1);
         }
         .pdf-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 20px 40px rgba(0,0,0,.18);
+            transform: translateY(-12px) scale(1.02);
+            box-shadow:
+                0 30px 80px rgba(255,107,53,.2),
+                0 0 0 1px rgba(255,107,53,.2),
+                inset 0 1px 0 rgba(255,255,255,1);
         }
 
         .pdf-header {
-            background: var(--orange-gradient);
+            background: linear-gradient(135deg, #ff6b35 0%, #ff8c00 50%, #ff6b35 100%);
+            background-size: 200% 100%;
+            animation: headerGradient 3s ease infinite;
             color: white;
-            padding: 1rem 1.25rem;
-            font-weight: 600;
+            padding: 1.2rem 1.5rem;
+            font-weight: 700;
             font-size: 1.05rem;
             display: flex;
             align-items: center;
             justify-content: space-between;
             position: relative;
             overflow: hidden;
+            box-shadow: 0 4px 15px rgba(255,107,53,.3);
         }
-        .pdf-header::after {
+        .pdf-header::before {
             content: '';
             position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,.1) 50%, transparent 70%);
-            transform: translateX(-100%);
-            animation: shimmer 3s infinite;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,.2) 0%, transparent 70%);
+            animation: shine 4s linear infinite;
+        }
+        @keyframes headerGradient {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        @keyframes shine {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
         }
 
         .pdf-info {
@@ -99,49 +193,9 @@
             align-items: center;
         }
 
-        /* زر الرجوع – واضح + يعمل + ثابت */
-        .back-btn {
-            position: fixed !important;
-            top: 100px;
-            left: 20px;
-            z-index: 9999;
-            background: #fff;
-            color: var(--dark);
-            border: 2px solid var(--primary);
-            border-radius: 50px;
-            padding: .75rem 1.5rem;
-            font-weight: 600;
-            font-size: 1rem;
-            box-shadow: 0 8px 25px rgba(13, 110, 253, 0.25);
-            transition: all .3s ease;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .back-btn:hover {
-            background: var(--primary);
-            color: white;
-            transform: translateY(-3px);
-            box-shadow: 0 12px 30px rgba(13, 110, 253, 0.35);
-        }
-        .back-btn i {
-            font-size: 1.2rem;
-        }
-
-        .meta-info {
-            font-size: .92rem;
-            color: #6c757d;
-            background: #f8f9fa;
-            padding: 1rem;
-            border-radius: .75rem;
-            margin-top: 1.5rem;
-            border-left: 4px solid var(--primary);
-        }
-        .meta-info i {
-            color: var(--primary);
-            font-size: 1.2rem;
-            width: 32px;
-        }
+        /* توحيد أنيميشن السوشال بالفوتر */
+        .footer-social-modern a { transition: all .3s ease !important; }
+        .footer-social-modern a:hover { animation: pulse .8s ease-in-out infinite !important; }
 
         iframe {
             border: none;
@@ -153,42 +207,78 @@
 
         .content-card {
             position: relative;
-            border-radius: 1rem;
+            border-radius: 20px;
             overflow: hidden;
-            box-shadow: 0 12px 30px rgba(0,0,0,.1);
-            transition: all .3s ease;
+            background:
+                radial-gradient(circle at 20% 30%, rgba(255,107,53,0.04) 0%, transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(26,84,144,0.04) 0%, transparent 40%),
+                linear-gradient(135deg, rgba(255,247,237,0.3) 0%, rgba(240,248,255,0.3) 100%),
+                #ffffff;
+            box-shadow:
+                0 25px 70px rgba(26,84,144,.1),
+                0 10px 25px rgba(255,107,53,.05),
+                0 0 0 1px rgba(26,84,144,.06),
+                inset 0 1px 0 rgba(255,255,255,1);
+            transition: all .4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 1px solid rgba(26,84,144,.08);
         }
         .content-card:hover {
-            box-shadow: 0 20px 40px rgba(0,0,0,.15);
+            transform: translateY(-8px);
+            box-shadow:
+                0 30px 80px rgba(26,84,144,.15),
+                0 15px 35px rgba(255,107,53,.1),
+                0 0 0 1px rgba(255,107,53,.15),
+                inset 0 1px 0 rgba(255,255,255,1);
+        }
+        .content-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #ff6b35, #1a5490, #ff6b35);
+            background-size: 200% 100%;
+            animation: gradientMove 3s linear infinite;
+            border-radius: 20px 20px 0 0;
+            z-index: 3;
+        }
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 200% 50%; }
         }
 
-        /* Animations */
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        /* Animation pulse للسوشال */
         @keyframes pulse {
-            0%, 100% { transform: scale(1) rotate(12deg); }
-            50% { transform: scale(1.08) rotate(12deg); }
-        }
-        @keyframes stamp {
-            0%, 100% { transform: rotate(0deg); }
-            50% { transform: rotate(-5deg); }
-        }
-        @keyframes shimmer {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
         }
 
         @media (max-width: 992px) {
             .pdf-card { position: static; margin-top: 2rem; }
-            .back-btn {
-                position: fixed !important;
-                bottom: 20px;
-                top: auto;
-                left: 50%;
-                transform: translateX(-50%);
-                border-radius: 50px;
+            .content-card::before { height: 3px; }
+            .content-card { border-radius: 15px; }
+            .official-label {
+                font-size: .7rem;
+                padding: 5px 15px;
+            }
+            .card-body { padding: 2rem 1.5rem !important; padding-top: 2.5rem !important; }
+            h1 { font-size: 1.6rem !important; }
+            .content-preview { font-size: 1.05rem !important; line-height: 2 !important; }
+            .content-preview * { font-size: 1.05rem !important; }
+            .content-preview p { margin-bottom: 1.2rem !important; font-size: 1.05rem !important; line-height: 2 !important; }
+            .content-preview span,
+            .content-preview div { font-size: 1.05rem !important; line-height: 2 !important; }
+            .content-preview li {
+                padding: 0.7rem 1rem;
+                padding-right: 2.5rem;
+                margin-bottom: 0.8rem;
+                font-size: 1.05rem !important;
+                line-height: 2 !important;
+            }
+            .content-preview li::before {
+                right: 0.8rem;
+                font-size: 1rem;
             }
         }
     </style>
@@ -202,9 +292,7 @@
         <div class="container relative z-2">
             <div class="row justify-content-center text-center">
                 <div class="col-12">
-                    <h1 class="split mb-3 fw-bold d-block w-100">
-                        {{ \Illuminate\Support\Str::limit($ad->TITLE, 60) }}
-                    </h1>
+                    <h1 class="split mb-3 fw-bold d-block w-100">الإعلانات والوظائف</h1>
                     <div class="w-100 mt-2">
                         <ul class="crumb">
                             <li><a href="{{ url('/') }}">الرئيسية</a></li>
@@ -219,64 +307,73 @@
         <div class="sw-overlay op-7"></div>
     </section>
 
-    <!-- زر الرجوع – ثابت وواضح 100% -->
-    <a href="{{ route('site.advertisements.index') }}" class="back-btn btn d-inline-flex align-items-center">
-        <i class="ri-arrow-left-line"></i> رجوع
-    </a>
+    {{-- زر الرجوع محذوف حسب الطلب --}}
 
     <!-- المحتوى الرئيسي -->
-    <div class="container py-5">
-        <div class="row g-4">
+    <div class="container py-4">
+        <div class="row g-3">
             <!-- المحتوى -->
             <div class="col-lg-8">
                 <div class="content-card position-relative bg-white">
-                    <!-- ختم "إعلان رسمي" -->
-                    <div class="official-stamp">
-                        <i class="ri-shield-check-line"></i>
-                        <span>إعلان رسمي</span>
-                    </div>
+                    <div class="card-body p-5" style="padding-top: 3rem !important; position: relative; z-index: 2;">
+                        <!-- العنوان الخرافي -->
+                        <div class="mb-4 text-center" style="position:relative;">
+                            <!-- نص إعلان رسمي -->
+                            <div class="official-label">إعلان رسمي</div>
 
-                    <div class="card-body p-5">
-                        <div class="mb-4">
-                            <h3 class="fw-bold text-primary mb-2">{{ $ad->TITLE }}</h3>
-                            <div class="text-muted small d-flex align-items-center gap-2">
-                                <i class="ri-calendar-line"></i>
-                                <span>{{ $ad->DATE_NEWS?->timezone('Asia/Hebron')->format('l، d F Y') }}</span>
-                                <span class="text-secondary">| {{ $ad->DATE_NEWS?->timezone('Asia/Hebron')->format('H:i') }}</span>
+                            <h1 class="fw-bold mb-3" style="
+                                color: #1a5490;
+                                font-size: 2rem;
+                                line-height: 1.4;
+                                text-align: center;
+                                margin: 0 auto;
+                                background: linear-gradient(135deg, #1a5490 0%, #2980b9 50%, #ff6b35 100%);
+                                -webkit-background-clip: text;
+                                -webkit-text-fill-color: transparent;
+                                background-clip: text;
+                                text-shadow: 0 4px 10px rgba(26,84,144,.15);
+                                animation: titleFade 1s ease-out;
+                                letter-spacing: -0.5px;
+                            ">
+                                {{ $ad->TITLE }}
+                            </h1>
+
+                            <div class="d-inline-flex align-items-center gap-2 px-4 py-2 rounded-pill" style="
+                                background: linear-gradient(135deg, rgba(255,107,53,.1), rgba(26,84,144,.1));
+                                border: 1.5px solid rgba(255,107,53,.3);
+                                font-size: .85rem;
+                                color: #2c3e50;
+                                font-weight: 600;
+                                box-shadow: 0 4px 15px rgba(255,107,53,.15);
+                            ">
+                                <i class="ri-calendar-event-fill" style="color:#ff6b35; font-size:1rem;"></i>
+                                <span>{{ $ad->DATE_NEWS?->timezone('Asia/Hebron')->format('d') }} {{ $ad->DATE_NEWS?->timezone('Asia/Hebron')->locale('ar')->translatedFormat('F') }} {{ $ad->DATE_NEWS?->timezone('Asia/Hebron')->format('Y') }}</span>
                             </div>
                         </div>
+
+                        <!-- فاصل فني -->
+                        <div class="mb-4 d-flex align-items-center justify-content-center gap-2">
+                            <div style="width:40px; height:2px; background:linear-gradient(to right, transparent, #ff6b35); border-radius:2px;"></div>
+                            <div style="width:8px; height:8px; background:#ff6b35; border-radius:50%; box-shadow: 0 0 10px rgba(255,107,53,.5);"></div>
+                            <div style="width:100px; height:3px; background:linear-gradient(90deg, #ff6b35, #1a5490, #ff6b35); border-radius:2px;"></div>
+                            <div style="width:8px; height:8px; background:#1a5490; border-radius:50%; box-shadow: 0 0 10px rgba(26,84,144,.5);"></div>
+                            <div style="width:40px; height:2px; background:linear-gradient(to left, transparent, #1a5490); border-radius:2px;"></div>
+                        </div>
+
+                        <style>
+                            @keyframes titleFade {
+                                from { opacity: 0; transform: translateY(-20px); }
+                                to { opacity: 1; transform: translateY(0); }
+                            }
+                        </style>
 
                         @if($ad->BODY)
                             <div class="content-preview">
                                 {!! $ad->BODY !!}
                             </div>
                         @else
-                            <p class="text-center text-muted py-5 fst-italic">لا يوجد محتوى نصي</p>
+                            <p class="text-center text-muted py-4 fst-italic">لا يوجد محتوى نصي</p>
                         @endif
-
-                        <!-- معلومات إضافية -->
-                        <div class="meta-info">
-                            <div class="row">
-                                <div class="col-sm-6 mb-3">
-                                    <div class="d-flex align-items-center gap-3">
-                                        <i class="ri-user-add-line"></i>
-                                        <div>
-                                            <div class="fw-semibold text-dark">{{ $ad->INSERT_USER ?? 'غير معروف' }}</div>
-                                            <div class="small">أُضيف في {{ $ad->INSERT_DATE?->timezone('Asia/Hebron')->format('d/m/Y H:i') ?? '—' }}</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-sm-6 mb-3">
-                                    <div class="d-flex align-items-center gap-3">
-                                        <i class="ri-refresh-line text-success"></i>
-                                        <div>
-                                            <div class="fw-semibold text-dark">{{ $ad->UPDATE_USER ?? '—' }}</div>
-                                            <div class="small">آخر تحديث {{ $ad->UPDATE_DATE?->timezone('Asia/Hebron')->format('d/m/Y H:i') ?? '—' }}</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
