@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
             SuperAdminSeeder::class,
             AdminSeeder::class,
             SlidersSeeder::class,
+            HomeVideoSeeder::class,
             FooterSeeder::class,
             AboutUsSeeder::class,
             WhyChooseUsSeeder::class,
