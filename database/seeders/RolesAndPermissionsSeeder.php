@@ -22,6 +22,7 @@ class RolesAndPermissionsSeeder extends Seeder
             'why',
             'impact-stats',
             'advertisements',
+            'tenders',
         ];
 
         // === الأقسام الخاصة بالسوبر أدمن فقط (CRUD) ===
@@ -54,7 +55,7 @@ class RolesAndPermissionsSeeder extends Seeder
             $permissions[] = "{$section}.delete";
         }
 
-        // ✅ جديد — permission لفيديو الصفحة الرئيسية
+
         $permissions[] = 'home-video.edit';
 
         // site settings
