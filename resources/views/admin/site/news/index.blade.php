@@ -105,6 +105,16 @@
                     });
                 }
             });
+
+            // حذف خبر (modern): نقرأ الرابط من data-attribute
+            window.delNews = function(btn){
+                if(!confirm('تأكيد حذف الخبر؟')) return;
+                const url = btn.getAttribute('data-delete-url');
+                fetch(url, {
+                    method: 'DELETE',
+                    headers: {'X-CSRF-TOKEN': '{{ csrf_token() }}', 'X-Requested-With':'XMLHttpRequest'}
+                }).then(r=>r.json()).then(()=>location.reload());
+            }
         })();
     </script>
 @endpush
