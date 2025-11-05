@@ -15,7 +15,7 @@ class News extends Model
 
     protected $table = 'news';
 
-    // modern style: اعتمدنا guarded فارغ ونستخدم validation بالكنترولر/Requests
+    // modern: نعتمد التحقق في الـ FormRequest/Controller
     protected $guarded = [];
 
     protected $casts = [
@@ -24,6 +24,7 @@ class News extends Model
         'published_at' => 'datetime',
     ];
 
+    // عشان الـ JSON والـ Blade يقدروا يستدعوا قيم جاهزة
     protected $appends = [
         'cover_url',
         'pdf_url',
@@ -33,19 +34,59 @@ class News extends Model
     /* =======================
      *  Accessors
      * ======================= */
+
+    // URL صورة الغلاف من الـ disk (public أو حسب ضبطك)
     public function getCoverUrlAttribute(): ?string
     {
-        return $this->cover_path ? Storage::disk('public')->url($this->cover_path) : null;
+        if (!$this->cover_path) return null;
+
+        $disk = config('filesystems.default', 'public');
+        try {
+            return Storage::disk($disk)->url($this->cover_path);
+        } catch (\Throwable $e) {
+            // fallback للـ public
+            return Storage::disk('public')->url($this->cover_path);
+        }
     }
 
+    // URL ملف الـ PDF
     public function getPdfUrlAttribute(): ?string
     {
-        return $this->pdf_path ? Storage::disk('public')->url($this->pdf_path) : null;
+        if (!$this->pdf_path) return null;
+
+        $disk = config('filesystems.default', 'public');
+        try {
+            return Storage::disk($disk)->url($this->pdf_path);
+        } catch (\Throwable $e) {
+            return Storage::disk('public')->url($this->pdf_path);
+        }
     }
 
+    // هل الخبر منشور (status + تاريخ النشر)
     public function getIsPublishedAttribute(): bool
     {
-        return $this->status === 'published' && (!is_null($this->published_at) ? $this->published_at->isPast() : true);
+        return $this->status === 'published'
+            && (is_null($this->published_at) ? true : $this->published_at->isPast());
+    }
+
+    /**
+     * ملخّص مقتضب (بديل أنيق لو ما عندك accessor جاهز)
+     */
+    public function excerpt(int $limit = 120): string
+    {
+        $base = $this->excerpt ?: ($this->body ? strip_tags($this->body) : '');
+        return Str::limit(trim(preg_replace('/\s+/', ' ', $base)), $limit);
+    }
+
+    // (اختياري) ميثود للألفة مع الكود القديم
+    public function coverUrl(): ?string
+    {
+        return $this->cover_url;
+    }
+
+    public function pdfUrl(): ?string
+    {
+        return $this->pdf_url;
     }
 
     /* =======================
@@ -53,7 +94,7 @@ class News extends Model
      * ======================= */
     protected static function booted(): void
     {
-        // ولادة slug تلقائياً لو مش مرسل
+        // توليد slug تلقائيًا لو مفقود
         static::creating(function (News $news) {
             if (empty($news->slug) && !empty($news->title)) {
                 $news->slug = static::uniqueSlug($news->title);
@@ -74,7 +115,7 @@ class News extends Model
 
         $i = 1;
         while (static::withTrashed()->where('slug', $slug)->exists()) {
-            $slug = $base.'-'.$i;
+            $slug = $base . '-' . $i;
             $i++;
         }
         return $slug;
@@ -87,7 +128,8 @@ class News extends Model
     {
         if (!$term) return $q;
         $term = trim($term);
-        return $q->where(function ($w) use ($term) {
+
+        return $q->where(function (Builder $w) use ($term) {
             $w->where('title', 'like', "%{$term}%")
                 ->orWhere('body', 'like', "%{$term}%")
                 ->orWhere('excerpt', 'like', "%{$term}%");
@@ -120,15 +162,18 @@ class News extends Model
 
         $sort = in_array($sort, $allowed, true) ? $sort : 'published_at';
 
-        return $q->when($sort === 'published_at', fn($qq) =>
-        $qq->orderBy('featured','desc')->orderBy('published_at', $dir)
-        )->when($sort !== 'published_at', fn($qq) =>
-        $qq->orderBy($sort, $dir)
-        )->orderBy('id', 'desc');
+        return $q
+            ->when($sort === 'published_at', fn($qq) =>
+            $qq->orderBy('featured','desc')->orderBy('published_at', $dir)
+            )
+            ->when($sort !== 'published_at', fn($qq) =>
+            $qq->orderBy($sort, $dir)
+            )
+            ->orderBy('id', 'desc');
     }
 
     /* =======================
-     *  Relations (اختياري)
+     *  Relations
      * ======================= */
     public function creator()
     {
@@ -139,4 +184,15 @@ class News extends Model
     {
         return $this->belongsTo(User::class, 'updated_by');
     }
+
+    /* =======================
+     *  Route Key (اختياري)
+     * ======================= */
+    // لو حاب URLs بالـ slug بدل id، فعّل السطر أدناه،
+    // وتأكد إن جميع السجلات فيها slug:
+    //
+    // public function getRouteKeyName(): string
+    // {
+    //     return 'slug';
+    // }
 }
