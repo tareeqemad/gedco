@@ -7,18 +7,16 @@ use App\Models\News;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 
 class NewsController extends Controller
 {
     public function index(Request $req)
     {
         $q        = $req->string('q')->toString();
-        $status   = $req->get('status');                // draft|published
+        $status   = $req->get('status');
         $featured = $req->has('featured') ? $req->boolean('featured') : null;
         $dateFrom = $req->get('date_from');
         $dateTo   = $req->get('date_to');
-        $tags     = $req->get('tags') ? array_filter(explode(',', $req->get('tags'))) : []; // tag1,tag2
         $perPage  = max(6, min(60, (int)($req->get('per_page') ?? 18)));
         $sort     = $req->get('sort', 'published_at');
         $dir      = $req->get('dir', 'desc');
@@ -27,7 +25,6 @@ class NewsController extends Controller
             ->search($q)
             ->status($status)
             ->featured($featured)
-            ->hasTags($tags) // ← سكوب جديد في الموديل
             ->betweenDates($dateFrom, $dateTo)
             ->sortSmart($sort, $dir)
             ->paginate($perPage)
@@ -42,7 +39,7 @@ class NewsController extends Controller
         }
 
         return view('admin.site.news.index', compact(
-            'items', 'q', 'status', 'featured', 'dateFrom', 'dateTo', 'tags', 'perPage', 'sort', 'dir'
+            'items', 'q', 'status', 'featured', 'dateFrom', 'dateTo', 'perPage', 'sort', 'dir'
         ));
     }
 
@@ -55,32 +52,23 @@ class NewsController extends Controller
     {
         $data = $r->validate([
             'title'        => ['required', 'string', 'max:255'],
-            'slug'         => ['nullable', 'string', 'max:255', 'unique:news,slug'],
-            'excerpt'      => ['nullable', 'string', 'max:500'],
-            'body'         => ['nullable', 'string'],
-            'tags'         => ['nullable', 'string'], // سيتم تحويلها إلى JSON
-            'pdf'          => ['nullable', 'file', 'mimes:pdf', 'max:10240'],
-            'cover'        => ['nullable', 'image', 'max:2048'],
+            'published_at' => ['nullable', 'date'],
             'status'       => ['nullable', 'in:draft,published'],
             'featured'     => ['nullable', 'boolean'],
-            'published_at' => ['nullable', 'date'],
+            'cover'        => ['nullable', 'image', 'max:2048'],
+            'pdf'          => ['nullable', 'file', 'mimes:pdf', 'max:10240'],
+            'body'         => ['nullable', 'string'],
         ]);
 
-        // معالجة الوسوم
-        $tagsArray = $this->parseTags($r->input('tags'));
-
-        // رفع الملفات
-        $pdfPath   = $r->hasFile('pdf')   ? $r->file('pdf')->store('news/files', 'public') : null;
         $coverPath = $r->hasFile('cover') ? $r->file('cover')->store('news/covers', 'public') : null;
+        $pdfPath   = $r->hasFile('pdf')   ? $r->file('pdf')->store('news/files', 'public') : null;
 
-        $item = News::create([
+        News::create([
             'title'        => $data['title'],
-            'slug'         => $this->generateUniqueSlug($data['slug'] ?? $data['title']),
-            'excerpt'      => $data['excerpt'] ?? null,
+            'slug'         => null, // يُولد تلقائيًا
             'body'         => $data['body'] ?? null,
-            'tags'         => $tagsArray, // → JSON array
-            'pdf_path'     => $pdfPath,
             'cover_path'   => $coverPath,
+            'pdf_path'     => $pdfPath,
             'status'       => $data['status'] ?? 'published',
             'featured'     => (bool)($data['featured'] ?? false),
             'published_at' => $data['published_at'] ?? now(),
@@ -88,7 +76,11 @@ class NewsController extends Controller
             'updated_by'   => Auth::id(),
         ]);
 
-        return redirect()->route('admin.news.index')->with('success', 'تم إنشاء الخبر بنجاح');
+        return response()->json([
+            'success'  => true,
+            'message'  => 'تم إنشاء الخبر بنجاح',
+            'redirect' => route('admin.news.index')
+        ]);
     }
 
     public function show(News $news)
@@ -108,7 +100,6 @@ class NewsController extends Controller
             'slug'         => ['nullable', 'string', 'max:255', 'unique:news,slug,' . $news->id],
             'excerpt'      => ['nullable', 'string', 'max:500'],
             'body'         => ['nullable', 'string'],
-            'tags'         => ['nullable', 'string'],
             'pdf'          => ['nullable', 'file', 'mimes:pdf', 'max:10240'],
             'cover'        => ['nullable', 'image', 'max:2048'],
             'status'       => ['nullable', 'in:draft,published'],
@@ -118,23 +109,17 @@ class NewsController extends Controller
             'remove_current_cover' => ['nullable', 'in:1'],
         ]);
 
-        // معالجة الوسوم (دمج مع القديمة إذا لم يُرسل جديد)
-        $tagsInput = $r->input('tags');
-        $tagsArray = $tagsInput !== null ? $this->parseTags($tagsInput) : $news->tags;
-
         $payload = [
             'title'        => $data['title'],
-            'slug'         => $this->generateUniqueSlug($data['slug'] ?? $news->slug, $news->id),
+            'slug'         => $data['slug'] ?? $news->slug,
             'excerpt'      => $data['excerpt'] ?? $news->excerpt,
             'body'         => $data['body'] ?? $news->body,
-            'tags'         => $tagsArray,
             'status'       => $data['status'] ?? $news->status,
             'featured'     => isset($data['featured']) ? (bool)$data['featured'] : $news->featured,
             'published_at' => $data['published_at'] ?? $news->published_at,
             'updated_by'   => Auth::id(),
         ];
 
-        // حذف الملفات القديمة
         if ($r->boolean('remove_current_pdf') && $news->pdf_path) {
             Storage::disk('public')->delete($news->pdf_path);
             $payload['pdf_path'] = null;
@@ -144,7 +129,6 @@ class NewsController extends Controller
             $payload['cover_path'] = null;
         }
 
-        // رفع ملفات جديدة
         if ($r->hasFile('pdf')) {
             if ($news->pdf_path) Storage::disk('public')->delete($news->pdf_path);
             $payload['pdf_path'] = $r->file('pdf')->store('news/files', 'public');
@@ -164,45 +148,8 @@ class NewsController extends Controller
         if ($news->pdf_path)   Storage::disk('public')->delete($news->pdf_path);
         if ($news->cover_path) Storage::disk('public')->delete($news->cover_path);
 
-        $news->delete(); // soft delete
+        $news->delete();
 
         return response()->json(['success' => true, 'message' => 'تم حذف الخبر']);
-    }
-
-    // =================================================================
-    // Helper Methods
-    // =================================================================
-
-    /**
-     * تحويل نص الوسوم إلى مصفوفة نظيفة
-     */
-    private function parseTags($tagsString): array
-    {
-        if (!$tagsString) return [];
-
-        return array_values(
-            array_unique(
-                array_filter(
-                    array_map('trim', explode(',', $tagsString))
-                )
-            )
-        );
-    }
-
-    /**
-     * توليد slug فريد
-     */
-    private function generateUniqueSlug($titleOrSlug, $excludeId = null): string
-    {
-        $slug = Str::slug($titleOrSlug, '-');
-
-        $original = $slug;
-        $count = 1;
-
-        while (News::where('slug', $slug)->where('id', '!=', $excludeId)->exists()) {
-            $slug = $original . '-' . $count++;
-        }
-
-        return $slug;
     }
 }

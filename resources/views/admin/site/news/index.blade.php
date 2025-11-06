@@ -83,38 +83,72 @@
         (function(){
             const form = document.getElementById('filterForm');
             const wrap = document.getElementById('cardsWrap');
-            const ajax = (u)=>fetch(u,{headers:{'X-Requested-With':'XMLHttpRequest'}}).then(r=>r.json());
+            const ajax = (u) => fetch(u, {headers: {'X-Requested-With': 'XMLHttpRequest'}}).then(r => r.json());
 
-            form?.addEventListener('submit', (e)=>{ e.preventDefault(); refresh(); });
-            form?.addEventListener('change', ()=>{ refresh(); });
+            form?.addEventListener('submit', (e) => { e.preventDefault(); refresh(); });
+            form?.addEventListener('change', () => { refresh(); });
 
-            function refresh(){
+            function refresh() {
                 const url = form.action + '?' + new URLSearchParams(new FormData(form)).toString();
-                ajax(url).then(({html,pagination})=>{
+                ajax(url).then(({html, pagination}) => {
                     wrap.innerHTML = html + pagination;
-                    window.scrollTo({top:0,behavior:'smooth'});
-                }).catch(()=>form.submit());
+                    window.scrollTo({top: 0, behavior: 'smooth'});
+                }).catch(() => form.submit());
             }
 
             document.addEventListener('click', function(e){
                 if (e.target.matches('.pagination a')) {
                     e.preventDefault();
-                    ajax(e.target.href).then(({html,pagination})=>{
+                    ajax(e.target.href).then(({html, pagination}) => {
                         wrap.innerHTML = html + pagination;
-                        window.scrollTo({top:0,behavior:'smooth'});
+                        window.scrollTo({top: 0, behavior: 'smooth'});
                     });
                 }
             });
 
-            // حذف خبر (modern): نقرأ الرابط من data-attribute
-            window.delNews = function(btn){
-                if(!confirm('تأكيد حذف الخبر؟')) return;
+            // حذف خبر
+            window.confirmDelete = function(btn, id) {
                 const url = btn.getAttribute('data-delete-url');
-                fetch(url, {
-                    method: 'DELETE',
-                    headers: {'X-CSRF-TOKEN': '{{ csrf_token() }}', 'X-Requested-With':'XMLHttpRequest'}
-                }).then(r=>r.json()).then(()=>location.reload());
-            }
+
+                Swal.fire({
+                    title: 'تأكيد الحذف',
+                    text: 'هل أنت متأكد من حذف هذا الخبر؟ لا يمكن التراجع!',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'نعم، احذف!',
+                    cancelButtonText: 'إلغاء',
+                    reverseButtons: true,
+                    buttonsStyling: false,
+                    customClass: {
+                        confirmButton: 'btn btn-danger px-4',
+                        cancelButton: 'btn btn-secondary px-4 me-2'
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        fetch(url, {
+                            method: 'DELETE',
+                            headers: {
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                'X-Requested-With': 'XMLHttpRequest',
+                                'Accept': 'application/json'
+                            }
+                        })
+                            .then(r => r.json())
+                            .then(data => {
+                                if (data.success) {
+                                    // إزالة الكارد من DOM
+                                    document.querySelector(`[data-news-id="${id}"]`)?.remove();
+                                    Swal.fire('تم!', data.message, 'success');
+                                } else {
+                                    Swal.fire('خطأ', data.message || 'فشل الحذف', 'error');
+                                }
+                            })
+                            .catch(() => {
+                                Swal.fire('خطأ', 'حدث خطأ في الاتصال', 'error');
+                            });
+                    }
+                });
+            };
         })();
     </script>
 @endpush

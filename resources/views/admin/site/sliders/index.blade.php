@@ -93,7 +93,7 @@
                                            title="تعديل">
                                             تعديل
                                         </a>
-                                      {{--
+
                                        <button type="button"
                                                 class="btn btn-outline-danger"
                                                 data-bs-toggle="modal"
@@ -101,7 +101,7 @@
                                                 title="حذف">
                                             حذف
                                         </button>
-                                      --}}
+
                                     </div>
                                 </td>
                             </tr>
