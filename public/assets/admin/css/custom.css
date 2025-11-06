@@ -1,0 +1,58 @@
+/* ========== Cairo ========== */
+@font-face {
+    font-family: "Cairo";
+    src: url('../../fonts/cairo/Cairo-Regular.ttf') format("truetype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: "Cairo";
+    src: url('../../fonts/cairo/Cairo-Bold.ttf') format("truetype");
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* ========== Tajawal ========== */
+@font-face {
+    font-family: "Tajawal";
+    src: url('../../fonts/tajawal/Tajawal-Regular.ttf') format("truetype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: "Tajawal";
+    src: url('../../fonts/tajawal/Tajawal-Bold.ttf') format("truetype");
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+
+.ql-snow .ql-picker.ql-font .ql-picker-label[data-value="cairo"]::before,
+.ql-snow .ql-picker.ql-font .ql-picker-item[data-value="cairo"]::before { content: "Cairo"; }
+.ql-snow .ql-picker.ql-font .ql-picker-label[data-value="tajawal"]::before,
+.ql-snow .ql-picker.ql-font .ql-picker-item[data-value="tajawal"]::before { content: "Tajawal"; }
+
+/* أحجام مخصصة */
+.ql-snow .ql-picker.ql-size .ql-picker-item[data-value="12px"]::before { content: "12px"; }
+.ql-snow .ql-picker.ql-size .ql-picker-item[data-value="14px"]::before { content: "14px"; }
+.ql-snow .ql-picker.ql-size .ql-picker-item[data-value="16px"]::before { content: "16px"; }
+.ql-snow .ql-picker.ql-size .ql-picker-item[data-value="18px"]::before { content: "18px"; }
+.ql-snow .ql-picker.ql-size .ql-picker-item[data-value="24px"]::before { content: "24px"; }
+.ql-snow .ql-picker.ql-size .ql-picker-item[data-value="32px"]::before { content: "32px"; }
+
+/* line-height picker labels */
+.ql-snow .ql-picker.ql-lineheight .ql-picker-item[data-value="1.4"]::before { content: "1.4"; }
+.ql-snow .ql-picker.ql-lineheight .ql-picker-item[data-value="1.6"]::before { content: "1.6"; }
+.ql-snow .ql-picker.ql-lineheight .ql-picker-item[data-value="1.8"]::before { content: "1.8"; }
+.ql-snow .ql-picker.ql-lineheight .ql-picker-item[data-value="2"]::before   { content: "2.0"; }
+
+
+
+.ql-font-cairo   { font-family: "Cairo", sans-serif; }
+.ql-font-tajawal { font-family: "Tajawal", sans-serif; }
+
+.ql-font-system  { font-family: system-ui, sans-serif; }
