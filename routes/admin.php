@@ -19,6 +19,7 @@ use App\Http\Controllers\Admin\Site\SocialLinkController;
 use App\Http\Controllers\Admin\Site\SliderController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\HomeVideoController;
+use App\Http\Controllers\Admin\UploadController;
 
 
 Route::prefix('admin')->name('admin.')->group(function () {
@@ -119,8 +120,10 @@ Route::prefix('admin')->name('admin.')->group(function () {
             ->names('tenders')
             ->middleware('permission:tenders.view|tenders.create|tenders.edit|tenders.delete');
 
+        Route::post('/uploads/quill-image', [UploadController::class, 'quillImage'])->name('uploads.quill-image');
+
         Route::resource('news', NewsController::class)
-            ->parameters(['news' => 'news']) // Route Model Binding على News $news
+            ->parameters(['news' => 'news'])
             ->names('news')
             ->middleware('permission:news.view|news.create|news.edit|news.delete');
 

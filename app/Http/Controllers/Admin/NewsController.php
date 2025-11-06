@@ -7,6 +7,8 @@ use App\Models\News;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 class NewsController extends Controller
 {
@@ -48,39 +50,48 @@ class NewsController extends Controller
         return view('admin.site.news.create');
     }
 
-    public function store(Request $r)
+    public function store(Request $request)
     {
-        $data = $r->validate([
-            'title'        => ['required', 'string', 'max:255'],
-            'published_at' => ['nullable', 'date'],
-            'status'       => ['nullable', 'in:draft,published'],
-            'featured'     => ['nullable', 'boolean'],
-            'cover'        => ['nullable', 'image', 'max:2048'],
-            'pdf'          => ['nullable', 'file', 'mimes:pdf', 'max:10240'],
-            'body'         => ['nullable', 'string'],
+        $validated = $request->validate([
+            'title'        => ['required','string','max:255'],
+            'published_at' => ['nullable','date'],
+            'status'       => ['required','in:published,draft'],
+            'featured'     => ['nullable','boolean'],
+            'body'         => ['required','string'],
+            'cover'        => ['nullable','image','mimes:jpg,jpeg,png,webp','max:2048'],   // 2MB
+            'pdf'          => ['nullable','mimes:pdf','max:10240'], // 10MB
         ]);
 
-        $coverPath = $r->hasFile('cover') ? $r->file('cover')->store('news/covers', 'public') : null;
-        $pdfPath   = $r->hasFile('pdf')   ? $r->file('pdf')->store('news/files', 'public') : null;
+        $data = [
+            'title'        => $validated['title'],
+            'slug'         => Str::slug($validated['title']).'-'.Str::random(5),
+            'published_at' => $validated['published_at'] ?? now(),
+            'status'       => $validated['status'],
+            'featured'     => (bool)($validated['featured'] ?? false),
+            'body'         => $validated['body'],
 
-        News::create([
-            'title'        => $data['title'],
-            'slug'         => null, // يُولد تلقائيًا
-            'body'         => $data['body'] ?? null,
-            'cover_path'   => $coverPath,
-            'pdf_path'     => $pdfPath,
-            'status'       => $data['status'] ?? 'published',
-            'featured'     => (bool)($data['featured'] ?? false),
-            'published_at' => $data['published_at'] ?? now(),
-            'created_by'   => Auth::id(),
-            'updated_by'   => Auth::id(),
-        ]);
+            'created_by'   => auth()->id(),
+        ];
 
-        return response()->json([
-            'success'  => true,
-            'message'  => 'تم إنشاء الخبر بنجاح',
-            'redirect' => route('admin.news.index')
-        ]);
+        if ($request->hasFile('cover')) {
+            $data['cover_path'] = $request->file('cover')->store('news/cover', 'public');
+        }
+
+        if ($request->hasFile('pdf')) {
+            $data['pdf_path'] = $request->file('pdf')->store('news/pdf', 'public');
+        }
+
+        $news = News::create($data);
+
+        if ($request->expectsJson()) {
+            return response()->json([
+                'ok'       => true,
+                'id'       => $news->id,
+                'redirect' => route('admin.news.index'),
+            ]);
+        }
+
+        return redirect()->route('admin.news.index')->with('success', 'تم إنشاء الخبر');
     }
 
     public function show(News $news)
@@ -88,59 +99,99 @@ class NewsController extends Controller
         return view('admin.site.news.show', ['item' => $news->load('creator', 'updater')]);
     }
 
+    // ====== VIEWS ======
     public function edit(News $news)
     {
-        return view('admin.site.news.edit', ['item' => $news]);
+        return view('admin.site.news.edit', compact('news'));
     }
 
-    public function update(Request $r, News $news)
+    // ====== UPDATE ======
+    public function update(Request $request, News $news)
     {
-        $data = $r->validate([
-            'title'        => ['required', 'string', 'max:255'],
-            'slug'         => ['nullable', 'string', 'max:255', 'unique:news,slug,' . $news->id],
-            'excerpt'      => ['nullable', 'string', 'max:500'],
-            'body'         => ['nullable', 'string'],
-            'pdf'          => ['nullable', 'file', 'mimes:pdf', 'max:10240'],
-            'cover'        => ['nullable', 'image', 'max:2048'],
-            'status'       => ['nullable', 'in:draft,published'],
-            'featured'     => ['nullable', 'boolean'],
-            'published_at' => ['nullable', 'date'],
-            'remove_current_pdf'   => ['nullable', 'in:1'],
-            'remove_current_cover' => ['nullable', 'in:1'],
+        // 1) Validation (no FormRequest, no Purifier)
+        $v = Validator::make($request->all(), [
+            'title'        => ['required','string','min:5','max:200'],
+            'published_at' => ['required','date'],
+            'status'       => ['required','in:draft,published'],
+            'featured'     => ['nullable','boolean'],
+            'body'         => ['required','string'], // نحفظه كما هو
+            'cover'        => ['nullable','image','mimes:jpg,jpeg,png,webp','max:2048','dimensions:min_width=300,min_height=200'],
+            'pdf'          => ['nullable','mimetypes:application/pdf','max:10240'],
+            'remove_cover' => ['nullable','boolean'],
+            'remove_pdf'   => ['nullable','boolean'],
+        ], [
+            'body.required' => 'محتوى الخبر مطلوب.',
         ]);
 
-        $payload = [
-            'title'        => $data['title'],
-            'slug'         => $data['slug'] ?? $news->slug,
-            'excerpt'      => $data['excerpt'] ?? $news->excerpt,
-            'body'         => $data['body'] ?? $news->body,
-            'status'       => $data['status'] ?? $news->status,
-            'featured'     => isset($data['featured']) ? (bool)$data['featured'] : $news->featured,
-            'published_at' => $data['published_at'] ?? $news->published_at,
-            'updated_by'   => Auth::id(),
-        ];
-
-        if ($r->boolean('remove_current_pdf') && $news->pdf_path) {
-            Storage::disk('public')->delete($news->pdf_path);
-            $payload['pdf_path'] = null;
+        if ($v->fails()) {
+            return $request->expectsJson()
+                ? response()->json(['errors' => $v->errors()], 422)
+                : back()->withErrors($v)->withInput();
         }
-        if ($r->boolean('remove_current_cover') && $news->cover_path) {
+
+        // 2) قواعد بسيطة على الـ body (بدون أي parsing)
+        $raw = (string) $request->input('body', '');
+
+        // ممنوع Base64 داخل الصور
+        if (stripos($raw, 'src="data:') !== false || stripos($raw, "src='data:") !== false) {
+            return $this->validationError('body', 'الصور بصيغة base64 غير مسموح بها.');
+        }
+
+        // حد أقصى 4 صور داخل المحتوى
+        $imgCount = preg_match_all('/<img\b[^>]*>/i', $raw);
+        if ($imgCount > 4) {
+            return $this->validationError('body', 'عدد الصور في المحتوى يتجاوز الحد (4).');
+        }
+
+
+        if (preg_match('/<\s*script\b/i', $raw)) {
+            return $this->validationError('body', 'وسم <script> غير مسموح.');
+        }
+
+
+        if ($request->boolean('remove_cover') && $news->cover_path) {
             Storage::disk('public')->delete($news->cover_path);
-            $payload['cover_path'] = null;
+            $news->cover_path = null;
         }
-
-        if ($r->hasFile('pdf')) {
-            if ($news->pdf_path) Storage::disk('public')->delete($news->pdf_path);
-            $payload['pdf_path'] = $r->file('pdf')->store('news/files', 'public');
-        }
-        if ($r->hasFile('cover')) {
+        if ($request->hasFile('cover')) {
             if ($news->cover_path) Storage::disk('public')->delete($news->cover_path);
-            $payload['cover_path'] = $r->file('cover')->store('news/covers', 'public');
+            $news->cover_path = $request->file('cover')->storePublicly('news/covers/'.date('Y/m'), 'public');
         }
 
-        $news->update($payload);
+        if ($request->boolean('remove_pdf') && $news->pdf_path) {
+            Storage::disk('public')->delete($news->pdf_path);
+            $news->pdf_path = null;
+        }
+        if ($request->hasFile('pdf')) {
+            if ($news->pdf_path) Storage::disk('public')->delete($news->pdf_path);
+            $news->pdf_path = $request->file('pdf')->storePublicly('news/pdfs/'.date('Y/m'), 'public');
+        }
 
-        return redirect()->route('admin.news.index')->with('success', 'تم تحديث الخبر بنجاح');
+        // 4) حفظ البيانات
+        $news->title        = (string) $request->input('title');
+        $news->published_at = $request->date('published_at');
+        $news->status       = (string) $request->input('status');
+        $news->featured     = $request->boolean('featured');
+        $news->body         = $raw; // ← زي ما هو
+
+        if ($request->user()) {
+            $news->updated_by = $request->user()->id;
+        }
+
+        $news->save();
+
+        // 5) استجابة مناسبة للـ fetch (JSON أو Redirect)
+        $routeShow = route($request->routeIs('admin.*') ? 'admin.news.show' : 'news.show', $news);
+
+        return $request->expectsJson()
+            ? response()->json(['redirect' => $routeShow])
+            : redirect()->to($routeShow);
+    }
+
+    // ====== Helpers ======
+    private function validationError(string $field, string $message)
+    {
+        return response()->json(['errors' => [$field => [$message]]], 422);
     }
 
     public function destroy(News $news)

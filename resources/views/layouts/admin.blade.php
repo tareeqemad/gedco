@@ -41,6 +41,7 @@
     <!-- Choices Css -->
     <link rel="stylesheet" href="{{ asset('assets/admin/libs/choices.js/public/assets/styles/choices.min.css') }}">
 
+    <link rel="stylesheet" href="{{ asset('assets/admin/css/custom.css') }}">
     @stack('styles')
 </head>
 
