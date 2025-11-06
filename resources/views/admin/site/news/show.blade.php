@@ -3,16 +3,13 @@
 
 @section('content')
     @php
-        $breadcrumbTitle     = 'تفاصيل الخبر #' . $item->id;
-        $breadcrumbParent    = 'الأخبار';
+        $breadcrumbTitle = 'تفاصيل الخبر #' . $item->id;
+        $breadcrumbParent = 'الأخبار';
         $breadcrumbParentUrl = route('admin.news.index');
-
-        $published   = method_exists($item,'getIsPublishedAttribute') ? $item->is_published : (($item->status ?? 'published') === 'published');
-        $publishedAt = optional($item->published_at)->format('Y-m-d') ?? ($item->published_at ?? null);
-        $tagsArray   = is_array($item->tags ?? null) ? $item->tags : (is_string($item->tags ?? null) ? json_decode($item->tags, true) : []);
-        if (!is_array($tagsArray)) $tagsArray = [];
-        $coverUrl    = $item->cover_url ?? ($item->cover_path ? Storage::url($item->cover_path) : null);
-        $pdfUrl      = $item->pdf_url   ?? ($item->pdf_path   ? Storage::url($item->pdf_path)   : null);
+        $published = $item->is_published ?? (($item->status ?? 'published') === 'published');
+        $publishedAt = optional($item->published_at)->format('Y-m-d') ?? '—';
+        $coverUrl = $item->cover_url;
+        $pdfUrl = $item->pdf_url;
     @endphp
 
     <div class="container-fluid p-0">
@@ -33,12 +30,9 @@
                         </a>
                     @endcan
                     @can('news.delete')
-                        <form action="{{ route('admin.news.destroy', $item) }}" method="POST" class="d-inline" id="deleteForm">
-                            @csrf @method('DELETE')
-                            <button type="button" id="btnDelete" class="btn btn-outline-danger btn-sm">
-                                <i class="ri-delete-bin-line"></i> حذف
-                            </button>
-                        </form>
+                        <button type="button" id="btnDelete" class="btn btn-outline-danger btn-sm">
+                            <i class="ri-delete-bin-line"></i> حذف
+                        </button>
                     @endcan
                 </div>
             </div>
@@ -55,7 +49,7 @@
                             <div class="d-flex flex-wrap align-items-center gap-2 small text-muted">
                                 <span class="d-inline-flex align-items-center gap-1">
                                     <i class="ri-calendar-line"></i>
-                                    {{ $publishedAt ? \Carbon\Carbon::parse($publishedAt)->locale('ar')->translatedFormat('d F Y') : '—' }}
+                                    {{ $publishedAt !== '—' ? \Carbon\Carbon::parse($publishedAt)->locale('ar')->translatedFormat('d F Y') : '—' }}
                                 </span>
                                 <span>•</span>
                                 <span class="d-inline-flex align-items-center gap-1">
@@ -65,7 +59,7 @@
                                         {{ $published ? 'منشور' : 'مسودة' }}
                                     </span>
                                 </span>
-                                @if(!empty($item->featured))
+                                @if($item->featured)
                                     <span>•</span>
                                     <span class="d-inline-flex align-items-center gap-1">
                                         <i class="ri-star-smile-line text-warning"></i> مميّز
@@ -80,34 +74,33 @@
                         <!-- Tabs -->
                         <ul class="nav nav-tabs nav-tabs-sm border-0 mb-3" role="tablist">
                             <li class="nav-item" role="presentation">
-                                <button class="nav-link active px-3 py-1" data-bs-toggle="tab" data-bs-target="#tab-html" type="button">
+                                <button class="nav-link active px-3 py-1" data-bs-toggle="tab" data-bs-target="#tab-html">
                                     <i class="ri-article-line me-1"></i> المحتوى (HTML)
                                 </button>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <button class="nav-link px-3 py-1" data-bs-toggle="tab" data-bs-target="#tab-text" type="button">
+                                <button class="nav-link px-3 py-1" data-bs-toggle="tab" data-bs-target="#tab-text">
                                     <i class="ri-file-text-line me-1"></i> نص مجرد
                                 </button>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <button class="nav-link px-3 py-1" data-bs-toggle="tab" data-bs-target="#tab-preview" type="button">
+                                <button class="nav-link px-3 py-1" data-bs-toggle="tab" data-bs-target="#tab-preview">
                                     <i class="ri-eye-line me-1"></i> معاينة مقال
                                 </button>
                             </li>
                         </ul>
 
                         <div class="tab-content">
-                            <div class="tab-pane fade show active" id="tab-html" role="tabpanel">
+                            <div class="tab-pane fade show active" id="tab-html">
                                 <div class="article-html border rounded-3 p-3" style="direction: rtl; text-align: right; line-height:1.9; font-size: 0.98rem;">
                                     {!! $item->body !!}
                                 </div>
                             </div>
-
-                            <div class="tab-pane fade" id="tab-text" role="tabpanel">
-                                <pre class="border rounded-3 p-3" style="white-space: pre-wrap; word-break: break-word; min-height: 220px;">{{ strip_tags((string)($item->body ?? '')) }}</pre>
+                            <div class="tab-pane fade" id="tab-text">
+                                <pre class="border rounded-3 p-3" style="white-space: pre-wrap; word-break: break-word; min-height: 220px;">
+{{ strip_tags($item->body ?? '') }}</pre>
                             </div>
-
-                            <div class="tab-pane fade" id="tab-preview" role="tabpanel">
+                            <div class="tab-pane fade" id="tab-preview">
                                 <article class="rounded-3 border p-3">
                                     @if($coverUrl)
                                         <img src="{{ $coverUrl }}" class="rounded-3 w-100 mb-3" style="max-height:360px; object-fit:cover;" alt="cover">
@@ -115,16 +108,7 @@
                                     <h3 class="fw-bold mb-2">{{ $item->title }}</h3>
                                     <div class="small text-muted mb-3 d-flex align-items-center gap-2">
                                         <i class="ri-calendar-line"></i>
-                                        <span>{{ $publishedAt ? \Carbon\Carbon::parse($publishedAt)->locale('ar')->translatedFormat('d F Y') : '—' }}</span>
-                                        @if($tagsArray)
-                                            <span>•</span>
-                                            <span class="d-inline-flex align-items-center gap-1">
-                                                <i class="ri-price-tag-3-line"></i>
-                                                @foreach($tagsArray as $tg)
-                                                    <span class="badge bg-light text-secondary border">{{ $tg }}</span>
-                                                @endforeach
-                                            </span>
-                                        @endif
+                                        <span>{{ $publishedAt !== '—' ? \Carbon\Carbon::parse($publishedAt)->locale('ar')->translatedFormat('d F Y') : '—' }}</span>
                                     </div>
                                     <div class="lh-lg" style="direction: rtl; text-align: right;">
                                         {!! $item->body !!}
@@ -132,7 +116,6 @@
                                 </article>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -152,15 +135,17 @@
                             </div>
                             <div class="list-group-item d-flex justify-content-between">
                                 <span class="text-muted">الحالة</span>
-                                <span class="badge {{ $published ? 'bg-success-subtle text-success' : 'bg-secondary-subtle text-secondary' }}">{{ $published ? 'منشور' : 'مسودة' }}</span>
+                                <span class="badge {{ $published ? 'bg-success-subtle text-success' : 'bg-secondary-subtle text-secondary' }}">
+                                    {{ $published ? 'منشور' : 'مسودة' }}
+                                </span>
                             </div>
                             <div class="list-group-item d-flex justify-content-between">
                                 <span class="text-muted">تاريخ النشر</span>
-                                <span>{{ $publishedAt ?: '—' }}</span>
+                                <span>{{ $publishedAt }}</span>
                             </div>
                             <div class="list-group-item d-flex justify-content-between">
                                 <span class="text-muted">مميّز</span>
-                                <span>{!! !empty($item->featured) ? '<i class="ri-check-line text-success"></i>' : '<i class="ri-close-line text-danger"></i>' !!}</span>
+                                <span>{!! $item->featured ? '<i class="ri-check-line text-success"></i>' : '<i class="ri-close-line text-danger"></i>' !!}</span>
                             </div>
                             <div class="list-group-item d-flex justify-content-between">
                                 <span class="text-muted">أُنشئ</span>
@@ -170,25 +155,17 @@
                                 <span class="text-muted">آخر تحديث</span>
                                 <span>{{ optional($item->updated_at)->format('Y-m-d H:i') ?? '—' }}</span>
                             </div>
+                            <div class="list-group-item d-flex justify-content-between">
+                                <span class="text-muted">أضاف</span>
+                                <span>{{ $item->creator?->name ?? 'غير معروف' }}</span>
+                            </div>
+                            <div class="list-group-item d-flex justify-content-between">
+                                <span class="text-muted">عدّل</span>
+                                <span>{{ $item->updater?->name ?? 'غير معروف' }}</span>
+                            </div>
                         </div>
                     </div>
                 </div>
-
-                @if($tagsArray)
-                    <div class="card border-0 shadow-sm rounded-3 bg-white mb-3">
-                        <div class="card-body p-3">
-                            <div class="d-flex align-items-center gap-2 mb-2">
-                                <i class="ri-price-tag-3-line text-success"></i>
-                                <h6 class="mb-0 fw-semibold">وسوم</h6>
-                            </div>
-                            <div class="d-flex flex-wrap gap-2">
-                                @foreach($tagsArray as $tg)
-                                    <span class="badge bg-light text-secondary border">{{ $tg }}</span>
-                                @endforeach
-                            </div>
-                        </div>
-                    </div>
-                @endif
 
                 @if($pdfUrl)
                     <div class="card border-0 shadow-sm rounded-3 bg-white">
@@ -211,34 +188,60 @@
 @push('styles')
     <link rel="stylesheet" href="{{ asset('assets/admin/libs/sweetalert2/sweetalert2.min.css') }}">
     <style>
-        .nav-tabs .nav-link{font-size:.875rem;border:none;color:#6c757d}
-        .nav-tabs .nav-link.active{color:#4361ee;font-weight:600;border-bottom:2px solid #4361ee}
-        .article-html h1,.article-html h2,.article-html h3{margin-top:1rem}
-        .article-html img{max-width:100%;height:auto;border-radius:.5rem}
+        .nav-tabs .nav-link { font-size: .875rem; border: none; color: #6c757d; }
+        .nav-tabs .nav-link.active { color: #4361ee; font-weight: 600; border-bottom: 2px solid #4361ee; }
+        .article-html h1, .article-html h2, .article-html h3 { margin-top: 1rem; }
+        .article-html img { max-width: 100%; height: auto; border-radius: .5rem; }
     </style>
 @endpush
 
 @push('scripts')
     <script src="{{ asset('assets/admin/libs/sweetalert2/sweetalert2.min.js') }}"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function(){
+        document.addEventListener('DOMContentLoaded', function () {
             const btnDelete = document.getElementById('btnDelete');
-            if(btnDelete){
-                btnDelete.addEventListener('click', function(){
-                    Swal.fire({
-                        title:'تأكيد الحذف',
-                        text:'هل تريد حذف هذا الخبر نهائياً؟',
-                        icon:'warning',
-                        showCancelButton:true,
-                        confirmButtonText:'نعم، حذف',
-                        cancelButtonText:'إلغاء'
-                    }).then(res=>{
-                        if(res.isConfirmed){
-                            document.getElementById('deleteForm').submit();
-                        }
-                    });
+            if (!btnDelete) return;
+
+            btnDelete.addEventListener('click', function () {
+                Swal.fire({
+                    title: 'تأكيد الحذف',
+                    text: 'هل تريد حذف هذا الخبر نهائياً؟ لا يمكن التراجع!',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'نعم، احذف',
+                    cancelButtonText: 'إلغاء',
+                    reverseButtons: true,
+                    buttonsStyling: false,
+                    customClass: {
+                        confirmButton: 'btn btn-danger px-4',
+                        cancelButton: 'btn btn-secondary px-4 me-2'
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        fetch('{{ route('admin.news.destroy', $item) }}', {
+                            method: 'DELETE',
+                            headers: {
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                'X-Requested-With': 'XMLHttpRequest',
+                                'Accept': 'application/json'
+                            }
+                        })
+                            .then(r => r.json())
+                            .then(data => {
+                                if (data.success) {
+                                    Swal.fire('تم!', data.message, 'success').then(() => {
+                                        window.location.href = '{{ route('admin.news.index') }}';
+                                    });
+                                } else {
+                                    Swal.fire('خطأ', data.message || 'فشل الحذف', 'error');
+                                }
+                            })
+                            .catch(() => {
+                                Swal.fire('خطأ', 'حدث خطأ في الاتصال', 'error');
+                            });
+                    }
                 });
-            }
+            });
         });
     </script>
 @endpush

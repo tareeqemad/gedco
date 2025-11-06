@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class News extends Model
@@ -16,9 +15,7 @@ class News extends Model
     protected $table = 'news';
     protected $guarded = [];
 
-    // دعم JSON + أنواع
     protected $casts = [
-        'tags'         => 'array',        // مهم جدًا للوسوم
         'featured'     => 'boolean',
         'views'        => 'integer',
         'published_at' => 'datetime',
@@ -31,16 +28,16 @@ class News extends Model
     ];
 
     /* =======================
-     *  Accessors
+     *  Accessors (ديناميكي حسب الدومين)
      * ======================= */
     public function getCoverUrlAttribute(): ?string
     {
-        return $this->cover_path ? Storage::disk('public')->url($this->cover_path) : null;
+        return $this->cover_path ? asset('storage/' . $this->cover_path) : null;
     }
 
     public function getPdfUrlAttribute(): ?string
     {
-        return $this->pdf_path ? Storage::disk('public')->url($this->pdf_path) : null;
+        return $this->pdf_path ? asset('storage/' . $this->pdf_path) : null;
     }
 
     public function getIsPublishedAttribute(): bool
@@ -106,16 +103,6 @@ class News extends Model
     public function scopeFeatured(Builder $q, $flag): Builder
     {
         return is_null($flag) ? $q : $q->where('featured', (bool)$flag);
-    }
-
-    public function scopeHasTags(Builder $q, array $tags): Builder
-    {
-        if (empty($tags)) return $q;
-
-        foreach ($tags as $tag) {
-            $q->whereJsonContains('tags', $tag);
-        }
-        return $q;
     }
 
     public function scopeBetweenDates(Builder $q, ?string $from, ?string $to): Builder

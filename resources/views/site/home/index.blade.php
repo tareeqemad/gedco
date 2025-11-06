@@ -36,9 +36,9 @@
                                                 <div class="col-lg-10 d-flex justify-content-center align-items-center text-center">
                                                     <div class="sw-text-wrapper">
                                                         @if($s->title)
-                                                            <h2 class="animated text-uppercase anim-order-1">
+                                                            <h1 class="animated text-uppercase anim-order-1">
                                                                 {{ $s->title }}
-                                                            </h2>
+                                                            </h1>
                                                         @endif
                                                     </div>
                                                 </div>
@@ -47,7 +47,7 @@
                                                     <div class="col-lg-6">
                                                         <div class="animated anim-order-2">
                                                             @if($s->subtitle)
-                                                                <p>{{ $s->subtitle }}</p>
+                                                                <p style="font-size:20px; color:#fff;">{{ $s->subtitle }}</p>
                                                             @endif
 
                                                             @if($s->button_text && $s->button_url)
@@ -281,16 +281,15 @@
                 <div class="row g-0">
                     <div class="col-lg-6">
                         <div class="relative overflow-hidden">
-                            <img src="{{ asset('assets/site/images/s5.webp') }}" class="w-100" alt="">
+                            <img src="{{ asset('assets/site/images/photo4.png') }}" class="w-100" alt="">
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div class="h-100 relative bg-dark p-5 text-light journey-section">
-                            <div class="subtitle">رحلة جديدة… بجذور قديمة</div>
-                            <h2 class="split">نعود لننير غزة</h2>
+                            <div class="subtitle">من بين الركام</div>
+                            <h2 class="split"> نعيد النور والأمل</h2>
                             <p class="mb-4 fs-5">
-                                منذ 20 عامًا ونحن معكم… واليوم نبدأ مرحلة جديدة من الخدمة،
-                                بثبات، وإصرار، وطاقـة لا تنطفئ ⚡
+                                العزيمة أقوى من الدمار...  ⚡ كهرباء غزة تواصل رسالتها
                             </p>
 
                         </div>
