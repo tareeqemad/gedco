@@ -8,11 +8,11 @@
         $breadcrumbParentUrl = route('admin.news.index');
 
         // القيود
-        $MAX_IMAGES = 4;                    // الحد الأقصى لعدد الصور داخل المحتوى
+        $MAX_IMAGES = 8;
         $MAX_IMAGE_BYTES = 2 * 1024 * 1024; // 2MB
     @endphp
 
-    <div class="container-fluid p-0">
+    <div class="container-fluid p-0" id="news-create-page">
         <div class="card border-0 shadow-sm rounded-3 bg-white mb-4">
             <div class="card-header bg-white border-bottom py-2 px-3 d-flex align-items-center justify-content-between flex-wrap gap-2">
                 <div class="d-flex align-items-center gap-2">
@@ -43,7 +43,6 @@
                                 <form id="newsForm" method="POST" enctype="multipart/form-data" action="{{ route('admin.news.store') }}">
                                     @csrf
 
-                                    <!-- input مخفي متعدد الملفات لصور Quill -->
                                     <input type="file" id="quillImageInput" accept="image/*" multiple class="visually-hidden">
 
                                     <!-- العنوان -->
@@ -99,16 +98,13 @@
 
                                         <div class="quill-wrapper border rounded-3 shadow-sm overflow-hidden">
                                             <div id="quill-toolbar" class="px-2 py-1">
-                                                <!-- اختيار الخط -->
                                                 <span class="ql-formats">
                                                     <select class="ql-font">
-                                                        <option value="default" selected>System</option>
+                                                        <option value="system" selected>System</option>
                                                         <option value="cairo">Cairo</option>
                                                         <option value="tajawal">Tajawal</option>
                                                     </select>
                                                 </span>
-
-                                                <!-- حجم الخط -->
                                                 <span class="ql-formats">
                                                     <select class="ql-size">
                                                         <option value="12px">12</option>
@@ -119,8 +115,6 @@
                                                         <option value="32px">32</option>
                                                     </select>
                                                 </span>
-
-                                                <!-- line-height -->
                                                 <span class="ql-formats">
                                                     <select class="ql-lineheight">
                                                         <option value="">LH</option>
@@ -130,8 +124,6 @@
                                                         <option value="2">2.0</option>
                                                     </select>
                                                 </span>
-
-                                                <!-- باقي الأدوات -->
                                                 <span class="ql-formats">
                                                     <select class="ql-header">
                                                         <option value="1">عنوان 1</option>
@@ -163,8 +155,8 @@
                                                     <button class="ql-image" id="imageUploader" title="إضافة صور متعددة (اختيار/سحب/لصق)"></button>
                                                 </span>
                                                 <span class="ql-formats">
-                                                    <button class="ql-undo">Undo</button>
-                                                    <button class="ql-redo">Redo</button>
+                                                      <button type="button" class="ql-undo" title="Undo">↶</button>
+                                                      <button type="button" class="ql-redo" title="Redo">↷</button>
                                                 </span>
                                             </div>
 
@@ -257,10 +249,25 @@
     <link rel="stylesheet" href="{{ asset('assets/admin/libs/sweetalert2/sweetalert2.min.css') }}">
     <style>
         :root { --primary: #4361ee; --success: #10b981; --danger: #ef4444; }
-        .quill-wrapper { height: 500px; background: #fff; }
-        .ql-container { height: calc(100% - 42px); font-size: 1.05rem; }
-        .ql-editor { direction: rtl; text-align: right; min-height: 100%; padding: 1rem; }
-        .ql-toolbar { border-bottom: 1px solid #dee2e6; background: #f8f9fa; }
+
+
+        .quill-wrapper{height:500px;background:#fff;display:flex;flex-direction:column;}
+        #quill-toolbar{flex:0 0 auto;}
+        #quill-editor{flex:1 1 auto;min-height:0;}
+        .ql-container{height:100% !important;font-size:1.05rem;overflow-y:auto;}
+        .ql-editor{direction:rtl;text-align:right;min-height:100%;padding:1rem;overflow-wrap:anywhere;word-break:break-word;}
+
+
+        .ql-editor img,.content-preview img{
+            max-width:100% !important;
+            height:auto !important;
+            max-height:420px !important;
+            object-fit:contain !important;
+            display:block;
+            margin:.5rem 0;
+        }
+        .ql-editor .ql-video,.ql-editor iframe{width:100% !important;max-width:100% !important;height:auto;aspect-ratio:16/9;}
+
         .dropzone { cursor: pointer; transition: all 0.2s ease; }
         .dropzone.dragover { background: #ebf2ff !important; border-color: var(--primary) !important; }
         .focus-ring:focus { box-shadow: 0 0 0 0.2rem rgba(67, 97, 238, 0.15); }
@@ -272,17 +279,6 @@
             border-radius: .5rem;
         }
         #quill-toolbar .ql-image[disabled]{ opacity:.5; cursor:not-allowed; }
-
-        /* خرائط خطوط Quill */
-        .ql-font-cairo   { font-family: "Cairo", sans-serif; }
-        .ql-font-tajawal { font-family: "Tajawal", sans-serif; }
-        .ql-font-system  { font-family: system-ui, sans-serif; } /* لو احتجتها */
-
-        /* وسم عناصر القوائم في pickers (اختياري للوضوح) */
-        .ql-snow .ql-picker.ql-font .ql-picker-item[data-value="cairo"]::before,
-        .ql-snow .ql-picker.ql-font .ql-picker-label[data-value="cairo"]::before { content: "Cairo"; }
-        .ql-snow .ql-picker.ql-font .ql-picker-item[data-value="tajawal"]::before,
-        .ql-snow .ql-picker.ql-font .ql-picker-label[data-value="tajawal"]::before { content: "Tajawal"; }
     </style>
 @endpush
 
@@ -299,6 +295,7 @@
             let quill;
             let isSubmitting = false;
             let isPickingImages = false;
+            let coverSrc = '';
 
             const el = {
                 title: document.getElementById('titleInput'),
@@ -357,9 +354,24 @@
                 if (exist) exist.remove();
             }
 
-            // تهيئة Quill — إضافة خطوط/أحجام/line-height
+
+            function styleQuillImages() {
+                const imgs = document.querySelectorAll('#quill-editor .ql-editor img');
+                imgs.forEach(img => {
+                    img.removeAttribute('width');
+                    img.removeAttribute('height');
+                    img.style.maxWidth  = '100%';
+                    img.style.height    = 'auto';
+                    img.style.maxHeight = '420px';
+                    img.style.objectFit = 'contain';
+                    img.style.display   = 'block';
+                    img.style.margin    = '.5rem 0';
+                });
+            }
+
+            // تهيئة Quill — خطوط/أحجام/line-height
             const Font = Quill.import('formats/font');
-            Font.whitelist = ['cairo', 'tajawal', 'system', 'default'];
+            Font.whitelist = ['cairo', 'tajawal', 'system'];
             Quill.register(Font, true);
 
             const Size = Quill.import('attributors/style/size');
@@ -438,9 +450,9 @@
             }
             function refreshCounters(){ updateImageCounter(); updateTextCounter(); }
             refreshCounters();
-            quill.on('text-change', refreshCounters);
+            quill.on('text-change', () => { refreshCounters(); styleQuillImages(); });
 
-            // اختيار صور متعددة من المتصفح
+            // اختيار صور متعددة من المتصفح (نفس edit — بدون تصغير)
             el.quillImageInput.addEventListener('change', async () => {
                 try {
                     const files = Array.from(el.quillImageInput.files || []);
@@ -469,6 +481,7 @@
                 const range = quill.getSelection(true);
                 quill.insertEmbed(range.index, 'image', url, 'user');
                 quill.setSelection(range.index + 1, 0, 'user');
+                styleQuillImages();
                 refreshCounters();
             }
 
@@ -500,7 +513,7 @@
                 return data.url;
             }
 
-            // سحب/إفلات + لصق صور
+            // سحب/إفلات + لصق صور (نفس edit)
             const quillEditorArea = document.querySelector('#quill-editor .ql-editor');
             ['dragover','dragenter'].forEach(evt =>
                 quillEditorArea.addEventListener(evt, e => { e.preventDefault(); e.dataTransfer.dropEffect = 'copy'; })
@@ -538,7 +551,7 @@
                 refreshCounters();
             });
 
-            // استعادة مسودة
+            // حفظ/استعادة مسودة بسيطة
             const saved = sessionStorage.getItem(DRAFT_KEY);
             if (saved) {
                 const d = JSON.parse(saved);
@@ -629,12 +642,11 @@
             }
             window.removePDF = () => { el.pdfInput.value = ''; el.pdfPreview.innerHTML = ''; updatePreview(); autoSave(); };
 
-            // تحويل أي صور Base64 في Quill إلى روابط (رفعها) واحترام الحد + تأكيد قبل حذف الزائد
+            // ⭐ مثل edit: تحويل أي صور Base64 في Quill إلى روابط (رفعها) واحترام الحد + تأكيد قبل حذف الزائد
             async function replaceBase64ImagesInEditor() {
                 const container = document.createElement('div');
                 container.innerHTML = quill.root.innerHTML;
 
-                // استبدال أي صور base64 برفعها
                 const imgs = Array.from(container.querySelectorAll('img[src^="data:"]'));
                 for (const img of imgs) {
                     try {
@@ -652,7 +664,6 @@
                     }
                 }
 
-                // فحص العدد النهائي
                 const finalImgs = Array.from(container.querySelectorAll('img'));
                 if (finalImgs.length > {{ $MAX_IMAGES }}) {
                     const extraCount = finalImgs.length - {{ $MAX_IMAGES }};
@@ -690,7 +701,7 @@
                 el.submitText.classList.add('d-none');
                 el.submitSpinner.classList.remove('d-none');
 
-                // تنظيف وتحويل Base64 + التأكيد قبل حذف الزائد
+
                 const cleanedHtml = await replaceBase64ImagesInEditor();
                 if (cleanedHtml === null) {
                     isSubmitting = false;

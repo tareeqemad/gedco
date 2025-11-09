@@ -52,7 +52,7 @@
                             <input class="form-check-input" type="checkbox" name="featured" value="1" id="featuredChk" {{ request('featured') ? 'checked' : '' }}>
                             <label class="form-check-label" for="featuredChk">مقالات مميّزة</label>
                         </div>
-                        <button class="btn btn-outline-primary btn-sm">تطبيق</button>
+                        <button class="btn btn-outline-primary btn-sm" type="submit">تطبيق</button>
                         <a href="{{ route('admin.news.index') }}" class="btn btn-outline-secondary btn-sm">تفريغ</a>
                     </div>
                 </form>
@@ -75,6 +75,9 @@
         .badge-dot{position:relative;padding-right:.85rem;}
         .badge-dot::before{content:"";width:6px;height:6px;border-radius:50%;background:#22c55e;position:absolute;right:.4rem;top:50%;transform:translateY(-50%);}
         .badge-dot.badge-draft::before{background:#eab308;}
+
+        /* 🔒 توضيح حالة التعطيل للزر */
+        .btn[disabled], .btn.disabled{pointer-events:none; opacity:.65;}
     </style>
 @endpush
 
@@ -106,7 +109,7 @@
                 }
             });
 
-            // حذف خبر
+            // حذف خبر (مع قفل زر الحذف أثناء التنفيذ)
             window.confirmDelete = function(btn, id) {
                 const url = btn.getAttribute('data-delete-url');
 
@@ -124,29 +127,44 @@
                         cancelButton: 'btn btn-secondary px-4 me-2'
                     }
                 }).then((result) => {
-                    if (result.isConfirmed) {
-                        fetch(url, {
-                            method: 'DELETE',
-                            headers: {
-                                'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                                'X-Requested-With': 'XMLHttpRequest',
-                                'Accept': 'application/json'
+                    if (!result.isConfirmed) return;
+
+                    // 🔒 قفل زر الحذف لتفادي التكرار
+                    const originalHtml = btn.innerHTML;
+                    btn.disabled = true;
+                    btn.classList.add('disabled');
+                    btn.setAttribute('aria-busy','true');
+
+                    fetch(url, {
+                        method: 'DELETE',
+                        headers: {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                            'X-Requested-With': 'XMLHttpRequest',
+                            'Accept': 'application/json'
+                        }
+                    })
+                        .then(r => r.json())
+                        .then(data => {
+                            if (data.success) {
+                                // إزالة الكارد من DOM
+                                document.querySelector(`[data-news-id="${id}"]`)?.remove();
+                                Swal.fire('تم!', data.message, 'success');
+                            } else {
+                                Swal.fire('خطأ', data.message || 'فشل الحذف', 'error');
+                                // رجّع الزر لأنه ما صار حذف
+                                btn.disabled = false;
+                                btn.classList.remove('disabled');
+                                btn.removeAttribute('aria-busy');
+                                btn.innerHTML = originalHtml;
                             }
                         })
-                            .then(r => r.json())
-                            .then(data => {
-                                if (data.success) {
-                                    // إزالة الكارد من DOM
-                                    document.querySelector(`[data-news-id="${id}"]`)?.remove();
-                                    Swal.fire('تم!', data.message, 'success');
-                                } else {
-                                    Swal.fire('خطأ', data.message || 'فشل الحذف', 'error');
-                                }
-                            })
-                            .catch(() => {
-                                Swal.fire('خطأ', 'حدث خطأ في الاتصال', 'error');
-                            });
-                    }
+                        .catch(() => {
+                            Swal.fire('خطأ', 'حدث خطأ في الاتصال', 'error');
+                            btn.disabled = false;
+                            btn.classList.remove('disabled');
+                            btn.removeAttribute('aria-busy');
+                            btn.innerHTML = originalHtml;
+                        });
                 });
             };
         })();

@@ -6,7 +6,7 @@
         $breadcrumbTitle     = 'تعديل خبر';
         $breadcrumbParent    = 'الأخبار';
         $breadcrumbParentUrl = route('admin.news.index');
-        $MAX_IMAGES = 4;
+        $MAX_IMAGES = 8;
         $MAX_IMAGE_BYTES = 2 * 1024 * 1024;
     @endphp
 
