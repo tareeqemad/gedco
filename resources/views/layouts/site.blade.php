@@ -661,8 +661,50 @@
                 fetchSuggestions(term);
             });
 
-            form.addEventListener('submit', event => {
+            const resolveEndpoint = form.dataset.resolveEndpoint;
+
+            form.addEventListener('submit', async event => {
                 event.preventDefault();
+                const term = input.value.trim();
+                if (!term) {
+                    clearMessage();
+                    renderSuggestions([]);
+                    return;
+                }
+
+                if (!resolveEndpoint) {
+                    return;
+                }
+
+                try {
+                    setMessage('جارٍ البحث...', 'info');
+                    const response = await fetch(`${resolveEndpoint}?q=${encodeURIComponent(term)}`, {
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest',
+                            'Accept': 'application/json',
+                        },
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Search request failed');
+                    }
+
+                    const payload = await response.json();
+
+                    if (payload.status === 'ok' && payload.url) {
+                        window.location.href = payload.url;
+                    } else if (payload.status === 'empty') {
+                        setMessage(payload.message ?? 'لم يتم العثور على نتائج مطابقة.', 'error');
+                        renderSuggestions([]);
+                    } else if (payload.status === 'invalid') {
+                        setMessage(payload.message ?? 'يرجى إدخال عبارة بحث صالحة.', 'error');
+                    } else {
+                        setMessage('لم يتم العثور على نتائج مطابقة.', 'error');
+                    }
+                } catch (error) {
+                    console.error(error);
+                    setMessage('تعذر تنفيذ البحث الآن. حاول لاحقاً.', 'error');
+                }
             });
 
             const handleActivate = item => {

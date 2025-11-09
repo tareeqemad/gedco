@@ -37,11 +37,41 @@
             margin-top: 8px !important; /* خط أبيض أوضح */
             padding-top: 120px !important;
             padding-bottom: 80px !important;
+            position: relative;
+            overflow: hidden;
+            border-radius: 0.75rem;
         }
 
         section#subheader h1 {
             font-size: 2.5rem;
             line-height: 1.2;
+        }
+
+        section#subheader .crumb {
+            display: inline-flex;
+            align-items: center;
+            gap: .75rem;
+            padding: .55rem 1.35rem;
+            border-radius: 999px;
+            background: rgba(15, 23, 42, 0.32);
+            backdrop-filter: blur(6px);
+            list-style: none;
+            margin: 0;
+        }
+
+        section#subheader .crumb li {
+            color: rgba(255, 255, 255, 0.85);
+            font-weight: 600;
+        }
+
+        section#subheader .crumb a {
+            color: rgba(255, 255, 255, 0.75);
+            text-decoration: none;
+            transition: color .3s ease;
+        }
+
+        section#subheader .crumb a:hover {
+            color: #fff;
         }
 
         /* فراغ بين الهيدر والصورة على الموبايل */

@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Site\HomeController;
 use App\Http\Controllers\Site\JobsController;
 use App\Http\Controllers\Site\TendersController;
+use App\Http\Controllers\Site\NewsController;
 use App\Http\Controllers\Site\AdvertisementController;
 use App\Http\Controllers\Site\SearchController;
 
@@ -23,6 +24,8 @@ Route::prefix('/')->name('site.')->group(function () {
 
     Route::get('/jobs', [JobsController::class, 'index'])->name('jobs');
     Route::get('/tenders', [TendersController::class, 'index'])->name('tenders');
+    Route::get('/news', [NewsController::class, 'index'])->name('news');
+    Route::get('/news/{news}', [NewsController::class, 'show'])->name('news.show');
 
 });
 

@@ -5,15 +5,47 @@
 
 @push('styles')
     <style>
-
         section.p-0 .container-fluid {
             padding-left: 0 !important;
             padding-right: 0 !important;
             max-width: 100% !important;
         }
-    #content {
+
+        #content {
             flex: 1 0 auto;
             overflow: visible;
+        }
+
+        .sw-text-wrapper {
+            width: 100%;
+            padding: 0 2rem;
+        }
+
+        .sw-text-wrapper h1 {
+            font-size: clamp(2.4rem, 4vw, 3.4rem);
+            line-height: 1.3;
+            white-space: normal;
+            word-break: break-word;
+        }
+
+        @media (max-width: 991.98px) {
+            .sw-text-wrapper {
+                padding: 0 1.5rem;
+            }
+
+            .sw-text-wrapper h1 {
+                font-size: clamp(1.8rem, 6vw, 2.6rem);
+            }
+        }
+
+        @media (max-width: 575.98px) {
+            .sw-text-wrapper {
+                padding: 0 1rem;
+            }
+
+            .sw-text-wrapper h1 {
+                font-size: clamp(1.6rem, 7vw, 2.2rem);
+            }
         }
     </style>
 @endpush

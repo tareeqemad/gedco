@@ -30,7 +30,7 @@
                                 <ul>
                                     <li><a href="#who-us"> من نحن</a></li>
                                     <li><a href="#section-why-choose-us">لماذا تختارنا</a></li>
-                                    <li><a href="#">فريقنا</a></li>
+                                    <li><a href="https://www.gedcoboard.com/" target="_blank" rel="noopener">مجلس الإدارة</a></li>
                                 </ul>
                             </li>
 
@@ -38,7 +38,8 @@
                                 <a class="menu-item" href="#">الاعلانات</a>
                                 <ul>
                                     <li><a href="{{ route('site.advertisements.index') }}">الإعلانات والوظائف</a></li>
-                                    <li><a href="#">العطاءات</a></li>
+                                    <li><a href="{{ route('site.news') }}">أخبار الشركة</a></li>
+                                    <li><a href="{{ route('site.tenders') }}">العطاءات</a></li>
                                 </ul>
                             </li>
 
@@ -76,7 +77,7 @@
                                                 placeholder="ابحث هنا"
                                                 class="header-search-mini__input"
                                             >
-                                            <button type="button" class="header-search-mini__submit" aria-hidden="true" disabled>
+                                            <button type="submit" class="header-search-mini__submit" aria-label="نفّذ البحث">
                                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                                                     <path fill-rule="evenodd" d="M9 3a6 6 0 0 1 4.708 9.708l3.792 3.792a.75.75 0 1 1-1.06 1.06l-3.792-3.792A6 6 0 1 1 9 3Zm0 1.5a4.5 4.5 0 1 0 0 9 4.5 4.5 0 0 0 0-9Z" clip-rule="evenodd" />
                                                 </svg>

@@ -19,6 +19,7 @@ class News extends Model
         'featured'     => 'boolean',
         'views'        => 'integer',
         'published_at' => 'datetime',
+        'tags' => 'array',
     ];
 
     protected $appends = [
@@ -27,9 +28,7 @@ class News extends Model
         'is_published',
     ];
 
-    /* =======================
-     *  Accessors (ديناميكي حسب الدومين)
-     * ======================= */
+
     public function getCoverUrlAttribute(): ?string
     {
         return $this->cover_path ? asset('storage/' . $this->cover_path) : null;
@@ -93,6 +92,15 @@ class News extends Model
                 ->orWhere('body', 'like', "%{$term}%")
                 ->orWhere('excerpt', 'like', "%{$term}%");
         });
+    }
+
+    public function scopePublished(Builder $q): Builder
+    {
+        return $q->where('status', 'published')
+            ->where(function (Builder $w) {
+                $w->whereNull('published_at')
+                    ->orWhere('published_at', '<=', now());
+            });
     }
 
     public function scopeStatus(Builder $q, ?string $status): Builder

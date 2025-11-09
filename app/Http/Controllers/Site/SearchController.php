@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Site;
 use App\Http\Controllers\Controller;
 use App\Models\Advertisement;
 use App\Models\Job;
+use App\Models\News;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
@@ -97,6 +98,25 @@ class SearchController extends Controller
                 'label' => $job->title,
                 'type' => 'وظيفة',
                 'url' => $job->link ?: route('site.jobs'),
+            ]);
+        }
+
+        $news = News::query()
+            ->published()
+            ->where(function ($builder) use ($query) {
+                $builder->where('title', 'like', "%{$query}%")
+                    ->orWhere('body', 'like', "%{$query}%")
+                    ->orWhere('excerpt', 'like', "%{$query}%");
+            })
+            ->orderByDesc('published_at')
+            ->limit(10)
+            ->get();
+
+        foreach ($news as $item) {
+            $results->push([
+                'label' => $item->title,
+                'type'  => 'خبر',
+                'url'   => route('site.news.show', $item->id),
             ]);
         }
 

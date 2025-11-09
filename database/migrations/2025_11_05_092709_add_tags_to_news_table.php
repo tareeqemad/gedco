@@ -12,17 +12,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('news', function (Blueprint $table) {
-            //
+            $table->json('tags')->nullable()->after('pdf_path');
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::table('news', function (Blueprint $table) {
-            //
+            $table->dropColumn('tags');
         });
     }
 };
