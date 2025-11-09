@@ -114,13 +114,22 @@ Route::prefix('admin')->name('admin.')->group(function () {
             ->parameters(['advertisements' => 'ID_ADVER'])
             ->names('advertisements')
             ->middleware('permission:advertisements.view|advertisements.create|advertisements.edit|advertisements.delete');
+        Route::get('advertisements/{ad}/pdf', [AdvertisementController::class, 'pdf'])
+            ->name('advertisements.pdf');
 
         Route::resource('tenders', TenderController::class)
             ->parameters(['tenders' => 'id'])
             ->names('tenders')
             ->middleware('permission:tenders.view|tenders.create|tenders.edit|tenders.delete');
 
+
+        // مسار الاخبار:
         Route::post('/uploads/quill-image', [UploadController::class, 'quillImage'])->name('uploads.quill-image');
+
+        // مسار  للإعلانات:
+        Route::post('/uploads/quill-image/ads', [UploadController::class, 'quillImageAds'])
+            ->name('admin.uploads.quill-image.ads');
+
 
         Route::resource('news', NewsController::class)
             ->parameters(['news' => 'news'])

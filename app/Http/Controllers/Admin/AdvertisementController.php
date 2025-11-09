@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
+use Carbon\Carbon;
 
 class AdvertisementController extends Controller
 {
@@ -79,7 +80,7 @@ class AdvertisementController extends Controller
 
     public function store(Request $request)
     {
-        // التحقق من البيانات
+        // 1) Validate
         $validated = $request->validate([
             'TITLE'     => 'required|string|max:255',
             'BODY'      => 'nullable|string',
@@ -87,48 +88,72 @@ class AdvertisementController extends Controller
             'DATE_NEWS' => 'required|date',
         ]);
 
-        // تهيئة مسار الـ PDF
-        $pdfPath = null;
+        // 2) Sanitize Body (اختياري بس أنصح فيه)
+        $body = $validated['BODY'] ?? '';
+        // لو عندك Purifier:
+        // $body = Purifier::clean($body);
+        // أو فلترة بسيطة (اختياري جداً):
+        // $body = strip_tags($body, '<p><br><b><strong><i><u><a><ul><ol><li><blockquote><code><pre><h1><h2><h3><img>');
 
-        // لو في ملف، يُخزن
+        // 3) Store PDF (اختياري)
+        $pdfPath = null;
         if ($request->hasFile('PDF')) {
             try {
                 $file = $request->file('PDF');
-
-                // تحقق من أن الملف صالح
                 if (!$file->isValid()) {
-                    return back()->withErrors(['PDF' => 'الملف غير صالح أو لم يُرفع بشكل صحيح'])->withInput();
+                    return $this->storeErrorResponse($request, ['PDF' => 'الملف غير صالح أو لم يُرفع بشكل صحيح']);
                 }
 
-                // تخزين الملف مع اسم فريد
                 $filename = time() . '_' . Str::random(10) . '.' . $file->getClientOriginalExtension();
                 $pdfPath = $file->storeAs('advertisements', $filename, 'public');
 
-                // تحقق من النجاح
                 if (!Storage::disk('public')->exists($pdfPath)) {
-                    \Log::error('Failed to store PDF', ['path' => $pdfPath]);
-                    return back()->withErrors(['PDF' => 'فشل في حفظ الملف'])->withInput();
+                    Log::error('Failed to store PDF', ['path' => $pdfPath]);
+                    return $this->storeErrorResponse($request, ['PDF' => 'فشل في حفظ الملف']);
                 }
-
-                \Log::info('PDF stored successfully', ['path' => $pdfPath]);
-            } catch (\Exception $e) {
-                \Log::error('PDF upload error: ' . $e->getMessage());
-                return back()->withErrors(['PDF' => 'حدث خطأ أثناء رفع الملف'])->withInput();
+            } catch (\Throwable $e) {
+                Log::error('PDF upload error: '.$e->getMessage());
+                return $this->storeErrorResponse($request, ['PDF' => 'حدث خطأ أثناء رفع الملف']);
             }
         }
 
-        // إنشاء الإعلان
-        Advertisement::create([
+        // 4) Create (ثبّت المنطقة الزمنية)
+        $user = Auth::user();
+        $ad = Advertisement::create([
             'TITLE'       => $validated['TITLE'],
-            'BODY'        => $validated['BODY'] ?? '',
+            'BODY'        => $body,
             'PDF'         => $pdfPath,
-            'DATE_NEWS'   => $validated['DATE_NEWS'],
-            'INSERT_USER' => Auth::user()->name ?? Auth::user()->email,
-            'INSERT_DATE' => now(),
+            'DATE_NEWS'   => \Carbon\Carbon::parse($validated['DATE_NEWS'], 'Asia/Hebron'),
+            'INSERT_USER' => $user?->name ?? $user?->email ?? 'system',
+            'INSERT_DATE' => now('Asia/Hebron'),
         ]);
 
-        return redirect()->route('admin.advertisements.index')
-            ->with('success', 'تم إضافة الإعلان بنجاح');
+        // 5) Response: JSON لـ AJAX، Redirect لـ non-AJAX
+        $redirect = route('admin.advertisements.index');
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'ok'       => true,
+                'id'       => $ad->ID_ADVER ?? $ad->id ?? null,
+                'redirect' => $redirect,
+                'message'  => 'تم إضافة الإعلان بنجاح',
+            ]);
+        }
+
+        return redirect($redirect)->with('success', 'تم إضافة الإعلان بنجاح');
+    }
+
+    /**
+     * Helper لارجاع أخطاء التحقق / رفع الملف
+     */
+    private function storeErrorResponse(Request $request, array $errors)
+    {
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'message' => 'validation_error',
+                'errors'  => $errors,
+            ], 422);
+        }
+        return back()->withErrors($errors)->withInput();
     }
 
     public function show($id)
@@ -139,7 +164,7 @@ class AdvertisementController extends Controller
 
     public function edit($id)
     {
-        $ad = Advertisement::findOrFail($id); // ← مهم: تحويل الـ ID للكائن
+        $ad = Advertisement::findOrFail($id);
         return view('admin.site.advertisements.edit', compact('ad'));
     }
 
@@ -147,42 +172,107 @@ class AdvertisementController extends Controller
     {
         $ad = Advertisement::findOrFail($id);
 
+        // فاليديشن متوافق مع الواجهة (remove_pdf بدلاً من remove_current_pdf)
         $validated = $request->validate([
-            'TITLE'              => 'required|string|max:255',
-            'BODY'               => 'nullable|string',
-            'PDF'                => 'nullable|file|mimes:pdf|max:10240',
-            'DATE_NEWS'          => 'required|date',
-            'remove_current_pdf' => 'nullable|in:1',
+            'TITLE'     => 'required|string|max:255',
+            'BODY'      => 'nullable|string',
+            'PDF'       => 'nullable|file|mimes:pdf|max:10240', // 10MB
+            'DATE_NEWS' => 'required|date',
+            'remove_pdf'=> 'nullable|in:1',
         ]);
 
-        $data = $request->only(['TITLE', 'BODY', 'DATE_NEWS']);
+        // (اختياري) تنظيف الـ HTML لو مركّب Purifier
+        $body = $validated['BODY'] ?? '';
+        // $body = Purifier::clean($body);
 
-        // حذف الملف القديم
-        if ($request->filled('remove_current_pdf') && $request->remove_current_pdf == '1') {
+        // جهّز بيانات التحديث
+        $data = [
+            'TITLE'       => $validated['TITLE'],
+            'BODY'        => $body,
+            'DATE_NEWS'   => Carbon::parse($validated['DATE_NEWS'], 'Asia/Hebron'),
+            'UPDATE_USER' => Auth::user()?->name ?? Auth::user()?->email ?? 'system',
+            'UPDATE_DATE' => now('Asia/Hebron'),
+        ];
+
+        // حذف المرفق الحالي لو طُلِب
+        if ($request->filled('remove_pdf') && $request->input('remove_pdf') === '1') {
             if ($ad->PDF) {
-                Storage::disk('public')->delete($ad->PDF);
+                try { Storage::disk('public')->delete($ad->PDF); } catch (\Throwable $e) {
+                    Log::warning('Failed to delete old PDF', ['id' => $ad->id, 'path' => $ad->PDF, 'err' => $e->getMessage()]);
+                }
             }
             $data['PDF'] = null;
         }
 
-        // رفع ملف جديد
+        // استبدال/رفع PDF جديد
         if ($request->hasFile('PDF')) {
-            if ($ad->PDF) {
-                Storage::disk('public')->delete($ad->PDF);
+            $file = $request->file('PDF');
+            if (! $file->isValid()) {
+                return $this->updateErrorResponse($request, ['PDF' => 'الملف غير صالح أو لم يُرفع بشكل صحيح']);
             }
-            $data['PDF'] = $request->file('PDF')->store('advertisements', 'public');
+
+            // احذف القديم أولاً (لو موجود)
+            if ($ad->PDF) {
+                try { Storage::disk('public')->delete($ad->PDF); } catch (\Throwable $e) {
+                    Log::warning('Failed to delete old PDF before replace', ['id' => $ad->id, 'path' => $ad->PDF, 'err' => $e->getMessage()]);
+                }
+            }
+
+            try {
+                // خزّن الجديد داخل مجلد الإعلانات
+                $storedPath = $file->store('advertisements', 'public');
+                if (! $storedPath || ! Storage::disk('public')->exists($storedPath)) {
+                    return $this->updateErrorResponse($request, ['PDF' => 'فشل في حفظ الملف']);
+                }
+                $data['PDF'] = $storedPath;
+            } catch (\Throwable $e) {
+                Log::error('PDF upload error on update: '.$e->getMessage(), ['id' => $ad->id]);
+                return $this->updateErrorResponse($request, ['PDF' => 'حدث خطأ أثناء رفع الملف']);
+            }
         }
 
-        // تحديث المستخدم + التاريخ (دائمًا)
-        $data['UPDATE_USER'] = Auth::user()->name ?? Auth::user()->email;
-        $data['UPDATE_DATE'] = now()->format('Y-m-d H:i:s');
-
-        // تحديث الكائن
+        // حفظ
         $ad->update($data);
 
-        return redirect()->route('admin.advertisements.index')->with('success', 'تم التحديث بنجاح');
+        // لو AJAX → JSON؛ غير كذا → Redirect
+        $redirect = route('admin.advertisements.index');
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'ok'       => true,
+                'id'       => $ad->ID_ADVER ?? $ad->id,
+                'redirect' => $redirect,
+                'message'  => 'تم التحديث بنجاح',
+            ]);
+        }
+
+        return redirect($redirect)->with('success', 'تم التحديث بنجاح');
     }
 
+    /**
+     * Helper لإرجاع أخطاء JSON 422 مع بقاء الـ non-AJAX على back()->withErrors()
+     */
+    private function updateErrorResponse(Request $request, array $errors)
+    {
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'message' => 'validation_error',
+                'errors'  => $errors,
+            ], 422);
+        }
+        return back()->withErrors($errors)->withInput();
+    }
+
+    public function pdf($id)
+    {
+        $ad = Advertisement::findOrFail($id);
+        abort_unless($ad->PDF && Storage::disk('public')->exists($ad->PDF), 404);
+
+        $path = Storage::disk('public')->path($ad->PDF);
+        return response()->file($path, [
+            'Content-Type'        => 'application/pdf',
+            'Content-Disposition' => 'inline; filename="'.basename($path).'"',
+        ]);
+    }
     public function destroy(int $ID_ADVER)
     {
         $ad = Advertisement::findOrFail($ID_ADVER);
