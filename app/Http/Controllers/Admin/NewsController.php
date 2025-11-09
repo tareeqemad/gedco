@@ -137,10 +137,10 @@ class NewsController extends Controller
             return $this->validationError('body', 'الصور بصيغة base64 غير مسموح بها.');
         }
 
-        // حد أقصى 4 صور داخل المحتوى
+        // حد أقصى 8 صور داخل المحتوى
         $imgCount = preg_match_all('/<img\b[^>]*>/i', $raw);
-        if ($imgCount > 4) {
-            return $this->validationError('body', 'عدد الصور في المحتوى يتجاوز الحد (4).');
+        if ($imgCount > 8) {
+            return $this->validationError('body', 'عدد الصور في المحتوى يتجاوز الحد (8).');
         }
 
 
