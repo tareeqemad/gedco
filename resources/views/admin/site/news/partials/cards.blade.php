@@ -5,10 +5,7 @@
                 <div class="card card-news h-100">
                     <a class="thumb" href="{{ route('admin.news.show', $row) }}">
                         @php
-                            $coverUrl = $row->cover_url ?? null;
-                            if (!$coverUrl && method_exists($row, 'coverUrl')) {
-                                $coverUrl = $row->coverUrl();
-                            }
+                            $coverUrl = $row->cover_url ?? (method_exists($row, 'coverUrl') ? $row->coverUrl() : null);
                         @endphp
                         @if($coverUrl)
                             <img src="{{ $coverUrl }}" alt="cover">
@@ -16,12 +13,13 @@
                             <img src="{{ asset('assets/admin/images/apps/google.png') }}" alt="placeholder">
                         @endif
                     </a>
+
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-center mb-2">
                             <div class="d-flex gap-2 align-items-center">
-                                <span class="badge badge-dot {{ $row->status === 'draft' ? 'badge-draft' : '' }}">
-                                    {{ $row->status === 'draft' ? 'مسودة' : 'منشور' }}
-                                </span>
+                        <span class="badge badge-dot {{ $row->status === 'draft' ? 'badge-draft' : '' }}">
+                            {{ $row->status === 'draft' ? 'مسودة' : 'منشور' }}
+                        </span>
                                 @if($row->featured)
                                     <span class="badge bg-warning-subtle text-warning border">مميّز</span>
                                 @endif
@@ -39,19 +37,19 @@
                                 {{ \Illuminate\Support\Str::limit($row->title, 90) }}
                             </a>
                         </h6>
+
                         <p class="text-muted small mb-3">
-                            {{ $row->excerpt(120) }}
+                            {{ method_exists($row,'excerpt') ? $row->excerpt(120) : \Illuminate\Support\Str::limit(strip_tags($row->content), 120) }}
                         </p>
 
-                        <!-- مين أضاف + مين عدّل + التواريخ -->
                         <div class="d-flex justify-content-between align-items-center mb-3 text-muted small">
                             <div>
                                 <strong>أضاف:</strong> {{ $row->creator?->name ?? 'غير معروف' }}<br>
                                 <strong>عدّل:</strong> {{ $row->updater?->name ?? 'غير معروف' }}
                             </div>
                             <div class="text-end">
-                                <div>{{ $row->created_at->format('Y-m-d H:i') }}</div>
-                                <div>{{ $row->updated_at->format('Y-m-d H:i') }}</div>
+                                <div>{{ optional($row->created_at)->format('Y-m-d H:i') }}</div>
+                                <div>{{ optional($row->updated_at)->format('Y-m-d H:i') }}</div>
                             </div>
                         </div>
 

@@ -5,9 +5,12 @@ use App\Http\Controllers\Site\HomeController;
 use App\Http\Controllers\Site\JobsController;
 use App\Http\Controllers\Site\TendersController;
 use App\Http\Controllers\Site\AdvertisementController;
+use App\Http\Controllers\Site\SearchController;
 
 Route::prefix('/')->name('site.')->group(function () {
     Route::get('/', [HomeController::class, 'index'])->name('home');
+    Route::get('/search', [SearchController::class, 'resolve'])->name('search');
+    Route::get('/search/suggestions', [SearchController::class, 'suggestions'])->name('search.suggestions');
 
     Route::view('/services', 'site.services.index')->name('services');
     Route::view('/blog', 'site.blog.index')->name('blog');

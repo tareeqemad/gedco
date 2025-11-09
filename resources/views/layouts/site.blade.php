@@ -98,12 +98,14 @@
             height: 100vh;
             background: #212529;
             overflow-y: auto;
-            padding: 60px 15px 20px;
+            padding: 48px 18px 28px;
             transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             box-shadow: -5px 0 20px rgba(0,0,0,0.3);
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            align-items: stretch;
+            justify-content: flex-start;
+            gap: 20px;
         }
 
         #mobile-menu-overlay.active #mobile-menu-content {
@@ -219,6 +221,12 @@
         #mobile-mainmenu > li > ul li a:hover {
             background: rgba(255,255,255,0.05);
             color: #fff;
+        }
+
+        #mobile-menu-items {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
         }
 
         @media (max-width: 991px) {
@@ -507,6 +515,317 @@
                 }
             });
         }, 100);
+    })();
+
+    (function headerMiniSearch() {
+        const configs = [
+            {
+                toggle: document.getElementById('header-search-toggle'),
+                popover: document.getElementById('header-search-popover'),
+                form: document.getElementById('header-search-form'),
+                input: document.getElementById('header-search-input'),
+                message: document.getElementById('header-search-message'),
+                resultsList: document.getElementById('header-search-results'),
+            },
+            {
+                form: document.getElementById('mobile-search-form'),
+                input: document.getElementById('mobile-search-input'),
+                message: document.getElementById('mobile-search-message'),
+                resultsList: document.getElementById('mobile-search-results'),
+            },
+        ].filter(cfg => cfg.form && cfg.input && cfg.message && cfg.resultsList);
+
+        if (!configs.length) return;
+
+        const debounce = (fn, delay = 220) => {
+            let timer;
+            return (...args) => {
+                clearTimeout(timer);
+                timer = setTimeout(() => fn.apply(null, args), delay);
+            };
+        };
+
+        configs.forEach(cfg => initSearch(cfg));
+
+        function initSearch(cfg) {
+            const {form, input, resultsList, message, toggle, popover} = cfg;
+
+            const suggestionsEndpoint = form.dataset.suggestionsEndpoint;
+            let suggestionController = null;
+            let suppressClick = false;
+            let isOpen = !toggle;
+            let activeItem = null;
+            let globalCloseListener = null;
+
+            const setMessage = (text = '', tone = 'info') => {
+                message.textContent = text || '';
+                message.classList.remove('is-error', 'is-success');
+                if (tone === 'error') message.classList.add('is-error');
+                if (tone === 'success') message.classList.add('is-success');
+            };
+
+            const clearMessage = () => setMessage('');
+
+            const setActiveItem = item => {
+                if (activeItem === item) return;
+                if (activeItem) {
+                    activeItem.classList.remove('is-active');
+                }
+                activeItem = item;
+                if (activeItem) {
+                    activeItem.classList.add('is-active');
+                }
+            };
+
+            const renderSuggestions = items => {
+                resultsList.innerHTML = '';
+                setActiveItem(null);
+                if (!items.length) {
+                    resultsList.classList.remove('is-visible');
+                    return;
+                }
+
+                items.forEach(item => {
+                    const li = document.createElement('li');
+                    li.className = 'header-search-mini__result';
+                    li.setAttribute('data-url', item.url);
+                    li.setAttribute('role', 'option');
+                    li.setAttribute('tabindex', '0');
+                    li.innerHTML = `
+                        <span class="header-search-mini__result-title">${item.label}</span>
+                        <span class="header-search-mini__result-meta">${item.type}</span>
+                    `;
+                    resultsList.appendChild(li);
+                });
+
+                resultsList.scrollTop = 0;
+                resultsList.classList.add('is-visible');
+            };
+
+            const fetchSuggestions = debounce(async term => {
+                if (!suggestionsEndpoint) return;
+
+                if (term.length < 2) {
+                    renderSuggestions([]);
+                    clearMessage();
+                    return;
+                }
+
+                try {
+                    suggestionController?.abort();
+                    suggestionController = new AbortController();
+
+                    const response = await fetch(`${suggestionsEndpoint}?q=${encodeURIComponent(term)}`, {
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest',
+                            'Accept': 'application/json',
+                        },
+                        signal: suggestionController.signal,
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Suggestion request failed');
+                    }
+
+                    const payload = await response.json();
+
+                    if (Array.isArray(payload.suggestions)) {
+                        renderSuggestions(payload.suggestions);
+                        if (payload.suggestions.length) {
+                            clearMessage();
+                        } else {
+                            setMessage('لم يتم العثور على نتائج مطابقة.', 'error');
+                        }
+                    }
+                } catch (error) {
+                    if (error.name === 'AbortError') return;
+                    console.error(error);
+                    renderSuggestions([]);
+                    setMessage('تعذر تحميل النتائج الآن. حاول لاحقاً.', 'error');
+                }
+            });
+
+            const activateResult = url => {
+                if (!url) return;
+                window.location.href = url;
+            };
+
+            input.addEventListener('keydown', event => {
+                if (event.key === 'Enter') {
+                    event.preventDefault();
+                }
+            });
+
+            input.addEventListener('input', () => {
+                const term = input.value.trim();
+                fetchSuggestions(term);
+            });
+
+            form.addEventListener('submit', event => {
+                event.preventDefault();
+            });
+
+            const handleActivate = item => {
+                if (!item) return;
+                activateResult(item.dataset.url);
+            };
+
+            resultsList.addEventListener('pointerdown', event => {
+                const item = event.target.closest('[data-url]');
+                if (!item) return;
+                handleActivate(item);
+            });
+
+            resultsList.addEventListener('click', event => {
+                const item = event.target.closest('[data-url]');
+                if (!item) return;
+                handleActivate(item);
+            });
+
+            const handleHover = event => {
+                const item = event.target.closest('[data-url]');
+                if (!item) return;
+                setActiveItem(item);
+            };
+
+            resultsList.addEventListener('pointermove', handleHover);
+            resultsList.addEventListener('mousemove', handleHover);
+            resultsList.addEventListener('mouseover', handleHover);
+            resultsList.addEventListener('touchmove', event => {
+                const touch = event.touches[0];
+                if (!touch) return;
+                const element = document.elementFromPoint(touch.clientX, touch.clientY);
+                if (!element) return;
+                const item = element.closest('[data-url]');
+                if (!item) return;
+                setActiveItem(item);
+            }, {passive: true});
+
+            resultsList.addEventListener('pointerleave', () => {
+                setActiveItem(null);
+            });
+
+            resultsList.addEventListener('keydown', event => {
+                if (event.key === 'Enter') {
+                    event.preventDefault();
+                }
+            });
+
+            const handleWheelScroll = event => {
+                if (event.ctrlKey) return;
+                const item = event.target.closest('.header-search-mini__result');
+                if (item && !event.defaultPrevented) {
+                    setActiveItem(item);
+                }
+                const atTop = resultsList.scrollTop <= 0;
+                const atBottom = resultsList.scrollTop + resultsList.clientHeight >= resultsList.scrollHeight;
+                const scrollingUp = event.deltaY < 0;
+                const scrollingDown = event.deltaY > 0;
+
+                let consumed = false;
+
+                if ((scrollingUp && !atTop) || (scrollingDown && !atBottom)) {
+                    resultsList.scrollTop += event.deltaY;
+                    consumed = true;
+                }
+
+                if (consumed) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+
+                if (consumed || (!consumed && resultsList.matches(':hover'))) {
+                    resultsList.classList.add('is-wheel-active');
+                    clearTimeout(resultsList._wheelTimeout);
+                    resultsList._wheelTimeout = setTimeout(() => {
+                        resultsList.classList.remove('is-wheel-active');
+                    }, 160);
+                }
+            };
+
+            ['wheel', 'mousewheel', 'DOMMouseScroll'].forEach(evt => {
+                resultsList.addEventListener(evt, handleWheelScroll, {passive: false});
+            });
+
+            if (toggle && popover) {
+                const openPopover = () => {
+                    if (isOpen) return;
+                    popover.classList.add('is-visible');
+                    toggle.setAttribute('aria-expanded', 'true');
+                    isOpen = true;
+                    renderSuggestions([]);
+                    clearMessage();
+                    requestAnimationFrame(() => input.focus());
+                };
+
+                const closePopover = () => {
+                    if (!isOpen) return;
+                    popover.classList.remove('is-visible');
+                    toggle.setAttribute('aria-expanded', 'false');
+                    isOpen = false;
+                    form.reset();
+                    clearMessage();
+                    renderSuggestions([]);
+                };
+
+                const togglePopover = event => {
+                    event.preventDefault();
+                    if (isOpen) {
+                        closePopover();
+                    } else {
+                        openPopover();
+                    }
+                };
+
+                toggle.addEventListener('pointerdown', event => {
+                    suppressClick = true;
+                    togglePopover(event);
+                });
+
+                toggle.addEventListener('click', event => {
+                    if (suppressClick) {
+                        suppressClick = false;
+                        return;
+                    }
+                    togglePopover(event);
+                });
+
+                toggle.addEventListener('keydown', event => {
+                    if (event.key === 'Enter' || event.key === ' ') {
+                        event.preventDefault();
+                        togglePopover(event);
+                    }
+                });
+
+                const handleDocPointer = event => {
+                    if (!isOpen) return;
+                    if (!popover.contains(event.target) && !toggle.contains(event.target)) {
+                        closePopover();
+                    }
+                };
+
+                const handleDocKey = event => {
+                    if (isOpen && event.key === 'Escape') {
+                        closePopover();
+                    }
+                };
+
+                document.addEventListener('pointerdown', handleDocPointer);
+                document.addEventListener('keydown', handleDocKey);
+            } else {
+                isOpen = true;
+                renderSuggestions([]);
+                clearMessage();
+                globalCloseListener = event => {
+                    if (form.contains(event.target)) return;
+                    form.reset();
+                    clearMessage();
+                    renderSuggestions([]);
+                };
+                document.addEventListener('pointerdown', globalCloseListener);
+                document.addEventListener('touchstart', globalCloseListener);
+            }
+        }
     })();
 
     console.log('✅ Mobile menu system loaded!');
