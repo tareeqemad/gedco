@@ -1,5 +1,6 @@
 <?php
 
+
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Site\HomeController;
 use App\Http\Controllers\Site\JobsController;
@@ -7,6 +8,7 @@ use App\Http\Controllers\Site\TendersController;
 use App\Http\Controllers\Site\NewsController;
 use App\Http\Controllers\Site\AdvertisementController;
 use App\Http\Controllers\Site\SearchController;
+use App\Http\Controllers\Staff\ProfileDependents;
 
 Route::prefix('/')->name('site.')->group(function () {
     Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -34,5 +36,14 @@ Route::prefix('advertisements')->name('site.advertisements.')->group(function ()
     Route::get('/{id}', [AdvertisementController::class, 'show'])->name('show');
 });
 
+
+
+Route::prefix('staff/profile')->group(function () {
+    Route::get('/dependents',  [ProfileDependents::class, 'create'])
+        ->name('staff.profile.dependents.create');   // صفحة الفورم العامة
+
+    Route::post('/dependents', [ProfileDependents::class, 'store'])
+        ->name('staff.profile.dependents.store');    // حفظ البيانات
+});
 
 require __DIR__.'/admin.php';
