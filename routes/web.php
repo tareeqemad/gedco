@@ -25,6 +25,8 @@ Route::prefix('/')->name('site.')->group(function () {
 
 });
 
+Route::view('/general-manager-message', 'site.general-manager-message')->name('company.general-manager-message');
+
 Route::prefix('advertisements')->name('site.advertisements.')->group(function () {
     Route::get('/', [AdvertisementController::class, 'index'])->name('index');
     Route::get('/{id}', [AdvertisementController::class, 'show'])->name('show');
