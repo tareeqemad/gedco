@@ -25,20 +25,22 @@
                                 </ul>
                             </li>
 
+
                             <li>
                                 <a class="menu-item" href="#">الشركة</a>
                                 <ul>
                                     <li><a href="#who-us"> من نحن</a></li>
                                     <li><a href="#section-why-choose-us">لماذا تختارنا</a></li>
+                                    <li><a href="">كلمة مدير عامالشركة</a></li>
                                     <li><a href="https://www.gedcoboard.com/" target="_blank" rel="noopener">مجلس الإدارة</a></li>
+
                                 </ul>
                             </li>
-
+                            <li><a class="menu-item" href="{{ route('site.news') }}">الاخبار</a></li>
                             <li>
                                 <a class="menu-item" href="#">الاعلانات</a>
                                 <ul>
                                     <li><a href="{{ route('site.advertisements.index') }}">الإعلانات والوظائف</a></li>
-                                    <li><a href="{{ route('site.news') }}">أخبار الشركة</a></li>
                                     <li><a href="{{ route('site.tenders') }}">العطاءات</a></li>
                                 </ul>
                             </li>
