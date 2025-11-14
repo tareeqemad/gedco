@@ -19,13 +19,11 @@ return new class extends Migration {
             $table->date('birth_date')->nullable();
             $table->boolean('is_student')->default(false);
 
-            // اختياري: منع التكرار العرضي لنفس المعال
-            // $table->unique(['staff_profile_id', 'name', 'birth_date']);
-
             $table->timestamps();
-
-
             $table->softDeletes();
+
+            // لمنع إدخال نفس الفرد مرتين لنفس الموظف
+            $table->unique(['staff_profile_id', 'name', 'birth_date']);
         });
     }
 
