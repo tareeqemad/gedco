@@ -1,6 +1,8 @@
 <?php
 
 
+use App\Http\Controllers\Staff\ProfileDependentsController;
+use App\Http\Controllers\Staff\ProfileEditAuthController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Site\HomeController;
 use App\Http\Controllers\Site\JobsController;
@@ -8,7 +10,6 @@ use App\Http\Controllers\Site\TendersController;
 use App\Http\Controllers\Site\NewsController;
 use App\Http\Controllers\Site\AdvertisementController;
 use App\Http\Controllers\Site\SearchController;
-use App\Http\Controllers\Staff\ProfileDependents;
 
 Route::prefix('/')->name('site.')->group(function () {
     Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -37,13 +38,29 @@ Route::prefix('advertisements')->name('site.advertisements.')->group(function ()
 });
 
 
+Route::prefix('staff/profile')->name('staff.profile.')->group(function () {
 
-Route::prefix('staff/profile')->group(function () {
-    Route::get('/dependents',  [ProfileDependents::class, 'create'])
-        ->name('staff.profile.dependents.create');   // صفحة الفورم العامة
+    // إنشاء
+    Route::get('create', [ProfileDependentsController::class, 'create'])->name('create');
+    Route::post('store', [ProfileDependentsController::class, 'store'])
+        ->middleware('throttle:10,1')->name('store');
 
-    Route::post('/dependents', [ProfileDependents::class, 'store'])
-        ->name('staff.profile.dependents.store');    // حفظ البيانات
+    // التحقق بكلمة مرور (بدون {profile} — المستخدم يختار الهوية/الرقم الوظيفي + الباس)
+    Route::get('verify', [ProfileEditAuthController::class, 'showVerifyForm'])->name('verify.form');
+    Route::post('verify', [ProfileEditAuthController::class, 'verify'])
+        ->middleware('throttle:10,1')->name('verify');
+
+    // عرض
+    Route::get('{profile}', [ProfileDependentsController::class, 'show'])
+        ->whereNumber('profile')->name('show');
+
+    // تعديل (محمي بجلسة التحقق)
+    Route::middleware('staff.edit.session')->group(function () {
+        Route::get('{profile}/edit',   [ProfileDependentsController::class, 'edit'])
+            ->whereNumber('profile')->name('edit');
+        Route::put('{profile}/update', [ProfileDependentsController::class, 'update'])
+            ->whereNumber('profile')->name('update');
+    });
 });
 
 require __DIR__.'/admin.php';
