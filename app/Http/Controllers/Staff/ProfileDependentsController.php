@@ -25,13 +25,13 @@ class ProfileDependentsController extends Controller
     {
         $data = $request->validated();
 
-        $existing = \App\Models\StaffProfile::query()
+        // لو موجود مسبقًا نحوله لفورم التحقق للتعديل
+        $existing = StaffProfile::query()
             ->where('employee_number', (int)$data['employee_number'])
             ->orWhere('national_id',   (int)$data['national_id'])
             ->first();
 
         if ($existing) {
-            // نحاول تخمين أفضل “by/value” نمررها للفورم:
             $by    = $existing->national_id == (int)$data['national_id'] ? 'national_id' : 'employee_number';
             $value = $by === 'national_id' ? $existing->national_id : $existing->employee_number;
 
@@ -39,7 +39,8 @@ class ProfileDependentsController extends Controller
                 ->with('info', 'الرقم الوظيفي/رقم الهوية مستخدم مسبقًا. أدخل كلمة المرور لمتابعة التعديل.')
                 ->withInput();
         }
-        // فحص مبكر (بانر قفل أجمل من رسالة حمراء)
+
+        // فحص قفل احتياطي
         $dupExists = StaffProfile::query()
             ->where('employee_number', $data['employee_number'])
             ->orWhere('national_id',   $data['national_id'])
@@ -54,8 +55,15 @@ class ProfileDependentsController extends Controller
 
         try {
             DB::transaction(function () use ($data) {
+
                 $familyRows = collect($data['family'] ?? [])
-                    ->filter(fn($r) => filled($r['name'] ?? null) || filled($r['relation'] ?? null) || filled($r['birth_date'] ?? null) || filled($r['is_student'] ?? null));
+                    ->filter(function ($r) {
+                        return filled($r['name'] ?? null)
+                            || filled($r['relation'] ?? null)
+                            || filled($r['birth_date'] ?? null)
+                            || filled($r['is_student'] ?? null);
+                    })
+                    ->values();
 
                 $profile = StaffProfile::create([
                     'full_name'            => $data['full_name'],
@@ -69,7 +77,7 @@ class ProfileDependentsController extends Controller
                     'department'           => $data['department'] ?? null,
                     'directorate'          => $data['directorate'] ?? null,
                     'section'              => $data['section'] ?? null,
-                    'marital_status'       => $data['marital_status'] ?? null,
+                    'marital_status'       => $data['marital_status'],
 
                     'has_family_incidents' => $data['has_family_incidents'] ?? 'no',
                     'family_notes'         => $data['family_notes'] ?? null,
@@ -88,22 +96,33 @@ class ProfileDependentsController extends Controller
                     'readiness'            => $data['readiness'] ?? null,
                     'readiness_notes'      => $data['readiness_notes'] ?? null,
 
-                    // إعداد التعديل
-                    'password_hash'        => Hash::make($data['password']),
+                    // هنا الباسورد = رقم الهوية (محول لنص ثم Hash)
+                    'password_hash'        => Hash::make((string) $data['national_id']),
                     'edits_allowed'        => 1,
                     'edits_remaining'      => 1,
                 ]);
 
-                foreach ($familyRows as $row) {
+                foreach ($familyRows as $index => $row) {
+                    $relation = $row['relation'] ?? null;
+
+                    // ضمان إضافي: أول صف = self دايمًا
+                    if ($index === 0) {
+                        $relation = 'self';
+                    } elseif (!in_array($relation, ['self','husband','wife','son','daughter','other'], true)) {
+                        $relation = 'other';
+                    }
+
                     $profile->dependents()->create([
                         'name'       => $row['name'] ?? '',
-                        'relation'   => $row['relation'] ?? 'other',
+                        'relation'   => $relation,
                         'birth_date' => $row['birth_date'] ?? null,
                         'is_student' => ($row['is_student'] ?? '') === 'yes',
                     ]);
                 }
 
-                $profile->update(['family_members_count' => max(1, $familyRows->count())]);
+                $profile->update([
+                    'family_members_count' => max(1, $familyRows->count()),
+                ]);
             });
         } catch (QueryException $e) {
             return back()
