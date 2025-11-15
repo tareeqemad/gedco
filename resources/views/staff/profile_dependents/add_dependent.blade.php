@@ -38,7 +38,6 @@
         label.field { display:flex; flex-direction:column; gap:.35rem; font-weight:600; color:var(--muted); }
         label.field span { font-size:.9rem; }
 
-        /* نجمة الحقول الإلزامية */
         label.field.required > span::after { content:" *"; color:#e63946; font-weight:bold; }
 
         input, select, textarea {
@@ -78,7 +77,6 @@
         .alert-danger  { background:#fdeeee; border:1px solid #f5b1b1; color:#8a1f1f; }
         .alert-warning { background:#fff6ed; border:1px solid #ffe0c2; color:#b15b00; }
 
-        /* إظهار/إخفاء ناعم */
         .hidden { opacity:0; max-height:0; overflow:hidden; transition:all .3s ease; }
         .show   { opacity:1; max-height:400px; }
 
@@ -97,14 +95,20 @@
 <body>
 
 @php
-    // جلب القوائم من staff_enums (مع fallback بسيط لو الملف غير متوفر)
     $locations       = config('staff_enums.locations',      ['1'=>'المقر الرئيسي','2'=>'مقر غزة','3'=>'مقر الشمال','4'=>'مقر الوسطى','6'=>'مقر خانيونس','7'=>'مقر رفح','8'=>'مقر الصيانة - غزة']);
-    $maritalStatus   = config('staff_enums.marital_status', ['single'=>'أعزب / عزباء','married'=>'متزوج / متزوجة','widowed'=>'أرمل / أرملة','divorced'=>'مطلق / مطلقة']);
+    $maritalStatus   = config('staff_enums.marital_status', ['single'=>'أعزب/عزباء','married'=>'متزوج/متزوجة','widowed'=>'أرمل/أرملة','divorced'=>'مطلق/مطلقة']);
     $houseStatus     = config('staff_enums.house_status',   ['intact'=>'سليم','partial'=>'هدم جزئي','demolished'=>'هدم كلي']);
     $residentStatus  = config('staff_enums.status',         ['resident'=>'مقيم','displaced'=>'نازح']);
     $housingTypes    = config('staff_enums.housing_type',   ['house'=>'منزل','apartment'=>'شقة','tent'=>'خيمة','other'=>'أخرى']);
-    $readinessList   = config('staff_enums.readiness',      ['ready'=>'جاهز','not_ready'=>'غير جاهز مع توضيح الأسباب']);
-    $relations       = config('staff_enums.relations',      ['spouse'=>'زوج / زوجة','son'=>'ابن','daughter'=>'ابنة','other'=>'أخرى']);
+    $readinessList   = config('staff_enums.readiness',      ['working'=>'باشر العمل فعلياًً','ready'=>'جاهز للعودة','not_ready'=>'مش جاهز بعد']);
+    $relations       = config('staff_enums.relation', [
+        'self'    => 'الموظف نفسه',
+        'husband' => 'زوج',
+        'wife'    => 'زوجة',
+        'son'     => 'ابن',
+        'daughter'=> 'ابنة',
+        'other'   => 'أخرى',
+    ]);
 @endphp
 
 <div class="form-shell">
@@ -112,12 +116,10 @@
         <h1>إقرار المعلومات الشخصية</h1>
     </div>
 
-    {{-- تنبيه عام للنجمة --}}
     <div class="alert alert-warning" style="margin: 1rem 2rem 0;">
         يرجى تعبئة جميع الحقول الإلزامية المعلّمة بـ (<span style="color:#e63946">*</span>)
     </div>
 
-    {{-- بانر منع التحديث لو مسجّل مسبقًا --}}
     @if (session('locked'))
         <div class="alert alert-danger">
             <div class="fw-bold">لا يمكن التحديث</div>
@@ -125,7 +127,6 @@
         </div>
     @endif
 
-    {{-- رسائل الأخطاء والنجاح --}}
     @if ($errors->any())
         <div class="alert alert-danger">
             <ul class="mb-0 ps-3">
@@ -145,7 +146,6 @@
     <form action="{{ route('staff.profile.store') }}" method="post" class="needs-validation" novalidate>
         @csrf
 
-        {{-- نقفل كل المدخلات لو Locked --}}
         <fieldset @if(session('locked')) disabled @endif>
 
             {{-- البيانات الأساسية --}}
@@ -209,14 +209,15 @@
                         <input type="text" name="section" value="{{ old('section') }}">
                     </label>
 
-                    <label class="field">
+                    <label class="field required">
                         <span>الحالة الاجتماعية</span>
-                        <select name="marital_status">
+                        <select name="marital_status" required class="@error('marital_status') is-invalid @enderror">
                             <option value="">_______</option>
                             @foreach($maritalStatus as $val => $label)
                                 <option value="{{ $val }}" @selected(old('marital_status') === $val)>{{ $label }}</option>
                             @endforeach
                         </select>
+                        @error('marital_status') <small class="text-danger">{{ $message }}</small> @enderror
                     </label>
 
                     <label class="field">
@@ -400,56 +401,8 @@
                 </div>
             </section>
 
-            {{-- إنشاء كلمة مرور --}}
-            <section class="form-section">
-                <div class="section-title">إنشاء كلمة مرور</div>
-
-                <div class="alert alert-info" style="margin-top:.25rem">
-                    هذه الكلمة ستُستخدم للتحقّق منك قبل تعديل بياناتك لاحقًا. احتفظ بها جيدًا.
-                </div>
-
-                <div class="grid grid-2" style="margin-top:1rem;">
-                    <label class="field required">
-                        <span>كلمة المرور</span>
-                        <input
-                            type="password"
-                            name="password"
-                            id="password"
-                            minlength="6"
-                            required
-                            class="@error('password') is-invalid @enderror"
-                            autocomplete="new-password"
-                        >
-                        @error('password') <small class="text-danger">{{ $message }}</small> @enderror
-                        <small id="password-hint" class="text-muted">الحد الأدنى 6 حروف/أرقام.</small>
-                        <div id="password-strength" style="height:6px;border-radius:6px;background:#eee;margin-top:.5rem;overflow:hidden;">
-                            <div id="password-strength-bar" style="height:100%;width:0;"></div>
-                        </div>
-                        <div style="margin-top:.5rem;">
-                            <label style="display:inline-flex;align-items:center;gap:.4rem;cursor:pointer;">
-                                <input type="checkbox" id="toggle-password"> إظهار كلمة المرور
-                            </label>
-                        </div>
-                    </label>
-
-                    <label class="field required">
-                        <span>تأكيد كلمة المرور</span>
-                        <input
-                            type="password"
-                            name="password_confirmation"
-                            id="password_confirmation"
-                            minlength="6"
-                            required
-                            autocomplete="new-password"
-                        >
-                        <small class="text-muted">أعد إدخال كلمة المرور للتأكيد.</small>
-                    </label>
-                </div>
-            </section>
-
         </fieldset>
 
-        {{-- إقرار الموظف أو العودة --}}
         @if(!session('locked'))
             <section class="submit-row">
                 <div class="section-title" style="margin-bottom: 1.1rem;">إقرار الموظف</div>
@@ -478,10 +431,54 @@
         const familyIncidentsNotesEl  = document.getElementById('family-incidents-notes');
         const statusSelectEl = document.getElementById('status-select');
         const currentAddressEl = document.getElementById('current-address-field');
+        const maritalSelect = document.querySelector('select[name="marital_status"]');
 
         const oldFamily = @json(old('family', []));
+        const fullNameInput   = document.querySelector('input[name="full_name"]');
+        const mainBirthInput  = document.querySelector('input[name="birth_date"]');
 
         if (!template || !container) { return; }
+
+        function customizeRelationOptions(row, index) {
+            const select = row.querySelector('[data-field="relation"]');
+            if (!select) return;
+
+            const currentVal = select.value;
+            const marital = maritalSelect?.value || '';
+
+            select.innerHTML = '';
+
+            if (index === 1) {
+                select.innerHTML = `<option value="self">الموظف نفسه</option>`;
+                select.value = 'self';
+                select.disabled = true;
+                select.classList.add('bg-light');
+                select.style.cursor = 'not-allowed';
+            } else {
+                select.disabled = false;
+                select.classList.remove('bg-light');
+                select.style.cursor = '';
+
+                if (marital === 'married' && index === 2) {
+                    select.innerHTML = `
+                    <option value="">_______</option>
+                    <option value="husband">زوج</option>
+                    <option value="wife">زوجة</option>
+                `;
+                } else {
+                    select.innerHTML = `
+                    <option value="">_______</option>
+                    <option value="son">ابن</option>
+                    <option value="daughter">ابنة</option>
+                    <option value="other">أخرى</option>
+                `;
+                }
+
+                if (currentVal && Array.from(select.options).some(o => o.value === currentVal)) {
+                    select.value = currentVal;
+                }
+            }
+        }
 
         function updateIndices() {
             container.querySelectorAll('tr').forEach((row, idx) => {
@@ -491,17 +488,25 @@
                     const field = input.dataset.field;
                     input.name = `family[${index}][${field}]`;
                 });
+                customizeRelationOptions(row, index);
             });
         }
 
         function toggleRemoveState() {
             const rows = container.querySelectorAll('tr');
-            rows.forEach(row => {
+            rows.forEach((row, idx) => {
                 const btn = row.querySelector('.remove-member-btn');
                 if (!btn) return;
-                const disabled = rows.length === 1;
-                btn.disabled = disabled;
-                btn.style.opacity = disabled ? 0.5 : 1;
+                if (idx === 0) {
+                    btn.disabled = true;
+                    btn.style.opacity = 0.5;
+                    btn.style.cursor = 'not-allowed';
+                } else {
+                    const disabled = rows.length === 1;
+                    btn.disabled = disabled;
+                    btn.style.opacity = disabled ? 0.5 : 1;
+                    btn.style.cursor = disabled ? 'not-allowed' : '';
+                }
             });
         }
 
@@ -513,18 +518,53 @@
             addButton.setAttribute('aria-disabled', disabled ? 'true' : 'false');
         }
 
+        function bindHeadRow() {
+            const headRow = container.querySelector('tr');
+            if (!headRow) return;
+
+            const nameInput  = headRow.querySelector('[data-field="name"]');
+            const birthInput = headRow.querySelector('[data-field="birth_date"]');
+            const removeBtn  = headRow.querySelector('.remove-member-btn');
+
+            if (removeBtn) {
+                removeBtn.disabled = true;
+                removeBtn.style.opacity = 0.5;
+                removeBtn.style.cursor = 'not-allowed';
+            }
+
+            if (fullNameInput && nameInput) {
+                if (!nameInput.value) {
+                    nameInput.value = fullNameInput.value || '';
+                }
+                fullNameInput.addEventListener('input', () => {
+                    nameInput.value = fullNameInput.value || '';
+                });
+            }
+
+            if (mainBirthInput && birthInput) {
+                if (!birthInput.value) {
+                    birthInput.value = mainBirthInput.value || '';
+                }
+                mainBirthInput.addEventListener('change', () => {
+                    birthInput.value = mainBirthInput.value || '';
+                });
+            }
+        }
+
         function createMemberRow(prefill = null) {
             const row = template.content.firstElementChild.cloneNode(true);
             const removeButton = row.querySelector('.remove-member-btn');
 
             if (prefill) {
-                row.querySelector('[data-field="name"]').value = prefill.name ?? '';
-                row.querySelector('[data-field="relation"]').value = prefill.relation ?? '';
+                row.querySelector('[data-field="name"]').value       = prefill.name ?? '';
+                row.querySelector('[data-field="relation"]').value   = prefill.relation ?? '';
                 row.querySelector('[data-field="birth_date"]').value = prefill.birth_date ?? '';
                 row.querySelector('[data-field="is_student"]').value = prefill.is_student ?? '';
             }
 
             removeButton.addEventListener('click', () => {
+                const rows = container.querySelectorAll('tr');
+                if (row === rows[0]) return;
                 row.remove();
                 const remaining = container.querySelectorAll('tr').length;
                 const nextCount = Math.max(remaining, 1);
@@ -548,28 +588,32 @@
 
             while (current < target) {
                 const prefill = Array.isArray(prefillList) ? (prefillList[current] || null) : null;
-                container.appendChild(createMemberRow(prefill));
+                const row = createMemberRow(prefill);
+                container.appendChild(row);
                 current++;
             }
 
             while (current > target) {
-                container.removeChild(container.lastElementChild);
+                const lastRow = container.lastElementChild;
+                if (!lastRow) break;
+                const rows = container.querySelectorAll('tr');
+                if (lastRow === rows[0] && rows.length === 1) break;
+                container.removeChild(lastRow);
                 current--;
             }
 
             updateIndices();
             toggleRemoveState();
             updateAddButtonState();
+            bindHeadRow();
         }
 
-        // زر إضافة فرد
         addButton?.addEventListener('click', () => {
             const nextCount = Math.min(container.querySelectorAll('tr').length + 1, MAX_FAMILY_MEMBERS);
             ensureRowCount(nextCount);
             if (familyCountInput) familyCountInput.value = nextCount;
         });
 
-        // التحكم بعدد الصفوف من المدخل
         familyCountInput?.addEventListener('input', () => {
             let desired = parseInt(familyCountInput.value, 10);
             if (!Number.isFinite(desired)) desired = 1;
@@ -578,7 +622,6 @@
             ensureRowCount(desired);
         });
 
-        // بداية: لو فيه old data رجّعها، غير هيك صف واحد أو حسب العدد
         if (Array.isArray(oldFamily) && oldFamily.filter(Boolean).length) {
             const normalized = oldFamily
                 .filter(Boolean)
@@ -596,7 +639,17 @@
             if (familyCountInput) familyCountInput.value = container.querySelectorAll('tr').length;
         }
 
-        // الحقول الشرطية (مع إظهار/إخفاء ناعم)
+        maritalSelect?.addEventListener('change', () => {
+            if (maritalSelect.value === 'married') {
+                const currentRows = container.querySelectorAll('tr').length;
+                const desired = Math.max(currentRows, 2);
+                ensureRowCount(desired);
+                if (familyCountInput) familyCountInput.value = desired;
+            } else {
+                updateIndices();
+            }
+        });
+
         const toggleShow = (selectEl, targetEl, value) => {
             const show = selectEl?.value === value;
             if (!targetEl) return;
@@ -618,57 +671,12 @@
         statusSelectEl?.addEventListener('change', () => toggleShow(statusSelectEl, currentAddressEl, 'displaced'));
         toggleShow(statusSelectEl, currentAddressEl, 'displaced');
 
-        // Bootstrap client-side validation
         document.querySelectorAll('.needs-validation').forEach(form => {
             form.addEventListener('submit', (e) => {
                 if (!form.checkValidity()) { e.preventDefault(); e.stopPropagation(); }
                 form.classList.add('was-validated');
             }, false);
         });
-
-        // ====== كلمة المرور: إظهار/إخفاء + مؤشر قوة بسيط ======
-        const passInput = document.getElementById('password');
-        const passConf  = document.getElementById('password_confirmation');
-        const togglePw  = document.getElementById('toggle-password');
-        const bar       = document.getElementById('password-strength-bar');
-
-        function scorePassword(pwd) {
-            let score = 0; if (!pwd) return 0;
-            const letters = {};
-            for (let i = 0; i < pwd.length; i++) {
-                letters[pwd[i]] = (letters[pwd[i]] || 0) + 1;
-                score += 5.0 / letters[pwd[i]];
-            }
-            const variations = {
-                digits: /\d/.test(pwd),
-                lower: /[a-z]/.test(pwd),
-                upper: /[A-Z]/.test(pwd),
-                nonWords: /[^a-zA-Z0-9]/.test(pwd),
-            };
-            let variationCount = 0;
-            for (let k in variations) { variationCount += variations[k] ? 1 : 0; }
-            score += (variationCount - 1) * 10;
-            return parseInt(score);
-        }
-
-        function updateStrength(pwd) {
-            const s = scorePassword(pwd);
-            let width = 0, color = '#ddd';
-            if (s > 0)  { width = 25; color = '#f66'; }
-            if (s > 40) { width = 50; color = '#f8a22f'; }
-            if (s > 70) { width = 75; color = '#8bc34a'; }
-            if (s > 90) { width = 100; color = '#4caf50'; }
-            if (bar) { bar.style.width = width + '%'; bar.style.background = color; }
-        }
-
-        togglePw?.addEventListener('change', () => {
-            const type = togglePw.checked ? 'text' : 'password';
-            if (passInput) passInput.type = type;
-            if (passConf)  passConf.type  = type;
-        });
-
-        passInput?.addEventListener('input', (e) => updateStrength(e.target.value));
-        updateStrength(passInput?.value || '');
     })();
 </script>
 </body>

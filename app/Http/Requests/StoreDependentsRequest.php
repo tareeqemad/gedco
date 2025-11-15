@@ -8,7 +8,10 @@ use Carbon\Carbon;
 
 class StoreDependentsRequest extends FormRequest
 {
-    public function authorize(): bool { return true; }
+    public function authorize(): bool
+    {
+        return true;
+    }
 
     public function rules(): array
     {
@@ -33,7 +36,9 @@ class StoreDependentsRequest extends FormRequest
             'department'       => ['nullable','string','max:100'],
             'directorate'      => ['nullable','string','max:100'],
             'section'          => ['nullable','string','max:100'],
-            'marital_status'   => ['nullable', Rule::in(array_keys(config('staff_enums.marital_status')))],
+
+            // صارت مطلوبة
+            'marital_status'   => ['required', Rule::in(array_keys(config('staff_enums.marital_status')))],
             'birth_date'       => ['nullable','date'],
 
             'house_status'     => ['nullable', Rule::in(array_keys(config('staff_enums.house_status')))],
@@ -53,15 +58,12 @@ class StoreDependentsRequest extends FormRequest
             'has_family_incidents' => ['nullable', Rule::in(['yes','no'])],
             'family_notes'         => ['nullable','string','max:1000'],
 
-            'family'               => ['nullable','array','max:10'],
+            // الأسرة مطلوبة وفيها على الأقل الموظف نفسه
+            'family'               => ['required','array','max:10'],
             'family.*.name'        => ['nullable','string','max:255'],
             'family.*.relation'    => ['nullable', Rule::in(array_keys(config('staff_enums.relation')))],
             'family.*.birth_date'  => ['nullable','date'],
             'family.*.is_student'  => ['nullable', Rule::in(['yes','no'])],
-
-            // كلمة المرور لإنشاء قدرة التعديل لاحقًا
-            'password'              => ['required','string','min:6','confirmed'],
-            'password_confirmation' => ['required','string','min:6'],
         ];
     }
 
@@ -89,49 +91,112 @@ class StoreDependentsRequest extends FormRequest
             $family  = $input['family'] ?? [];
             $marital = $input['marital_status'] ?? null;
 
-            $count   = is_array($family) ? count($family) : 0;
-            $spouses = collect($family)->where('relation', 'spouse')->count();
+            $famCollection = collect($family);
 
+            // عدد "الموظف نفسه"
+            $selfCount = $famCollection->where('relation', 'self')->count();
+
+            // عدد الأزواج والزوجات
+            $husbands = $famCollection->where('relation', 'husband')->count();
+            $wives    = $famCollection->where('relation', 'wife')->count();
+            $spousesTotal = $husbands + $wives;
+
+            // إجمالي أفراد الأسرة (يشمل الموظف)
+            $count = $famCollection->count();
+
+            // 1) الموظف لازم يكون موجود مرة واحدة فقط ضمن الأسرة
+            if ($selfCount === 0) {
+                $validator->errors()->add('family', 'يجب إدخال الموظف نفسه ضمن أفراد الأسرة (علاقة: الموظف نفسه).');
+            } elseif ($selfCount > 1) {
+                $validator->errors()->add('family', 'يجب إدخال الموظف نفسه مرة واحدة فقط ضمن أفراد الأسرة.');
+            }
+
+            // 2) على الأقل فرد واحد (الموظف نفسه)
+            if ($count < 1) {
+                $validator->errors()->add('family', 'يجب إدخال فرد أسرة واحد على الأقل (الموظف نفسه).');
+            }
+
+            // 3) منطق الحالة الاجتماعية مع الزوج/الزوجة
             switch ($marital) {
-                case 'single':
-                    if ($spouses > 0) $validator->errors()->add('family', 'لا يمكن إدخال زوج/زوجة مع الحالة: أعزب/عزباء.');
-                    if ($count < 1)   $validator->errors()->add('family', 'يجب إدخال فرد أسرة واحد على الأقل للحالة: أعزب/عزباء.');
+                case 'single':   // أعزب/عزباء
+                case 'widowed':  // أرمل/أرملة
+                case 'divorced': // مطلق/مطلقة
+                    if ($spousesTotal > 0) {
+                        $validator->errors()->add(
+                            'family',
+                            'لا يمكن إدخال زوج أو زوجة مع الحالة الاجتماعية الحالية.'
+                        );
+                    }
                     break;
-                case 'married':
-                    if ($spouses !== 1) $validator->errors()->add('family', 'يجب إدخال زوج/زوجة واحد فقط للحالة: متزوج/متزوجة.');
-                    if ($count < 2)     $validator->errors()->add('family', 'الحد الأدنى 2 (زوج/زوجة + طفل/أخرى).');
-                    break;
-                case 'widowed':
-                case 'divorced':
-                    if ($spouses > 0) $validator->errors()->add('family', 'لا يمكن إدخال زوج/زوجة مع الحالة الحالية.');
-                    if ($count < 1)   $validator->errors()->add('family', 'يجب إدخال فرد أسرة واحد على الأقل.');
+
+                case 'married': // متزوج/متزوجة
+                    // لا يمكن أكثر من زوج واحد أو أكثر من زوجة واحدة
+                    if ($husbands > 1 || $wives > 1) {
+                        $validator->errors()->add(
+                            'family',
+                            'لا يمكن إدخال أكثر من زوج واحد أو أكثر من زوجة واحدة.'
+                        );
+                    }
+
+                    // مجموع الأزواج/الزوجات لازم يكون واحد فقط (زوج أو زوجة)
+                    if ($spousesTotal !== 1) {
+                        $validator->errors()->add(
+                            'family',
+                            'يجب إدخال زوج واحد أو زوجة واحدة فقط للحالة: متزوج/متزوجة.'
+                        );
+                    }
+
+                    // منطقيًا: أقل شيء الموظف + زوج/زوجة
+                    if ($count < 2) {
+                        $validator->errors()->add(
+                            'family',
+                            'الحد الأدنى لأفراد الأسرة في حالة متزوج/متزوجة هو: الموظف + زوج/زوجة.'
+                        );
+                    }
                     break;
             }
 
-            // تكرار داخل نفس الطلب (اسم + تاريخ ميلاد)
-            $fam = collect($family)
+            // 4) تكرار داخل نفس الطلب (اسم + تاريخ ميلاد)
+            $fam = $famCollection
                 ->filter(fn($r) => filled($r['name'] ?? null) || filled($r['birth_date'] ?? null));
-            $dups = $fam->groupBy(fn($r) => trim(($r['name'] ?? '').'|'.($r['birth_date'] ?? '')))
+
+            $dups = $fam->groupBy(function ($r) {
+                $name  = trim($r['name'] ?? '');
+                $birth = $r['birth_date'] ?? '';
+                return $name.'|'.$birth;
+            })
                 ->filter(fn($g) => $g->count() > 1);
+
             if ($dups->isNotEmpty()) {
                 $validator->errors()->add('family', 'يوجد تكرار لأفراد أسرة (الاسم + تاريخ الميلاد).');
             }
 
-            // تحقق عمر الطالب الجامعي 17-30
-            $today = now()->toDateString();
+            // 5) تحقق عمر الطالب الجامعي 17-30 + صحة تاريخ الميلاد
             foreach ($family as $idx => $member) {
-                $row = $idx + 1;
-                $birth = $member['birth_date'] ?? null;
-                $student = $member['is_student'] ?? null;
+                $row      = $idx + 1;
+                $birth    = $member['birth_date'] ?? null;
+                $student  = $member['is_student'] ?? null;
 
                 if (!empty($birth)) {
-                    if (!strtotime($birth) || $birth > $today) {
-                        $validator->errors()->add("family.$idx.birth_date", "تاريخ الميلاد في صف ($row) غير صالح.");
-                    } elseif ($student === 'yes') {
-                        $age = Carbon::parse($birth)->age;
-                        if ($age < 17 || $age > 30) {
-                            $validator->errors()->add("family.$idx.is_student", "عمر الطالب الجامعي يجب أن يكون بين 17 و 30 سنة (صف $row).");
+                    try {
+                        $birthDate = Carbon::parse($birth);
+
+                        if ($birthDate->isFuture()) {
+                            $validator->errors()->add("family.$idx.birth_date", "تاريخ الميلاد في صف ($row) غير صالح (تاريخ مستقبلي).");
+                            continue;
                         }
+
+                        if ($student === 'yes') {
+                            $age = $birthDate->age;
+                            if ($age < 17 || $age > 30) {
+                                $validator->errors()->add(
+                                    "family.$idx.is_student",
+                                    "عمر الطالب الجامعي يجب أن يكون بين 17 و 30 سنة (صف $row)."
+                                );
+                            }
+                        }
+                    } catch (\Exception $e) {
+                        $validator->errors()->add("family.$idx.birth_date", "تاريخ الميلاد في صف ($row) غير صالح.");
                     }
                 }
             }
@@ -143,20 +208,27 @@ class StoreDependentsRequest extends FormRequest
         return [
             'employee_number.unique' => 'الرقم الوظيفي مستخدم مسبقًا.',
             'national_id.unique'     => 'رقم الهوية مستخدم مسبقًا.',
-            'employee_number.required' => 'الرقم الوظيفي مطلوب.',
-            'employee_number.numeric'  => 'الرقم الوظيفي يجب أن يكون رقميًا.',
-            'employee_number.max'      => 'الرقم الوظيفي يجب أن يكون أقل من 2000.',
+
+            'employee_number.required'       => 'الرقم الوظيفي مطلوب.',
+            'employee_number.numeric'        => 'الرقم الوظيفي يجب أن يكون رقميًا.',
+            'employee_number.max'            => 'الرقم الوظيفي يجب أن يكون أقل من 2000.',
             'employee_number.digits_between' => 'الرقم الوظيفي يجب ألا يتجاوز 4 أرقام.',
+
             'national_id.required'  => 'رقم الهوية مطلوب.',
             'national_id.digits'    => 'رقم الهوية يجب أن يتكون من 9 أرقام.',
+
             'mobile.required'       => 'رقم الجوال مطلوب.',
             'mobile.digits_between' => 'رقم الجوال يجب ألا يتجاوز 10 أرقام.',
+
             'location.required'     => 'اختيار المقر مطلوب.',
             'location.in'           => 'المقر غير صحيح.',
-            'housing_type.required' => 'حالة السكن مطلوبة.',
-            'current_address.required' => 'العنوان الحالي بعد النزوح مطلوب.',
-            'password.required'     => 'كلمة المرور مطلوبة.',
-            'password.confirmed'    => 'تأكيد كلمة المرور غير مطابق.',
+
+            'marital_status.required' => 'الحالة الاجتماعية مطلوبة.',
+
+            'housing_type.required'   => 'حالة السكن مطلوبة.',
+            'current_address.required'=> 'العنوان الحالي بعد النزوح مطلوب.',
+
+            'family.required'         => 'بيانات الأسرة مطلوبة.',
         ];
     }
 
@@ -179,10 +251,13 @@ class StoreDependentsRequest extends FormRequest
             'whatsapp'        => preg_replace('/\D/', '', $normalizeDigits($this->whatsapp ?? '')),
         ]);
 
-        // Clean family rows
+        // Clean family rows (إزالة الصفوف الفارغة)
         if (is_array($this->family)) {
             $clean = array_values(array_filter($this->family, function ($row) {
-                return !empty($row['name']) || !empty($row['relation']) || !empty($row['birth_date']) || !empty($row['is_student']);
+                return !empty($row['name'])
+                    || !empty($row['relation'])
+                    || !empty($row['birth_date'])
+                    || !empty($row['is_student']);
             }));
             $this->merge(['family' => $clean]);
         }
