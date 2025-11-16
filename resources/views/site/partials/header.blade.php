@@ -31,7 +31,7 @@
                                 <ul>
                                     <li><a href="#who-us"> من نحن</a></li>
                                     <li><a href="#section-why-choose-us">لماذا تختارنا</a></li>
-                                    <li><a href="">كلمة مدير عامالشركة</a></li>
+                                    <li><a href="{{route('company.general-manager-message')}}">كلمة مدير عام الشركة</a></li>
                                     <li><a href="https://www.gedcoboard.com/" target="_blank" rel="noopener">مجلس الإدارة</a></li>
 
                                 </ul>
