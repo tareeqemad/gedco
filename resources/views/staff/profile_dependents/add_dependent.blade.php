@@ -155,8 +155,8 @@
                 <div class="grid grid-3">
                     <label class="field required">
                         <span>رقم الهوية</span>
-                        <input type="text" name="national_id" value="{{ old('national_id') }}"
-                               required maxlength="9" pattern="\d{9}" class="@error('national_id') is-invalid @enderror">
+                        <input type="text" name="national_id" id="national_id_input" value="{{ old('national_id') }}"
+                               required maxlength="9" pattern="\d{9}" inputmode="numeric" class="@error('national_id') is-invalid @enderror">
                         @error('national_id') <small class="text-danger">{{ $message }}</small> @enderror
                     </label>
 
@@ -418,6 +418,8 @@
     </form>
 </div>
 
+<link rel="stylesheet" href="{{ asset('assets/admin/libs/sweetalert2/sweetalert2.min.css') }}">
+<script src="{{ asset('assets/admin/libs/sweetalert2/sweetalert2.min.js') }}"></script>
 <script>
     (() => {
         const template = document.getElementById('family-row-template');
@@ -455,6 +457,17 @@
                 select.disabled = true;
                 select.classList.add('bg-light');
                 select.style.cursor = 'not-allowed';
+                // إضافة hidden input لضمان إرسال القيمة (لأن disabled inputs لا تُرسل)
+                let hiddenInput = row.querySelector('input[type="hidden"][name*="[relation]"]');
+                if (!hiddenInput) {
+                    hiddenInput = document.createElement('input');
+                    hiddenInput.type = 'hidden';
+                    hiddenInput.name = select.name;
+                    hiddenInput.value = 'self';
+                    select.insertAdjacentElement('afterend', hiddenInput);
+                } else {
+                    hiddenInput.value = 'self';
+                }
             } else {
                 select.disabled = false;
                 select.classList.remove('bg-light');
@@ -688,6 +701,7 @@
         const maritalEl       = document.querySelector('select[name="marital_status"]');
         const jobTitleEl      = document.querySelector('input[name="job_title"]');
         const locationEl      = document.querySelector('select[name="location"]');
+        const departmentEl    = document.querySelector('input[name="department"]');
         const employeeNoEl    = document.querySelector('input[name="employee_number"]');
 
         function setIfEmpty(input, value) {
@@ -743,7 +757,7 @@
             return `${mo}/${d}/${y}`;
         }
 
-        // قفل الحقول غير القابلة للتعديل من المستخدم
+        // قفل الحقول غير القابلة للتعديل من المستخدم (جميع الحقول من API ما عدا الحالة الاجتماعية)
         function lockImmutableFields() {
             if (fullNameEl) {
                 fullNameEl.readOnly = true;
@@ -761,6 +775,10 @@
                 jobTitleEl.readOnly = true;
                 jobTitleEl.setAttribute('aria-readonly', 'true');
             }
+            if (departmentEl) {
+                departmentEl.readOnly = true;
+                departmentEl.setAttribute('aria-readonly', 'true');
+            }
             if (locationEl) {
                 // mirror value to hidden input to ensure submission
                 locationEl.disabled = true;
@@ -773,6 +791,7 @@
                     locationEl.insertAdjacentElement('afterend', mirror);
                 }
             }
+            // ملاحظة: marital_status (الحالة الاجتماعية) غير مقفول - يمكن للمستخدم تعديله
         }
         lockImmutableFields();
 
@@ -796,11 +815,45 @@
 
         async function fetchEmployeeById(id) {
             // محاولة مباشرة (قد تفشل بسبب CORS)
+            const apiUrl = '{{ config("staff.employee_lookup_api_url", "https://eservices.gedco.ps/api/employees/search") }}';
             try {
-                const direct = await fetch(`https://eservices.gedco.ps/employees/search/${id}`, { method: 'GET' });
+                // جرب POST مع id أولاً
+                let direct = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({ id: id })
+                });
+
+                // إذا فشل، جرب POST مع national_id
+                if (!direct.ok) {
+                    direct = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json'
+                        },
+                        body: JSON.stringify({ national_id: id })
+                    });
+                }
+
                 if (direct.ok) {
                     const json = await direct.json();
-                    const row = (json?.data_rows || [])[0] || null;
+
+                    // دعم بنيات مختلفة للاستجابة
+                    let row = null;
+                    if (json?.data_rows && Array.isArray(json.data_rows)) {
+                        row = json.data_rows[0] || null;
+                    } else if (json?.data && Array.isArray(json.data)) {
+                        row = Array.isArray(json.data[0]) ? json.data[0] : json.data;
+                    } else if (Array.isArray(json) && json[0]) {
+                        row = json[0];
+                    } else if (json && json.NAME) {
+                        row = json;
+                    }
+
                     if (row) {
                         return {
                             full_name: row.NAME || '',
@@ -808,25 +861,44 @@
                             marital_status_text: row.STATUS_NAME || '',
                             job_title: row.W_NO_ADMIN_NAME || '',
                             branch: row.BRAN_NAME || '',
+                            department: row.HEAD_DEPARTMENT_NAME || row.DEPT_NAME || row.DEPARTMENT || row.ADMIN_NAME || row.DEPT || '',
                             employee_number: row.NO || ''
                         };
                     }
                 }
-            } catch (_) {}
+            } catch (e) {
+                // Direct API call failed, trying server proxy
+            }
 
             // بروكسي عبر السيرفر
-            const resp = await fetch(`{{ route('staff.profile.lookup') }}?id=${encodeURIComponent(id)}`, { method: 'GET', headers: { 'Accept': 'application/json' } });
-            if (!resp.ok) throw new Error('lookup_failed');
-            const payload = await resp.json();
-            if (!payload?.ok) throw new Error(payload?.message || 'not_ok');
-            return {
-                full_name: payload.data?.full_name || '',
-                birth_date: toEnglishDigits(payload.data?.birth_date || ''),
-                marital_status: payload.data?.marital_status || '',
-                job_title: payload.data?.job_title || '',
-                location: payload.data?.location || '',
-                employee_number: payload.data?.employee_number || ''
-            };
+            try {
+                const resp = await fetch(`{{ route('staff.profile.lookup') }}?id=${encodeURIComponent(id)}`, {
+                    method: 'GET',
+                    headers: { 'Accept': 'application/json' }
+                });
+
+                if (!resp.ok) {
+                    throw new Error('lookup_failed');
+                }
+
+                const payload = await resp.json();
+
+                if (!payload?.ok) {
+                    throw new Error(payload?.message || 'not_ok');
+                }
+
+                return {
+                    full_name: payload.data?.full_name || '',
+                    birth_date: toEnglishDigits(payload.data?.birth_date || ''),
+                    marital_status: payload.data?.marital_status || '',
+                    job_title: payload.data?.job_title || '',
+                    location: payload.data?.location || '',
+                    department: payload.data?.department || '',
+                    employee_number: payload.data?.employee_number || ''
+                };
+            } catch (e) {
+                throw e;
+            }
         }
 
         function mapMaritalToValue(text) {
@@ -870,6 +942,7 @@
             if (jobTitleEl)   jobTitleEl.value = '';
             if (maritalEl)    maritalEl.value = '';
             if (locationEl)   locationEl.value = '';
+            if (departmentEl) departmentEl.value = '';
             const mirror = document.querySelector('input[type="hidden"][name="location"]');
             if (mirror) mirror.value = '';
         }
@@ -885,6 +958,7 @@
             if (fullNameEl)    fullNameEl.value    = data.full_name || '';
             if (employeeNoEl)  employeeNoEl.value  = (data.employee_number || '').toString();
             if (jobTitleEl)    jobTitleEl.value    = data.job_title || '';
+            if (departmentEl)  departmentEl.value = data.department || '';
             if (maritalEl) {
                 const val = data.marital_status || mapMaritalToValue(data.marital_status_text || '');
                 if (val && Array.from(maritalEl.options).some(o => o.value === val)) {
@@ -899,6 +973,9 @@
                     if (mirror) mirror.value = String(loc);
                 }
             }
+
+            // إعادة قفل الحقول بعد ملء البيانات من API (لضمان أن الحقول التي تم ملؤها مقفولة)
+            lockImmutableFields();
         }
 
         async function fetchAndFillByCurrentId() {
@@ -915,12 +992,41 @@
             nationalIdInput.style.opacity = 0.7;
             try {
                 const data = await fetchEmployeeById(id);
-                fillFromData(data);
-                lastFetchedId = id;
+                if (data && (data.full_name || data.employee_number)) {
+                    fillFromData(data);
+                    lastFetchedId = id;
+                } else {
+                    clearFetchedFields();
+                    lastFetchedId = '';
+                    // عرض alert عند عدم العثور على بيانات
+                    if (typeof Swal !== 'undefined') {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'خطأ في رقم الهوية',
+                            text: 'يرجى المحاولة مرة أخرى',
+                            confirmButtonText: 'حسناً',
+                            confirmButtonColor: '#ef7c4c'
+                        });
+                    } else {
+                        alert('خطأ في رقم الهوية. يرجى المحاولة مرة أخرى.');
+                    }
+                }
             } catch (e) {
                 // في حال الخطأ/عدم العثور امسح القيم المعروضة
                 clearFetchedFields();
                 lastFetchedId = '';
+                // عرض alert عند حدوث خطأ - نعتبره خطأ في رقم الهوية
+                if (typeof Swal !== 'undefined') {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'خطأ في رقم الهوية',
+                        text: 'يرجى المحاولة مرة أخرى',
+                        confirmButtonText: 'حسناً',
+                        confirmButtonColor: '#ef7c4c'
+                    });
+                } else {
+                    alert('خطأ في رقم الهوية. يرجى المحاولة مرة أخرى.');
+                }
             } finally {
                 nationalIdInput.disabled = false;
                 nationalIdInput.style.opacity = 1;
@@ -937,7 +1043,43 @@
         nationalIdInput?.addEventListener('input', debounceFetch);
         nationalIdInput?.addEventListener('change', fetchAndFillByCurrentId);
         nationalIdInput?.addEventListener('blur', fetchAndFillByCurrentId);
+
+        // منع إدخال أي شيء غير الأرقام في حقل رقم الهوية
+        if (nationalIdInput) {
+            nationalIdInput.addEventListener('keypress', function(e) {
+                // السماح فقط بالأرقام (0-9)
+                const char = String.fromCharCode(e.which);
+                if (!/[0-9]/.test(char)) {
+                    e.preventDefault();
+                    return false;
+                }
+            });
+
+            // منع اللصق (paste) للأرقام فقط
+            nationalIdInput.addEventListener('paste', function(e) {
+                e.preventDefault();
+                const pastedText = (e.clipboardData || window.clipboardData).getData('text');
+                // استخرج الأرقام فقط من النص المنسوخ
+                const numbersOnly = pastedText.replace(/\D/g, '');
+                if (numbersOnly) {
+                    this.value = numbersOnly.substring(0, 9); // حد أقصى 9 أرقام
+                    // تشغيل البحث تلقائياً بعد اللصق
+                    debounceFetch();
+                }
+            });
+
+            // منع إدخال أي شيء غير الأرقام عند الكتابة
+            nationalIdInput.addEventListener('input', function(e) {
+                // إزالة أي شيء غير الأرقام
+                this.value = this.value.replace(/\D/g, '');
+                // حد أقصى 9 أرقام
+                if (this.value.length > 9) {
+                    this.value = this.value.substring(0, 9);
+                }
+            });
+        }
     })();
 </script>
 </body>
 </html>
+

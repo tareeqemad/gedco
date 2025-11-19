@@ -12,55 +12,59 @@ class ProfileEditAuthController extends Controller
     public function showVerifyForm(Request $request): View
     {
         return view('staff.profile_dependents.verify', [
-            // تعبئة مسبقة لراحة المستخدم
-            'prefill_by'    => $request->old('by', $request->query('by', 'national_id')), // national_id | employee_number
-            'prefill_value' => $request->old('value', $request->query('value')),
+            'prefill_national_id' => $request->old('national_id', $request->query('national_id')),
         ]);
     }
 
     public function verify(Request $request)
     {
+        // اليوزر ما بدخل إلا رقم الهوية
         $data = $request->validate([
-            'by'       => ['required', 'in:national_id,employee_number'],
-            'value'    => ['required', 'string', 'max:20'],
-            'password' => ['required', 'string', 'min:6'],
+            'national_id' => ['required', 'digits:9'],
         ]);
 
+        // تنظيف الأرقام
+        $nationalId = preg_replace('/\D/', '', $data['national_id'] ?? '');
 
-        $value = preg_replace('/\D/', '', $data['value'] ?? '');
-
-        // ابحث حسب المفتاح المختار
+        // البحث فقط برقم الهوية
         $profile = StaffProfile::query()
-            ->when($data['by'] === 'national_id',     fn($q) => $q->where('national_id',     (int) $value))
-            ->when($data['by'] === 'employee_number', fn($q) => $q->where('employee_number', (int) $value))
+            ->where('national_id', (int)$nationalId)
             ->first();
 
+        /**
+         * لو ما في أي بروفايل بهذا الرقم:
+         * -> روح مباشرة على صفحة الإدخال (إنشاء جديد)
+         */
         if (!$profile) {
-            return back()
-                ->withErrors(['value' => 'لم يتم العثور على بيانات مطابقة.'])
-                ->withInput();
-        }
+            return redirect()
+                ->route('staff.profile.create')
+                ->with('info', 'لا توجد بيانات سابقة لهذا رقم الهوية، يمكنك الآن تعبئة النموذج.');        }
 
+        /**
+         * لو موجود لكن خلّص محاولات التعديل
+         */
         if (!$profile->canEdit()) {
             return back()
-                ->withErrors(['value' => 'انتهت محاولات التعديل المسموح بها.'])
+                ->withErrors(['national_id' => 'انتهت محاولات التعديل المسموح بها.'])
                 ->withInput();
         }
 
-        if (!$profile->verifyPassword($data['password'])) {
+        /**
+         * كلمة المرور المخزنة = رقم الهوية
+         * نتحقق داخلياً بدون ما نطلب كلمة مرور من المستخدم
+         */
+        if (!$profile->verifyPassword((string)$nationalId)) {
             return back()
-                ->withErrors(['password' => 'كلمة المرور غير صحيحة.'])
+                ->withErrors(['national_id' => 'تعذر التحقق من الهوية، يرجى مراجعة شؤون الموظفين.'])
                 ->withInput();
         }
 
-
+        // سماح التعديل في الـ session
         $request->session()->put('allowed_edit_profile_id', $profile->getKey());
-
         $request->session()->put('allowed_edit_expires_at', now()->addMinutes(30)->toISOString());
 
-
+        // تجديد session id
         $request->session()->migrate(true);
-
 
         return redirect()
             ->route('staff.profile.edit', ['profile' => $profile->getKey()])
