@@ -51,6 +51,7 @@
         .grid-3 { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
         .grid-2 { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
 
+
         .family-table { width:100%; border-collapse:collapse; border:1px solid rgba(239,124,76,.18); border-radius:16px; overflow:hidden; }
         .family-table thead th { background:var(--surface-alt); padding:.8rem; font-weight:700; color:var(--accent-dark); }
         .family-table td { padding:.6rem; border-top:1px solid rgba(239,124,76,.12); }
@@ -153,6 +154,13 @@
                 <div class="section-title">البيانات الأساسية</div>
                 <div class="grid grid-3">
                     <label class="field required">
+                        <span>رقم الهوية</span>
+                        <input type="text" name="national_id" value="{{ old('national_id') }}"
+                               required maxlength="9" pattern="\d{9}" class="@error('national_id') is-invalid @enderror">
+                        @error('national_id') <small class="text-danger">{{ $message }}</small> @enderror
+                    </label>
+
+                    <label class="field required">
                         <span>الاسم رباعي</span>
                         <input type="text" name="full_name" value="{{ old('full_name') }}" required
                                class="@error('full_name') is-invalid @enderror">
@@ -161,7 +169,7 @@
 
                     <label class="field">
                         <span>تاريخ الميلاد</span>
-                        <input type="date" name="birth_date" value="{{ old('birth_date') }}">
+                        <input type="text" name="birth_date" value="{{ old('birth_date') }}" inputmode="numeric" pattern="\d{4}-\d{2}-\d{2}" autocomplete="off">
                     </label>
 
                     <label class="field required">
@@ -169,13 +177,6 @@
                         <input type="text" name="employee_number" value="{{ old('employee_number') }}" required
                                maxlength="4" pattern="\d{1,4}" class="@error('employee_number') is-invalid @enderror">
                         @error('employee_number') <small class="text-danger">{{ $message }}</small> @enderror
-                    </label>
-
-                    <label class="field required">
-                        <span>رقم الهوية</span>
-                        <input type="text" name="national_id" value="{{ old('national_id') }}"
-                               required maxlength="9" pattern="\d{9}" class="@error('national_id') is-invalid @enderror">
-                        @error('national_id') <small class="text-danger">{{ $message }}</small> @enderror
                     </label>
 
                     <label class="field">
@@ -677,6 +678,265 @@
                 form.classList.add('was-validated');
             }, false);
         });
+
+        // (تم إلغاء عرض النص الإنجليزي أسفل الحقل وإرجاعه كما كان)
+
+        // جلب تلقائي عبر رقم الهوية
+        const nationalIdInput = document.querySelector('input[name="national_id"]');
+        const fullNameEl      = document.querySelector('input[name="full_name"]');
+        const birthDateEl     = document.querySelector('input[name="birth_date"]');
+        const maritalEl       = document.querySelector('select[name="marital_status"]');
+        const jobTitleEl      = document.querySelector('input[name="job_title"]');
+        const locationEl      = document.querySelector('select[name="location"]');
+        const employeeNoEl    = document.querySelector('input[name="employee_number"]');
+
+        function setIfEmpty(input, value) {
+            if (!input) return;
+            if (!input.value) { input.value = value || ''; }
+        }
+
+        // تحويل أرقام عربية/فارسية إلى إنجليزية
+        function toEnglishDigits(str) {
+            if (!str) return '';
+            return String(str)
+                .replace(/[٠-٩]/g, d => '٠١٢٣٤٥٦٧٨٩'.indexOf(d))
+                .replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d));
+        }
+
+        // صيغ التاريخ:
+        // - ISO: YYYY-MM-DD (لاستخدام input[type=date])
+        // - DISPLAY: MM/DD/YYYY (لعرض النص)
+        function toISODate(v) {
+            const s = toEnglishDigits(v || '').trim();
+            if (!s) return '';
+            // نمط ISO
+            let m = s.match(/^(\d{4})[-\/](\d{1,2})[-\/](\d{1,2})$/);
+            if (m) {
+                const y = m[1];
+                const mo = m[2].padStart(2, '0');
+                const d  = m[3].padStart(2, '0');
+                return `${y}-${mo}-${d}`;
+            }
+            // نمط MM/DD/YYYY
+            m = s.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})$/);
+            if (m) {
+                const mo = m[1].padStart(2, '0');
+                const d  = m[2].padStart(2, '0');
+                const y  = m[3];
+                return `${y}-${mo}-${d}`;
+            }
+            // اقتطاع مبسط إن لزم
+            const cleaned = s.replace(/[^\d]/g, '');
+            if (cleaned.length === 8) {
+                // حاول تفسيره كـ YYYYMMDD
+                const y = cleaned.slice(0,4);
+                const mo = cleaned.slice(4,6);
+                const d  = cleaned.slice(6,8);
+                return `${y}-${mo}-${d}`;
+            }
+            return '';
+        }
+        function toDisplayDate(iso) {
+            const s = toISODate(iso);
+            if (!s) return '';
+            const [y, mo, d] = s.split('-');
+            return `${mo}/${d}/${y}`;
+        }
+
+        // قفل الحقول غير القابلة للتعديل من المستخدم
+        function lockImmutableFields() {
+            if (fullNameEl) {
+                fullNameEl.readOnly = true;
+                fullNameEl.setAttribute('aria-readonly', 'true');
+            }
+            if (birthDateEl) {
+                birthDateEl.readOnly = true;
+                birthDateEl.setAttribute('aria-readonly', 'true');
+            }
+            if (employeeNoEl) {
+                employeeNoEl.readOnly = true;
+                employeeNoEl.setAttribute('aria-readonly', 'true');
+            }
+            if (jobTitleEl) {
+                jobTitleEl.readOnly = true;
+                jobTitleEl.setAttribute('aria-readonly', 'true');
+            }
+            if (locationEl) {
+                // mirror value to hidden input to ensure submission
+                locationEl.disabled = true;
+                let mirror = document.querySelector('input[type="hidden"][name="location"]');
+                if (!mirror) {
+                    mirror = document.createElement('input');
+                    mirror.type = 'hidden';
+                    mirror.name = 'location';
+                    mirror.value = locationEl.value || '';
+                    locationEl.insertAdjacentElement('afterend', mirror);
+                }
+            }
+        }
+        lockImmutableFields();
+
+        if (mainBirthInput) {
+            // عند التركيز: استخدم منتقي التاريخ
+            mainBirthInput.addEventListener('focus', () => {
+                if (mainBirthInput.readOnly) return;
+                const val = toISODate(mainBirthInput.value);
+                mainBirthInput.type = 'date';
+                if (val) mainBirthInput.value = val;
+            });
+            // عند الخروج: اعرض كنص ثابت بأرقام إنجليزية
+            mainBirthInput.addEventListener('blur', () => {
+                const iso = toISODate(mainBirthInput.value);
+                mainBirthInput.type = 'text';
+                mainBirthInput.value = toDisplayDate(iso);
+            });
+            // تطبيع فوري للقيمة الحالية عند التحميل
+            mainBirthInput.value = toDisplayDate(toISODate(mainBirthInput.value));
+        }
+
+        async function fetchEmployeeById(id) {
+            // محاولة مباشرة (قد تفشل بسبب CORS)
+            try {
+                const direct = await fetch(`https://eservices.gedco.ps/employees/search/${id}`, { method: 'GET' });
+                if (direct.ok) {
+                    const json = await direct.json();
+                    const row = (json?.data_rows || [])[0] || null;
+                    if (row) {
+                        return {
+                            full_name: row.NAME || '',
+                            birth_date: toEnglishDigits((row.BIRTH_DATE || '').slice(0,10)),
+                            marital_status_text: row.STATUS_NAME || '',
+                            job_title: row.W_NO_ADMIN_NAME || '',
+                            branch: row.BRAN_NAME || '',
+                            employee_number: row.NO || ''
+                        };
+                    }
+                }
+            } catch (_) {}
+
+            // بروكسي عبر السيرفر
+            const resp = await fetch(`{{ route('staff.profile.lookup') }}?id=${encodeURIComponent(id)}`, { method: 'GET', headers: { 'Accept': 'application/json' } });
+            if (!resp.ok) throw new Error('lookup_failed');
+            const payload = await resp.json();
+            if (!payload?.ok) throw new Error(payload?.message || 'not_ok');
+            return {
+                full_name: payload.data?.full_name || '',
+                birth_date: toEnglishDigits(payload.data?.birth_date || ''),
+                marital_status: payload.data?.marital_status || '',
+                job_title: payload.data?.job_title || '',
+                location: payload.data?.location || '',
+                employee_number: payload.data?.employee_number || ''
+            };
+        }
+
+        function mapMaritalToValue(text) {
+            if (!text) return '';
+            if (text.includes('أعزب')) return 'single';
+            if (text.includes('متزوج')) return 'married';
+            if (text.includes('أرمل')) return 'widowed';
+            if (text.includes('مطلق')) return 'divorced';
+            return '';
+        }
+
+        function mapBranchToLocation(branch) {
+            if (!branch) return '';
+            const b = branch.toLowerCase();
+            if (b.includes('الرئيس')) return '1';
+            if (b.includes('غزة')) return '2';
+            if (b.includes('الشمال')) return '3';
+            if (b.includes('الوسطى')) return '4';
+            if (b.includes('خانيونس')) return '6';
+            if (b.includes('رفح')) return '7';
+            if (b.includes('الصيانة')) return '8';
+            return '';
+        }
+
+        let lookupInFlight = false;
+        let lastFetchedId = '';
+        let debounceTimer = null;
+
+        function sanitizeId(value) {
+            return (value || '').toString().replace(/\D/g, '');
+        }
+
+        // تفريغ القيم المجلوبة عند فشل/عدم العثور
+        function clearFetchedFields() {
+            if (fullNameEl)   fullNameEl.value = '';
+            if (birthDateEl) {
+                birthDateEl.type = 'text';
+                birthDateEl.value = '';
+            }
+            if (employeeNoEl) employeeNoEl.value = '';
+            if (jobTitleEl)   jobTitleEl.value = '';
+            if (maritalEl)    maritalEl.value = '';
+            if (locationEl)   locationEl.value = '';
+            const mirror = document.querySelector('input[type="hidden"][name="location"]');
+            if (mirror) mirror.value = '';
+        }
+
+        function fillFromData(data) {
+            if (!data) return;
+            if (birthDateEl) {
+                const v = toDisplayDate(toISODate(data.birth_date || ''));
+                const wasFocused = document.activeElement === birthDateEl;
+                if (!wasFocused) birthDateEl.type = 'text';
+                birthDateEl.value = v;
+            }
+            if (fullNameEl)    fullNameEl.value    = data.full_name || '';
+            if (employeeNoEl)  employeeNoEl.value  = (data.employee_number || '').toString();
+            if (jobTitleEl)    jobTitleEl.value    = data.job_title || '';
+            if (maritalEl) {
+                const val = data.marital_status || mapMaritalToValue(data.marital_status_text || '');
+                if (val && Array.from(maritalEl.options).some(o => o.value === val)) {
+                    maritalEl.value = val;
+                }
+            }
+            if (locationEl) {
+                const loc = data.location || mapBranchToLocation(data.branch || '');
+                if (loc && Array.from(locationEl.options).some(o => o.value === String(loc))) {
+                    locationEl.value = String(loc);
+                    const mirror = document.querySelector('input[type="hidden"][name="location"]');
+                    if (mirror) mirror.value = String(loc);
+                }
+            }
+        }
+
+        async function fetchAndFillByCurrentId() {
+            const id = sanitizeId(nationalIdInput?.value || '');
+            if (lookupInFlight) return;
+            if (id.length !== 9) {
+                lastFetchedId = '';
+                clearFetchedFields();
+                return;
+            }
+            if (id === lastFetchedId) return;
+            lookupInFlight = true;
+            nationalIdInput.disabled = true;
+            nationalIdInput.style.opacity = 0.7;
+            try {
+                const data = await fetchEmployeeById(id);
+                fillFromData(data);
+                lastFetchedId = id;
+            } catch (e) {
+                // في حال الخطأ/عدم العثور امسح القيم المعروضة
+                clearFetchedFields();
+                lastFetchedId = '';
+            } finally {
+                nationalIdInput.disabled = false;
+                nationalIdInput.style.opacity = 1;
+                lookupInFlight = false;
+            }
+        }
+
+        function debounceFetch() {
+            if (!nationalIdInput) return;
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(fetchAndFillByCurrentId, 500);
+        }
+
+        nationalIdInput?.addEventListener('input', debounceFetch);
+        nationalIdInput?.addEventListener('change', fetchAndFillByCurrentId);
+        nationalIdInput?.addEventListener('blur', fetchAndFillByCurrentId);
     })();
 </script>
 </body>
