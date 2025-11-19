@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use Carbon\Carbon;
+use App\Models\StaffProfile;
 
 class UpdateDependentsRequest extends FormRequest
 {
@@ -15,8 +16,20 @@ class UpdateDependentsRequest extends FormRequest
 
     public function rules(): array
     {
-        // حاول نجيب الـ ID من الروت (عدّل الاسم حسب الراوت عندك)
-        $staffId = $this->route('staff') ?? $this->route('id');
+        // جلب الـ ID الصحيح من الراوت (يدعم: profile / staff / id)
+        $routeProfile = $this->route('profile')
+            ?? $this->route('staff')
+            ?? $this->route('id');
+
+        $staffId = $routeProfile instanceof StaffProfile
+            ? $routeProfile->getKey()
+            : $routeProfile;
+
+        // القيم المسموحة لعلاقة أفراد الأسرة (نضيف spouse كمان)
+        $relationKeys = array_keys(config('staff_enums.relation') ?? []);
+        if (! in_array('spouse', $relationKeys, true)) {
+            $relationKeys[] = 'spouse';
+        }
 
         return [
             'full_name'       => ['required','string','max:255'],
@@ -62,11 +75,11 @@ class UpdateDependentsRequest extends FormRequest
 
             'family'               => ['required','array','max:10'],
             'family.*.name'        => ['nullable','string','max:255'],
-            'family.*.relation'    => ['nullable', Rule::in(array_keys(config('staff_enums.relation')))],
+            'family.*.relation'    => ['nullable', Rule::in($relationKeys)],
             'family.*.birth_date'  => ['nullable','date'],
             'family.*.is_student'  => ['nullable', Rule::in(['yes','no'])],
 
-            // في التحديث غالباً كلمة المرور اختيارية
+            // في التحديث كلمة المرور اختيارية
             'password'              => ['nullable','string','min:6','confirmed'],
             'password_confirmation' => ['nullable','string','min:6'],
         ];
@@ -101,37 +114,32 @@ class UpdateDependentsRequest extends FormRequest
             // عدد "الموظف نفسه"
             $selfCount = $famCollection->where('relation', 'self')->count();
 
-            // عدد الأزواج والزوجات
-            $husbands = $famCollection->where('relation', 'husband')->count();
-            $wives    = $famCollection->where('relation', 'wife')->count();
-            $spousesTotal = $husbands + $wives;
+            // عدد الأزواج / الزوجات (ندعم spouse أيضاً)
+            $husbands      = $famCollection->where('relation', 'husband')->count();
+            $wives         = $famCollection->where('relation', 'wife')->count();
+            $genericSpouse = $famCollection->where('relation', 'spouse')->count();
+            $spousesTotal  = $husbands + $wives + $genericSpouse;
 
             // إجمالي أفراد الأسرة (يشمل الموظف)
             $count = $famCollection->count();
 
-            /**
-             * 1) الموظف لازم يكون موجود مرة واحدة فقط ضمن الأسرة
-             */
+            // 1) الموظف لازم يكون موجود مرة واحدة فقط ضمن الأسرة
             if ($selfCount === 0) {
                 $validator->errors()->add('family', 'يجب إدخال الموظف نفسه ضمن أفراد الأسرة (علاقة: الموظف نفسه).');
             } elseif ($selfCount > 1) {
                 $validator->errors()->add('family', 'يجب إدخال الموظف نفسه مرة واحدة فقط ضمن أفراد الأسرة.');
             }
 
-            /**
-             * 2) على الأقل فرد واحد في الأسرة (الموظف نفسه)
-             */
+            // 2) على الأقل فرد واحد في الأسرة (الموظف نفسه)
             if ($count < 1) {
                 $validator->errors()->add('family', 'يجب إدخال فرد أسرة واحد على الأقل (الموظف نفسه).');
             }
 
-            /**
-             * 3) منطق الحالة الاجتماعية مع الزوج/الزوجة
-             */
+            // 3) منطق الحالة الاجتماعية مع الزوج/الزوجة
             switch ($marital) {
-                case 'single':   // أعزب/عزباء
-                case 'widowed':  // أرمل/أرملة
-                case 'divorced': // مطلق/مطلقة
+                case 'single':
+                case 'widowed':
+                case 'divorced':
                     if ($spousesTotal > 0) {
                         $validator->errors()->add(
                             'family',
@@ -140,16 +148,16 @@ class UpdateDependentsRequest extends FormRequest
                     }
                     break;
 
-                case 'married': // متزوج/متزوجة
-                    // لا يمكن أكثر من زوج واحد أو أكثر من زوجة واحدة
-                    if ($husbands > 1 || $wives > 1) {
+                case 'married':
+                    // أكثر من سجل واحد لزوج/زوجة (بأي صيغة) ممنوع
+                    if ($spousesTotal > 1) {
                         $validator->errors()->add(
                             'family',
                             'لا يمكن إدخال أكثر من زوج واحد أو أكثر من زوجة واحدة.'
                         );
                     }
 
-                    // مجموع الأزواج/الزوجات لازم يكون واحد فقط (زوج أو زوجة)
+                    // لازم يكون في بالضبط زوج/زوجة واحد
                     if ($spousesTotal !== 1) {
                         $validator->errors()->add(
                             'family',
@@ -167,9 +175,7 @@ class UpdateDependentsRequest extends FormRequest
                     break;
             }
 
-            /**
-             * 4) تكرار داخل نفس الطلب (اسم + تاريخ ميلاد)
-             */
+            // 4) تكرار داخل نفس الطلب (اسم + تاريخ ميلاد)
             $fam = $famCollection
                 ->filter(fn($r) => filled($r['name'] ?? null) || filled($r['birth_date'] ?? null));
 
@@ -184,9 +190,7 @@ class UpdateDependentsRequest extends FormRequest
                 $validator->errors()->add('family', 'يوجد تكرار لأفراد أسرة (الاسم + تاريخ الميلاد).');
             }
 
-            /**
-             * 5) تحقق عمر الطالب الجامعي 17-30 + صحة تاريخ الميلاد
-             */
+            // 5) تحقق عمر الطالب الجامعي 17-30 + صحة تاريخ الميلاد
             foreach ($family as $idx => $member) {
                 $row      = $idx + 1;
                 $birth    = $member['birth_date'] ?? null;
@@ -266,15 +270,24 @@ class UpdateDependentsRequest extends FormRequest
             'whatsapp'        => preg_replace('/\D/', '', $normalizeDigits($this->whatsapp ?? '')),
         ]);
 
-        // Clean family rows (إزالة الصفوف الفارغة)
+        // تنظيف صفوف الأسرة + إجبار الصف الأول يكون "self"
         if (is_array($this->family)) {
-            $clean = array_values(array_filter($this->family, function ($row) {
-                return !empty($row['name'])
-                    || !empty($row['relation'])
-                    || !empty($row['birth_date'])
-                    || !empty($row['is_student']);
-            }));
-            $this->merge(['family' => $clean]);
+            $clean = [];
+            foreach ($this->family as $index => $row) {
+                if ($index === 0) {
+                    // إجبار أول صف أن يكون الموظف نفسه
+                    $row['relation'] = 'self';
+                    $clean[] = $row;
+                } elseif (
+                    !empty($row['name']) ||
+                    !empty($row['relation']) ||
+                    !empty($row['birth_date']) ||
+                    !empty($row['is_student'])
+                ) {
+                    $clean[] = $row;
+                }
+            }
+            $this->merge(['family' => array_values($clean)]);
         }
     }
 }

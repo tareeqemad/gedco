@@ -86,32 +86,43 @@
 <body>
 
 @php
+    use Carbon\Carbon;
+
     // من config/staff_enums.php لو موجود، وإلا fallback
     $LOC     = config('staff_enums.locations', ['1'=>'المقر الرئيسي','2'=>'مقر غزة','3'=>'مقر الشمال','4'=>'مقر الوسطى','6'=>'مقر خانيونس','7'=>'مقر رفح','8'=>'مقر الصيانة - غزة']);
     $HOUSE   = config('staff_enums.house_status', ['intact'=>'سليم','partial'=>'هدم جزئي','demolished'=>'هدم كلي']);
     $HOUSING = config('staff_enums.housing_type', ['house'=>'منزل','apartment'=>'شقة','tent'=>'خيمة','other'=>'أخرى']);
     $MARITAL = config('staff_enums.marital_status', ['single'=>'أعزب/عزباء','married'=>'متزوج/متزوجة','widowed'=>'أرمل/أرملة','divorced'=>'مطلق/مطلقة']);
 
+    // صف الموظف نفسه (نضيفه أول واحد)
+    $selfRow = [
+        'name'       => $profile->full_name,
+        'relation'   => 'self',
+        'birth_date' => $profile->birth_date
+            ? Carbon::parse($profile->birth_date)->toDateString()
+            : null,
+        'is_student' => '',
+    ];
 
-   use Carbon\Carbon;
-
+    // أفراد الأسرة من الجدول
     $dependentsData = ($profile->dependents ?? collect())->map(function($d){
-
         $birth = $d->birth_date;
         if ($birth instanceof Carbon) {
             $birth = $birth->toDateString();
-        } elseif (is_string($birth) && preg_match('/^\d{4}-\d{2}-\d{2}$/', $birth) === 0) {
-
+        } elseif (is_string($birth)) {
             try { $birth = Carbon::parse($birth)->toDateString(); } catch (\Throwable $e) { $birth = null; }
         }
 
         return [
             'name'       => $d->name,
-            'relation'   => $d->relation,
-            'birth_date' => $birth, // الآن مضمون Y-m-d أو null
+            'relation'   => $d->relation, // spouse/son/daughter/other
+            'birth_date' => $birth,
             'is_student' => $d->is_student ? 'yes' : 'no',
         ];
     })->values();
+
+    // نجهز مصفوفة initial family (الموظف نفسه + التوابع)
+    $serverFamily = collect([$selfRow])->merge($dependentsData)->values();
 @endphp
 
 <div class="form-shell">
@@ -377,88 +388,159 @@
 
 <script>
     (() => {
-        const template = document.getElementById('family-row-template');
-        const container = document.getElementById('family-rows');
-        const addButton = document.getElementById('add-family-member');
-        const familyCountInput = document.getElementById('family-count-input');
+        const template          = document.getElementById('family-row-template');
+        const container         = document.getElementById('family-rows');
+        const addButton         = document.getElementById('add-family-member');
+        const familyCountInput  = document.getElementById('family-count-input');
         const readinessSelectEl = document.getElementById('readiness-select');
-        const readinessNotesEl = document.getElementById('readiness-notes-field');
-        const statusSelectEl = document.getElementById('status-select');
-        const currentAddressEl = document.getElementById('current-address-field');
+        const readinessNotesEl  = document.getElementById('readiness-notes-field');
+        const statusSelectEl    = document.getElementById('status-select');
+        const currentAddressEl  = document.getElementById('current-address-field');
         const MAX_FAMILY_MEMBERS = parseInt(familyCountInput?.getAttribute('max') ?? '10', 10);
 
-        // Prefill from server ($profile->dependents) OR old('family')
-        const serverFamily = @json($dependentsData);
-        const oldFamily = @json(old('family', []));
-        const initialFamily = (Array.isArray(oldFamily) && oldFamily.filter(Boolean).length) ? oldFamily : serverFamily;
+        const serverFamily = @json($serverFamily);
+        const oldFamily    = @json(old('family', []));
+        const initialFamily = (Array.isArray(oldFamily) && oldFamily.filter(Boolean).length)
+            ? oldFamily
+            : serverFamily;
 
         if (!template || !container) return;
 
-        function updateIndices(){
+        function updateIndices() {
             container.querySelectorAll('tr').forEach((row, idx) => {
                 const index = idx + 1;
                 row.querySelector('.family-index').textContent = index;
+
                 row.querySelectorAll('[data-field]').forEach(input => {
                     const field = input.dataset.field;
                     input.name = `family[${index}][${field}]`;
                 });
+
+                const relationSelect = row.querySelector('[data-field="relation"]');
+
+                if (relationSelect) {
+                    if (index === 1) {
+                        // الصف الأول = الموظف نفسه دائماً
+                        relationSelect.innerHTML = `<option value="self">الموظف نفسه</option>`;
+                        relationSelect.value = 'self';
+                        relationSelect.disabled = true;
+                        relationSelect.classList.add('bg-light');
+                        relationSelect.style.cursor = 'not-allowed';
+
+                        // hidden input لأن disabled لا يُرسل
+                        let hidden = row.querySelector('input[type="hidden"][name*="[relation]"]');
+                        if (!hidden) {
+                            hidden = document.createElement('input');
+                            hidden.type = 'hidden';
+                            hidden.name = relationSelect.name;
+                            hidden.value = 'self';
+                            relationSelect.insertAdjacentElement('afterend', hidden);
+                        } else {
+                            hidden.value = 'self';
+                        }
+                    } else {
+                        // باقي الصفوف: صلة القرابة عادية
+                        if (relationSelect.disabled) {
+                            relationSelect.disabled = false;
+                            relationSelect.classList.remove('bg-light');
+                            relationSelect.style.cursor = '';
+                        }
+
+                        if (!relationSelect.options.length || relationSelect.options[0].value === 'self') {
+                            relationSelect.innerHTML = `
+                                <option value="">_______</option>
+                                <option value="spouse">زوج / زوجة</option>
+                                <option value="son">ابن</option>
+                                <option value="daughter">ابنة</option>
+                                <option value="other">أخرى</option>
+                            `;
+                        }
+                    }
+                }
             });
         }
-        function toggleRemoveState(){
+
+        function toggleRemoveState() {
             const rows = container.querySelectorAll('tr');
-            rows.forEach(row => {
+            rows.forEach((row, idx) => {
                 const btn = row.querySelector('.remove-member-btn');
-                if(!btn) return;
-                const disabled = rows.length === 1;
-                btn.disabled = disabled;
-                btn.style.opacity = disabled ? 0.5 : 1;
+                if (!btn) return;
+
+                if (idx === 0) {
+                    // لا يمكن حذف الموظف نفسه
+                    btn.disabled = true;
+                    btn.style.opacity = 0.5;
+                    btn.style.cursor = 'not-allowed';
+                } else {
+                    const disabled = rows.length === 1;
+                    btn.disabled = disabled;
+                    btn.style.opacity = disabled ? 0.5 : 1;
+                    btn.style.cursor = disabled ? 'not-allowed' : '';
+                }
             });
         }
-        function updateAddButtonState(){
+
+        function updateAddButtonState() {
             const count = container.querySelectorAll('tr').length;
             const disabled = count >= MAX_FAMILY_MEMBERS;
             addButton.disabled = disabled;
             addButton.style.opacity = disabled ? 0.5 : 1;
             addButton.setAttribute('aria-disabled', disabled ? 'true' : 'false');
         }
-        function createMemberRow(prefill=null){
+
+        function createMemberRow(prefill = null) {
             const row = template.content.firstElementChild.cloneNode(true);
             const removeButton = row.querySelector('.remove-member-btn');
-            if(prefill){
-                row.querySelector('[data-field="name"]').value = prefill.name ?? '';
-                row.querySelector('[data-field="relation"]').value = prefill.relation ?? '';
+
+            if (prefill) {
+                row.querySelector('[data-field="name"]').value       = prefill.name ?? '';
+                row.querySelector('[data-field="relation"]').value   = prefill.relation ?? '';
                 row.querySelector('[data-field="birth_date"]').value = prefill.birth_date ?? '';
                 row.querySelector('[data-field="is_student"]').value = prefill.is_student ?? '';
             }
+
             removeButton.addEventListener('click', () => {
+                const rows = container.querySelectorAll('tr');
+                if (row === rows[0]) return; // لا تحذف الموظف نفسه
                 row.remove();
                 const remaining = container.querySelectorAll('tr').length;
                 const nextCount = Math.max(remaining, 1);
                 ensureRowCount(nextCount);
                 if (familyCountInput) familyCountInput.value = nextCount;
             });
+
             return row;
         }
-        function ensureRowCount(desired, prefillList=null){
+
+        function ensureRowCount(desired, prefillList = null) {
             let target = Number.isFinite(desired) ? desired : 1;
             target = Math.max(1, Math.min(MAX_FAMILY_MEMBERS, target));
 
-            if(Array.isArray(prefillList)){
+            if (Array.isArray(prefillList)) {
                 container.innerHTML = '';
                 target = Math.max(1, Math.min(MAX_FAMILY_MEMBERS, prefillList.length || 1));
             }
+
             let current = container.querySelectorAll('tr').length;
 
-            while(current < target){
+            while (current < target) {
                 const prefill = Array.isArray(prefillList) ? (prefillList[current] || null) : null;
                 container.appendChild(createMemberRow(prefill));
                 current++;
             }
-            while(current > target){
-                container.removeChild(container.lastElementChild);
+
+            while (current > target) {
+                const lastRow = container.lastElementChild;
+                if (!lastRow) break;
+                const rows = container.querySelectorAll('tr');
+                if (lastRow === rows[0] && rows.length === 1) break;
+                container.removeChild(lastRow);
                 current--;
             }
-            updateIndices(); toggleRemoveState(); updateAddButtonState();
+
+            updateIndices();
+            toggleRemoveState();
+            updateAddButtonState();
         }
 
         // زر إضافة فرد
@@ -477,22 +559,20 @@
             ensureRowCount(desired);
         });
 
-        // بداية: تهيئة الصفوف
-        if(Array.isArray(initialFamily) && initialFamily.filter(Boolean).length){
-            const normalized = initialFamily.filter(Boolean).map(function(item){
-                return {
-                    name: item?.name ?? '',
-                    relation: item?.relation ?? '',
-                    birth_date: item?.birth_date ?? '',
-                    is_student: item?.is_student ?? ''
-                };
-            });
+        // تهيئة الصفوف أول مرة
+        if (Array.isArray(initialFamily) && initialFamily.filter(Boolean).length) {
+            const normalized = initialFamily.filter(Boolean).map(item => ({
+                name: item?.name ?? '',
+                relation: item?.relation ?? '',
+                birth_date: item?.birth_date ?? '',
+                is_student: item?.is_student ?? '',
+            }));
             ensureRowCount(normalized.length, normalized);
-            if(familyCountInput) familyCountInput.value = normalized.length;
-        }else{
+            if (familyCountInput) familyCountInput.value = normalized.length;
+        } else {
             const startCount = parseInt(familyCountInput?.value ?? '1', 10) || 1;
             ensureRowCount(startCount);
-            if(familyCountInput) familyCountInput.value = container.querySelectorAll('tr').length;
+            if (familyCountInput) familyCountInput.value = container.querySelectorAll('tr').length;
         }
 
         // الحقول الشرطية

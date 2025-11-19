@@ -252,14 +252,21 @@ class StoreDependentsRequest extends FormRequest
         ]);
 
         // Clean family rows (إزالة الصفوف الفارغة)
+        // لكن نحافظ على الصف الأول إذا كان relation = 'self' حتى لو كان فارغاً جزئياً
         if (is_array($this->family)) {
-            $clean = array_values(array_filter($this->family, function ($row) {
-                return !empty($row['name'])
+            $clean = [];
+            foreach ($this->family as $index => $row) {
+                // إذا كان الصف الأول و relation = 'self'، نحافظ عليه حتى لو كان فارغاً جزئياً
+                if ($index === 0 && ($row['relation'] ?? '') === 'self') {
+                    $clean[] = $row;
+                } elseif (!empty($row['name'])
                     || !empty($row['relation'])
                     || !empty($row['birth_date'])
-                    || !empty($row['is_student']);
-            }));
-            $this->merge(['family' => $clean]);
+                    || !empty($row['is_student'])) {
+                    $clean[] = $row;
+                }
+            }
+            $this->merge(['family' => array_values($clean)]);
         }
     }
 }
