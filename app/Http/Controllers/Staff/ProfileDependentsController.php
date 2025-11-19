@@ -11,7 +11,8 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Hash;
-
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 class ProfileDependentsController extends Controller
 {
     public function create(): View
@@ -217,5 +218,62 @@ class ProfileDependentsController extends Controller
 
         return redirect()->route('staff.profile.show', $profile->id)
             ->with('success', 'تم تحديث البيانات بنجاح ✅');
+    }
+
+    public function lookup(Request $request)
+    {
+        $id = preg_replace('/\D/', '', (string) $request->query('id', ''));
+        if (strlen($id) !== 9) {
+            return response()->json(['ok' => false, 'message' => 'رقم الهوية غير صالح.'], 422);
+        }
+
+        try {
+            $response = Http::timeout(10)->acceptJson()->get("https://eservices.gedco.ps/employees/search/{$id}");
+            if (!$response->ok()) {
+                return response()->json(['ok' => false, 'message' => 'تعذر الاتصال بالخدمة.'], 502);
+            }
+            $payload = $response->json();
+            $row = $payload['data_rows'][0] ?? null;
+            if (!$row) {
+                return response()->json(['ok' => false, 'message' => 'لا توجد بيانات مطابقة.'], 404);
+            }
+
+            $normalizeMarital = function (?string $status): ?string {
+                $status = trim((string) $status);
+                if ($status === '') return null;
+                if (str_contains($status, 'أعزب'))    return 'single';
+                if (str_contains($status, 'متزوج'))   return 'married';
+                if (str_contains($status, 'أرمل'))    return 'widowed';
+                if (str_contains($status, 'مطلق'))    return 'divorced';
+                return null;
+            };
+
+            $normalizeLocation = function (?string $branch): ?string {
+                $b = mb_strtolower(trim((string) $branch));
+                if ($b === '') return null;
+                if (str_contains($b, 'الرئيس'))   return '1';
+                if (str_contains($b, 'غزة'))      return '2';
+                if (str_contains($b, 'الشمال'))    return '3';
+                if (str_contains($b, 'الوسطى'))    return '4';
+                if (str_contains($b, 'خانيونس'))   return '6';
+                if (str_contains($b, 'رفح'))       return '7';
+                if (str_contains($b, 'الصيانة'))   return '8';
+                return null;
+            };
+
+            $data = [
+                'full_name'      => $row['NAME'] ?? null,
+                'birth_date'     => isset($row['BIRTH_DATE']) ? substr((string)$row['BIRTH_DATE'], 0, 10) : null,
+                'marital_status' => $normalizeMarital($row['STATUS_NAME'] ?? null),
+                'job_title'      => $row['W_NO_ADMIN_NAME'] ?? null,
+                'location'       => $normalizeLocation($row['BRAN_NAME'] ?? null),
+                'national_id'    => $row['ID'] ?? null,
+                'employee_number'=> $row['NO'] ?? null,
+            ];
+
+            return response()->json(['ok' => true, 'data' => $data]);
+        } catch (\Throwable $e) {
+            return response()->json(['ok' => false, 'message' => 'حدث خطأ غير متوقع.'], 500);
+        }
     }
 }
