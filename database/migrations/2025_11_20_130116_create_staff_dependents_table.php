@@ -15,14 +15,14 @@ return new class extends Migration {
                 ->index();
 
             $table->string('name');
-            $table->enum('relation', ['spouse','son','daughter','other']);
+            $table->string('relation', 20);
             $table->date('birth_date')->nullable();
             $table->boolean('is_student')->default(false);
 
             $table->timestamps();
             $table->softDeletes();
 
-            // لمنع إدخال نفس الفرد مرتين لنفس الموظف
+
             $table->unique(['staff_profile_id', 'name', 'birth_date']);
         });
     }

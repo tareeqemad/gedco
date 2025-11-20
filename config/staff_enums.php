@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'locations' => [
         '1' => 'المقر الرئيسي',
         '2' => 'مقر غزة',
@@ -19,9 +20,9 @@ return [
     ],
 
     'house_status' => [
-        'intact'     => 'سليم',
-        'partial'    => 'هدم جزئي',
-        'demolished' => 'هدم كلي',
+        'intact'      => 'سليم',
+        'partial'     => 'هدم جزئي',
+        'demolished'  => 'هدم كلي',
     ],
 
     'status' => [
@@ -37,13 +38,13 @@ return [
     ],
 
     'readiness' => [
-        'working'   => 'باشر العمل فعلياًً',
+        'working'   => 'باشر العمل فعلياً',
         'ready'     => 'جاهز للعودة',
         'not_ready' => 'مش جاهز بعد',
     ],
 
+
     'relation' => [
-        'self'     => 'الموظف نفسه',
         'husband'  => 'زوج',
         'wife'     => 'زوجة',
         'son'      => 'ابن',

@@ -194,6 +194,15 @@
                     </li>
                 @endcan
 
+                @can('staff-profiles.view')
+                    <li class="slide {{ $isActive('admin.staff-profiles.*') }}">
+                        <a href="{{ route('admin.staff-profiles.index') }}" class="side-menu__item">
+                            <i class="bi bi-person-lines-fill side-menu__icon"></i>
+                            <span class="side-menu__label">استمارات الموظفين</span>
+                        </a>
+                    </li>
+                @endcan
+
                 <!-- 4) إعدادات الموقع -->
                 <li class="slide__category mt-3">
                     <span class="side-menu__label text-muted text-xs opacity-70">إعدادات الموقع</span>

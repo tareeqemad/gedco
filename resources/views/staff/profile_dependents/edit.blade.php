@@ -4,82 +4,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>تعديل البيانات الشخصية</title>
-    <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="{{ asset('assets/site/images/icon.ico') }}">
-
-    {{-- Bootstrap RTL فقط --}}
     <link id="style" href="{{ asset('assets/admin/libs/bootstrap/css/bootstrap.rtl.min.css') }}" rel="stylesheet">
-
+    <link rel="stylesheet" href="{{ asset('assets/site/css/staff-common.css') }}">
     <style>
-        @font-face { font-family: 'Cairo'; font-style: normal; font-weight: 400; src: url('{{ asset('assets/fonts/cairo/Cairo-Regular.ttf') }}') format('truetype'); font-display: swap; }
-        @font-face { font-family: 'Cairo'; font-style: normal; font-weight: 500; src: url('{{ asset('assets/fonts/cairo/Cairo-Medium.ttf') }}') format('truetype'); font-display: swap; }
-        @font-face { font-family: 'Cairo'; font-style: normal; font-weight: 600; src: url('{{ asset('assets/fonts/cairo/Cairo-SemiBold.ttf') }}') format('truetype'); font-display: swap; }
-        @font-face { font-family: 'Cairo'; font-style: normal; font-weight: 700; src: url('{{ asset('assets/fonts/cairo/Cairo-Bold.ttf') }}') format('truetype'); font-display: swap; }
-
-        :root{
-            --surface:#fff7f2; --surface-alt:#fff1e6; --border:#f1b08d; --accent:#ef7c4c; --accent-dark:#c65a28; --text:#2f2b28; --muted:#8c6f61;
+        .phone-input {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            direction: ltr;      /* عشان يطلع + 970 [input] بالترتيب الصحيح */
         }
-        body{ margin:0; font-family:"Cairo",Arial,sans-serif; background:#ffffff; color:var(--text); padding:2rem 0; }
-        .form-shell{ width:min(1080px,100%); margin:0 auto; background:#fff; border-radius:24px; border:1px solid rgba(239,124,76,.2); box-shadow:0 20px 50px rgba(239,124,76,.15); overflow:hidden; }
-        .form-header{ padding:2rem 1rem; background:linear-gradient(135deg, rgba(239,124,76,.15), rgba(239,124,76,.05)); border-bottom:1px solid rgba(239,124,76,.15); text-align:center; }
-        .form-header h1{ margin:0; color:var(--accent-dark); font-weight:700; }
 
-        .form-section{ padding:2rem; border-bottom:1px solid rgba(239,124,76,.08); }
-        .form-section:last-of-type{ border-bottom:none; }
-        .section-title{ display:inline-flex; align-items:center; gap:.5rem; background:rgba(239,124,76,.1); color:var(--accent-dark); padding:.4rem 1.1rem; border-radius:999px; font-weight:700; margin-bottom:1.25rem; }
-
-        label.field{ display:flex; flex-direction:column; gap:.35rem; font-weight:600; color:var(--muted); }
-        label.field span{ font-size:.9rem; }
-
-        input,select,textarea{
-            border:1px solid rgba(239,124,76,.2); border-radius:14px; padding:.8rem 1rem;
-            font-size:.95rem; background:#fff; transition:border-color .2s, box-shadow .2s;
+        .phone-plus {
+            font-weight: 600;
+            padding: 0 2px;
         }
-        input:focus,select:focus,textarea:focus{ outline:none; border-color:var(--accent); box-shadow:0 0 0 3px rgba(239,124,76,.18); }
-        textarea{ min-height:90px; resize:vertical; }
 
-        .grid{ display:grid; gap:1rem 1.5rem; }
-        .grid-3{ grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); }
-        .grid-2{ grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); }
-
-        .family-table{ width:100%; border-collapse:collapse; border:1px solid rgba(239,124,76,.18); border-radius:16px; overflow:hidden; }
-        .family-table thead th{ background:var(--surface-alt); padding:.8rem; font-weight:700; color:var(--accent-dark); }
-        .family-table td{ padding:.6rem; border-top:1px solid rgba(239,124,76,.12); }
-        .family-table input, .family-table select{ width:100%; }
-
-        .add-member-btn{
-            margin-top:1rem; display:inline-flex; align-items:center; gap:.6rem;
-            border:1px dashed rgba(239,124,76,.45); padding:.6rem 1.4rem; border-radius:999px;
-            color:var(--accent-dark); background:rgba(239,124,76,.08); font-weight:700; cursor:pointer;
+        .phone-prefix {
+            max-width: 70px;
         }
-        .add-member-btn:hover{ background:rgba(239,124,76,.16); }
-        .remove-member-btn{ border:none; background:rgba(239,124,76,.1); color:var(--accent-dark); padding:.45rem .8rem; border-radius:12px; cursor:pointer; font-size:.85rem; }
 
-        .submit-row{ padding:2rem; text-align:center; }
-        .submit-row button{
-            background:linear-gradient(135deg, #ef7c4c, #f49a6a); border:none; color:#fff;
-            padding:.9rem 2.75rem; border-radius:18px; font-size:1rem; font-weight:700;
-        }
-        .submit-row button:hover{ transform:translateY(-2px); box-shadow:0 12px 20px rgba(239,124,76,.25); }
-
-        .alert{ border-radius:14px; padding:1rem 1.1rem; margin:1rem 2rem 0; font-weight:600; }
-        .alert-success{ background:#e9f9ee; border:1px solid #b6e1c5; color:#165c2f; }
-        .alert-danger{ background:#fdeeee; border:1px solid #f5b1b1; color:#8a1f1f; }
-        .alert-info{ background:#eef6ff; border:1px solid #b6d5ff; color:#1b4d91; }
-        .alert-secondary{ background:#f6f6f6; border:1px solid #ddd; color:#333; }
-
-        .hidden{ display:none!important; }
-        .req-star{ color:#d9534f; margin-inline-start:.2rem; }
-
-        @media (max-width:640px){
-            .form-section{ padding:1.5rem; }
-            .grid-3,.grid-2{ grid-template-columns:1fr; }
-            .family-table thead{ display:none; }
-            .family-table, .family-table tbody, .family-table tr, .family-table td{ display:block; width:100%; }
-            .family-table tr{ margin-bottom:1rem; border:1px solid rgba(239,124,76,.18); border-radius:12px; overflow:hidden; }
-            .family-table td{ border-top:none; padding:.65rem .9rem; }
-            .family-table td::before{ content:attr(data-label); display:block; font-weight:700; color:var(--accent-dark); margin-bottom:.35rem; }
-            .remove-member-btn{ width:100%; }
+        .phone-number {
+            flex: 1;
         }
     </style>
 </head>
@@ -88,24 +34,14 @@
 @php
     use Carbon\Carbon;
 
-    // من config/staff_enums.php لو موجود، وإلا fallback
-    $LOC     = config('staff_enums.locations', ['1'=>'المقر الرئيسي','2'=>'مقر غزة','3'=>'مقر الشمال','4'=>'مقر الوسطى','6'=>'مقر خانيونس','7'=>'مقر رفح','8'=>'مقر الصيانة - غزة']);
-    $HOUSE   = config('staff_enums.house_status', ['intact'=>'سليم','partial'=>'هدم جزئي','demolished'=>'هدم كلي']);
-    $HOUSING = config('staff_enums.housing_type', ['house'=>'منزل','apartment'=>'شقة','tent'=>'خيمة','other'=>'أخرى']);
-    $MARITAL = config('staff_enums.marital_status', ['single'=>'أعزب/عزباء','married'=>'متزوج/متزوجة','widowed'=>'أرمل/أرملة','divorced'=>'مطلق/مطلقة']);
+    $LOC     = config('staff_enums.locations');
+    $HOUSE   = config('staff_enums.house_status');
+    $HOUSING = config('staff_enums.housing_type');
+    $MARITAL = config('staff_enums.marital_status');
+    $relations = config('staff_enums.relation'); // spouse / son / daughter / other
+    $readinessList = config('staff_enums.readiness');
 
-    // صف الموظف نفسه (نضيفه أول واحد)
-    $selfRow = [
-        'name'       => $profile->full_name,
-        'relation'   => 'self',
-        'birth_date' => $profile->birth_date
-            ? Carbon::parse($profile->birth_date)->toDateString()
-            : null,
-        'is_student' => '',
-    ];
-
-    // أفراد الأسرة من الجدول
-    $dependentsData = ($profile->dependents ?? collect())->map(function($d){
+    $serverFamily = ($profile->dependents ?? collect())->map(function($d){
         $birth = $d->birth_date;
         if ($birth instanceof Carbon) {
             $birth = $birth->toDateString();
@@ -115,14 +51,11 @@
 
         return [
             'name'       => $d->name,
-            'relation'   => $d->relation, // spouse/son/daughter/other
+            'relation'   => $d->relation, // spouse / son / daughter / other
             'birth_date' => $birth,
             'is_student' => $d->is_student ? 'yes' : 'no',
         ];
     })->values();
-
-    // نجهز مصفوفة initial family (الموظف نفسه + التوابع)
-    $serverFamily = collect([$selfRow])->merge($dependentsData)->values();
 @endphp
 
 <div class="form-shell">
@@ -142,13 +75,15 @@
         </div>
     @endif
 
-    {{-- تنبيه المحاولات المتبقية --}}
     <div class="alert alert-secondary" style="margin:1rem 2rem 0;">
         لديك <b>{{ $profile->edits_remaining }}</b> محاولة تعديل متبقية.
-        @if($profile->edits_remaining == 1) <span class="text-danger">⚠️ هذه آخر محاولة!</span> @endif
+        @if($profile->edits_remaining == 1)
+            <span class="text-danger">⚠️ هذه آخر محاولة!</span>
+        @endif
     </div>
 
-    <form action="{{ route('staff.profile.update', ['profile' => $profile->getKey()]) }}" method="post" class="needs-validation" novalidate>
+    <form action="{{ route('staff.profile.update', ['profile' => $profile->getKey()]) }}"
+          method="post" class="needs-validation" novalidate>
         @csrf
         @method('PUT')
 
@@ -158,30 +93,40 @@
             <div class="grid grid-3">
                 <label class="field">
                     <span>الاسم رباعي <span class="req-star">*</span></span>
-                    <input type="text" name="full_name" value="{{ old('full_name',$profile->full_name) }}" required class="@error('full_name') is-invalid @enderror">
+                    <input type="text" name="full_name"
+                           value="{{ old('full_name',$profile->full_name) }}" required
+                           class="@error('full_name') is-invalid @enderror">
                     @error('full_name') <small class="text-danger">{{ $message }}</small> @enderror
                 </label>
 
                 <label class="field">
                     <span>تاريخ الميلاد</span>
-                    <input type="date" name="birth_date" value="{{ old('birth_date', $profile->birth_date ? \Carbon\Carbon::parse($profile->birth_date)->format('Y-m-d') : '') }}">
+                    <input type="date" name="birth_date"
+                           value="{{ old('birth_date',
+                               $profile->birth_date ? \Carbon\Carbon::parse($profile->birth_date)->format('Y-m-d') : ''
+                           ) }}">
                 </label>
 
                 <label class="field">
                     <span>الرقم الوظيفي <span class="req-star">*</span></span>
-                    <input type="text" name="employee_number" value="{{ old('employee_number',$profile->employee_number) }}" required class="@error('employee_number') is-invalid @enderror">
+                    <input type="text" name="employee_number"
+                           value="{{ old('employee_number',$profile->employee_number) }}" required
+                           class="@error('employee_number') is-invalid @enderror">
                     @error('employee_number') <small class="text-danger">{{ $message }}</small> @enderror
                 </label>
 
                 <label class="field">
                     <span>رقم الهوية <span class="req-star">*</span></span>
-                    <input type="text" name="national_id" value="{{ old('national_id',$profile->national_id) }}" required class="@error('national_id') is-invalid @enderror">
+                    <input type="text" name="national_id"
+                           value="{{ old('national_id',$profile->national_id) }}" required
+                           class="@error('national_id') is-invalid @enderror">
                     @error('national_id') <small class="text-danger">{{ $message }}</small> @enderror
                 </label>
 
                 <label class="field">
                     <span>الوظيفة الحالية</span>
-                    <input type="text" name="job_title" value="{{ old('job_title',$profile->job_title) }}">
+                    <input type="text" name="job_title"
+                           value="{{ old('job_title',$profile->job_title) }}">
                 </label>
 
                 <label class="field">
@@ -189,7 +134,10 @@
                     <select name="location" class="@error('location') is-invalid @enderror" required>
                         <option value="">_________</option>
                         @foreach($LOC as $key=>$label)
-                            <option value="{{ $key }}" @selected(old('location', (string)$profile->location)===(string)$key)>{{ $label }}</option>
+                            <option value="{{ $key }}"
+                                @selected(old('location', (string)$profile->location)===(string)$key)>
+                                {{ $label }}
+                            </option>
                         @endforeach
                     </select>
                     @error('location') <small class="text-danger">{{ $message }}</small> @enderror
@@ -197,17 +145,20 @@
 
                 <label class="field">
                     <span>الإدارة</span>
-                    <input type="text" name="department" value="{{ old('department',$profile->department) }}">
+                    <input type="text" name="department"
+                           value="{{ old('department',$profile->department) }}">
                 </label>
 
                 <label class="field">
                     <span>الدائرة</span>
-                    <input type="text" name="directorate" value="{{ old('directorate',$profile->directorate) }}">
+                    <input type="text" name="directorate"
+                           value="{{ old('directorate',$profile->directorate) }}">
                 </label>
 
                 <label class="field">
                     <span>القسم</span>
-                    <input type="text" name="section" value="{{ old('section',$profile->section) }}">
+                    <input type="text" name="section"
+                           value="{{ old('section',$profile->section) }}">
                 </label>
 
                 <label class="field">
@@ -215,14 +166,18 @@
                     <select name="marital_status">
                         <option value="">_______</option>
                         @foreach($MARITAL as $k=>$lbl)
-                            <option value="{{ $k }}" @selected(old('marital_status',$profile->marital_status)===$k)>{{ $lbl }}</option>
+                            <option value="{{ $k }}"
+                                @selected(old('marital_status',$profile->marital_status)===$k)>
+                                {{ $lbl }}
+                            </option>
                         @endforeach
                     </select>
                 </label>
 
                 <label class="field">
                     <span>عدد أفراد الأسرة حاليًا</span>
-                    <input type="number" min="1" max="10" name="family_members_count" id="family-count-input" value="{{ old('family_members_count', $profile->family_members_count) }}">
+                    <input type="number" min="1" max="10" name="family_members_count" id="family-count-input"
+                           value="{{ old('family_members_count', $profile->family_members_count) }}">
                 </label>
             </div>
         </section>
@@ -247,7 +202,9 @@
                 </table>
             </div>
 
-            <button type="button" class="add-member-btn" id="add-family-member">+ إضافة فرد جديد</button>
+            <button type="button" class="add-member-btn" id="add-family-member">
+                + إضافة فرد جديد
+            </button>
 
             <template id="family-row-template">
                 <tr>
@@ -258,10 +215,9 @@
                     <td data-label="صلة القرابة">
                         <select data-field="relation">
                             <option value="">_______</option>
-                            <option value="spouse">زوج / زوجة</option>
-                            <option value="son">ابن</option>
-                            <option value="daughter">ابنة</option>
-                            <option value="other">أخرى</option>
+                            @foreach($relations as $val => $label)
+                                <option value="{{ $val }}">{{ $label }}</option>
+                            @endforeach
                         </select>
                     </td>
                     <td data-label="تاريخ الميلاد">
@@ -287,7 +243,8 @@
             <div class="grid grid-2">
                 <label class="field">
                     <span>عنوان السكن الأصلي كامل</span>
-                    <input type="text" name="original_address" value="{{ old('original_address',$profile->original_address) }}">
+                    <input type="text" name="original_address"
+                           value="{{ old('original_address',$profile->original_address) }}">
                 </label>
 
                 <label class="field">
@@ -295,7 +252,10 @@
                     <select name="house_status">
                         <option value="">_______</option>
                         @foreach($HOUSE as $k=>$lbl)
-                            <option value="{{ $k }}" @selected(old('house_status',$profile->house_status)===$k)>{{ $lbl }}</option>
+                            <option value="{{ $k }}"
+                                @selected(old('house_status',$profile->house_status)===$k)>
+                                {{ $lbl }}
+                            </option>
                         @endforeach
                     </select>
                 </label>
@@ -306,14 +266,18 @@
                     <span>الحالة</span>
                     <select name="status" id="status-select">
                         <option value="">_______</option>
-                        <option value="resident"  @selected(old('status',$profile->status)==='resident')>مقيم</option>
-                        <option value="displaced" @selected(old('status',$profile->status)==='displaced')>نازح</option>
+                        <option value="resident"
+                            @selected(old('status',$profile->status)==='resident')>مقيم</option>
+                        <option value="displaced"
+                            @selected(old('status',$profile->status)==='displaced')>نازح</option>
                     </select>
                 </label>
 
-                <label class="field {{ old('status',$profile->status)==='displaced' ? '' : 'hidden' }}" id="current-address-field">
+                <label class="field {{ old('status',$profile->status)==='displaced' ? '' : 'hidden' }}"
+                       id="current-address-field">
                     <span>العنوان الحالي بعد النزوح</span>
-                    <input type="text" name="current_address" value="{{ old('current_address',$profile->current_address) }}">
+                    <input type="text" name="current_address"
+                           value="{{ old('current_address',$profile->current_address) }}">
                 </label>
 
                 <label class="field">
@@ -321,7 +285,10 @@
                     <select name="housing_type">
                         <option value="">_______</option>
                         @foreach($HOUSING as $k=>$lbl)
-                            <option value="{{ $k }}" @selected(old('housing_type',$profile->housing_type)===$k)>{{ $lbl }}</option>
+                            <option value="{{ $k }}"
+                                @selected(old('housing_type',$profile->housing_type)===$k)>
+                                {{ $lbl }}
+                            </option>
                         @endforeach
                     </select>
                 </label>
@@ -334,28 +301,66 @@
             <div class="grid grid-3">
                 <label class="field">
                     <span>رقم الجوال <span class="req-star">*</span></span>
-                    <input type="tel" name="mobile" value="{{ old('mobile',$profile->mobile) }}" required class="@error('mobile') is-invalid @enderror">
+                    <input type="tel" name="mobile"
+                           value="{{ old('mobile',$profile->mobile) }}" required
+                           class="@error('mobile') is-invalid @enderror">
                     @error('mobile') <small class="text-danger">{{ $message }}</small> @enderror
                 </label>
 
                 <label class="field">
                     <span>رقم جوال بديل</span>
-                    <input type="tel" name="mobile_alt" value="{{ old('mobile_alt',$profile->mobile_alt) }}">
+                    <input type="tel" name="mobile_alt"
+                           value="{{ old('mobile_alt',$profile->mobile_alt) }}">
                 </label>
 
+                @php
+                    $whats   = $profile->whatsapp ?? '';
+                    $waPref  = '970';
+                    $waNum   = '';
+
+                    if ($whats) {
+                        if (str_starts_with($whats, '970')) {
+                            $waPref = '970';
+                            $waNum  = substr($whats, 3);
+                        } elseif (str_starts_with($whats, '972')) {
+                            $waPref = '972';
+                            $waNum  = substr($whats, 3);
+                        } else {
+                            $waNum = $whats;
+                        }
+                    }
+                @endphp
                 <label class="field">
                     <span>واتس آب</span>
-                    <input type="tel" name="whatsapp" value="{{ old('whatsapp',$profile->whatsapp) }}">
+
+                    <div class="phone-input">
+                        <span class="phone-plus">+</span>
+
+                        <select name="whatsapp_prefix" class="phone-prefix">
+                            <option value="970" @selected(old('whatsapp_prefix', $waPref)=='970')>970</option>
+                            <option value="972" @selected(old('whatsapp_prefix', $waPref)=='972')>972</option>
+                        </select>
+
+                        <input type="tel"
+                               name="whatsapp"
+                               value="{{ old('whatsapp', $waNum) }}"
+                               maxlength="10"
+                               pattern="\d{8,10}"
+                               class="phone-number"
+                               placeholder="59xxxxxxx">
+                    </div>
                 </label>
 
                 <label class="field">
                     <span>تيليجرام</span>
-                    <input type="text" name="telegram" value="{{ old('telegram',$profile->telegram) }}">
+                    <input type="text" name="telegram"
+                           value="{{ old('telegram',$profile->telegram) }}">
                 </label>
 
                 <label class="field">
                     <span>Gmail</span>
-                    <input type="email" name="gmail" value="{{ old('gmail',$profile->gmail) }}">
+                    <input type="email" name="gmail"
+                           value="{{ old('gmail',$profile->gmail) }}">
                 </label>
             </div>
         </section>
@@ -368,14 +373,19 @@
                     <span>مستوى الجاهزية</span>
                     <select name="readiness" id="readiness-select">
                         <option value="">_______</option>
-                        <option value="ready"     @selected(old('readiness',$profile->readiness)==='ready')>جاهز</option>
-                        <option value="not_ready" @selected(old('readiness',$profile->readiness)==='not_ready')>غير جاهز مع توضيح الأسباب</option>
+                        @foreach($readinessList as $val => $label)
+                            <option value="{{ $val }}"
+                                @selected(old('readiness', $profile->readiness) === $val)>
+                                {{ $label }}
+                            </option>
+                        @endforeach
                     </select>
                 </label>
 
-                <label class="field {{ old('readiness',$profile->readiness)==='not_ready' ? '' : 'hidden' }}" id="readiness-notes-field">
+                <label class="field {{ old('readiness', $profile->readiness)==='not_ready' ? '' : 'hidden' }}"
+                       id="readiness-notes-field">
                     <span>أسباب عدم الجاهزية</span>
-                    <textarea name="readiness_notes">{{ old('readiness_notes',$profile->readiness_notes) }}</textarea>
+                    <textarea name="readiness_notes">{{ old('readiness_notes', $profile->readiness_notes) }}</textarea>
                 </label>
             </div>
         </section>
@@ -410,73 +420,22 @@
             container.querySelectorAll('tr').forEach((row, idx) => {
                 const index = idx + 1;
                 row.querySelector('.family-index').textContent = index;
-
                 row.querySelectorAll('[data-field]').forEach(input => {
                     const field = input.dataset.field;
                     input.name = `family[${index}][${field}]`;
                 });
-
-                const relationSelect = row.querySelector('[data-field="relation"]');
-
-                if (relationSelect) {
-                    if (index === 1) {
-                        // الصف الأول = الموظف نفسه دائماً
-                        relationSelect.innerHTML = `<option value="self">الموظف نفسه</option>`;
-                        relationSelect.value = 'self';
-                        relationSelect.disabled = true;
-                        relationSelect.classList.add('bg-light');
-                        relationSelect.style.cursor = 'not-allowed';
-
-                        // hidden input لأن disabled لا يُرسل
-                        let hidden = row.querySelector('input[type="hidden"][name*="[relation]"]');
-                        if (!hidden) {
-                            hidden = document.createElement('input');
-                            hidden.type = 'hidden';
-                            hidden.name = relationSelect.name;
-                            hidden.value = 'self';
-                            relationSelect.insertAdjacentElement('afterend', hidden);
-                        } else {
-                            hidden.value = 'self';
-                        }
-                    } else {
-                        // باقي الصفوف: صلة القرابة عادية
-                        if (relationSelect.disabled) {
-                            relationSelect.disabled = false;
-                            relationSelect.classList.remove('bg-light');
-                            relationSelect.style.cursor = '';
-                        }
-
-                        if (!relationSelect.options.length || relationSelect.options[0].value === 'self') {
-                            relationSelect.innerHTML = `
-                                <option value="">_______</option>
-                                <option value="spouse">زوج / زوجة</option>
-                                <option value="son">ابن</option>
-                                <option value="daughter">ابنة</option>
-                                <option value="other">أخرى</option>
-                            `;
-                        }
-                    }
-                }
             });
         }
 
         function toggleRemoveState() {
             const rows = container.querySelectorAll('tr');
-            rows.forEach((row, idx) => {
+            rows.forEach(row => {
                 const btn = row.querySelector('.remove-member-btn');
                 if (!btn) return;
-
-                if (idx === 0) {
-                    // لا يمكن حذف الموظف نفسه
-                    btn.disabled = true;
-                    btn.style.opacity = 0.5;
-                    btn.style.cursor = 'not-allowed';
-                } else {
-                    const disabled = rows.length === 1;
-                    btn.disabled = disabled;
-                    btn.style.opacity = disabled ? 0.5 : 1;
-                    btn.style.cursor = disabled ? 'not-allowed' : '';
-                }
+                const disabled = rows.length === 1;
+                btn.disabled = disabled;
+                btn.style.opacity = disabled ? 0.5 : 1;
+                btn.style.cursor = disabled ? 'not-allowed' : '';
             });
         }
 
@@ -501,7 +460,7 @@
 
             removeButton.addEventListener('click', () => {
                 const rows = container.querySelectorAll('tr');
-                if (row === rows[0]) return; // لا تحذف الموظف نفسه
+                if (rows.length <= 1) return;
                 row.remove();
                 const remaining = container.querySelectorAll('tr').length;
                 const nextCount = Math.max(remaining, 1);
@@ -532,8 +491,7 @@
             while (current > target) {
                 const lastRow = container.lastElementChild;
                 if (!lastRow) break;
-                const rows = container.querySelectorAll('tr');
-                if (lastRow === rows[0] && rows.length === 1) break;
+                if (current === 1) break;
                 container.removeChild(lastRow);
                 current--;
             }
@@ -543,14 +501,12 @@
             updateAddButtonState();
         }
 
-        // زر إضافة فرد
         addButton?.addEventListener('click', () => {
             const nextCount = Math.min(container.querySelectorAll('tr').length + 1, MAX_FAMILY_MEMBERS);
             ensureRowCount(nextCount);
             if (familyCountInput) familyCountInput.value = nextCount;
         });
 
-        // التحكم بعدد الصفوف من المدخل
         familyCountInput?.addEventListener('input', () => {
             let desired = parseInt(familyCountInput.value, 10);
             if (!Number.isFinite(desired)) desired = 1;
@@ -559,7 +515,6 @@
             ensureRowCount(desired);
         });
 
-        // تهيئة الصفوف أول مرة
         if (Array.isArray(initialFamily) && initialFamily.filter(Boolean).length) {
             const normalized = initialFamily.filter(Boolean).map(item => ({
                 name: item?.name ?? '',
@@ -575,18 +530,17 @@
             if (familyCountInput) familyCountInput.value = container.querySelectorAll('tr').length;
         }
 
-        // الحقول الشرطية
         const toggleShow = (selectEl, targetEl, value) => {
             const show = selectEl?.value === value;
             targetEl?.classList.toggle('hidden', !show);
         };
+
         readinessSelectEl?.addEventListener('change', () => toggleShow(readinessSelectEl, readinessNotesEl, 'not_ready'));
         toggleShow(readinessSelectEl, readinessNotesEl, 'not_ready');
 
         statusSelectEl?.addEventListener('change', () => toggleShow(statusSelectEl, currentAddressEl, 'displaced'));
         toggleShow(statusSelectEl, currentAddressEl, 'displaced');
 
-        // Bootstrap client-side validation
         document.querySelectorAll('.needs-validation').forEach(form => {
             form.addEventListener('submit', (e) => {
                 if (!form.checkValidity()) { e.preventDefault(); e.stopPropagation(); }

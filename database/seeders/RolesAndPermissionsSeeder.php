@@ -24,6 +24,7 @@ class RolesAndPermissionsSeeder extends Seeder
             'advertisements',
             'tenders',
             'news',
+            'staff-profiles'
         ];
 
         // === الأقسام الخاصة بالسوبر أدمن فقط (CRUD) ===
