@@ -40,12 +40,13 @@ Route::prefix('staff/profile')->name('staff.profile.')->group(function () {
     Route::post('store', [ProfileDependentsController::class, 'store'])
         ->middleware('throttle:10,1')->name('store');
 
-
     Route::get('lookup', [ProfileDependentsController::class, 'lookup'])
         ->middleware('throttle:20,1')->name('lookup');
 
-    // التحقق بكلمة مرور (بدون {profile} — المستخدم يختار الهوية/الرقم الوظيفي + الباس)
-    Route::get('verify', [ProfileEditAuthController::class, 'showVerifyForm'])->name('verify.form');
+    // التحقق برقم الهوية
+    Route::get('verify', [ProfileEditAuthController::class, 'showVerifyForm'])
+        ->name('verify.form');
+
     Route::post('verify', [ProfileEditAuthController::class, 'verify'])
         ->middleware('throttle:10,1')->name('verify');
 
@@ -57,11 +58,10 @@ Route::prefix('staff/profile')->name('staff.profile.')->group(function () {
     Route::middleware('staff.edit.session')->group(function () {
         Route::get('{profile}/edit',   [ProfileDependentsController::class, 'edit'])
             ->whereNumber('profile')->name('edit');
+
         Route::put('{profile}/update', [ProfileDependentsController::class, 'update'])
             ->whereNumber('profile')->name('update');
     });
-
-
 });
 
 
