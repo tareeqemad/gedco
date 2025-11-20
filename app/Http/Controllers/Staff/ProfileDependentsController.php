@@ -16,38 +16,46 @@ use Illuminate\Support\Facades\Http;
 
 class ProfileDependentsController extends Controller
 {
+    /**
+     * عرض صفحة إنشاء بيانات الموظف وأسرته
+     */
     public function create(): View
     {
         $locked  = session('locked', false);
         $profile = null;
-        return view('staff.profile_dependents.add_dependent', compact('locked','profile'));
+
+        return view('staff.profile_dependents.add_dependent', compact('locked', 'profile'));
     }
 
+    /**
+     * حفظ بيانات الموظف + أفراد الأسرة
+     */
     public function store(StoreDependentsRequest $request): RedirectResponse
     {
         $data = $request->validated();
 
         // لو موجود مسبقًا نحوله لفورم التحقق للتعديل
         $existing = StaffProfile::query()
-            ->where(function($query) use ($data) {
-                $query->where('employee_number', (int)$data['employee_number'])
-                    ->orWhere('national_id', (int)$data['national_id']);
+            ->where(function ($query) use ($data) {
+                $query->where('employee_number', (int) $data['employee_number'])
+                    ->orWhere('national_id', (int) $data['national_id']);
             })
             ->first();
 
         if ($existing) {
-            $by    = $existing->national_id == (int)$data['national_id'] ? 'national_id' : 'employee_number';
+            $by    = $existing->national_id == (int) $data['national_id'] ? 'national_id' : 'employee_number';
             $value = $by === 'national_id' ? $existing->national_id : $existing->employee_number;
 
-            return redirect()->route('staff.profile.verify.form', ['by' => $by, 'value' => $value])
-                ->with('info', 'الرقم الوظيفي/رقم الهوية مستخدم مسبقًا. أدخل كلمة المرور لمتابعة التعديل.')
+            return redirect()
+                ->route('staff.profile.verify.form', ['by' => $by, 'value' => $value])
+                ->with('info', 'الرقم الوظيفي/رقم الهوية مستخدم مسبقًا. أدخل رقم الهوية لمتابعة التعديل.')
                 ->withInput();
         }
 
-        $profile = null;
         try {
             $profile = DB::transaction(function () use ($data) {
 
+                // فلترة المعالين: أي صف فاضي بالكامل ينشال
                 $familyRows = collect($data['family'] ?? [])
                     ->filter(function ($r) {
                         return filled($r['name'] ?? null)
@@ -57,26 +65,42 @@ class ProfileDependentsController extends Controller
                     })
                     ->values();
 
-                // تحويل صيغة تاريخ الميلاد من MM/DD/YYYY إلى YYYY-MM-DD
+                // منع تكرار نفس فرد الأسرة (نفس الاسم + نفس تاريخ الميلاد)
+                $duplicates = $familyRows
+                    ->map(function ($r) {
+                        $name  = mb_strtolower(trim($r['name'] ?? ''));
+                        $birth = trim($r['birth_date'] ?? '');
+                        return $name . '|' . ($birth ?: 'NULL');
+                    })
+                    ->groupBy(fn($key) => $key)
+                    ->filter(fn($group) => $group->count() > 1);
+
+                if ($duplicates->isNotEmpty()) {
+                    throw new \RuntimeException('duplicate_family_members');
+                }
+
+                // 🔹 تحويل تاريخ الميلاد للموظف إلى Y-m-d
                 $birthDate = null;
                 if (!empty($data['birth_date'])) {
                     $dateStr = trim($data['birth_date']);
-                    // إذا كانت الصيغة MM/DD/YYYY
+
+                    // لو جاي من الفورم كـ MM/DD/YYYY (مثال: 08/20/1994)
                     if (preg_match('/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/', $dateStr, $matches)) {
                         $month = str_pad($matches[1], 2, '0', STR_PAD_LEFT);
-                        $day = str_pad($matches[2], 2, '0', STR_PAD_LEFT);
-                        $year = $matches[3];
-                        $birthDate = "$year-$month-$day";
+                        $day   = str_pad($matches[2], 2, '0', STR_PAD_LEFT);
+                        $year  = $matches[3];
+                        $birthDate = "$year-$month-$day"; // 1994-08-20
                     } else {
-                        // محاولة تحويل مباشرة (إذا كانت بالفعل YYYY-MM-DD)
+                        // أي فورمات ثانية: نخلي Carbon يحاول يقرأها
                         try {
                             $birthDate = \Carbon\Carbon::parse($dateStr)->format('Y-m-d');
-                        } catch (\Exception $e) {
+                        } catch (\Throwable $e) {
                             $birthDate = null;
                         }
                     }
                 }
 
+                // إنشاء ملف الموظف
                 $profile = StaffProfile::create([
                     'full_name'            => $data['full_name'],
                     'employee_number'      => (int) $data['employee_number'],
@@ -101,135 +125,144 @@ class ProfileDependentsController extends Controller
                     'housing_type'         => $data['housing_type'] ?? null,
 
                     'mobile_alt'           => $data['mobile_alt'] ?? null,
-                    'whatsapp'             => $data['whatsapp'] ?? null,
+                    'whatsapp'             => ($data['whatsapp_prefix'] ?? '') . ($data['whatsapp'] ?? ''),
                     'telegram'             => $data['telegram'] ?? null,
                     'gmail'                => $data['gmail'] ?? null,
 
                     // تحويل readiness: 'working' -> 'ready'
-                    'readiness'            => ($data['readiness'] ?? null) === 'working' ? 'ready' : ($data['readiness'] ?? null),
+                    'readiness'            => ($data['readiness'] ?? null) === 'working'
+                        ? 'ready'
+                        : ($data['readiness'] ?? null),
                     'readiness_notes'      => $data['readiness_notes'] ?? null,
 
-                    // هنا الباسورد = رقم الهوية
+                    // الباسورد = رقم الهوية
                     'password_hash'        => Hash::make((string) $data['national_id']),
                     'edits_allowed'        => 1,
                     'edits_remaining'      => 1,
                 ]);
 
-                foreach ($familyRows as $index => $row) {
+                $allowedRelations = array_keys(config('staff_enums.relation', []));
+
+                foreach ($familyRows as $row) {
                     $relation = $row['relation'] ?? null;
 
-                    // ضمان إضافي: أول صف = self دايمًا
-                    if ($index === 0) {
-                        $relation = 'self';
-                    } elseif (!in_array($relation, ['self','husband','wife','son','daughter','other'], true)) {
+                    if (!in_array($relation, $allowedRelations, true)) {
                         $relation = 'other';
                     }
 
-                    // تحويل القيم لتتوافق مع enum في قاعدة البيانات
-                    $dbRelation = match($relation) {
-                        'self' => 'other',      // الموظف نفسه -> other (لأن DB لا يدعم self)
-                        'husband', 'wife' => 'spouse',  // زوج/زوجة -> spouse
-                        'son' => 'son',
-                        'daughter' => 'daughter',
-                        'other' => 'other',
-                        default => 'other'
-                    };
-
-                    // تحويل صيغة تاريخ الميلاد لأفراد الأسرة
+                    // 🔹 تحويل تاريخ ميلاد المعال إلى Y-m-d
                     $dependentBirthDate = null;
                     if (!empty($row['birth_date'])) {
-                        $dateStr = trim($row['birth_date']);
-                        // إذا كانت الصيغة MM/DD/YYYY
-                        if (preg_match('/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/', $dateStr, $matches)) {
-                            $month = str_pad($matches[1], 2, '0', STR_PAD_LEFT);
-                            $day = str_pad($matches[2], 2, '0', STR_PAD_LEFT);
-                            $year = $matches[3];
-                            $dependentBirthDate = "$year-$month-$day";
-                        } else {
-                            // محاولة تحويل مباشرة
-                            try {
-                                $dependentBirthDate = \Carbon\Carbon::parse($dateStr)->format('Y-m-d');
-                            } catch (\Exception $e) {
-                                $dependentBirthDate = null;
-                            }
+                        try {
+                            $dependentBirthDate = \Carbon\Carbon::parse($row['birth_date'])->format('Y-m-d');
+                        } catch (\Throwable $e) {
+                            $dependentBirthDate = null;
                         }
                     }
 
                     $profile->dependents()->create([
                         'name'       => $row['name'] ?? '',
-                        'relation'   => $dbRelation, // استخدام القيمة المحولة
+                        'relation'   => $relation,
                         'birth_date' => $dependentBirthDate,
                         'is_student' => ($row['is_student'] ?? '') === 'yes',
                     ]);
                 }
 
                 $profile->update([
-                    'family_members_count' => max(1, $familyRows->count()),
+                    'family_members_count' => max(0, $familyRows->count()),
                 ]);
 
-                return $profile; // إرجاع الـ profile من الـ transaction
+                return $profile;
             });
-        } catch (QueryException $e) {
-            // التحقق من نوع الخطأ
-            $errorCode = $e->getCode();
+        } catch (\RuntimeException $e) {
+            if ($e->getMessage() === 'duplicate_family_members') {
+                return back()
+                    ->with('locked', true)
+                    ->with('locked_msg', 'يوجد تكرار في إدخال أحد أفراد الأسرة (نفس الاسم وتاريخ الميلاد مكرر أكثر من مرة).')
+                    ->withInput();
+            }
+
+            throw $e;
+        } catch (\Illuminate\Database\QueryException $e) {
+
             $errorMessage = $e->getMessage();
+            $sqlState     = $e->errorInfo[0] ?? null;
+            $sqlCode      = $e->errorInfo[1] ?? null;
 
-            // تسجيل الخطأ للتحقق
             \Log::error('Error creating staff profile', [
-                'error' => $errorMessage,
-                'code' => $errorCode,
-                'sql_state' => $e->errorInfo[0] ?? null,
-                'sql_code' => $e->errorInfo[1] ?? null,
+                'error'           => $errorMessage,
+                'code'            => $e->getCode(),
+                'sql_state'       => $sqlState,
+                'sql_code'        => $sqlCode,
                 'employee_number' => $data['employee_number'] ?? null,
-                'national_id' => $data['national_id'] ?? null,
+                'national_id'     => $data['national_id'] ?? null,
             ]);
 
-            // التحقق من وجود السجلات في قاعدة البيانات
-            $checkEmployee = StaffProfile::where('employee_number', (int)$data['employee_number'])->exists();
-            $checkNational = StaffProfile::where('national_id', (int)$data['national_id'])->exists();
+            // تكرار في الأرقام الأساسية
+            if (str_contains($errorMessage, 'Duplicate entry')
+                && (str_contains($errorMessage, 'staff_profiles_employee_number_unique')
+                    || str_contains($errorMessage, 'staff_profiles_national_id_unique')
+                    || $sqlCode == 1062)) {
 
-            \Log::info('Database check', [
-                'employee_exists' => $checkEmployee,
-                'national_exists' => $checkNational,
-                'total_records' => StaffProfile::count(),
-            ]);
-
-            // إذا كان الخطأ بسبب unique constraint
-            if (str_contains($errorMessage, 'Duplicate entry') ||
-                str_contains($errorMessage, 'UNIQUE constraint') ||
-                str_contains($errorMessage, '1062') ||
-                ($e->errorInfo[1] ?? 0) == 1062) {
                 return back()
                     ->with('locked', true)
                     ->with('locked_msg', 'الأرقام المدخلة موجودة مسبقًا.')
                     ->withInput();
             }
 
-            // لأخطاء أخرى، نعرض رسالة عامة
+            // تكرار في أفراد الأسرة لنفس الموظف
+            if (str_contains($errorMessage, 'staff_dependents_staff_profile_id_name_birth_date_unique')) {
+                return back()
+                    ->with('locked', true)
+                    ->with('locked_msg', 'لا يمكن إدخال نفس فرد الأسرة مرتين بنفس الاسم وتاريخ الميلاد.')
+                    ->withInput();
+            }
+
+            // Data too long
+            if ($sqlCode == 1406 || str_contains($errorMessage, 'Data too long')) {
+                return back()
+                    ->with('locked', true)
+                    ->with('locked_msg', 'أحد الحقول المدخلة أطول من المسموح به. تأكد من طول رقم الجوال واسم المستخدم في تيليجرام وبريد Gmail.')
+                    ->withInput();
+            }
+
+            // fallback عام
             return back()
                 ->with('locked', true)
                 ->with('locked_msg', 'حدث خطأ أثناء حفظ البيانات. يرجى المحاولة مرة أخرى.')
                 ->withInput();
         }
 
-        // التوجيه إلى صفحة عرض البيانات بعد الحفظ الناجح
         return redirect()
             ->route('staff.profile.show', $profile->id)
             ->with('success', 'تم حفظ البيانات بنجاح ✅');
     }
 
+
+
+    /**
+     * عرض بيانات الموظف + الأسرة
+     */
     public function show(StaffProfile $profile): View
     {
         $profile->load('dependents');
+
         return view('staff.profile_dependents.show', compact('profile'));
     }
 
+    /**
+     * عرض صفحة التعديل
+     */
     public function edit(StaffProfile $profile): View
     {
         $profile->load('dependents');
+
         return view('staff.profile_dependents.edit', compact('profile'));
     }
 
+    /**
+     * تحديث بيانات الموظف + أفراد الأسرة
+     */
     public function update(UpdateDependentsRequest $request, StaffProfile $profile): RedirectResponse
     {
         $data = $request->validated();
@@ -238,116 +271,179 @@ class ProfileDependentsController extends Controller
         if (($profile->edits_remaining ?? 0) < 1) {
             return redirect()
                 ->route('staff.profile.show', $profile->id)
-                ->with('locked_msg','انتهت محاولات التعديل.');
+                ->with('locked_msg', 'انتهت محاولات التعديل.');
         }
 
-        DB::transaction(function () use ($data, $profile, $request) {
-            $payload = [
-                'full_name'            => $data['full_name'],
-                'employee_number'      => (int) $data['employee_number'],
-                'national_id'          => (int) $data['national_id'],
-                'mobile'               => $data['mobile'],
-                'birth_date'           => $data['birth_date'] ?? null,
-                'job_title'            => $data['job_title'] ?? null,
-                'location'             => $data['location'],
-                'department'           => $data['department'] ?? null,
-                'directorate'          => $data['directorate'] ?? null,
-                'section'              => $data['section'] ?? null,
-                'marital_status'       => $data['marital_status'] ?? null,
-                'has_family_incidents' => $data['has_family_incidents'] ?? 'no',
-                'family_notes'         => $data['family_notes'] ?? null,
-                'original_address'     => $data['original_address'] ?? null,
-                'house_status'         => $data['house_status'] ?? null,
-                'status'               => $data['status'] ?? null,
-                'current_address'      => $data['current_address'] ?? null,
-                'housing_type'         => $data['housing_type'] ?? null,
-                'mobile_alt'           => $data['mobile_alt'] ?? null,
-                'whatsapp'             => $data['whatsapp'] ?? null,
-                'telegram'             => $data['telegram'] ?? null,
-                'gmail'                => $data['gmail'] ?? null,
-                'readiness'            => $data['readiness'] ?? null,
-                'readiness_notes'      => $data['readiness_notes'] ?? null,
-            ];
+        try {
+            DB::transaction(function () use ($data, $profile, $request) {
 
-            if ($request->filled('password')) {
-                $payload['password_hash'] = \Hash::make($data['password']);
-            }
-
-            // تحديث بيانات الموظف الأساسية
-            $profile->update($payload);
-
-            // استبدال أفراد الأسرة بنفس منطق store()
-            $profile->dependents()->delete();
-
-            $familyRows = collect($data['family'] ?? [])
-                ->filter(fn($r) =>
-                    filled($r['name'] ?? null) ||
-                    filled($r['relation'] ?? null) ||
-                    filled($r['birth_date'] ?? null) ||
-                    filled($r['is_student'] ?? null)
-                )
-                ->values();
-
-            foreach ($familyRows as $index => $row) {
-                $relation = $row['relation'] ?? null;
-
-                // ضمان أن الصف الأول هو الموظف نفسه
-                if ($index === 0) {
-                    $relation = 'self';
-                } elseif (!in_array($relation, ['self','husband','wife','son','daughter','other'], true)) {
-                    $relation = 'other';
-                }
-
-                // نفس المابينغ الخاص بـ store()
-                $dbRelation = match($relation) {
-                    'self'            => 'other',   // الموظف نفسه -> other في DB
-                    'husband', 'wife' => 'spouse',
-                    'son'             => 'son',
-                    'daughter'        => 'daughter',
-                    'other'           => 'other',
-                    default           => 'other'
-                };
-
-                // تحويل تاريخ الميلاد لأفراد الأسرة (يدعم MM/DD/YYYY أو أي صيغة يفهمها Carbon)
-                $dependentBirthDate = null;
-                if (!empty($row['birth_date'])) {
-                    $dateStr = trim($row['birth_date']);
-                    if (preg_match('/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/', $dateStr, $matches)) {
-                        $month = str_pad($matches[1], 2, '0', STR_PAD_LEFT);
-                        $day   = str_pad($matches[2], 2, '0', STR_PAD_LEFT);
-                        $year  = $matches[3];
-                        $dependentBirthDate = "$year-$month-$day";
-                    } else {
-                        try {
-                            $dependentBirthDate = \Carbon\Carbon::parse($dateStr)->format('Y-m-d');
-                        } catch (\Exception $e) {
-                            $dependentBirthDate = null;
-                        }
+                // 🔹 تحويل تاريخ الميلاد للموظف (مع إن الفورم input[type=date] لكن أمان زيادة)
+                $birthDate = null;
+                if (!empty($data['birth_date'])) {
+                    try {
+                        $birthDate = \Carbon\Carbon::parse($data['birth_date'])->format('Y-m-d');
+                    } catch (\Throwable $e) {
+                        $birthDate = null;
                     }
                 }
 
-                $profile->dependents()->create([
-                    'name'       => $row['name'] ?? '',
-                    'relation'   => $dbRelation,
-                    'birth_date' => $dependentBirthDate,
-                    'is_student' => ($row['is_student'] ?? '') === 'yes',
-                ]);
-            }
+                $payload = [
+                    'full_name'            => $data['full_name'],
+                    'employee_number'      => (int) $data['employee_number'],
+                    'national_id'          => (int) $data['national_id'],
+                    'mobile'               => $data['mobile'],
+                    'birth_date'           => $birthDate,
+                    'job_title'            => $data['job_title'] ?? null,
+                    'location'             => $data['location'],
+                    'department'           => $data['department'] ?? null,
+                    'directorate'          => $data['directorate'] ?? null,
+                    'section'              => $data['section'] ?? null,
+                    'marital_status'       => $data['marital_status'] ?? null,
+                    'has_family_incidents' => $data['has_family_incidents'] ?? 'no',
+                    'family_notes'         => $data['family_notes'] ?? null,
+                    'original_address'     => $data['original_address'] ?? null,
+                    'house_status'         => $data['house_status'] ?? null,
+                    'status'               => $data['status'] ?? null,
+                    'current_address'      => $data['current_address'] ?? null,
+                    'housing_type'         => $data['housing_type'] ?? null,
+                    'mobile_alt'           => $data['mobile_alt'] ?? null,
+                    'whatsapp'             => ($data['whatsapp_prefix'] ?? '') . ($data['whatsapp'] ?? ''),
+                    'telegram'             => $data['telegram'] ?? null,
+                    'gmail'                => $data['gmail'] ?? null,
+                    'readiness'            => $data['readiness'] ?? null,
+                    'readiness_notes'      => $data['readiness_notes'] ?? null,
+                ];
 
-            $profile->update([
-                'family_members_count' => max(1, $familyRows->count()),
-                'last_edited_at'       => now(),
-                'edits_remaining'      => max(0, ($profile->edits_remaining ?? 1) - 1),
+                if ($request->filled('password')) {
+                    $payload['password_hash'] = Hash::make($data['password']);
+                }
+
+                // تحديث بيانات الموظف
+                $profile->update($payload);
+
+                // حذف المعالين القدامى
+                $profile->dependents()->delete();
+
+                // إعادة بناء قائمة المعالين
+                $familyRows = collect($data['family'] ?? [])
+                    ->filter(fn ($r) =>
+                        filled($r['name'] ?? null) ||
+                        filled($r['relation'] ?? null) ||
+                        filled($r['birth_date'] ?? null) ||
+                        filled($r['is_student'] ?? null)
+                    )
+                    ->values();
+
+
+                $duplicates = $familyRows
+                    ->map(function ($r) {
+                        $name  = mb_strtolower(trim($r['name'] ?? ''));
+                        $birth = trim($r['birth_date'] ?? '');
+                        return $name . '|' . ($birth ?: 'NULL');
+                    })
+                    ->groupBy(fn($key) => $key)
+                    ->filter(fn($group) => $group->count() > 1);
+
+                if ($duplicates->isNotEmpty()) {
+                    throw new \RuntimeException('duplicate_family_members');
+                }
+
+                $allowedRelations = array_keys(config('staff_enums.relation', []));
+
+                foreach ($familyRows as $row) {
+                    $relation = $row['relation'] ?? null;
+
+                    if (!in_array($relation, $allowedRelations, true)) {
+                        $relation = 'other';
+                    }
+
+                    $dependentBirthDate = null;
+                    if (!empty($row['birth_date'])) {
+                        try {
+                            $dependentBirthDate = \Carbon\Carbon::parse($row['birth_date'])->format('Y-m-d');
+                        } catch (\Throwable $e) {
+                            $dependentBirthDate = null;
+                        }
+                    }
+
+                    $profile->dependents()->create([
+                        'name'       => $row['name'] ?? '',
+                        'relation'   => $relation,
+                        'birth_date' => $dependentBirthDate,
+                        'is_student' => ($row['is_student'] ?? '') === 'yes',
+                    ]);
+                }
+
+                $profile->update([
+                    'family_members_count' => max(0, $familyRows->count()),
+                    'last_edited_at'       => now(),
+                    'edits_remaining'      => max(0, ($profile->edits_remaining ?? 1) - 1),
+                ]);
+
+                session()->forget("staff_edit_allowed_{$profile->id}");
+            });
+        } catch (\RuntimeException $e) {
+            if ($e->getMessage() === 'duplicate_family_members') {
+                return back()
+                    ->with('locked', true)
+                    ->with('locked_msg', 'يوجد تكرار في إدخال أحد أفراد الأسرة (نفس الاسم وتاريخ الميلاد مكرر أكثر من مرة).')
+                    ->withInput();
+            }
+            throw $e;
+        } catch (\Illuminate\Database\QueryException $e) {
+
+            $errorMessage = $e->getMessage();
+            $sqlState     = $e->errorInfo[0] ?? null;
+            $sqlCode      = $e->errorInfo[1] ?? null;
+
+            \Log::error('Error updating staff profile', [
+                'error'      => $errorMessage,
+                'code'       => $e->getCode(),
+                'sql_state'  => $sqlState,
+                'sql_code'   => $sqlCode,
+                'profile_id' => $profile->id,
             ]);
 
-            // إنهاء جلسة التعديل
-            session()->forget("staff_edit_allowed_{$profile->id}");
-        });
+            if (str_contains($errorMessage, 'Duplicate entry')
+                && (str_contains($errorMessage, 'staff_profiles_employee_number_unique')
+                    || str_contains($errorMessage, 'staff_profiles_national_id_unique')
+                    || $sqlCode == 1062)) {
 
-        return redirect()->route('staff.profile.show', $profile->id)
+                return back()
+                    ->with('locked', true)
+                    ->with('locked_msg', 'الأرقام المدخلة موجودة مسبقًا لموظف آخر.')
+                    ->withInput();
+            }
+
+            if (str_contains($errorMessage, 'staff_dependents_staff_profile_id_name_birth_date_unique')) {
+                return back()
+                    ->with('locked', true)
+                    ->with('locked_msg', 'لا يمكن إدخال نفس فرد الأسرة مرتين بنفس الاسم وتاريخ الميلاد.')
+                    ->withInput();
+            }
+
+            if ($sqlCode == 1406 || str_contains($errorMessage, 'Data too long')) {
+                return back()
+                    ->with('locked', true)
+                    ->with('locked_msg', 'أحد الحقول المدخلة أطول من المسموح به. تأكد من طول رقم الجوال واسم المستخدم في تيليجرام وبريد Gmail.')
+                    ->withInput();
+            }
+
+            return back()
+                ->with('locked', true)
+                ->with('locked_msg', 'حدث خطأ أثناء حفظ البيانات. يرجى المحاولة مرة أخرى.')
+                ->withInput();
+        }
+
+        return redirect()
+            ->route('staff.profile.show', $profile->id)
             ->with('success', 'تم تحديث البيانات بنجاح ✅');
     }
 
+
+    /**
+     * خدمة lookup لبيانات الموظف من الـ API الخارجي
+     */
     public function lookup(Request $request)
     {
         $id = preg_replace('/\D/', '', (string) $request->query('id', ''));
@@ -358,7 +454,7 @@ class ProfileDependentsController extends Controller
         try {
             $apiUrl = config('staff.employee_lookup_api_url', 'https://eservices.gedco.ps/api/employees/search');
 
-            // جرب POST مع body أولاً (الأكثر شيوعاً في APIs الجديدة)
+            // جرب POST مع body أولاً
             $response = Http::timeout(10)
                 ->acceptJson()
                 ->asJson()
@@ -389,11 +485,12 @@ class ProfileDependentsController extends Controller
 
             if (!$response->ok()) {
                 \Log::error('Employee lookup API failed', [
-                    'url' => $apiUrl,
-                    'id' => $id,
+                    'url'    => $apiUrl,
+                    'id'     => $id,
                     'status' => $response->status(),
-                    'body' => $response->body()
+                    'body'   => $response->body(),
                 ]);
+
                 return response()->json(['ok' => false, 'message' => 'تعذر الاتصال بالخدمة.'], 502);
             }
 
@@ -401,11 +498,11 @@ class ProfileDependentsController extends Controller
 
             // تسجيل نتائج API للتحقق
             \Log::info('Employee lookup API response', [
-                'url' => $apiUrl,
-                'id' => $id,
-                'status' => $response->status(),
-                'payload_keys' => is_array($payload) ? array_keys($payload) : 'not_array',
-                'payload_sample' => is_array($payload) ? json_encode(array_slice($payload, 0, 1, true)) : $payload,
+                'url'           => $apiUrl,
+                'id'            => $id,
+                'status'        => $response->status(),
+                'payload_keys'  => is_array($payload) ? array_keys($payload) : 'not_array',
+                'payload_sample'=> is_array($payload) ? json_encode(array_slice($payload, 0, 1, true)) : $payload,
             ]);
 
             // دعم بنيات مختلفة للاستجابة
@@ -422,66 +519,71 @@ class ProfileDependentsController extends Controller
 
             if (!$row) {
                 \Log::warning('Employee lookup: No data found', [
-                    'url' => $apiUrl,
-                    'id' => $id,
-                    'payload_structure' => array_keys($payload ?? [])
+                    'url'                => $apiUrl,
+                    'id'                 => $id,
+                    'payload_structure'  => is_array($payload) ? array_keys($payload) : 'not_array',
                 ]);
+
                 return response()->json(['ok' => false, 'message' => 'لا توجد بيانات مطابقة.'], 404);
             }
 
             $normalizeMarital = function (?string $status): ?string {
                 $status = trim((string) $status);
                 if ($status === '') return null;
-                if (str_contains($status, 'أعزب'))    return 'single';
-                if (str_contains($status, 'متزوج'))   return 'married';
-                if (str_contains($status, 'أرمل'))    return 'widowed';
-                if (str_contains($status, 'مطلق'))    return 'divorced';
+                if (str_contains($status, 'أعزب'))   return 'single';
+                if (str_contains($status, 'متزوج'))  return 'married';
+                if (str_contains($status, 'أرمل'))   return 'widowed';
+                if (str_contains($status, 'مطلق'))   return 'divorced';
                 return null;
             };
 
             $normalizeLocation = function (?string $branch): ?string {
                 $b = mb_strtolower(trim((string) $branch));
                 if ($b === '') return null;
-                if (str_contains($b, 'الرئيس'))   return '1';
-                if (str_contains($b, 'غزة'))      return '2';
-                if (str_contains($b, 'الشمال'))    return '3';
-                if (str_contains($b, 'الوسطى'))    return '4';
-                if (str_contains($b, 'خانيونس'))   return '6';
-                if (str_contains($b, 'رفح'))       return '7';
-                if (str_contains($b, 'الصيانة'))   return '8';
+                if (str_contains($b, 'الرئيس'))  return '1';
+                if (str_contains($b, 'غزة'))     return '2';
+                if (str_contains($b, 'الشمال'))  return '3';
+                if (str_contains($b, 'الوسطى'))  return '4';
+                if (str_contains($b, 'خانيونس')) return '6';
+                if (str_contains($b, 'رفح'))     return '7';
+                if (str_contains($b, 'الصيانة')) return '8';
                 return null;
             };
 
             // تسجيل البيانات المستخرجة
             \Log::info('Employee lookup extracted data', [
-                'row_keys' => is_array($row) ? array_keys($row) : 'not_array',
-                'row_sample' => is_array($row) ? json_encode($row) : $row,
+                'row_keys'  => is_array($row) ? array_keys($row) : 'not_array',
+                'row_sample'=> is_array($row) ? json_encode($row) : $row,
             ]);
 
             $data = [
-                'full_name'      => $row['NAME'] ?? null,
-                'birth_date'     => isset($row['BIRTH_DATE']) ? substr((string)$row['BIRTH_DATE'], 0, 10) : null,
-                'marital_status' => $normalizeMarital($row['STATUS_NAME'] ?? null),
-                'job_title'      => $row['W_NO_ADMIN_NAME'] ?? null,
-                'location'       => $normalizeLocation($row['BRAN_NAME'] ?? null),
-                'department'     => $row['HEAD_DEPARTMENT_NAME'] ?? $row['DEPT_NAME'] ?? $row['DEPARTMENT'] ?? $row['ADMIN_NAME'] ?? $row['DEPT'] ?? null,
-                'national_id'    => $row['ID'] ?? null,
-                'employee_number'=> $row['NO'] ?? null,
+                'full_name'       => $row['NAME'] ?? null,
+                'birth_date'      => isset($row['BIRTH_DATE']) ? substr((string) $row['BIRTH_DATE'], 0, 10) : null,
+                'marital_status'  => $normalizeMarital($row['STATUS_NAME'] ?? null),
+                'job_title'       => $row['W_NO_ADMIN_NAME'] ?? null,
+                'location'        => $normalizeLocation($row['BRAN_NAME'] ?? null),
+                'department'      => $row['HEAD_DEPARTMENT_NAME'] ?? $row['DEPT_NAME'] ?? $row['DEPARTMENT'] ?? $row['ADMIN_NAME'] ?? $row['DEPT'] ?? null,
+                'national_id'     => $row['ID'] ?? null,
+                'employee_number' => $row['NO'] ?? null,
             ];
 
-            // إضافة البيانات الخام للاستجابة (للتشخيص)
             $responseData = [
-                'ok' => true,
+                'ok'   => true,
                 'data' => $data,
                 '_debug' => [
                     'raw_payload_keys' => is_array($payload) ? array_keys($payload) : 'not_array',
-                    'raw_row_keys' => is_array($row) ? array_keys($row) : 'not_array',
-                    'raw_row' => $row, // البيانات الخام من API
-                ]
+                    'raw_row_keys'     => is_array($row) ? array_keys($row) : 'not_array',
+                    'raw_row'          => $row,
+                ],
             ];
 
             return response()->json($responseData);
         } catch (\Throwable $e) {
+            \Log::error('Employee lookup unexpected error', [
+                'id'      => $id,
+                'message' => $e->getMessage(),
+            ]);
+
             return response()->json(['ok' => false, 'message' => 'حدث خطأ غير متوقع.'], 500);
         }
     }

@@ -9,30 +9,8 @@
 
     <link id="style" href="{{ asset('assets/admin/libs/bootstrap/css/bootstrap.rtl.min.css') }}" rel="stylesheet">
 
-    <style>
-        :root { --surface:#fff7f2; --surface-alt:#fff1e6; --border:#f1b08d; --accent:#ef7c4c; --accent-dark:#c65a28; --text:#2f2b28; --muted:#8c6f61; }
-        body { margin:0; font-family:"Cairo", Arial, sans-serif; background:#ffffff; color:var(--text); padding:2rem 0; }
-        .shell { width:min(1080px,100%); margin:0 auto; background:#fff; border-radius:24px; border:1px solid rgba(239,124,76,.2); box-shadow:0 20px 50px rgba(239,124,76,.15); overflow:hidden; }
-        .header { padding:2rem 1rem; background:linear-gradient(135deg, rgba(239,124,76,.15), rgba(239,124,76,.05)); border-bottom:1px solid rgba(239,124,76,.15); text-align:center; }
-        .header h1 { margin:0; color:var(--accent-dark); font-weight:700; }
-        .section { padding:2rem; border-bottom:1px solid rgba(239,124,76,.08); }
-        .section:last-of-type { border-bottom:none; }
-        .title { display:inline-flex; align-items:center; gap:.5rem; background:rgba(239,124,76,.1); color:var(--accent-dark); padding:.4rem 1.1rem; border-radius:999px; font-weight:700; margin-bottom:1.25rem; }
-        .grid { display:grid; gap:1rem 1.5rem; }
-        .grid-3 { grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); }
-        .card { border:1px solid rgba(239,124,76,.18); border-radius:16px; padding:1rem 1.25rem; background:#fff; }
-        .label { color:var(--muted); font-weight:700; font-size:.9rem; }
-        .value { font-weight:700; color:#2f2b28; }
-        .family-table { width:100%; border-collapse:collapse; border:1px solid rgba(239,124,76,.18); border-radius:16px; overflow:hidden; }
-        .family-table thead th { background:var(--surface-alt); padding:.8rem; font-weight:700; color:var(--accent-dark); }
-        .family-table td { padding:.7rem; border-top:1px solid rgba(239,124,76,.12); }
-        .actions { padding:2rem; text-align:center; }
-        .btn-main { background:linear-gradient(135deg,#ef7c4c,#f49a6a); border:none; color:#fff; padding:.9rem 2.75rem; border-radius:18px; font-size:1rem; font-weight:700; text-decoration:none; display:inline-block; }
-        .alert { border-radius:14px; padding:1rem 1.1rem; margin:1rem 2rem 0; font-weight:600; }
-        .alert-info { background:#eef6ff; border:1px solid #cfe3ff; color:#0b4b8a; }
-        .alert-success { background:#e9f9ee; border:1px solid #b6e1c5; color:#165c2f; }
-        .alert-warning { background:#fff8e6; border:1px solid #ffe2a6; color:#7a4c00; }
-    </style>
+    <link rel="stylesheet" href="{{ asset('assets/site/css/staff-common.css') }}">
+
 </head>
 <body>
 

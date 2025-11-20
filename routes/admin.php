@@ -20,6 +20,7 @@ use App\Http\Controllers\Admin\Site\SliderController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\HomeVideoController;
 use App\Http\Controllers\Admin\UploadController;
+use App\Http\Controllers\Admin\Staff\StaffProfileController;
 
 
 Route::prefix('admin')->name('admin.')->group(function () {
@@ -140,6 +141,11 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/home-video',  [HomeVideoController::class,'edit'])->name('homeVideo.edit');
         Route::put('/home-video',  [HomeVideoController::class,'update'])->name('homeVideo.update');
 
+
+        Route::prefix('staff-profiles')->name('staff-profiles.')->group(function () {
+            Route::get('/', [StaffProfileController::class, 'index'])->name('index');
+            Route::get('/{profile}', [StaffProfileController::class, 'show'])->name('show');
+        });
 
         Route::post('logout', [AuthController::class, 'destroy'])->name('logout');
 

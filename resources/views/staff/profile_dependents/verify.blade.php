@@ -9,32 +9,8 @@
 
     <link id="style" href="{{ asset('assets/admin/libs/bootstrap/css/bootstrap.rtl.min.css') }}" rel="stylesheet">
 
-    <style>
-        @font-face { font-family: 'Cairo'; font-style: normal; font-weight: 400; src: url('{{ asset('assets/fonts/cairo/Cairo-Regular.ttf') }}') format('truetype'); font-display: swap; }
-        @font-face { font-family: 'Cairo'; font-style: normal; font-weight: 500; src: url('{{ asset('assets/fonts/cairo/Cairo-Medium.ttf') }}') format('truetype'); font-display: swap; }
-        @font-face { font-family: 'Cairo'; font-style: normal; font-weight: 600; src: url('{{ asset('assets/fonts/cairo/Cairo-SemiBold.ttf') }}') format('truetype'); font-display: swap; }
-        @font-face { font-family: 'Cairo'; font-style: normal; font-weight: 700; src: url('{{ asset('assets/fonts/cairo/Cairo-Bold.ttf') }}') format('truetype'); font-display: swap; }
+    <link rel="stylesheet" href="{{ asset('assets/site/css/staff-common.css') }}">
 
-        :root{ --surface:#fff7f2; --surface-alt:#fff1e6; --border:#f1b08d; --accent:#ef7c4c; --accent-dark:#c65a28; --text:#2f2b28; --muted:#8c6f61; }
-        body{ margin:0; font-family:"Cairo",Arial,sans-serif; background:#ffffff; color:var(--text); padding:2rem 0; }
-        .form-shell{ width:min(720px,100%); margin:0 auto; background:#fff; border-radius:24px; border:1px solid rgba(239,124,76,.2); box-shadow:0 20px 50px rgba(239,124,76,.15); overflow:hidden; }
-        .form-header{ padding:2rem 1rem; background:linear-gradient(135deg, rgba(239,124,76,.15), rgba(239,124,76,.05)); border-bottom:1px solid rgba(239,124,76,.15); text-align:center; }
-        .form-header h1{ margin:0; color:var(--accent-dark); font-weight:700; }
-        .form-section{ padding:2rem; border-bottom:1px solid rgba(239,124,76,.08); }
-        .form-section:last-of-type{ border-bottom:none; }
-        .section-title{ display:inline-flex; align-items:center; gap:.5rem; background:rgba(239,124,76,.1); color:var(--accent-dark); padding:.4rem 1.1rem; border-radius:999px; font-weight:700; margin-bottom:1.25rem; }
-        label.field{ display:flex; flex-direction:column; gap:.35rem; font-weight:600; color:var(--muted); }
-        label.field span{ font-size:.9rem; }
-        input{ border:1px solid rgba(239,124,76,.2); border-radius:14px; padding:.8rem 1rem; font-size:.95rem; background:#fff; transition:border-color .2s, box-shadow .2s; }
-        input:focus{ outline:none; border-color:var(--accent); box-shadow:0 0 0 3px rgba(239,124,76,.18); }
-        .submit-row{ padding:2rem; text-align:center; }
-        .submit-row button{ background:linear-gradient(135deg, #ef7c4c, #f49a6a); border:none; color:#fff; padding:.9rem 2.75rem; border-radius:18px; font-size:1rem; font-weight:700; }
-        .submit-row button:hover{ transform:translateY(-2px); box-shadow:0 12px 20px rgba(239,124,76,.25); }
-        .alert{ border-radius:14px; padding:1rem 1.1rem; margin:1rem 2rem 0; font-weight:600; }
-        .alert-info{ background:#eef6ff; border:1px solid #b6d5ff; color:#1b4d91; }
-        .alert-danger{ background:#fdeeee; border:1px solid #f5b1b1; color:#8a1f1f; }
-        .req-star{ color:#d9534f; margin-inline-start:.2rem; }
-    </style>
 </head>
 <body>
 <div class="form-shell">

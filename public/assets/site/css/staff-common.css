@@ -1,0 +1,463 @@
+/* =========================
+   الخطوط العامة (Cairo)
+   ========================= */
+@font-face {
+    font-family: 'Cairo';
+    font-style: normal;
+    font-weight: 400;
+    src: url('../../fonts/cairo/Cairo-Regular.ttf') format('truetype');
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Cairo';
+    font-style: normal;
+    font-weight: 500;
+    src: url('../../fonts/cairo/Cairo-Medium.ttf') format('truetype');
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Cairo';
+    font-style: normal;
+    font-weight: 600;
+    src: url('../../fonts/cairo/Cairo-SemiBold.ttf') format('truetype');
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Cairo';
+    font-style: normal;
+    font-weight: 700;
+    src: url('../../fonts/cairo/Cairo-Bold.ttf') format('truetype');
+    font-display: swap;
+}
+
+/* =========================
+   متغيرات الألوان والأساسيات
+   ========================= */
+:root {
+    --surface:      #fff7f2;
+    --surface-alt:  #fff1e6;
+    --border:       #f1b08d;
+    --accent:       #ef7c4c;
+    --accent-dark:  #c65a28;
+    --text:         #2f2b28;
+    --muted:        #8c6f61;
+}
+
+body {
+    margin: 0;
+    font-family: "Cairo", Arial, sans-serif;
+    background: #ffffff;
+    color: var(--text);
+    padding: 2rem 0;
+    line-height: 1.6;
+}
+
+/* =========================
+   الحاوية العامة (النماذج / العرض)
+   ========================= */
+.form-shell,
+.shell {
+    width: min(1080px, 100%);
+    margin: 0 auto;
+    background: #fff;
+    border-radius: 24px;
+    border: 1px solid rgba(239, 124, 76, .2);
+    box-shadow: 0 20px 50px rgba(239, 124, 76, .15);
+    overflow: hidden;
+}
+
+/* الهيدر العلوي */
+.form-header,
+.header {
+    padding: 2rem 1rem;
+    background: linear-gradient(135deg, rgba(239,124,76,.15), rgba(239,124,76,.05));
+    border-bottom: 1px solid rgba(239,124,76,.15);
+    text-align: center;
+}
+
+.form-header h1,
+.header h1 {
+    margin: 0;
+    color: var(--accent-dark);
+    font-weight: 700;
+    font-size: 1.6rem;
+}
+
+/* =========================
+   الأقسام والعناوين
+   ========================= */
+.form-section,
+.section {
+    padding: 2rem;
+    border-bottom: 1px solid rgba(239,124,76,.08);
+}
+
+.form-section:last-of-type,
+.section:last-of-type {
+    border-bottom: none;
+}
+
+.section-title,
+.title {
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+    background: rgba(239,124,76,.1);
+    color: var(--accent-dark);
+    padding: .4rem 1.1rem;
+    border-radius: 999px;
+    font-weight: 700;
+    margin-bottom: 1.25rem;
+    font-size: .95rem;
+}
+
+/* =========================
+   الـ Grid العام
+   ========================= */
+.grid {
+    display: grid;
+    gap: 1rem 1.5rem;
+}
+
+.grid-3 {
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.grid-2 {
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+
+/* =========================
+   الحقول (في فورم الإضافة / التعديل)
+   ========================= */
+label.field {
+    display: flex;
+    flex-direction: column;
+    gap: .35rem;
+    font-weight: 600;
+    color: var(--muted);
+}
+
+label.field span {
+    font-size: .9rem;
+}
+
+label.field.required > span::after {
+    content: " *";
+    color: #e63946;
+    font-weight: bold;
+}
+
+input,
+select,
+textarea {
+    border: 1px solid rgba(239,124,76,.2);
+    border-radius: 14px;
+    padding: .8rem 1rem;
+    font-size: .95rem;
+    background: #fff;
+    transition: border-color .2s ease, box-shadow .2s ease, background-color .2s ease;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(239,124,76,.18);
+    background-color: #fffdf9;
+}
+
+textarea {
+    min-height: 90px;
+    resize: vertical;
+}
+
+/* نجمة الحقول المطلوبة في verify/edit */
+.req-star {
+    color: #d9534f;
+    margin-inline-start: .2rem;
+}
+
+/* =========================
+   الكروت في صفحة العرض
+   ========================= */
+.card {
+    border: 1px solid rgba(239,124,76,.18);
+    border-radius: 16px;
+    padding: 1rem 1.25rem;
+    background: #fff;
+}
+
+.label {
+    color: var(--muted);
+    font-weight: 700;
+    font-size: .9rem;
+    margin-bottom: .25rem;
+}
+
+.value {
+    font-weight: 700;
+    color: #2f2b28;
+}
+
+/* حقل قراءة فقط يشبه الـ input */
+.field-line {
+    border: 1px solid rgba(239,124,76,.2);
+    border-radius: 14px;
+    padding: .7rem 1rem;
+    background: #fff;
+    margin-top: .35rem;
+    min-height: 2.1rem;
+    display: flex;
+    align-items: center;
+}
+
+/* =========================
+   جدول أفراد الأسرة
+   ========================= */
+.family-table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid rgba(239,124,76,.18);
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+.family-table thead th {
+    background: var(--surface-alt);
+    padding: .8rem;
+    font-weight: 700;
+    color: var(--accent-dark);
+    font-size: .9rem;
+}
+
+.family-table td {
+    padding: .6rem;
+    border-top: 1px solid rgba(239,124,76,.12);
+    font-size: .9rem;
+}
+
+.family-table input,
+.family-table select {
+    width: 100%;
+}
+
+/* =========================
+   أزرار أفراد الأسرة / الإضافة
+   ========================= */
+.add-member-btn,
+button {
+    transition: all .2s ease;
+}
+
+.add-member-btn {
+    margin-top: 1rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: .6rem;
+    border: 1px dashed rgba(239,124,76,.45);
+    padding: .6rem 1.4rem;
+    border-radius: 999px;
+    color: var(--accent-dark);
+    background: rgba(239,124,76,.08);
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.add-member-btn:hover {
+    background: rgba(239,124,76,.16);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(239,124,76,.2);
+}
+
+.remove-member-btn {
+    border: none;
+    background: rgba(239,124,76,.1);
+    color: var(--accent-dark);
+    padding: .45rem .8rem;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: .85rem;
+}
+
+.remove-member-btn:hover {
+    background: rgba(239,124,76,.2);
+}
+
+/* =========================
+   صف حفظ / أزرار الأكشن
+   ========================= */
+.submit-row,
+.actions {
+    padding: 2rem;
+    text-align: center;
+}
+
+.submit-row button,
+.btn-main {
+    background: linear-gradient(135deg, #ef7c4c, #f49a6a);
+    border: none;
+    color: #fff;
+    padding: .9rem 2.75rem;
+    border-radius: 18px;
+    font-size: 1rem;
+    font-weight: 700;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.submit-row button:hover,
+.btn-main:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 20px rgba(239,124,76,.25);
+}
+
+/* =========================
+   التنبيهات (Alerts)
+   ========================= */
+.alert {
+    border-radius: 14px;
+    padding: 1rem 1.1rem;
+    margin: 1rem 2rem 0;
+    font-weight: 600;
+    font-size: .9rem;
+}
+
+.alert-success {
+    background: #e9f9ee;
+    border: 1px solid #b6e1c5;
+    color: #165c2f;
+}
+
+.alert-danger {
+    background: #fdeeee;
+    border: 1px solid #f5b1b1;
+    color: #8a1f1f;
+}
+
+.alert-warning {
+    background: #fff6ed;
+    border: 1px solid #ffe0c2;
+    color: #b15b00;
+}
+
+.alert-info {
+    background: #eef6ff;
+    border: 1px solid #cfe3ff;
+    color: #0b4b8a;
+}
+
+/* =========================
+   Helpers: hidden / show
+   ========================= */
+.hidden {
+    opacity: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: all .3s ease;
+}
+
+.show {
+    opacity: 1;
+    max-height: 400px;
+}
+
+/* =========================
+   ريسبونسيف للموبايل (<= 640px)
+   ========================= */
+@media (max-width: 640px) {
+    body {
+        padding: 1rem 0;
+        font-size: 14px;
+    }
+
+    .form-shell,
+    .shell {
+        border-radius: 16px;
+        box-shadow: 0 10px 25px rgba(239,124,76,.12);
+    }
+
+    .form-header,
+    .header {
+        padding: 1.25rem .75rem;
+    }
+
+    .form-header h1,
+    .header h1 {
+        font-size: 1.3rem;
+    }
+
+    .form-section,
+    .section {
+        padding: 1.25rem 1rem;
+    }
+
+    .grid-3,
+    .grid-2 {
+        grid-template-columns: 1fr;
+    }
+
+    .alert {
+        margin: 1rem 1rem 0;
+        padding: .85rem .9rem;
+    }
+
+    .submit-row,
+    .actions {
+        padding: 1.5rem 1rem 1.75rem;
+    }
+
+    .submit-row button,
+    .btn-main,
+    .add-member-btn {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .add-member-btn {
+        justify-content: center;
+    }
+
+    /* جدول الأسرة يتحول إلى كروت */
+    .family-table thead {
+        display: none;
+    }
+
+    .family-table,
+    .family-table tbody,
+    .family-table tr,
+    .family-table td {
+        display: block;
+        width: 100%;
+    }
+
+    .family-table tr {
+        margin-bottom: 1rem;
+        border: 1px solid rgba(239,124,76,.18);
+        border-radius: 12px;
+        overflow: hidden;
+        background: #fff;
+    }
+
+    .family-table td {
+        border-top: none;
+        padding: .65rem .9rem;
+    }
+
+    .family-table td::before {
+        content: attr(data-label);
+        display: block;
+        font-weight: 700;
+        color: var(--accent-dark);
+        margin-bottom: .35rem;
+    }
+
+    .remove-member-btn {
+        width: 100%;
+        text-align: center;
+        margin-top: .35rem;
+    }
+}
