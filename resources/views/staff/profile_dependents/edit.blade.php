@@ -8,24 +8,40 @@
     <link id="style" href="{{ asset('assets/admin/libs/bootstrap/css/bootstrap.rtl.min.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('assets/site/css/staff-common.css') }}">
     <style>
-        .phone-input {
+        .field .wa-wrapper {
+            width: 100%;
             display: flex;
             align-items: center;
-            gap: 4px;
-            direction: ltr;      /* عشان يطلع + 970 [input] بالترتيب الصحيح */
+            gap: 6px;
+            direction: ltr !important;
+
+            background: #fff;
+            border: 1px solid #f0b9a6;
+            border-radius: 12px;
+            padding: 0 10px;
+            height: 48px;
+            box-sizing: border-box;
         }
 
-        .phone-plus {
-            font-weight: 600;
-            padding: 0 2px;
+        .wa-plus {
+            font-size: 16px;
+            font-weight: bold;
         }
 
-        .phone-prefix {
-            max-width: 70px;
+        .wa-prefix {
+            width: 80px;
+            border: none;
+            background: transparent;
+            font-size: 15px;
+            outline: none;
         }
 
-        .phone-number {
+        .wa-number {
             flex: 1;
+            border: none;
+            background: transparent;
+            font-size: 15px;
+            outline: none;
         }
     </style>
 </head>
@@ -330,24 +346,25 @@
                         }
                     }
                 @endphp
+
                 <label class="field">
                     <span>واتس آب</span>
 
-                    <div class="phone-input">
-                        <span class="phone-plus">+</span>
+                    <div class="wa-wrapper">
+                        <span class="wa-plus">+</span>
 
-                        <select name="whatsapp_prefix" class="phone-prefix">
+                        <select name="whatsapp_prefix" class="wa-prefix">
                             <option value="970" @selected(old('whatsapp_prefix', $waPref)=='970')>970</option>
                             <option value="972" @selected(old('whatsapp_prefix', $waPref)=='972')>972</option>
                         </select>
 
                         <input type="tel"
                                name="whatsapp"
+                               placeholder="59xxxxxxx"
                                value="{{ old('whatsapp', $waNum) }}"
                                maxlength="10"
                                pattern="\d{8,10}"
-                               class="phone-number"
-                               placeholder="59xxxxxxx">
+                               class="wa-number">
                     </div>
                 </label>
 

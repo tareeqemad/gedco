@@ -220,46 +220,18 @@
 
 @section('content')
     @php
-        $locations = config('staff_enums.locations', [
-            '1'=>'المقر الرئيسي','2'=>'مقر غزة','3'=>'مقر الشمال',
-            '4'=>'مقر الوسطى','6'=>'مقر خانيونس','7'=>'مقر رفح','8'=>'مقر الصيانة - غزة'
-        ]);
-
-        $maritalStatus = config('staff_enums.marital_status', [
-            'single'=>'أعزب/عزباء','married'=>'متزوج/متزوجة',
-            'widowed'=>'أرمل/أرملة','divorced'=>'مطلق/مطلقة'
-        ]);
-
-        $houseStatus = config('staff_enums.house_status', [
-            'intact'=>'سليم','partial'=>'هدم جزئي','demolished'=>'هدم كلي'
-        ]);
-
-        $residentStatus = config('staff_enums.status', [
-            'resident'=>'مقيم','displaced'=>'نازح'
-        ]);
-
-        $housingTypes = config('staff_enums.housing_type', [
-            'house'=>'منزل','apartment'=>'شقة','tent'=>'خيمة','other'=>'أخرى'
-        ]);
-
-        $readinessList = config('staff_enums.readiness', [
-            'working'=>'باشر العمل فعلياًً','ready'=>'جاهز للعودة','not_ready'=>'مش جاهز بعد'
-        ]);
-
-        $relations = config('staff_enums.relation', [
-            'self'    => 'الموظف نفسه',
-            'husband' => 'زوج',
-            'wife'    => 'زوجة',
-            'spouse'  => 'زوج / زوجة',
-            'son'     => 'ابن',
-            'daughter'=> 'ابنة',
-            'other'   => 'أخرى',
-        ]);
+        $locations      = config('staff_enums.locations');
+        $maritalStatus  = config('staff_enums.marital_status');
+        $houseStatus    = config('staff_enums.house_status');
+        $residentStatus = config('staff_enums.status');
+        $housingTypes   = config('staff_enums.housing_type');
+        $readinessList  = config('staff_enums.readiness');
+        $relations      = config('staff_enums.relation');
     @endphp
 
     <div class="container-fluid">
 
-        {{-- هيدر أعلى الصفحة + أزرار (لا تُطبع) --}}
+
         <div class="d-flex justify-content-between align-items-center mb-3 d-print-none">
             <div>
                 <h4 class="mb-1">بيانات الموظف</h4>
@@ -272,12 +244,22 @@
                         رقم وظيفي: <strong>{{ $profile->employee_number }}</strong>
                     @endif
                 </div>
+
+                <div class="profile-meta mt-1">
+                    مرات التعديل المسموح بها: <strong>{{ $profile->edits_allowed }}</strong>
+                    <span class="mx-2">•</span>
+                    المتبقي للموظف: <strong>{{ $profile->edits_remaining }}</strong>
+                </div>
             </div>
 
             <div class="d-flex gap-2">
                 <button type="button" onclick="window.print()" class="btn btn-sm btn-print">
                     <i class="bi bi-printer"></i> طباعة
                 </button>
+
+                <a href="{{ route('admin.staff-profiles.edit', $profile->id) }}" class="btn btn-sm btn-warning">
+                    <i class="bi bi-pencil-square"></i> تعديل البيانات
+                </a>
 
                 <a href="{{ route('admin.staff-profiles.index') }}" class="btn btn-sm btn-outline-secondary">
                     <i class="bi bi-arrow-right"></i> رجوع للقائمة

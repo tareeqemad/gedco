@@ -129,10 +129,8 @@ class ProfileDependentsController extends Controller
                     'telegram'             => $data['telegram'] ?? null,
                     'gmail'                => $data['gmail'] ?? null,
 
-                    // تحويل readiness: 'working' -> 'ready'
-                    'readiness'            => ($data['readiness'] ?? null) === 'working'
-                        ? 'ready'
-                        : ($data['readiness'] ?? null),
+
+                    'readiness' => $data['readiness'] ?? null,
                     'readiness_notes'      => $data['readiness_notes'] ?? null,
 
                     // الباسورد = رقم الهوية

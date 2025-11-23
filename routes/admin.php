@@ -145,6 +145,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::prefix('staff-profiles')->name('staff-profiles.')->group(function () {
             Route::get('/', [StaffProfileController::class, 'index'])->name('index');
             Route::get('/{profile}', [StaffProfileController::class, 'show'])->name('show');
+            Route::get('/{profile}/edit', [StaffProfileController::class, 'edit'])->name('edit');
+            Route::put('/{profile}', [StaffProfileController::class, 'update'])->name('update');
         });
 
         Route::post('logout', [AuthController::class, 'destroy'])->name('logout');
