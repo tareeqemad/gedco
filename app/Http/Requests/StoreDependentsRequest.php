@@ -176,10 +176,10 @@ class StoreDependentsRequest extends FormRequest
 
                 if ($student === 'yes') {
                     $age = $birthDate->age;
-                    if ($age < 17 || $age > 30) {
+                    if ($age < 17 || $age > 55) {
                         $validator->errors()->add(
                             "family.$idx.is_student",
-                            "عمر الطالب الجامعي في صف ($row) يجب أن يكون بين 17 و 30 سنة."
+                            "عمر الطالب الجامعي في صف ($row) يجب أن يكون بين 17 و 55 سنة."
                         );
                     }
                 }

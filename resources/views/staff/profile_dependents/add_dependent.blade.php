@@ -175,7 +175,7 @@
 
                     <label class="field">
                         <span>عدد أفراد الأسرة حاليًا</span>
-                        <input type="number" min="1" max="10" name="family_members_count" id="family-count-input"
+                        <input type="number" min="1" max="15" name="family_members_count" id="family-count-input"
                                value="{{ old('family_members_count', 1) }}">
                     </label>
                 </div>
