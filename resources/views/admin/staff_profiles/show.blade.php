@@ -1,560 +1,464 @@
+{{-- resources/views/admin/staff-profiles/show.blade.php --}}
 @extends('layouts.admin')
 
-@section('page-title', 'عرض بيانات الموظف')
+@section('page-title', 'بيانات الموظف')
 
 @push('styles')
     <style>
         :root {
-            --surface:      #fff7f2;
-            --surface-alt:  #fff1e6;
-            --border:       #f1b08d;
-            --accent:       #ef7c4c;
-            --accent-dark:  #c65a28;
-            --text:         #2f2b28;
-            --muted:        #8c6f61;
+            --primary: #e67e22;
+            --primary-dark: #d35400;
+            --success: #27ae60;
+            --danger: #e74c3c;
+            --warning: #f39c12;
+            --info: #3498db;
+            --light: #fdf2e9;
+            --border: #e2e8f0;
+            --shadow: 0 10px 30px rgba(0,0,0,0.08);
         }
 
-        .profile-shell {
-            background: #fff;
-            border-radius: 18px;
-            border: 1px solid rgba(239,124,76,.18);
-            box-shadow: 0 14px 35px rgba(15,23,42,.08);
-            padding: 1.75rem;
-        }
-
-        .profile-header-chip {
-            display: inline-flex;
-            align-items: center;
-            gap: .5rem;
-            background: rgba(239,124,76,.08);
-            color: var(--accent-dark);
-            padding: .3rem .9rem;
-            border-radius: 999px;
-            font-size: .8rem;
-            font-weight: 600;
-        }
-
-        .profile-section {
-            margin-top: 1.75rem;
-            padding-top: 1.25rem;
-            border-top: 1px dashed rgba(148,163,184,.5);
-        }
-
-        .profile-section-title {
-            display: inline-flex;
-            align-items: center;
-            gap: .5rem;
-            background: rgba(239,124,76,.1);
-            color: var(--accent-dark);
-            padding: .35rem 1.1rem;
-            border-radius: 999px;
-            font-weight: 700;
-            font-size: .9rem;
-            margin-bottom: 1.1rem;
-        }
-
-        .profile-grid-3 {
-            display: grid;
-            gap: 1rem 1.25rem;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-        }
-
-        .profile-grid-2 {
-            display: grid;
-            gap: 1rem 1.25rem;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        .profile-header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-radius: 1rem;
+            padding: 1.25rem 1.5rem;
+            color: white;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--shadow);
         }
 
         .profile-card {
-            border-radius: 14px;
-            border: 1px solid rgba(226,232,240,.9);
-            background: linear-gradient(135deg,#ffffff,#fffaf7);
-            padding: .9rem 1rem;
-        }
-
-        .profile-card-label {
-            color: var(--muted);
-            font-size: .8rem;
-            font-weight: 700;
-            margin-bottom: .25rem;
-        }
-
-        .profile-card-value {
-            font-weight: 700;
-            color: #111827;
-            font-size: .95rem;
-            word-break: break-word;
-        }
-
-        .profile-card-muted {
-            color: #9ca3af;
-            font-weight: 500;
-        }
-
-        .profile-meta {
-            font-size: .8rem;
-            color: #6b7280;
-        }
-
-        /* جدول الأسرة */
-        .family-table {
-            width: 100%;
-            border-collapse: collapse;
-            border-radius: 14px;
+            background: white;
+            border-radius: 1.25rem;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
             overflow: hidden;
-            border: 1px solid rgba(226,232,240,.9);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
         }
 
-        .family-table thead th {
-            background: var(--surface-alt);
-            padding: .7rem .75rem;
-            font-size: .8rem;
+        .profile-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, var(--primary), var(--primary-dark));
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .profile-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.12);
+            border-color: var(--primary);
+        }
+
+        .profile-card:hover::before {
+            opacity: 1;
+        }
+
+        .card-title {
+            font-size: 1.2rem;
             font-weight: 700;
-            color: var(--accent-dark);
-            border-bottom: 1px solid rgba(226,232,240,1);
-            white-space: nowrap;
+            color: var(--primary-dark);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 3px solid var(--light);
+            display: inline-block;
         }
 
-        .family-table tbody td {
-            padding: .55rem .75rem;
-            border-top: 1px solid rgba(226,232,240,.9);
-            font-size: .86rem;
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
         }
 
-        .family-table tbody tr:nth-child(even) {
-            background: #f9fafb;
+        .info-item {
+            padding: 1rem 0;
+            border-bottom: 1px dashed #eee;
+            transition: all 0.2s;
         }
 
-        .badge-soft {
-            border-radius: 999px;
-            padding: .15rem .55rem;
-            font-size: .75rem;
+        .info-item:hover {
+            background: linear-gradient(90deg, transparent, var(--light), transparent);
+            padding-right: 0.5rem;
+        }
+
+        .info-item:last-child { border-bottom: none; }
+
+        .info-label {
+            font-weight: 600;
+            color: #5f6368;
+            font-size: 0.95rem;
+            margin-bottom: 0.4rem;
+        }
+
+        .info-value {
+            font-size: 1.05rem;
+            color: #2c3e50;
             font-weight: 600;
         }
 
-        .badge-soft-success {
-            background: #e7f7ec;
-            color: #166534;
+        .badge-custom {
+            padding: 0.5rem 1.2rem;
+            border-radius: 50rem;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
 
-        .badge-soft-danger {
-            background: #fee2e2;
-            color: #b91c1c;
+        .badge-custom:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
         }
 
-        .badge-soft-warning {
-            background: #fef3c7;
-            color: #92400e;
+        .family-table th {
+            background: var(--light);
+            color: var(--primary-dark);
+            font-weight: 700;
+            font-size: 0.95rem;
         }
 
-        .badge-soft-info {
-            background: #e0f2fe;
-            color: #075985;
+        .btn-floating {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
         }
 
-        /* زر الطباعة */
-        .btn-print {
-            background: linear-gradient(135deg,#ef7c4c,#f59e0b);
-            border: none;
-            color: #fff;
+        .btn-floating::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.3s, height 0.3s;
         }
 
-        .btn-print:hover {
-            opacity: .95;
-            box-shadow: 0 10px 24px rgba(239,124,76,.4);
+        .btn-floating:hover {
+            transform: translateY(-2px) scale(1.1);
+            box-shadow: 0 6px 18px rgba(0,0,0,0.15);
         }
 
-        /* تنسيق التنبيهات داخل الـshell */
-        .profile-shell .alert {
-            border-radius: 12px;
-            padding: .75rem .9rem;
-            margin-bottom: 1rem;
+        .btn-floating:hover::before {
+            width: 100%;
+            height: 100%;
         }
 
-        /* ريسبونسيف للموبايل */
-        @media (max-width: 768px) {
-            .profile-shell {
-                padding: 1.25rem;
-            }
-        }
-
-        /* طباعة */
         @media print {
-            body {
-                background: #ffffff !important;
-                -webkit-print-color-adjust: exact;
-                print-color-adjust: exact;
-            }
-
-            .app-header,
-            .main-header,
-            .app-sidebar,
-            .main-sidebar,
-            .footer,
-            .page-header,
-            .breadcrumb,
-            .d-print-none {
-                display: none !important;
-            }
-
-            .main-content,
-            .content,
-            .container-fluid {
-                margin: 0 !important;
-                padding: .5rem 1rem !important;
-                max-width: 100% !important;
-            }
-
-            .profile-shell {
-                box-shadow: none !important;
-                border: 1px solid #e5e7eb !important;
-                padding: 1rem !important;
-            }
-
-            .profile-section {
-                page-break-inside: avoid;
-            }
+            body { background: white !important; }
+            .no-print, .app-sidebar, .app-header { display: none !important; }
+            .profile-card { box-shadow: none !important; border: 1px solid #ddd !important; page-break-inside: avoid; }
+            .container-fluid { padding: 1rem !important; }
         }
     </style>
 @endpush
 
 @section('content')
     @php
-        $locations      = config('staff_enums.locations');
-        $maritalStatus  = config('staff_enums.marital_status');
-        $houseStatus    = config('staff_enums.house_status');
-        $residentStatus = config('staff_enums.status');
-        $housingTypes   = config('staff_enums.housing_type');
-        $readinessList  = config('staff_enums.readiness');
-        $relations      = config('staff_enums.relation');
+        $loc = config('staff_enums.locations');
+        $status = config('staff_enums.status');
+        $ready = config('staff_enums.readiness');
+        $marital = config('staff_enums.marital_status');
+        $house = config('staff_enums.house_status');
+        $housing = config('staff_enums.housing_type');
+        $relation = config('staff_enums.relation');
     @endphp
 
-    <div class="container-fluid">
+    <div class="container-fluid py-4">
 
-
-        <div class="d-flex justify-content-between align-items-center mb-3 d-print-none">
-            <div>
-                <h4 class="mb-1">بيانات الموظف</h4>
-                <div class="profile-meta">
-                    {{ $profile->full_name }}
-                    <span class="mx-2">•</span>
-                    رقم الهوية: <strong>{{ $profile->national_id }}</strong>
-                    @if($profile->employee_number)
-                        <span class="mx-2">•</span>
-                        رقم وظيفي: <strong>{{ $profile->employee_number }}</strong>
-                    @endif
+        <!-- Header -->
+        <div class="profile-header">
+            <div class="row align-items-center">
+                <div class="col-lg-8">
+                    <h5 class="mb-1 text-white"><i class="bi bi-person-vcard-fill me-2"></i>{{ $profile->full_name }}</h5>
+                    <div class="d-flex flex-wrap gap-3 text-white-50 mt-2 small">
+                        <div><strong>رقم الهوية:</strong> {{ $profile->national_id }}</div>
+                        @if($profile->employee_number)
+                            <div><strong>الرقم الوظيفي:</strong> #{{ $profile->employee_number }}</div>
+                        @endif
+                        <div><strong>المقر:</strong> {{ $loc[$profile->location] ?? 'غير محدد' }}</div>
+                    </div>
                 </div>
-
-                <div class="profile-meta mt-1">
-                    مرات التعديل المسموح بها: <strong>{{ $profile->edits_allowed }}</strong>
-                    <span class="mx-2">•</span>
-                    المتبقي للموظف: <strong>{{ $profile->edits_remaining }}</strong>
+                <div class="col-lg-4 text-lg-end mt-3 mt-lg-0 no-print">
+                    <div class="d-flex justify-content-lg-end gap-2">
+                        <button onclick="window.print()" class="btn btn-light btn-sm" style="width:40px;height:40px;padding:0;">
+                            <i class="bi bi-printer-fill"></i>
+                        </button>
+                        <a href="{{ route('admin.staff-profiles.edit', $profile) }}" class="btn btn-warning btn-sm" style="width:40px;height:40px;padding:0;">
+                            <i class="bi bi-pencil-square"></i>
+                        </a>
+                        <a href="{{ route('admin.staff-profiles.index') }}" class="btn btn-outline-light btn-sm" style="width:40px;height:40px;padding:0;">
+                            <i class="bi bi-arrow-left"></i>
+                        </a>
+                    </div>
                 </div>
             </div>
 
-            <div class="d-flex gap-2">
-                <button type="button" onclick="window.print()" class="btn btn-sm btn-print">
-                    <i class="bi bi-printer"></i> طباعة
-                </button>
-
-                <a href="{{ route('admin.staff-profiles.edit', $profile->id) }}" class="btn btn-sm btn-warning">
-                    <i class="bi bi-pencil-square"></i> تعديل البيانات
-                </a>
-
-                <a href="{{ route('admin.staff-profiles.index') }}" class="btn btn-sm btn-outline-secondary">
-                    <i class="bi bi-arrow-right"></i> رجوع للقائمة
-                </a>
+            <!-- حالة الجاهزية والحالة الاجتماعية في الأعلى -->
+            <div class="row mt-3">
+                <div class="col-md-6">
+                    <div class="d-flex align-items-center gap-2">
+                        <span class="fw-bold small">الجاهزية:</span>
+                        @switch($profile->readiness)
+                            @case('working')
+                                <span class="badge badge-custom bg-success text-white px-3 py-2 small">باشر العمل</span>
+                                @break
+                            @case('ready')
+                                <span class="badge badge-custom bg-info text-white px-3 py-2 small">جاهز للعودة</span>
+                                @break
+                            @case('not_ready')
+                                <span class="badge badge-custom bg-warning text-dark px-3 py-2 small">غير جاهز</span>
+                                @break
+                            @default
+                                <span class="badge bg-secondary-subtle text-secondary px-3 py-2 small">غير محدد</span>
+                        @endswitch
+                    </div>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <div class="d-flex align-items-center justify-content-md-end gap-2">
+                        <span class="fw-bold small">الحالة:</span>
+                        @if($profile->status == 'resident')
+                            <span class="badge badge-custom bg-success-subtle text-success px-3 py-2 small">مقيم</span>
+                        @elseif($profile->status == 'displaced')
+                            <span class="badge badge-custom bg-danger-subtle text-danger px-3 py-2 small">نازح</span>
+                        @else
+                            <span class="badge bg-secondary-subtle text-secondary px-3 py-2 small">غير محدد</span>
+                        @endif
+                    </div>
+                </div>
             </div>
         </div>
 
-        <div class="profile-shell">
+        <div class="row g-4">
 
-            {{-- شريحة معلومات سريعة أعلى --}}
-            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
-                <div class="profile-header-chip">
-                    <i class="bi bi-person-vcard"></i>
-                    <span>الموظف: {{ $profile->full_name }}</span>
+            <!-- البيانات الأساسية -->
+            <div class="col-lg-8">
+                <div class="profile-card p-4">
+                    <h4 class="card-title"><i class="bi bi-person-badge-fill me-2"></i>البيانات الأساسية</h4>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <div class="info-label">تاريخ الميلاد</div>
+                            <div class="info-value">{{ $profile->birth_date?->format('d/m/Y') ?? 'غير محدد' }}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">الوظيفة الحالية</div>
+                            <div class="info-value">{{ $profile->job_title ?? 'غير محدد' }}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">الإدارة / الدائرة / القسم</div>
+                            <div class="info-value">
+                                {{ $profile->department ?? '' }}
+                                @if($profile->directorate) / {{ $profile->directorate }} @endif
+                                @if($profile->section) / {{ $profile->section }} @endif
+                                @if(!$profile->department && !$profile->directorate && !$profile->section) غير محدد @endif
+                            </div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">الحالة الاجتماعية</div>
+                            <div class="info-value">{{ $marital[$profile->marital_status] ?? 'غير محدد' }}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">عدد أفراد الأسرة</div>
+                            <div class="info-value">{{ $profile->family_members_count ?? 'غير محدد' }}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">تاريخ آخر تعديل</div>
+                            <div class="info-value">
+                                {{ $profile->updated_at?->format('d/m/Y H:i') ?? 'لم يُحدث' }}
+                                @if($profile->updated_at && $profile->updated_at->diffInDays($profile->created_at) > 0)
+                                    <small class="text-success d-block">({{ $profile->updated_at->diffForHumans() }})</small>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
                 </div>
+            </div>
 
-                <div class="d-flex gap-2 flex-wrap profile-meta">
-                    <span>أنشئ: {{ optional($profile->created_at)->format('Y-m-d H:i') }}</span>
-                    @if($profile->updated_at && $profile->updated_at != $profile->created_at)
-                        <span class="text-muted">| آخر تحديث: {{ $profile->updated_at->format('Y-m-d H:i') }}</span>
+            <!-- أفراد الأسرة -->
+            <div class="col-lg-4">
+                <div class="profile-card p-4 h-100">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h4 class="card-title mb-0"><i class="bi bi-people-fill me-2"></i>أفراد الأسرة</h4>
+                        @if($profile->dependents?->count())
+                            <span class="badge bg-primary fs-6">{{ $profile->dependents->count() }} فرد</span>
+                        @endif
+                    </div>
+                    @if($profile->dependents?->count())
+                        <div class="table-responsive" style="max-height: 500px; overflow-y: auto;">
+                            <table class="table table-sm family-table">
+                                <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>الاسم</th>
+                                    <th>القرابة</th>
+                                    <th>تاريخ الميلاد</th>
+                                    <th>طالب جامعي</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                @foreach($profile->dependents as $i => $d)
+                                    <tr>
+                                        <td>{{ $i+1 }}</td>
+                                        <td class="fw-bold">{{ $d->name }}</td>
+                                        <td><small>{{ $relation[$d->relation] ?? $d->relation }}</small></td>
+                                        <td><small>{{ $d->birth_date ? \Carbon\Carbon::parse($d->birth_date)->format('d/m/Y') : '—' }}</small></td>
+                                        <td>
+                                            @if($d->is_student)
+                                                <span class="badge bg-success-subtle text-success small">نعم</span>
+                                            @else
+                                                <span class="badge bg-secondary-subtle text-secondary small">لا</span>
+                                            @endif
+                                        </td>
+                                    </tr>
+                                @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    @else
+                        <p class="text-muted text-center my-5">لا توجد بيانات أفراد أسرة</p>
                     @endif
                 </div>
             </div>
 
-            {{-- Alerts داخل صفحة العرض للأدمن لو حاب تستخدمها من الكنترولر --}}
-            @if (session('success'))
-                <div class="alert alert-success">
-                    {{ session('success') }}
-                </div>
-            @endif
-
-            @if (session('info'))
-                <div class="alert alert-info">
-                    {{ session('info') }}
-                </div>
-            @endif
-
-            {{-- القسم 1: البيانات الأساسية --}}
-            <div class="profile-section">
-                <div class="profile-section-title">
-                    <i class="bi bi-person-badge"></i>
-                    <span>البيانات الأساسية</span>
-                </div>
-
-                <div class="profile-grid-3">
-                    <div class="profile-card">
-                        <div class="profile-card-label">الاسم الرباعي</div>
-                        <div class="profile-card-value">{{ $profile->full_name }}</div>
+            <!-- السكن والتواصل -->
+            <div class="col-lg-6">
+                <div class="profile-card p-4">
+                    <h4 class="card-title"><i class="bi bi-house-door-fill me-2"></i>بيانات السكن</h4>
+                    <div class="info-item">
+                        <div class="info-label">العنوان الأصلي</div>
+                        <div class="info-value">{{ $profile->original_address ?: 'غير محدد' }}</div>
                     </div>
-
-                    <div class="profile-card">
-                        <div class="profile-card-label">رقم الهوية</div>
-                        <div class="profile-card-value">{{ $profile->national_id }}</div>
+                    <div class="info-item">
+                        <div class="info-label">وضع المنزل حاليًا</div>
+                        <div class="info-value">{{ $house[$profile->house_status] ?? 'غير محدد' }}</div>
                     </div>
-
-                    <div class="profile-card">
-                        <div class="profile-card-label">الرقم الوظيفي</div>
-                        <div class="profile-card-value">
-                            {{ $profile->employee_number ?: '—' }}
+                    @if($profile->status == 'displaced')
+                        <div class="info-item">
+                            <div class="info-label text-danger">العنوان الحالي (بعد النزوح)</div>
+                            <div class="info-value text-danger fw-bold">{{ $profile->current_address }}</div>
                         </div>
-                    </div>
-
-                    <div class="profile-card">
-                        <div class="profile-card-label">تاريخ الميلاد</div>
-                        <div class="profile-card-value">
-                            {{ optional($profile->birth_date)->format('Y-m-d') ?: '—' }}
-                        </div>
-                    </div>
-
-                    <div class="profile-card">
-                        <div class="profile-card-label">المسمّى الوظيفي</div>
-                        <div class="profile-card-value">
-                            {{ $profile->job_title ?: '—' }}
-                        </div>
-                    </div>
-
-                    <div class="profile-card">
-                        <div class="profile-card-label">المقر</div>
-                        <div class="profile-card-value">
-                            {{ $locations[$profile->location] ?? $profile->location ?? '—' }}
-                        </div>
-                    </div>
-
-                    <div class="profile-card">
-                        <div class="profile-card-label">الإدارة</div>
-                        <div class="profile-card-value">
-                            {{ $profile->department ?: '—' }}
-                        </div>
-                    </div>
-
-                    <div class="profile-card">
-                        <div class="profile-card-label">الدائرة</div>
-                        <div class="profile-card-value">
-                            {{ $profile->directorate ?: '—' }}
-                        </div>
-                    </div>
-
-                    <div class="profile-card">
-                        <div class="profile-card-label">القسم</div>
-                        <div class="profile-card-value">
-                            {{ $profile->section ?: '—' }}
-                        </div>
-                    </div>
-
-                    <div class="profile-card">
-                        <div class="profile-card-label">الحالة الاجتماعية</div>
-                        <div class="profile-card-value">
-                            {{ $maritalStatus[$profile->marital_status] ?? '—' }}
-                        </div>
-                    </div>
-
-                    <div class="profile-card">
-                        <div class="profile-card-label">عدد أفراد الأسرة</div>
-                        <div class="profile-card-value">
-                            {{ $profile->family_members_count ?: '—' }}
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-
-            {{-- القسم 2: أفراد الأسرة --}}
-            <div class="profile-section">
-                <div class="profile-section-title">
-                    <i class="bi bi-people"></i>
-                    <span>أفراد الأسرة</span>
-                </div>
-
-                <div class="table-responsive">
-                    <table class="family-table">
-                        <thead>
-                        <tr>
-                            <th style="width:60px;">م.</th>
-                            <th>الاسم</th>
-                            <th>صلة القرابة</th>
-                            <th>تاريخ الميلاد</th>
-                            <th>طالب جامعي</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        @php
-                            $dependents = $profile->dependents ?? collect();
-                        @endphp
-
-                        @forelse($dependents as $i => $d)
-                            <tr>
-                                <td>{{ $i + 1 }}</td>
-                                <td>{{ $d->name }}</td>
-                                <td>
-                                    {{ $relations[$d->relation] ?? $d->relation }}
-                                </td>
-                                <td>{{ optional($d->birth_date)->format('Y-m-d') ?: '—' }}</td>
-                                <td>
-                                    @if($d->is_student)
-                                        <span class="badge-soft badge-soft-success">نعم</span>
-                                    @else
-                                        <span class="badge-soft badge-soft-danger">لا</span>
-                                    @endif
-                                </td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="5" class="text-center text-muted py-3">
-                                    لا يوجد بيانات أفراد أسرة مسجلة.
-                                </td>
-                            </tr>
-                        @endforelse
-                        </tbody>
-                    </table>
-                </div>
-
-                @if ($profile->has_family_incidents === 'yes')
-                    <div class="alert alert-warning mt-3 mb-0">
-                        <strong>ملاحظات حول الإصابات / الاعتقالات:</strong>
-                        <div class="mt-1">{{ $profile->family_notes }}</div>
-                    </div>
-                @endif
-            </div>
-
-            {{-- القسم 3: السكن والوضع الاجتماعي --}}
-            <div class="profile-section">
-                <div class="profile-section-title">
-                    <i class="bi bi-house-door"></i>
-                    <span>بيانات السكن والوضع الاجتماعي</span>
-                </div>
-
-                <div class="profile-grid-3">
-                    <div class="profile-card">
-                        <div class="profile-card-label">عنوان السكن الأصلي</div>
-                        <div class="profile-card-value">
-                            {{ $profile->original_address ?: '—' }}
-                        </div>
-                    </div>
-
-                    <div class="profile-card">
-                        <div class="profile-card-label">وضع المنزل حاليًا</div>
-                        <div class="profile-card-value">
-                            {{ $houseStatus[$profile->house_status] ?? '—' }}
-                        </div>
-                    </div>
-
-                    <div class="profile-card">
-                        <div class="profile-card-label">الحالة (مقيم / نازح)</div>
-                        <div class="profile-card-value">
-                            {{ $residentStatus[$profile->status] ?? '—' }}
-                        </div>
-                    </div>
-
-                    <div class="profile-card">
-                        <div class="profile-card-label">العنوان الحالي بعد النزوح</div>
-                        <div class="profile-card-value">
-                            {{ $profile->current_address ?: '—' }}
-                        </div>
-                    </div>
-
-                    <div class="profile-card">
-                        <div class="profile-card-label">نوع السكن</div>
-                        <div class="profile-card-value">
-                            {{ $housingTypes[$profile->housing_type] ?? '—' }}
-                        </div>
+                    @endif
+                    <div class="info-item">
+                        <div class="info-label">نوع السكن الحالي</div>
+                        <div class="info-value">{{ $housing[$profile->housing_type] ?? 'غير محدد' }}</div>
                     </div>
                 </div>
             </div>
 
-            {{-- القسم 4: وسائل التواصل --}}
-            <div class="profile-section">
-                <div class="profile-section-title">
-                    <i class="bi bi-telephone"></i>
-                    <span>وسائل التواصل</span>
-                </div>
-
-                <div class="profile-grid-3">
-                    <div class="profile-card">
-                        <div class="profile-card-label">رقم الجوال</div>
-                        <div class="profile-card-value">{{ $profile->mobile ?: '—' }}</div>
+            <div class="col-lg-6">
+                <div class="profile-card p-4">
+                    <h4 class="card-title"><i class="bi bi-telephone-fill me-2"></i>وسائل التواصل</h4>
+                    <div class="info-item">
+                        <div class="info-label">رقم الجوال</div>
+                        <div class="info-value">{{ $profile->mobile ?: 'غير محدد' }}</div>
                     </div>
-
-                    <div class="profile-card">
-                        <div class="profile-card-label">جوال بديل</div>
-                        <div class="profile-card-value">{{ $profile->mobile_alt ?: '—' }}</div>
+                    <div class="info-item">
+                        <div class="info-label">جوال بديل</div>
+                        <div class="info-value">{{ $profile->mobile_alt ?: 'غير محدد' }}</div>
                     </div>
-
-                    <div class="profile-card">
-                        <div class="profile-card-label">واتس آب</div>
-                        <div class="profile-card-value">{{ $profile->whatsapp ?: '—' }}</div>
-                    </div>
-
-                    <div class="profile-card">
-                        <div class="profile-card-label">تيليجرام</div>
-                        <div class="profile-card-value">{{ $profile->telegram ?: '—' }}</div>
-                    </div>
-
-                    <div class="profile-card">
-                        <div class="profile-card-label">Gmail</div>
-                        <div class="profile-card-value">{{ $profile->gmail ?: '—' }}</div>
-                    </div>
-                </div>
-            </div>
-
-            {{-- القسم 5: الجاهزية --}}
-            <div class="profile-section">
-                <div class="profile-section-title">
-                    <i class="bi bi-clipboard-check"></i>
-                    <span>الجاهزية للعودة للعمل</span>
-                </div>
-
-                <div class="profile-grid-2">
-                    <div class="profile-card">
-                        <div class="profile-card-label">مستوى الجاهزية</div>
-                        <div class="profile-card-value">
-                            @php
-                                $readText = $readinessList[$profile->readiness] ?? null;
-                            @endphp
-
-                            @if($profile->readiness === 'working')
-                                <span class="badge-soft badge-soft-success">{{ $readText }}</span>
-                            @elseif($profile->readiness === 'ready')
-                                <span class="badge-soft badge-soft-info">{{ $readText }}</span>
-                            @elseif($profile->readiness === 'not_ready')
-                                <span class="badge-soft badge-soft-warning">{{ $readText ?? 'غير جاهز بعد' }}</span>
+                    <div class="info-item">
+                        <div class="info-label">واتس آب</div>
+                        <div class="info-value">
+                            @if($profile->whatsapp)
+                                @php
+                                    $whats = $profile->whatsapp;
+                                    if (str_starts_with($whats, '970')) {
+                                        echo '+970 ' . substr($whats, 3);
+                                    } elseif (str_starts_with($whats, '972')) {
+                                        echo '+972 ' . substr($whats, 3);
+                                    } else {
+                                        echo $whats;
+                                    }
+                                @endphp
                             @else
-                                —
+                                غير محدد
                             @endif
                         </div>
                     </div>
-
-                    <div class="profile-card">
-                        <div class="profile-card-label">ملاحظات الجاهزية</div>
-                        <div class="profile-card-value">
-                            {{ $profile->readiness_notes ?: '—' }}
-                        </div>
+                    <div class="info-item">
+                        <div class="info-label">تيليجرام</div>
+                        <div class="info-value">{{ $profile->telegram ?: 'غير محدد' }}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">البريد الإلكتروني</div>
+                        <div class="info-value">{{ $profile->gmail ?: 'غير محدد' }}</div>
                     </div>
                 </div>
             </div>
 
-        </div> {{-- /profile-shell --}}
+            <!-- الحوادث العائلية -->
+            @if($profile->has_family_incidents == 'yes' || $profile->family_notes)
+            <div class="col-12">
+                <div class="profile-card p-4">
+                    <h4 class="card-title"><i class="bi bi-exclamation-triangle-fill me-2"></i>الحوادث العائلية</h4>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="info-label">هل يوجد حوادث عائلية؟</div>
+                            <div class="info-value">
+                                @if($profile->has_family_incidents == 'yes')
+                                    <span class="badge bg-danger text-white">نعم</span>
+                                @else
+                                    <span class="badge bg-success text-white">لا</span>
+                                @endif
+                            </div>
+                        </div>
+                        @if($profile->family_notes)
+                            <div class="col-md-8">
+                                <div class="info-label">ملاحظات الحوادث العائلية</div>
+                                <div class="info-value p-3 bg-light rounded-3 border">
+                                    {{ $profile->family_notes }}
+                                </div>
+                            </div>
+                        @endif
+                    </div>
+                </div>
+            </div>
+            @endif
+
+            <!-- الجاهزية والملاحظات -->
+            <div class="col-12">
+                <div class="profile-card p-4">
+                    <h4 class="card-title"><i class="bi bi-clipboard-check-fill me-2"></i>الجاهزية للعودة للعمل</h4>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="info-label">مستوى الجاهزية</div>
+                            <div class="info-value fs-5">
+                                @php
+                                    $r = $ready[$profile->readiness] ?? null;
+                                @endphp
+                                @if($r)
+                                    <span class="badge badge-custom bg-{{ $r['color'] ?? 'secondary' }} text-white">
+                                    {{ $r['label'] ?? $r }}
+                                </span>
+                                @else
+                                    غير محدد
+                                @endif
+                            </div>
+                        </div>
+                        @if($profile->readiness_notes)
+                            <div class="col-md-8">
+                                <div class="info-label">ملاحظات الجاهزية</div>
+                                <div class="info-value p-3 bg-light rounded-3 border">
+                                    {{ $profile->readiness_notes }}
+                                </div>
+                            </div>
+                        @endif
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 @endsection

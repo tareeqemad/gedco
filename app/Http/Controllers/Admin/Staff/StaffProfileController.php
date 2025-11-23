@@ -17,7 +17,7 @@ class StaffProfileController extends Controller
     {
         $query = StaffProfile::query();
 
-
+        // البحث النصي
         if ($search = $request->input('q')) {
             $query->where(function ($q) use ($search) {
                 $q->where('full_name', 'like', "%{$search}%")
@@ -26,10 +26,35 @@ class StaffProfileController extends Controller
             });
         }
 
+        // فلترة حسب الحالة (مقيم/نازح)
+        if ($status = $request->input('status')) {
+            if (in_array($status, ['resident', 'displaced'])) {
+                $query->where('status', $status);
+            }
+        }
 
-        $profiles = $query->latest()->paginate(25);
+        // فلترة حسب الجاهزية
+        if ($readiness = $request->input('readiness')) {
+            if (in_array($readiness, ['working', 'ready', 'not_ready'])) {
+                $query->where('readiness', $readiness);
+            }
+        }
 
-        return view('admin.staff_profiles.index', compact('profiles', 'search'));
+        $profiles = $query->latest()->paginate(25)->withQueryString();
+        
+        // حساب الإحصائيات - فقط الحالات المحددة
+        $stats = [
+            'total'       => StaffProfile::count(),
+            // حالات الجاهزية (3 حالات فقط)
+            'working'     => StaffProfile::where('readiness', 'working')->count(),
+            'ready'       => StaffProfile::where('readiness', 'ready')->count(),
+            'not_ready'   => StaffProfile::where('readiness', 'not_ready')->count(),
+            // حالات الحالة (حالتان فقط)
+            'resident'    => StaffProfile::where('status', 'resident')->count(),
+            'displaced'   => StaffProfile::where('status', 'displaced')->count(),
+        ];
+        
+        return view('admin.staff_profiles.index', compact('profiles', 'search', 'stats'));
     }
 
 
