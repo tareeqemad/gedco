@@ -65,6 +65,7 @@ class UpdateDependentsRequest extends FormRequest
 
             // وسائل التواصل الإضافية
             'mobile_alt'      => ['nullable','digits_between:8,10'],
+            'whatsapp_prefix' => ['nullable', 'in:970,972'],
             'whatsapp'        => ['nullable','digits_between:8,10'],
             'telegram'        => ['nullable','string','max:50'],
             'gmail'           => ['nullable','email','max:150'],

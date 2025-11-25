@@ -40,6 +40,7 @@ Route::prefix('staff/profile')->name('staff.profile.')->group(function () {
     Route::post('store', [ProfileDependentsController::class, 'store'])
         ->middleware('throttle:10,1')->name('store');
 
+    // lookup
     Route::get('lookup', [ProfileDependentsController::class, 'lookup'])
         ->middleware('throttle:20,1')->name('lookup');
 
@@ -50,12 +51,13 @@ Route::prefix('staff/profile')->name('staff.profile.')->group(function () {
     Route::post('verify', [ProfileEditAuthController::class, 'verify'])
         ->middleware('throttle:10,1')->name('verify');
 
-    // عرض
-    Route::get('{profile}', [ProfileDependentsController::class, 'show'])
-        ->whereNumber('profile')->name('show');
-
-    // تعديل (محمي بجلسة التحقق)
+    //   كل شيء يعرض أو يعدّل بروفايل صار محمي بالسيشن
     Route::middleware('staff.edit.session')->group(function () {
+        // عرض
+        Route::get('{profile}', [ProfileDependentsController::class, 'show'])
+            ->whereNumber('profile')->name('show');
+
+        // تعديل
         Route::get('{profile}/edit',   [ProfileDependentsController::class, 'edit'])
             ->whereNumber('profile')->name('edit');
 

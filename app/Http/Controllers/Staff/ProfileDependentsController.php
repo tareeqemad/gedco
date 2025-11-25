@@ -24,7 +24,14 @@ class ProfileDependentsController extends Controller
         $locked  = session('locked', false);
         $profile = null;
 
-        return view('staff.profile_dependents.add_dependent', compact('locked', 'profile'));
+
+        $lookupUrl = route('staff.profile.lookup');
+
+        return view('staff.profile_dependents.add_dependent', [
+            'locked'    => $locked,
+            'profile'   => $profile,
+            'lookupUrl' => $lookupUrl,
+        ]);
     }
 
     /**
@@ -129,8 +136,7 @@ class ProfileDependentsController extends Controller
                     'telegram'             => $data['telegram'] ?? null,
                     'gmail'                => $data['gmail'] ?? null,
 
-
-                    'readiness' => $data['readiness'] ?? null,
+                    'readiness'            => $data['readiness'] ?? null,
                     'readiness_notes'      => $data['readiness_notes'] ?? null,
 
                     // الباسورد = رقم الهوية
@@ -230,6 +236,9 @@ class ProfileDependentsController extends Controller
                 ->with('locked_msg', 'حدث خطأ أثناء حفظ البيانات. يرجى المحاولة مرة أخرى.')
                 ->withInput();
         }
+
+        // 👈 هنا نضبط السيشن عشان الميدل وير يسمح له يشوف / يعدّل هذا البروفايل
+        session(['allowed_edit_profile_id' => $profile->id]);
 
         return redirect()
             ->route('staff.profile.show', $profile->id)
@@ -332,7 +341,7 @@ class ProfileDependentsController extends Controller
                     )
                     ->values();
 
-
+                // منع تكرار نفس فرد الأسرة (نفس الاسم + نفس تاريخ الميلاد)
                 $duplicates = $familyRows
                     ->map(function ($r) {
                         $name  = mb_strtolower(trim($r['name'] ?? ''));
@@ -347,7 +356,6 @@ class ProfileDependentsController extends Controller
                 }
 
                 $allowedRelations = array_keys(config('staff_enums.relation', []));
-
                 foreach ($familyRows as $row) {
                     $relation = $row['relation'] ?? null;
 
@@ -378,7 +386,7 @@ class ProfileDependentsController extends Controller
                     'edits_remaining'      => max(0, ($profile->edits_remaining ?? 1) - 1),
                 ]);
 
-                session()->forget("staff_edit_allowed_{$profile->id}");
+                // هنا ما عاد نمسح أي سيشن له علاقة بالصلاحية
             });
         } catch (\RuntimeException $e) {
             if ($e->getMessage() === 'duplicate_family_members') {
@@ -433,6 +441,9 @@ class ProfileDependentsController extends Controller
                 ->withInput();
         }
 
+
+        session(['allowed_edit_profile_id' => $profile->id]);
+
         return redirect()
             ->route('staff.profile.show', $profile->id)
             ->with('success', 'تم تحديث البيانات بنجاح ✅');
@@ -446,42 +457,21 @@ class ProfileDependentsController extends Controller
     {
         $id = preg_replace('/\D/', '', (string) $request->query('id', ''));
         if (strlen($id) !== 9) {
-            return response()->json(['ok' => false, 'message' => 'رقم الهوية غير صالح.'], 422);
+            return response()->json([
+                'ok'      => false,
+                'message' => 'رقم الهوية غير صالح.',
+            ], 422);
         }
 
         try {
             $apiUrl = config('staff.employee_lookup_api_url', 'https://eservices.gedco.ps/api/employees/search');
 
-            // جرب POST مع body أولاً
             $response = Http::timeout(10)
                 ->acceptJson()
                 ->asJson()
                 ->post($apiUrl, ['id' => $id]);
 
-            // إذا فشل، جرب POST مع national_id
-            if (!$response->ok()) {
-                $response = Http::timeout(10)
-                    ->acceptJson()
-                    ->asJson()
-                    ->post($apiUrl, ['national_id' => $id]);
-            }
-
-            // إذا فشل، جرب GET مع path parameter
-            if (!$response->ok()) {
-                $response = Http::timeout(10)->acceptJson()->get("{$apiUrl}/{$id}");
-            }
-
-            // إذا فشل، جرب GET مع query parameter
-            if (!$response->ok()) {
-                $response = Http::timeout(10)->acceptJson()->get($apiUrl, ['id' => $id]);
-            }
-
-            // إذا فشل، جرب GET مع national_id query parameter
-            if (!$response->ok()) {
-                $response = Http::timeout(10)->acceptJson()->get($apiUrl, ['national_id' => $id]);
-            }
-
-            if (!$response->ok()) {
+            if (! $response->ok()) {
                 \Log::error('Employee lookup API failed', [
                     'url'    => $apiUrl,
                     'id'     => $id,
@@ -489,42 +479,46 @@ class ProfileDependentsController extends Controller
                     'body'   => $response->body(),
                 ]);
 
-                return response()->json(['ok' => false, 'message' => 'تعذر الاتصال بالخدمة.'], 502);
+                return response()->json([
+                    'ok'      => false,
+                    'message' => 'تعذر الاتصال بخدمة بيانات الموظفين.',
+                ], 502);
             }
 
             $payload = $response->json();
 
-            // تسجيل نتائج API للتحقق
             \Log::info('Employee lookup API response', [
                 'url'           => $apiUrl,
                 'id'            => $id,
                 'status'        => $response->status(),
                 'payload_keys'  => is_array($payload) ? array_keys($payload) : 'not_array',
-                'payload_sample'=> is_array($payload) ? json_encode(array_slice($payload, 0, 1, true)) : $payload,
             ]);
 
-            // دعم بنيات مختلفة للاستجابة
+            // استخراج صف الموظف من أشكال مختلفة محتملة للـ payload
             $row = null;
+
             if (isset($payload['data_rows']) && is_array($payload['data_rows'])) {
                 $row = $payload['data_rows'][0] ?? null;
             } elseif (isset($payload['data']) && is_array($payload['data'])) {
-                $row = is_array($payload['data'][0] ?? null) ? $payload['data'][0] : $payload['data'];
+                // قد تكون data = [] أو data = {} مباشرة
+                $row = is_array($payload['data'][0] ?? null)
+                    ? $payload['data'][0]
+                    : $payload['data'];
             } elseif (isset($payload[0]) && is_array($payload[0])) {
                 $row = $payload[0];
             } elseif (is_array($payload) && isset($payload['NAME'])) {
+                // استجابة مباشرة بشكل صف واحد
                 $row = $payload;
             }
 
-            if (!$row) {
-                \Log::warning('Employee lookup: No data found', [
-                    'url'                => $apiUrl,
-                    'id'                 => $id,
-                    'payload_structure'  => is_array($payload) ? array_keys($payload) : 'not_array',
-                ]);
-
-                return response()->json(['ok' => false, 'message' => 'لا توجد بيانات مطابقة.'], 404);
+            if (! is_array($row)) {
+                return response()->json([
+                    'ok'      => false,
+                    'message' => 'لا توجد بيانات مطابقة لهذا الرقم.',
+                ], 404);
             }
 
+            // توحيد حالة الاجتماعية
             $normalizeMarital = function (?string $status): ?string {
                 $status = trim((string) $status);
                 if ($status === '') return null;
@@ -535,32 +529,67 @@ class ProfileDependentsController extends Controller
                 return null;
             };
 
-            $normalizeLocation = function (?string $branch): ?string {
-                $b = mb_strtolower(trim((string) $branch));
-                if ($b === '') return null;
-                if (str_contains($b, 'الرئيس'))  return '1';
-                if (str_contains($b, 'غزة'))     return '2';
-                if (str_contains($b, 'الشمال'))  return '3';
-                if (str_contains($b, 'الوسطى'))  return '4';
-                if (str_contains($b, 'خانيونس')) return '6';
-                if (str_contains($b, 'رفح'))     return '7';
-                if (str_contains($b, 'الصيانة')) return '8';
+            // تحويل اسم الفرع إلى كود المقر (لو حبيت تستخدمه لاحقاً)
+            $normalizeLocation = function (?string $branchName): ?string {
+                if (! $branchName) return null;
+                $b = mb_strtolower($branchName);
+
+                if (str_contains($b, 'الرئيس'))   return '1';
+                if (str_contains($b, 'غزة'))      return '2';
+                if (str_contains($b, 'الشمال'))   return '3';
+                if (str_contains($b, 'الوسطى'))   return '4';
+                if (str_contains($b, 'خانيونس'))  return '6';
+                if (str_contains($b, 'رفح'))      return '7';
+                if (str_contains($b, 'الصيانة'))  return '8';
+
                 return null;
             };
 
-            // تسجيل البيانات المستخرجة
-            \Log::info('Employee lookup extracted data', [
-                'row_keys'  => is_array($row) ? array_keys($row) : 'not_array',
-                'row_sample'=> is_array($row) ? json_encode($row) : $row,
-            ]);
+            // تطبيع تاريخ الميلاد إلى Y-m-d
+            $normalizeBirthDate = function ($raw) {
+                $raw = trim((string) $raw);
+                if ($raw === '') {
+                    return null;
+                }
+
+                // 1994-08-20 أو 1994/08/20
+                if (preg_match('/^(\d{4})[-\/](\d{1,2})[-\/](\d{1,2})$/', $raw, $m)) {
+                    $year  = $m[1];
+                    $month = str_pad($m[2], 2, '0', STR_PAD_LEFT);
+                    $day   = str_pad($m[3], 2, '0', STR_PAD_LEFT);
+                    return "{$year}-{$month}-{$day}";
+                }
+
+                // 20/08/1994 أو 20-08-1994
+                if (preg_match('/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})$/', $raw, $m)) {
+                    $day   = str_pad($m[1], 2, '0', STR_PAD_LEFT);
+                    $month = str_pad($m[2], 2, '0', STR_PAD_LEFT);
+                    $year  = $m[3];
+                    return "{$year}-{$month}-{$day}";
+                }
+
+                // أي شيء آخر: نخلي Carbon يحاول
+                try {
+                    return \Carbon\Carbon::parse($raw)->format('Y-m-d');
+                } catch (\Throwable $e) {
+                    return null;
+                }
+            };
+
+            $birthDate = $normalizeBirthDate($row['BIRTH_DATE'] ?? null);
 
             $data = [
                 'full_name'       => $row['NAME'] ?? null,
-                'birth_date'      => isset($row['BIRTH_DATE']) ? substr((string) $row['BIRTH_DATE'], 0, 10) : null,
+                'birth_date'      => $birthDate,
                 'marital_status'  => $normalizeMarital($row['STATUS_NAME'] ?? null),
                 'job_title'       => $row['W_NO_ADMIN_NAME'] ?? null,
                 'location'        => $normalizeLocation($row['BRAN_NAME'] ?? null),
-                'department'      => $row['HEAD_DEPARTMENT_NAME'] ?? $row['DEPT_NAME'] ?? $row['DEPARTMENT'] ?? $row['ADMIN_NAME'] ?? $row['DEPT'] ?? null,
+                'department'      => $row['HEAD_DEPARTMENT_NAME']
+                    ?? $row['DEPT_NAME']
+                        ?? $row['DEPARTMENT']
+                        ?? $row['ADMIN_NAME']
+                        ?? $row['DEPT']
+                        ?? null,
                 'national_id'     => $row['ID'] ?? null,
                 'employee_number' => $row['NO'] ?? null,
             ];
@@ -570,19 +599,22 @@ class ProfileDependentsController extends Controller
                 'data' => $data,
                 '_debug' => [
                     'raw_payload_keys' => is_array($payload) ? array_keys($payload) : 'not_array',
-                    'raw_row_keys'     => is_array($row) ? array_keys($row) : 'not_array',
-                    'raw_row'          => $row,
+                    'raw_row_keys'     => array_keys($row),
                 ],
             ];
 
             return response()->json($responseData);
+
         } catch (\Throwable $e) {
             \Log::error('Employee lookup unexpected error', [
                 'id'      => $id,
                 'message' => $e->getMessage(),
             ]);
 
-            return response()->json(['ok' => false, 'message' => 'حدث خطأ غير متوقع.'], 500);
+            return response()->json([
+                'ok'      => false,
+                'message' => 'حدث خطأ غير متوقع أثناء جلب البيانات.',
+            ], 500);
         }
     }
 }

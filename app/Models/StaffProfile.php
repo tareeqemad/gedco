@@ -30,7 +30,8 @@ class StaffProfile extends Model
      | ========================== */
     public function dependents(): HasMany
     {
-        return $this->hasMany(StaffDependent::class);
+        return $this->hasMany(StaffDependent::class, 'staff_profile_id')
+            ->orderBy('birth_date', 'asc'); // من الأكبر للأصغر
     }
 
     /* ==========================
