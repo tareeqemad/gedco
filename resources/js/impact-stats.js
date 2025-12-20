@@ -29,24 +29,36 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // فتح Modal التعديل وتعبئة الحقول
     function handleEditClick(e) {
+        e.preventDefault();
         const btn = e.currentTarget;
         const id = btn.dataset.id;
-        const title = btn.dataset.title;
+        const titleAr = btn.dataset.titleAr || '';
+        // معالجة titleEn - إذا كان "null" أو "undefined" أو فارغ، نجعلها string فارغ
+        let titleEn = btn.dataset.titleEn || '';
+        if (titleEn === 'null' || titleEn === 'undefined' || titleEn === null || titleEn === undefined) {
+            titleEn = '';
+        }
         const amount = btn.dataset.amount;
         const isActive = btn.dataset.active === '1';
 
+        // ملء الحقول
         document.getElementById('editId').value = id;
-        document.getElementById('editTitle').value = title;
+        document.getElementById('editTitleAr').value = titleAr;
+        document.getElementById('editTitleEn').value = titleEn;
         document.getElementById('editAmount').value = amount;
         document.getElementById('editActive').checked = isActive;
+
+        // فتح Modal
+        const editModal = new bootstrap.Modal(document.getElementById('editModal'));
+        editModal.show();
     }
 
     // فتح Modal الحذف
     function handleDeleteClick(e) {
         const btn = e.currentTarget;
         const id = btn.dataset.id;
-        const title = btn.dataset.title;
-        document.getElementById('deleteTitle').textContent = title;
+        const titleAr = btn.dataset.titleAr || '';
+        document.getElementById('deleteTitle').textContent = titleAr;
         document.getElementById('deleteForm').action = `/admin/impact-stats/${id}`;
     }
 
@@ -72,12 +84,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
                 if (res.ok) {
                     btn.dataset.active = isActive ? '0' : '1';
-                    btn.innerHTML = `<i class="fas fa-power-off"></i> ${isActive ? 'تفعيل' : 'إيقاف'}`;
+                    btn.innerHTML = `<i class="bi bi-power"></i> ${isActive ? 'تفعيل' : 'إيقاف'}`;
                     btn.className = `toggle-btn btn btn-sm w-100 d-flex align-items-center justify-content-center gap-1 ${isActive ? 'btn-outline-secondary' : 'btn-teal'}`;
 
                     const badge = document.querySelector(`.status-badge[data-id="${id}"]`);
                     badge.className = `status-badge badge rounded-pill px-3 py-2 ${isActive ? 'bg-secondary' : 'bg-teal text-white'}`;
-                    badge.innerHTML = `<i class="fas fa-circle small me-1"></i>${isActive ? 'معطل' : 'مفعل'}`;
+                    badge.innerHTML = `<i class="bi bi-circle-fill small me-1"></i>${isActive ? 'معطل' : 'مفعل'}`;
 
                     showToast(isActive ? 'تم الإيقاف' : 'تم التفعيل');
                 }
@@ -158,12 +170,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 const toggleBtn = document.querySelector(`[data-id="${id}"] .toggle-btn`);
                 const isActive = item.is_active;
                 toggleBtn.dataset.active = isActive ? '1' : '0';
-                toggleBtn.innerHTML = `<i class="fas fa-power-off"></i> ${isActive ? 'إيقاف' : 'تفعيل'}`;
+                toggleBtn.innerHTML = `<i class="bi bi-power"></i> ${isActive ? 'إيقاف' : 'تفعيل'}`;
                 toggleBtn.className = `toggle-btn btn btn-sm w-100 d-flex align-items-center justify-content-center gap-1 ${isActive ? 'btn-teal' : 'btn-outline-secondary'}`;
 
                 const badge = document.querySelector(`.status-badge[data-id="${id}"]`);
                 badge.className = `status-badge badge rounded-pill px-3 py-2 ${isActive ? 'bg-teal text-white' : 'bg-secondary'}`;
-                badge.innerHTML = `<i class="fas fa-circle small me-1"></i>${isActive ? 'مفعل' : 'معطل'}`;
+                badge.innerHTML = `<i class="bi bi-circle-fill small me-1"></i>${isActive ? 'مفعل' : 'معطل'}`;
 
                 bootstrap.Modal.getInstance(document.getElementById('editModal')).hide();
                 showToast('تم التحديث بنجاح');
@@ -236,34 +248,34 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <span class="badge bg-light text-dark rounded-pill px-3 py-1 fw-semibold sort-badge">#${item.sort_order}</span>
                         <span class="status-badge badge rounded-pill px-3 py-2 ${item.is_active ? 'bg-teal text-white' : 'bg-secondary'}" data-id="${item.id}">
-                            <i class="fas fa-circle small me-1"></i>${item.is_active ? 'مفعل' : 'معطل'}
+                            <i class="bi bi-circle-fill small me-1"></i>${item.is_active ? 'مفعل' : 'معطل'}
                         </span>
                     </div>
-                    <h5 class="card-title mb-2 fw-bold text-dark">${item.title_ar}</h5>
+                    <h5 class="card-title mb-2 fw-bold text-dark">${item.title_ar || ''}</h5>
                     <p class="display-6 fw-bold text-danger mb-3">$${Number(item.amount_usd).toLocaleString('en-US', { minimumFractionDigits: 1 })}</p>
                     <div class="d-flex gap-2">
                         <button class="toggle-btn btn btn-sm w-100 d-flex align-items-center justify-content-center gap-1 ${item.is_active ? 'btn-teal' : 'btn-outline-secondary'}"
                                 data-id="${item.id}" data-active="${item.is_active ? '1' : '0'}">
-                            <i class="fas fa-power-off"></i> ${item.is_active ? 'إيقاف' : 'تفعيل'}
+                            <i class="bi bi-power"></i> ${item.is_active ? 'إيقاف' : 'تفعيل'}
                         </button>
-                        <button class="btn btn-sm btn-warning flex-fill edit-btn d-flex align-items-center justify-content-center gap-1"
+                        <button type="button" class="btn btn-sm btn-warning flex-fill edit-btn d-flex align-items-center justify-content-center gap-1"
                                 data-id="${item.id}"
-                                data-title="${item.title_ar}"
+                                data-title-ar="${item.title_ar || ''}"
+                                data-title-en="${item.title_en ? item.title_en : ''}"
                                 data-amount="${item.amount_usd}"
-                                data-active="${item.is_active ? '1' : '0'}"
-                                data-bs-toggle="modal" data-bs-target="#editModal">
-                            <i class="fas fa-edit"></i> تعديل
+                                data-active="${item.is_active ? '1' : '0'}">
+                            <i class="bi bi-pencil"></i> تعديل
                         </button>
-                        <button class="btn btn-sm btn-danger delete-btn d-flex align-items-center justify-content-center"
+                        <button type="button" class="btn btn-sm btn-danger delete-btn d-flex align-items-center justify-content-center"
                                 data-id="${item.id}"
-                                data-title="${item.title_ar}"
+                                data-title-ar="${item.title_ar || ''}"
                                 data-bs-toggle="modal" data-bs-target="#deleteModal">
-                            <i class="fas fa-trash"></i>
+                            <i class="bi bi-trash"></i>
                         </button>
                     </div>
                 </div>
                 <div class="drag-handle-icon position-absolute top-0 end-0 p-3 text-muted opacity-50">
-                    <i class="fas fa-grip-lines fa-lg"></i>
+                    <i class="bi bi-grip-vertical"></i>
                 </div>
             </div>
         `;
@@ -277,15 +289,29 @@ document.addEventListener('DOMContentLoaded', () => {
     // === تحديث كرت ===
     window.updateCard = function(id, data) {
         const card = document.querySelector(`[data-id="${id}"]`);
-        card.querySelector('.card-title').textContent = data.title_ar;
+        // استخدام العنوان حسب لغة لوحة التحكم
+        const adminDir = document.documentElement.dir || 'rtl';
+        const displayTitle = (adminDir === 'rtl') ? (data.title_ar || '') : (data.title_en || data.title_ar || '');
+        card.querySelector('.card-title').textContent = displayTitle;
+        
+        // تحديث data attributes
+        const editBtn = card.querySelector('.edit-btn');
+        if (editBtn) {
+            editBtn.dataset.titleAr = data.title_ar || '';
+            editBtn.dataset.titleEn = data.title_en || '';
+        }
+        const deleteBtn = card.querySelector('.delete-btn');
+        if (deleteBtn) {
+            deleteBtn.dataset.titleAr = data.title_ar || '';
+        }
         card.querySelector('.display-6').textContent = `$${Number(data.amount_usd).toLocaleString('en-US', { minimumFractionDigits: 1 })}`;
         const badge = card.querySelector('.status-badge');
         const btn = card.querySelector('.toggle-btn');
         const active = data.is_active;
         badge.className = `status-badge badge rounded-pill px-3 py-2 ${active ? 'bg-teal text-white' : 'bg-secondary'}`;
-        badge.innerHTML = `<i class="fas fa-circle small me-1"></i>${active ? 'مفعل' : 'معطل'}`;
+        badge.innerHTML = `<i class="bi bi-circle-fill small me-1"></i>${active ? 'مفعل' : 'معطل'}`;
         btn.dataset.active = active ? '1' : '0';
-        btn.innerHTML = `<i class="fas fa-power-off"></i> ${active ? 'إيقاف' : 'تفعيل'}`;
+        btn.innerHTML = `<i class="bi bi-power"></i> ${active ? 'إيقاف' : 'تفعيل'}`;
         btn.className = `toggle-btn btn btn-sm w-100 d-flex align-items-center justify-content-center gap-1 ${active ? 'btn-teal' : 'btn-outline-secondary'}`;
     };
 
@@ -311,7 +337,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const toast = document.createElement('div');
         toast.className = `custom-toast alert alert-${type === 'error' ? 'danger' : 'success'} position-fixed top-0 end-0 m-4 shadow-lg rounded-pill fade show d-flex align-items-center`;
         toast.style.cssText = `min-width:320px;z-index:1070;animation:slideInRight .4s ease,fadeOut .5s 3.5s forwards;backdrop-filter:blur(8px);`;
-        toast.innerHTML = `<i class="fas ${type === 'error' ? 'fa-exclamation-triangle' : 'fa-check-circle'} me-2"></i><span>${msg}</span><button type="button" class="btn-close btn-close-sm ms-auto" onclick="this.parentElement.remove()"></button>`;
+        toast.innerHTML = `<i class="bi ${type === 'error' ? 'bi-exclamation-triangle' : 'bi-check-circle'} me-2"></i><span>${msg}</span><button type="button" class="btn-close btn-close-sm ms-auto" onclick="this.parentElement.remove()"></button>`;
         document.body.appendChild(toast);
         setTimeout(() => toast.remove(), 4000);
     };

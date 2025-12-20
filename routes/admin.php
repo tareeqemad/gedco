@@ -21,6 +21,7 @@ use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\HomeVideoController;
 use App\Http\Controllers\Admin\UploadController;
 use App\Http\Controllers\Admin\Staff\StaffProfileController;
+use App\Http\Controllers\Admin\ActivityLogController;
 
 
 Route::prefix('admin')->name('admin.')->group(function () {
@@ -47,6 +48,12 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::middleware('permission:users.edit')->get('/users/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
         Route::middleware('permission:users.edit')->put('/users/{user}', [UserController::class, 'update'])->name('users.update');
         Route::middleware('permission:users.delete')->delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
+        
+        // Routes for password management (super-admin only)
+        Route::middleware('role:super-admin')->group(function () {
+            Route::post('/users/{user}/update-password', [UserController::class, 'updatePassword'])->name('users.update-password');
+            Route::get('/users/{user}/show-temporary-password', [UserController::class, 'showTemporaryPassword'])->name('users.show-temporary-password');
+        });
 
         // === إعدادات الموقع ===
         Route::middleware('permission:site-settings.edit')->group(function () {
@@ -180,6 +187,11 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::get('/social-links/{social_link}/edit', [SocialLinkController::class, 'edit'])->name('social-links.edit');
             Route::put('/social-links/{social_link}', [SocialLinkController::class, 'update'])->name('social-links.update');
             Route::delete('/social-links/{social_link}', [SocialLinkController::class, 'destroy'])->name('social-links.destroy');
+
+            // Activity Logs (سجل الأنشطة)
+            Route::get('/activity-logs', [ActivityLogController::class, 'index'])->name('activity-logs.index');
+            Route::get('/activity-logs/active-users', [ActivityLogController::class, 'activeUsers'])->name('activity-logs.active-users');
+            Route::get('/activity-logs/user/{user}', [ActivityLogController::class, 'userActivity'])->name('activity-logs.user');
         });
     });
 });

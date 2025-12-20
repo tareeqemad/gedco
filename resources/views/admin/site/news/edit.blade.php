@@ -1,10 +1,10 @@
 @extends('layouts.admin')
-@section('title', 'تعديل خبر')
+@section('title', __('admin.news.edit_title'))
 
 @section('content')
     @php
-        $breadcrumbTitle     = 'تعديل خبر';
-        $breadcrumbParent    = 'الأخبار';
+        $breadcrumbTitle     = __('admin.news.edit_title');
+        $breadcrumbParent    = __('admin.menu.news');
         $breadcrumbParentUrl = route('admin.news.index');
         $MAX_IMAGES = 8;
         $MAX_IMAGE_BYTES = 2 * 1024 * 1024;
@@ -14,18 +14,18 @@
         <div class="card border-0 shadow-sm rounded-3 bg-white mb-4">
             <div class="card-header bg-white border-bottom py-2 px-3 d-flex align-items-center justify-content-between flex-wrap gap-2">
                 <div class="d-flex align-items-center gap-2">
-                    <i class="ri-edit-2-line text-primary fs-5"></i>
-                    <h6 class="mb-0 fw-semibold text-dark-emphasis">تعديل: {{ $news->title }}</h6>
+                    <i class="bi bi-pencil-square text-primary fs-5"></i>
+                    <h6 class="mb-0 fw-semibold text-dark-emphasis">{{ __('admin.news.edit_title') }}: {{ $news->title }}</h6>
                 </div>
                 <ul class="nav nav-tabs nav-tabs-sm border-0" id="newsTabs" role="tablist">
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link active px-3 py-1 rounded-3" data-bs-toggle="tab" data-bs-target="#form-content">
-                            <i class="ri-edit-line me-1"></i> إدخال
+                            <button class="nav-link active px-3 py-1 rounded-3" data-bs-toggle="tab" data-bs-target="#form-content">
+                            <i class="bi bi-pencil me-1"></i> {{ __('admin.news.form_tab_input') }}
                         </button>
                     </li>
                     <li class="nav-item" role="presentation">
                         <button class="nav-link px-3 py-1 rounded-3" data-bs-toggle="tab" data-bs-target="#preview-content">
-                            <i class="ri-eye-line me-1"></i> معاينة
+                            <i class="bi bi-eye me-1"></i> {{ __('admin.news.form_tab_preview') }}
                         </button>
                     </li>
                 </ul>
@@ -48,7 +48,7 @@
                                     {{-- العنوان --}}
                                     <div class="mb-4">
                                         <label class="form-label fw-medium text-secondary d-flex align-items-center gap-1">
-                                            <i class="ri-heading fs-6 text-primary"></i> عنوان الخبر
+                                            <i class="bi bi-type-h1 fs-6 text-primary"></i> عنوان الخبر
                                         </label>
                                         <input type="text" name="title" id="titleInput"
                                                class="form-control rounded-3 border-0 shadow-sm focus-ring focus-ring-primary @error('title') is-invalid @enderror"
@@ -60,7 +60,7 @@
                                     <div class="row g-3 mb-4">
                                         <div class="col-md-5">
                                             <label class="form-label fw-medium text-secondary d-flex align-items-center gap-1">
-                                                <i class="ri-calendar-line fs-6 text-info"></i> تاريخ النشر
+                                                <i class="bi bi-calendar fs-6 text-info"></i> تاريخ النشر
                                             </label>
                                             <input type="date" name="published_at" id="dateInput"
                                                    class="form-control rounded-3 border-0 shadow-sm focus-ring focus-ring-info @error('published_at') is-invalid @enderror"
@@ -83,11 +83,32 @@
                                         </div>
                                     </div>
 
+                                    {{-- اللغة - مخفية، يتم تحديدها تلقائياً حسب لغة لوحة التحكم --}}
+                                    @php
+                                        $currentDirection = session('direction', 'rtl');
+                                        $defaultLang = $currentDirection === 'rtl' ? 'ar' : 'en';
+                                        // في التعديل، نستخدم لغة السجل الحالي
+                                        $currentLang = old('language', $news->language ?? $defaultLang);
+                                    @endphp
+                                    <input type="hidden" name="language" value="{{ $currentLang }}">
+                                    <div class="mb-4">
+                                        <div class="d-flex align-items-center gap-2">
+                                            <label class="form-label fw-medium text-secondary mb-0 d-flex align-items-center gap-1">
+                                                <i class="bi bi-globe fs-6 text-primary"></i> {{ __('admin.labels.language') }}:
+                                            </label>
+                                            <span class="badge bg-info rounded-pill">
+                                                {{ $currentLang === 'ar' ? __('admin.labels.arabic') : __('admin.labels.english') }}
+                                            </span>
+                                            <small class="text-muted">({{ __('admin.common.language_default_selected') }})</small>
+                                        </div>
+                                        @error('language') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
+                                    </div>
+
                                     {{-- المحتوى (Quill) --}}
                                     <div class="mb-4">
                                         <label class="form-label fw-medium text-secondary d-flex align-items-center gap-2 flex-wrap">
                                         <span class="d-inline-flex align-items-center gap-1">
-                                            <i class="ri-file-text-line fs-6 text-success"></i> المحتوى
+                                            <i class="bi bi-file-text fs-6 text-success"></i> المحتوى
                                         </span>
                                             <small class="text-muted">(حتى {{ $MAX_IMAGES }} صور × 2MB كحد أقصى — ويمكن بدون صور)</small>
                                             <span id="imgCounter" class="badge img-counter bg-primary">0 / {{ $MAX_IMAGES }}</span>
@@ -168,12 +189,12 @@
                                     {{-- صورة الغلاف --}}
                                     <div class="mb-4">
                                         <label class="form-label fw-medium text-secondary d-flex align-items-center gap-1">
-                                            <i class="ri-image-add-line fs-6 text-primary"></i> صورة الغلاف (اختياري)
+                                            <i class="bi bi-image fs-6 text-primary"></i> صورة الغلاف (اختياري)
                                         </label>
                                         <div class="dropzone border border-2 border-dashed rounded-3 p-4 text-center bg-light-subtle transition" id="coverDrop">
                                             <input type="file" name="cover" id="coverInput" class="visually-hidden" accept="image/*">
                                             <div class="text-primary">
-                                                <i class="ri-image-add-line fs-1 mb-2 d-block"></i>
+                                                <i class="bi bi-image fs-1 mb-2 d-block"></i>
                                                 <p class="mb-1 fw-medium">
                                                     اسحب صورة أو
                                                     <label for="coverInput" class="text-primary" style="text-decoration: underline; cursor: pointer;">اختر ملف</label>
@@ -200,12 +221,12 @@
                                     {{-- PDF --}}
                                     <div class="mb-4">
                                         <label class="form-label fw-medium text-secondary d-flex align-items-center gap-1">
-                                            <i class="ri-file-pdf-line fs-6 text-danger"></i> ملف PDF (اختياري)
+                                            <i class="bi bi-file-pdf fs-6 text-danger"></i> ملف PDF (اختياري)
                                         </label>
                                         <div class="dropzone border border-2 border-dashed rounded-3 p-4 text-center bg-light-subtle transition" id="pdfDrop">
                                             <input type="file" name="pdf" id="pdfInput" class="visually-hidden" accept="application/pdf">
                                             <div class="text-primary">
-                                                <i class="ri-upload-cloud-2-line fs-1 mb-2 d-block"></i>
+                                                <i class="bi bi-cloud-upload fs-1 mb-2 d-block"></i>
                                                 <p class="mb-1 fw-medium">
                                                     اسحب ملف أو
                                                     <label for="pdfInput" class="text-primary" style="text-decoration: underline; cursor: pointer;">اختر ملف</label>
@@ -218,12 +239,12 @@
                                             @if($pdfUrl)
                                                 <div class="alert alert-success d-flex align-items-center justify-content-between p-2 rounded shadow-sm">
                                                     <div class="d-flex align-items-center gap-2">
-                                                        <i class="ri-file-pdf-line fs-5"></i>
-                                                        <div><strong>مرفق حالي</strong><br><small><a href="{{ $pdfUrl }}" target="_blank" rel="noopener">عرض الملف</a></small></div>
+                                                        <i class="bi bi-file-pdf fs-5"></i>
+                                                        <div><strong>{{ __('admin.news.form_pdf') }}</strong><br><small><a href="{{ $pdfUrl }}" target="_blank" rel="noopener">{{ __('admin.advertisements.view_file') }}</a></small></div>
                                                     </div>
                                                     <div class="form-check">
                                                         <input class="form-check-input" type="checkbox" name="remove_pdf" id="removePdf" value="1">
-                                                        <label class="form-check-label small" for="removePdf">إزالة المرفق</label>
+                                                        <label class="form-check-label small" for="removePdf">{{ __('admin.news.form_remove_pdf') }}</label>
                                                     </div>
                                                 </div>
                                             @endif
@@ -234,7 +255,7 @@
                                     {{-- الأزرار --}}
                                     <div class="d-flex flex-wrap gap-2 mt-4 form-actions">
                                         <button type="button" id="submitBtn" class="btn btn-primary px-4 d-flex align-items-center gap-2 shadow-sm">
-                                            <i class="ri-check-line"></i>
+                                            <i class="bi bi-check"></i>
                                             <span id="submitText">تحديث الخبر</span>
                                             <span id="submitSpinner" class="spinner-border spinner-border-sm d-none" role="status"></span>
                                         </button>
@@ -251,12 +272,12 @@
             <div class="tab-pane fade" id="preview-content">
                 <div class="card border-0 shadow-sm rounded-3 bg-white">
                     <div class="card-header bg-light py-2 px-3">
-                        <h6 class="mb-0 fw-semibold text-primary"><i class="ri-file-search-line me-1"></i> معاينة كاملة</h6>
+                        <h6 class="mb-0 fw-semibold text-primary"><i class="bi bi-eye me-1"></i> معاينة كاملة</h6>
                     </div>
                     <div class="card-body p-4" id="fullPreview">
                         <div class="text-center text-muted py-5">
-                            <i class="ri-file-search-line fs-4 d-block mb-2"></i>
-                            <small>عدّل في تبويب "إدخال"</small>
+                            <i class="bi bi-eye fs-4 d-block mb-2"></i>
+                            <small>{{ __('admin.news.form_preview_edit_in_tab') }}</small>
                         </div>
                     </div>
                 </div>
@@ -268,21 +289,6 @@
 @push('styles')
     <link rel="stylesheet" href="{{ asset('assets/admin/libs/quill/quill.snow.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/admin/libs/sweetalert2/sweetalert2.min.css') }}">
-    <style>
-        /* محرر فليكس بدل calc */
-        .quill-wrapper{height:500px;background:#fff;display:flex;flex-direction:column;}
-        #quill-toolbar{flex:0 0 auto;}
-        #quill-editor{flex:1 1 auto;min-height:0;}
-        .ql-container{height:100% !important;font-size:1.05rem;overflow-y:auto;}
-        .ql-editor{direction:rtl;text-align:right;min-height:100%;padding:1rem;overflow-wrap:anywhere;word-break:break-word;}
-        /* صور/فيديو ريسبونسِف */
-        .ql-editor img,.content-preview img{max-width:100% !important;height:auto !important;max-height:420px !important;object-fit:contain !important;display:block;margin:.5rem 0;}
-        .ql-editor .ql-video,.ql-editor iframe{width:100% !important;max-width:100% !important;height:auto;aspect-ratio:16/9;}
-        /* قصّ المسافة أسفل آخر كارد في الصفحة */
-        #news-edit-page .card:last-of-type{margin-bottom:0 !important;}
-        #news-edit-page .card-body > *:last-child{margin-bottom:0 !important;}
-        #news-edit-page{padding-bottom:0 !important;}
-    </style>
 @endpush
 
 @push('scripts')
@@ -553,10 +559,10 @@
             ${coverSrc ? `<div class="mb-3"><img src="${coverSrc}" class="w-100 rounded" style="max-height:200px; object-fit:cover;"></div>` : ''}
             <h5 class="fw-bold text-primary mb-2">${title} ${featured} ${status}</h5>
             <div class="text-muted small mb-3 d-flex align-items-center gap-1">
-                <i class="ri-calendar-line"></i> <span>${date || 'تاريخ النشر'}</span>
+                <i class="bi bi-calendar"></i> <span>${date || 'تاريخ النشر'}</span>
             </div>
             <div class="content-preview lh-lg" style="font-size:.95rem;">${content}</div>
-            ${el.pdfPreview.innerHTML ? `<div class="mt-3"><span class="badge bg-danger-subtle text-danger"><i class="ri-file-pdf-line"></i> مرفق PDF</span></div>` : ''}
+            ${el.pdfPreview.innerHTML ? `<div class="mt-3"><span class="badge bg-danger-subtle text-danger"><i class="bi bi-file-pdf"></i> مرفق PDF</span></div>` : ''}
         </article>`;
             }
 
@@ -604,7 +610,7 @@
                 el.pdfPreview.innerHTML = `
         <div class="alert alert-success d-flex align-items-center justify-content-between p-2 rounded shadow-sm">
             <div class="d-flex align-items-center gap-2">
-                <i class="ri-file-pdf-line fs-5"></i>
+                <i class="bi bi-file-pdf fs-5"></i>
                 <div><strong>${file.name}</strong><br><small>${(file.size/1024/1024).toFixed(2)} MB</small></div>
             </div>
             <button type="button" class="btn-close btn-close-sm" onclick="removePDF()"></button>

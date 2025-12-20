@@ -1,15 +1,15 @@
 @extends('layouts.admin')
-@section('title', 'تعديل شريحة السلايدر')
+@section('title', __('admin.slider.edit_slide_title'))
 
 @section('content')
     @php
 
-          $breadcrumbTitle     = ' تعديل الشريحة';
-          $breadcrumbParent    = 'لوحةالتحكم';
+          $breadcrumbTitle     = __('admin.slider.edit_slide');
+          $breadcrumbParent    = __('admin.breadcrumbs.home');
           $breadcrumbParentUrl = route('admin.dashboard');
 
-          $title      = 'تعديل الشريحة';
-          $parent     = 'شرائح السلايدر';
+          $title      = __('admin.slider.edit_slide');
+          $parent     = __('admin.slider.slider_items');
           $parent_url = route('admin.sliders.index');
     @endphp
 
@@ -18,11 +18,11 @@
             <!-- Card Header -->
             <div class="card-header bg-white border-bottom d-flex align-items-center justify-content-between flex-wrap gap-3 py-3">
                 <h5 class="card-title mb-0 text-dark fw-semibold d-flex align-items-center gap-2">
-                    تعديل الشريحة: <span class="text-primary">{{ Str::limit($slider->title, 40) }}</span>
+                    {{ __('admin.slider.edit_slide') }}: <span class="text-primary">{{ Str::limit($slider->title, 40) }}</span>
                 </h5>
                 <a href="{{ route('admin.sliders.index') }}"
                    class="btn btn-outline-secondary btn-sm d-flex align-items-center gap-1 shadow-sm">
-                    عودة إلى القائمة
+                    {{ __('admin.slider.back_to_list') }}
                 </a>
             </div>
 

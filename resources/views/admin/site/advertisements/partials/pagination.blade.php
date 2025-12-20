@@ -20,12 +20,12 @@
             <ul class="pagination mb-0">
                 {{-- السابق --}}
                 @if ($ads->onFirstPage())
-                    <li class="page-item disabled"><span class="page-link"><i class="ri-arrow-right-s-line"></i></span></li>
+                    <li class="page-item disabled"><span class="page-link"><i class="bi bi-arrow-right"></i></span></li>
                 @else
                     @php $prevQuery = array_merge($currentQuery, ['page' => $ads->currentPage() - 1]); @endphp
                     <li class="page-item">
                         <a class="page-link pagination-link" href="{{ $buildUrl($prevQuery) }}" data-url="{{ $buildUrl($prevQuery) }}">
-                            <i class="ri-arrow-right-s-line"></i>
+                            <i class="bi bi-arrow-right"></i>
                         </a>
                     </li>
                 @endif
@@ -72,11 +72,11 @@
                     @php $nextQuery = array_merge($currentQuery, ['page' => $ads->currentPage() + 1]); @endphp
                     <li class="page-item">
                         <a class="page-link pagination-link" href="{{ $buildUrl($nextQuery) }}" data-url="{{ $buildUrl($nextQuery) }}">
-                            <i class="ri-arrow-left-s-line"></i>
+                            <i class="bi bi-arrow-left"></i>
                         </a>
                     </li>
                 @else
-                    <li class="page-item disabled"><span class="page-link"><i class="ri-arrow-left-s-line"></i></span></li>
+                    <li class="page-item disabled"><span class="page-link"><i class="bi bi-arrow-left"></i></span></li>
                 @endif
             </ul>
         </nav>

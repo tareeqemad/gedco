@@ -20,45 +20,62 @@
 @endphp
 
 <div class="row g-3">
-    <!-- العنوان -->
+    <!-- Title -->
     <div class="col-md-6">
-        <label class="form-label fw-semibold">العنوان <span class="text-danger">*</span></label>
+        <label class="form-label fw-semibold">{{ __('admin.slider.form_title') }} <span class="text-danger">*</span></label>
         <input type="text" name="title" class="form-control @error('title') is-invalid @enderror"
                value="{{ old('title', $slider->title ?? '') }}" required>
         @error('title')<div class="invalid-feedback">{{ $message }}</div>@enderror
     </div>
 
-    <!-- الترتيب -->
+    <!-- Order -->
     <div class="col-md-3">
-        <label class="form-label fw-semibold">الترتيب</label>
+        <label class="form-label fw-semibold">{{ __('admin.slider.form_order') }}</label>
         @if($edit)
             <input type="number" name="sort_order" class="form-control @error('sort_order') is-invalid @enderror"
                    value="{{ old('sort_order', $slider->sort_order ?? 0) }}" min="0">
             @error('sort_order')<div class="invalid-feedback">{{ $message }}</div>@enderror
         @else
             <input type="number" class="form-control bg-light" value="{{ $nextOrder ?? 0 }}" readonly>
-            <small class="text-muted">يُحدد تلقائيًا</small>
+            <small class="text-muted">{{ __('admin.slider.form_order_auto') }}</small>
         @endif
     </div>
 
-    <!-- الحالة -->
+    <!-- Status -->
     <div class="col-md-3">
-        <label class="form-label fw-semibold d-block">الحالة</label>
+        <label class="form-label fw-semibold d-block">{{ __('admin.slider.form_status') }}</label>
         <div class="form-check form-switch mt-2">
             <input class="form-check-input" type="checkbox" name="is_active" value="1"
                    id="is_active" @checked(old('is_active', $slider->is_active ?? true))>
             <label class="form-check-label" for="is_active">
-                {{ old('is_active', $slider->is_active ?? true) ? 'مفعّل' : 'معطّل' }}
+                {{ old('is_active', $slider->is_active ?? true) ? __('admin.slider.form_active') : __('admin.slider.form_inactive') }}
             </label>
         </div>
     </div>
 </div>
 
-<!-- الوصف -->
+<!-- Language - Hidden, automatically set based on admin panel language -->
+@php
+    $currentDirection = session('direction', 'rtl');
+    $defaultLang = $currentDirection === 'rtl' ? 'ar' : 'en';
+@endphp
+<input type="hidden" name="language" value="{{ old('language', $slider->language ?? $defaultLang) }}">
 <div class="mt-3">
-    <label class="form-label fw-semibold">الوصف الفرعي</label>
+    <div class="d-flex align-items-center gap-2">
+        <label class="form-label fw-semibold mb-0">{{ __('admin.labels.language') }}:</label>
+        <span class="badge bg-info rounded-pill">
+            {{ $defaultLang === 'ar' ? __('admin.labels.arabic') : __('admin.labels.english') }}
+        </span>
+        <small class="text-muted">({{ __('admin.common.language_default_selected') }})</small>
+    </div>
+    @error('language') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
+</div>
+
+<!-- Subtitle -->
+<div class="mt-3">
+    <label class="form-label fw-semibold">{{ __('admin.slider.form_subtitle') }}</label>
     <textarea name="subtitle" class="form-control @error('subtitle') is-invalid @enderror" rows="3"
-              placeholder="وصف مختصر يظهر أسفل العنوان...">{{ old('subtitle', $slider->subtitle ?? '') }}</textarea>
+              placeholder="{{ __('admin.slider.form_subtitle_placeholder') }}">{{ old('subtitle', $slider->subtitle ?? '') }}</textarea>
     @error('subtitle')<div class="invalid-feedback">{{ $message }}</div>@enderror
 </div>
 
@@ -85,34 +102,34 @@
 --}}
 
 
-<!-- === صورة الخلفية + المعاينة === -->
+<!-- === Background Image + Preview === -->
 <div class="mt-4">
-    <label class="form-label fw-semibold d-block">صورة الخلفية <span class="text-danger">*</span></label>
+    <label class="form-label fw-semibold d-block">{{ __('admin.slider.form_bg_image') }} <span class="text-danger">*</span></label>
 
-    <!-- الصورة الحالية (للتعديل فقط) -->
+    <!-- Current Image (for edit only) -->
     @if($edit && !empty($slider?->bg_image))
         <div class="mb-3">
             <div class="position-relative d-inline-block">
                 <img src="{{ $slider->bg_image_url ?? '' }}"
-                     alt="الصورة الحالية"
+                     alt="{{ __('admin.slider.form_bg_image_current') }}"
                      id="current-image"
                      class="rounded shadow-sm"
                      style="max-width: 280px; height: auto; border: 1px solid #ddd;">
 
-                <!-- زر إخفاء الصورة: يسبمت فورم خارجي بـ id=remove-image-{{ $slider->id }} -->
+                <!-- Remove Image Button: submits external form with id=remove-image-{{ $slider->id }} -->
                 <button type="submit"
                         form="remove-image-{{ $slider->id }}"
                         class="btn btn-sm btn-outline-danger border-0 bg-transparent p-1 position-absolute top-0 end-0 mt-1 me-1"
-                        title="إخفاء الصورة"
-                        aria-label="إخفاء الصورة"
-                        onclick="return confirm('هل تريد إخفاء الصورة؟')">
+                        title="{{ __('admin.slider.form_bg_image_remove') }}"
+                        aria-label="{{ __('admin.slider.form_bg_image_remove') }}"
+                        onclick="return confirm('{{ __('admin.slider.form_bg_image_remove_confirm') }}')">
                     X
                 </button>
             </div>
         </div>
     @endif
 
-    <!-- حقل رفع الملف -->
+    <!-- File Upload Field -->
     <input type="file"
            name="bg_image"
            id="bg_image_input"
@@ -121,19 +138,19 @@
         {{ !$edit ? 'required' : '' }}>
 
     <small class="text-muted d-block mt-1">
-        الصيغ المسموحة: WEBP, JPG, PNG (المقاس المقترح: 1920×1080)
+        {{ __('admin.slider.form_bg_image_allowed') }}
     </small>
 
     @error('bg_image')
     <div class="invalid-feedback d-block">{{ $message }}</div>
     @enderror
 
-    <!-- المعاينة الفورية -->
+    <!-- Instant Preview -->
     <div id="image-preview-container" class="mt-3" style="display: none;">
-        <p class="small text-success fw-semibold mb-2">معاينة الصورة الجديدة:</p>
+        <p class="small text-success fw-semibold mb-2">{{ __('admin.slider.form_bg_image_preview') }}</p>
         <img id="image-preview"
              src="#"
-             alt="معاينة الصورة"
+             alt="{{ __('admin.slider.form_bg_image_preview') }}"
              class="rounded shadow-sm"
              style="max-width: 280px; height: auto; border: 1px solid #ddd;">
     </div>
@@ -141,22 +158,22 @@
 
 <!-- Bullets -->
 <div class="mt-4">
-    <h6 class="fw-bold text-primary mb-3">النقاط البارزة أسفل الشريحة (اختياري - حتى 4)</h6>
+    <h6 class="fw-bold text-primary mb-3">{{ __('admin.slider.form_bullets_title') }}</h6>
     <div class="row g-2">
         @for($i = 0; $i < 4; $i++)
             <div class="col-md-6">
                 <input type="text" name="bullets[]" class="form-control form-control-sm"
                        value="{{ $bullets[$i] ?? '' }}"
-                       placeholder="مثال: جهودنا لا تنطفئ">
+                       placeholder="{{ __('admin.slider.form_bullets_placeholder') }}">
             </div>
         @endfor
     </div>
 </div>
 
-<!-- أزرار الحفظ -->
+<!-- Save Buttons -->
 <div class="mt-4 d-flex gap-2">
-    <button type="submit" class="btn btn-success px-4">حفظ التغييرات</button>
-    <a href="{{ route('admin.sliders.index') }}" class="btn btn-outline-secondary px-4">إلغاء</a>
+    <button type="submit" class="btn btn-success px-4">{{ __('admin.common.save_changes') }}</button>
+    <a href="{{ route('admin.sliders.index') }}" class="btn btn-outline-secondary px-4">{{ __('admin.actions.cancel') }}</a>
 </div>
 
 @push('scripts')
@@ -177,19 +194,19 @@
                     return;
                 }
 
-                // الأنواع المسموحة
+                // Allowed types
                 const validTypes = ['image/webp', 'image/jpeg', 'image/jpg', 'image/png'];
                 if (!validTypes.includes(file.type)) {
-                    alert('الرجاء اختيار صورة بصيغة WEBP, JPG أو PNG فقط.');
+                    alert('{{ __('admin.slider.invalid_image_format') }}');
                     input.value = '';
                     previewContainer.style.display = 'none';
                     return;
                 }
 
-                // الحجم الأقصى 5MB
+                // Maximum size 5MB
                 const maxSize = 5 * 1024 * 1024;
                 if (file.size > maxSize) {
-                    alert('حجم الصورة كبير جدًا. الحد الأقصى: 5 ميجابايت.');
+                    alert('{{ __('admin.slider.image_too_large') }}');
                     input.value = '';
                     previewContainer.style.display = 'none';
                     return;

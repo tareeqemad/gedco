@@ -10,6 +10,11 @@ use App\Http\Controllers\Site\TendersController;
 use App\Http\Controllers\Site\NewsController;
 use App\Http\Controllers\Site\AdvertisementController;
 use App\Http\Controllers\Site\SearchController;
+use App\Http\Controllers\DirectionController;
+
+// Direction toggle route
+Route::match(['get', 'post'], '/direction/toggle', [DirectionController::class, 'toggle'])->name('direction.toggle');
+Route::match(['get', 'post'], '/direction/set/{direction}', [DirectionController::class, 'set'])->name('direction.set');
 
 Route::prefix('/')->name('site.')->group(function () {
     Route::get('/', [HomeController::class, 'index'])->name('home');

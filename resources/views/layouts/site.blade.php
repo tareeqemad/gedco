@@ -1,5 +1,8 @@
+@php
+    $currentDirection = session('direction', 'rtl');
+@endphp
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar" dir="{{ $currentDirection }}">
 <head>
     <title>@yield('title', 'كهرباء غزة')</title>
     <meta charset="utf-8">
@@ -8,25 +11,28 @@
     {{-- Meta --}}
     <meta name="description" content="@yield('meta_description','كهرباء غزة')">
     <meta name="keywords" content="@yield('meta_keywords','')">
-    <link rel="icon" type="image/x-icon" href="{{ asset('assets/site/images/icon.ico') }}">
+    <link rel="icon" type="image/x-icon" href="{{ asset('assets/site/images/icons/icon.ico') }}">
 
-    <link id="bootstrap" rel="stylesheet" href="{{ asset('assets/site/css/bootstrap.rtl.min.css') }}">
+    {{-- Fonts are loaded via @font-face in style.css (Cairo for RTL, Inter for LTR) --}}
+
+    <link id="bootstrap" rel="stylesheet" href="{{ asset('assets/site/css/bootstrap' . ($currentDirection === 'rtl' ? '.rtl' : '') . '.min.css') }}">
 
     <link rel="stylesheet" href="{{ asset('assets/site/css/plugins.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/site/css/swiper.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/site/css/swiper-custom-1.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/site/css/style.css') }}">
 
     <link rel="stylesheet" href="{{ asset('assets/site/css/coloring.css') }}">
     <link href="{{ asset('assets/admin/css/icons.css') }}" rel="stylesheet" >
 
-    <link rel="stylesheet" href="{{ asset('assets/site/css/rtl-custom.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/site/css/rtl-fix-simple.css') }}">
+    @if($currentDirection === 'rtl')
+    <link rel="stylesheet" href="{{ asset('assets/site/css/rtl.css') }}">
+    @else
+    <link rel="stylesheet" href="{{ asset('assets/site/css/ltr.css') }}">
+    @endif
 
     <link id="colors" rel="stylesheet" href="{{ asset('assets/site/css/colors/scheme-01.css') }}">
 
     <link rel="stylesheet" href="{{ asset('assets/site/css/custom.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/site/css/rtl-overrides.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/site/css/menu-mobile.css') }}">
 
     {{-- CSS إجباري للمنيو --}}
@@ -88,7 +94,7 @@
             z-index: -1;
         }
 
-        /* القائمة الجانبية */
+        /* القائمة الجانبية - RTL (افتراضي: من اليمين) */
         #mobile-menu-content {
             position: fixed;
             top: 0;
@@ -99,19 +105,35 @@
             background: #212529;
             overflow-y: auto;
             padding: 48px 18px 28px;
-            transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1), left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             box-shadow: -5px 0 20px rgba(0,0,0,0.3);
             display: flex;
             flex-direction: column;
             align-items: stretch;
-            justify-content: flex-start;
+            justify-content: space-between;
             gap: 20px;
+        }
+
+        /* في وضع LTR: المنيو من اليسار */
+        html[dir="ltr"] #mobile-menu-content {
+            right: auto;
+            left: -100%;
+            box-shadow: 5px 0 20px rgba(0,0,0,0.3);
+            transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1), right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         #mobile-menu-overlay.active #mobile-menu-content {
             right: 0;
+            left: auto;
         }
 
+        /* في وضع LTR: المنيو يظهر من اليسار */
+        html[dir="ltr"] #mobile-menu-overlay.active #mobile-menu-content {
+            right: auto;
+            left: 0;
+        }
+
+        /* زر الإغلاق - RTL (افتراضي: على اليسار) */
         #mobile-menu-close {
             position: absolute;
             top: 15px;
@@ -125,6 +147,12 @@
             line-height: 28px;
             z-index: 10;
             transition: transform 0.2s;
+        }
+
+        /* في وضع LTR: زر الإغلاق على اليمين */
+        html[dir="ltr"] #mobile-menu-close {
+            left: auto;
+            right: 15px;
         }
 
         #mobile-menu-close:hover {
@@ -162,10 +190,11 @@
             background: rgba(255,255,255,0.08);
         }
 
-        /* سهم للعناصر اللي فيها قوائم فرعية */
+        /* سهم للعناصر اللي فيها قوائم فرعية - RTL (افتراضي: على اليسار) */
         #mobile-mainmenu > li:has(ul) > a {
             position: relative;
             padding-left: 40px !important;
+            padding-right: 18px !important;
         }
 
         #mobile-mainmenu > li:has(ul) > a::before {
@@ -177,6 +206,17 @@
             font-size: 12px;
             transition: transform 0.3s ease;
             color: rgba(255,255,255,0.6);
+        }
+
+        /* في وضع LTR: السهم على اليمين */
+        html[dir="ltr"] #mobile-mainmenu > li:has(ul) > a {
+            padding-left: 18px !important;
+            padding-right: 40px !important;
+        }
+
+        html[dir="ltr"] #mobile-mainmenu > li:has(ul) > a::before {
+            left: auto;
+            right: 15px;
         }
 
         /* عكس السهم عند الفتح - يصير لفوق */
@@ -227,6 +267,14 @@
             display: flex;
             flex-direction: column;
             gap: 10px;
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        /* Donate Button Animation for Mobile Menu */
+        @keyframes donateGradient {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
         }
 
         @media (max-width: 991px) {
@@ -238,22 +286,52 @@
                 position: relative !important;
             }
 
-            /* الشعار في الوسط */
+            /* الشعار - RTL: على اليمين، LTR: على اليسار */
             header.header-mobile .de-flex-col:first-child {
                 flex: 0 0 auto !important;
-                margin: 0 auto !important;
+                margin: 0 !important;
+                position: relative !important;
+            }
+
+            /* في RTL: الشعار على اليمين */
+            html[dir="rtl"] header.header-mobile .de-flex-col:first-child {
+                margin-left: auto !important;
+                margin-right: 0 !important;
+            }
+
+            /* في LTR: الشعار على اليسار */
+            html[dir="ltr"] header.header-mobile .de-flex-col:first-child {
+                margin-left: 0 !important;
+                margin-right: auto !important;
             }
 
             header.header-mobile #logo {
                 display: block !important;
             }
 
-            /* زر القائمة على اليسار - position absolute */
+            /* في RTL: محاذاة النص للشعار على اليمين */
+            html[dir="rtl"] header.header-mobile #logo {
+                text-align: right !important;
+            }
+
+            /* في LTR: محاذاة النص للشعار على اليسار */
+            html[dir="ltr"] header.header-mobile #logo {
+                text-align: left !important;
+            }
+
+            /* زر القائمة - RTL: على اليسار، LTR: على اليمين */
             header.header-mobile .de-flex-col:last-child {
                 position: absolute !important;
                 left: 15px !important;
+                right: auto !important;
                 top: 50% !important;
                 transform: translateY(-50%) !important;
+            }
+
+            /* في وضع LTR: زر القائمة على اليمين */
+            html[dir="ltr"] header.header-mobile .de-flex-col:last-child {
+                left: auto !important;
+                right: 15px !important;
             }
 
             header.header-mobile .menu_side_area {
@@ -270,10 +348,17 @@
                 height: 16px !important;
                 cursor: pointer !important;
                 margin-right: 15px !important;
+                margin-left: 0 !important;
                 background: transparent !important;
                 border: none !important;
                 padding: 0 !important;
                 align-self: center !important;
+            }
+
+            /* في وضع LTR: margin على اليسار */
+            html[dir="ltr"] #menu-btn {
+                margin-right: 0 !important;
+                margin-left: 15px !important;
             }
 
             /* إلغاء الأيقونة القديمة */
@@ -297,6 +382,16 @@
 
             /* إخفاء زر التبرع */
             .donate-btn { display: none !important; }
+            
+            /* Direction Toggle Button Styles for Mobile */
+            .direction-toggle-wrapper-mobile {
+                display: inline-block !important;
+            }
+            
+            .direction-toggle-btn-mobile {
+                font-size: 12px !important;
+                padding: 5px 10px !important;
+            }
 
             /* إخفاء المنيو الأصلي - بنستخدم الـ overlay */
             header.header-mobile #mainmenu,
@@ -385,6 +480,106 @@
         <div id="mobile-menu-close">×</div>
         <div id="mobile-menu-items">
             <!-- سيتم ملؤه بـ JavaScript -->
+        </div>
+        
+        {{-- Donate Button - في المنيو الجانبي --}}
+        <div id="mobile-donate-button" style="
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        ">
+            <a href="https://gazaappeal.gedco.ps/ar/donate" target="_blank" rel="noopener" style="
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 10px;
+                padding: 14px 20px;
+                background: linear-gradient(135deg, #ff6b35 0%, #f57c00 50%, #ff6b35 100%);
+                background-size: 200% 200%;
+                border-radius: 30px;
+                color: #fff;
+                font-weight: 600;
+                font-size: 15px;
+                text-decoration: none;
+                box-shadow: 0 6px 20px rgba(255,107,53,0.5), 0 0 30px rgba(255,107,53,0.3);
+                transition: all 0.3s ease;
+                animation: donateGradient 3s ease infinite;
+                width: 100%;
+            " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 25px rgba(255,107,53,0.6), 0 0 40px rgba(255,107,53,0.4)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 6px 20px rgba(255,107,53,0.5), 0 0 30px rgba(255,107,53,0.3)';">
+                <i class="fa-solid fa-hand-holding-heart" style="font-size: 18px;"></i>
+                <span>{{ __('common.donate_now') }}</span>
+            </a>
+        </div>
+        
+        {{-- Language Direction Selector - أسفل القائمة --}}
+        @php
+            $mobileDir = session('direction', 'rtl');
+            $mobileIsRtl = $mobileDir === 'rtl';
+        @endphp
+        <div id="mobile-language-selector" style="
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        ">
+            <div style="
+                color: rgba(255, 255, 255, 0.7);
+                font-size: 12px;
+                margin-bottom: 12px;
+                text-align: center;
+                font-weight: 500;
+            ">{{ __('common.choose_language') }}</div>
+            <div style="
+                display: flex;
+                gap: 10px;
+                justify-content: center;
+            ">
+                <form action="{{ route('direction.set', 'rtl') }}" method="POST" style="flex: 1; margin: 0;">
+                    @csrf
+                    <button 
+                        type="submit"
+                        style="
+                            width: 100%;
+                            padding: 12px;
+                            border: 2px solid {{ $mobileDir === 'rtl' ? '#fff' : 'rgba(255,255,255,0.3)' }};
+                            background: {{ $mobileDir === 'rtl' ? 'rgba(255,255,255,0.1)' : 'transparent' }};
+                            color: #fff;
+                            font-size: 14px;
+                            font-weight: 600;
+                            text-align: center;
+                            cursor: pointer;
+                            transition: all 0.3s;
+                            border-radius: 6px;
+                        "
+                        onmouseover="this.style.background='rgba(255,255,255,0.15)'; this.style.borderColor='#fff'"
+                        onmouseout="this.style.background='{{ $mobileDir === 'rtl' ? 'rgba(255,255,255,0.1)' : 'transparent' }}'; this.style.borderColor='{{ $mobileDir === 'rtl' ? '#fff' : 'rgba(255,255,255,0.3)' }}'"
+                       >
+                           {{ __('common.arabic') }}
+                       </button>
+                   </form>
+                   <form action="{{ route('direction.set', 'ltr') }}" method="POST" style="flex: 1; margin: 0;">
+                       @csrf
+                       <button 
+                           type="submit"
+                           style="
+                               width: 100%;
+                               padding: 12px;
+                               border: 2px solid {{ $mobileDir === 'ltr' ? '#fff' : 'rgba(255,255,255,0.3)' }};
+                               background: {{ $mobileDir === 'ltr' ? 'rgba(255,255,255,0.1)' : 'transparent' }};
+                               color: #fff;
+                               font-size: 14px;
+                               font-weight: 600;
+                               text-align: center;
+                               cursor: pointer;
+                               transition: all 0.3s;
+                               border-radius: 6px;
+                           "
+                           onmouseover="this.style.background='rgba(255,255,255,0.15)'; this.style.borderColor='#fff'"
+                           onmouseout="this.style.background='{{ $mobileDir === 'ltr' ? 'rgba(255,255,255,0.1)' : 'transparent' }}'; this.style.borderColor='{{ $mobileDir === 'ltr' ? '#fff' : 'rgba(255,255,255,0.3)' }}'"
+                       >
+                           {{ __('common.english') }}
+                       </button>
+                </form>
+            </div>
         </div>
     </div>
 </div>
@@ -911,6 +1106,8 @@
 
         lastWidth = currentWidth;
     });
+    
+    // Direction toggle الآن يعمل مباشرة من form - لا حاجة لـ JavaScript إضافي
 </script>
 @stack('scripts')
 </body>

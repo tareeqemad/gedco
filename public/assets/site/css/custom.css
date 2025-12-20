@@ -191,6 +191,30 @@
 .site-header{ border-bottom: 0 !important; }
 .site-header .container{ margin: 0 auto; }
 
+/* ===== Menu Side Area - Spacing Between Buttons ===== */
+.menu_side_area {
+    display: flex;
+    align-items: center;
+    gap: 12px !important; /* مسافة بين الأزرار */
+}
+
+/* ===== Donate Button - Reduce Height ===== */
+.donate-btn-epic {
+    padding: 8px 20px !important; /* تقليل من 12px 28px */
+    font-size: 0.9rem !important; /* تقليل حجم الخط قليلاً */
+    height: 36px !important; /* ارتفاع ثابت */
+    display: inline-flex !important;
+    align-items: center !important;
+}
+
+.donate-btn-content {
+    gap: 6px !important; /* تقليل المسافة بين الأيقونة والنص */
+}
+
+.donate-btn-content i {
+    font-size: 1rem !important; /* تقليل حجم الأيقونة */
+}
+
 /* إصلاح السكرول الأفقي والفراغ تحت الـ footer */
 html {
     overflow-x: hidden;
@@ -253,12 +277,12 @@ footer {
 /* ===== Header Search ===== */
 .header-search-mini {
     position: relative;
-    margin-inline-end: 15px;
+    margin-inline-end: 12px;
 }
 
 .header-search-mini__trigger {
-    width: 40px;
-    height: 40px;
+    width: 36px;
+    height: 36px;
     border: none;
     border-radius: 50%;
     display: grid;
@@ -278,8 +302,8 @@ footer {
 }
 
 .header-search-mini__icon svg {
-    width: 18px;
-    height: 18px;
+    width: 16px;
+    height: 16px;
     display: block;
 }
 
@@ -513,6 +537,264 @@ footer {
 @media (max-width: 991px) {
     .header-search-mini {
         margin-inline-end: 10px;
+    }
+}
+
+/* ================================================== */
+/* Swiper Custom Animations */
+/* Merged from swiper-custom-1.css */
+/* ================================================== */
+.anim-order-1, .anim-order-2 {
+    opacity: 0;
+}
+
+.swiper-slide.swiper-slide-active .swiper-inner,
+.swiper-slide.swiper-slide-duplicate-active .swiper-inner {
+    animation-name: fadeIn;
+    animation-duration: 1.5s;
+    animation-delay: 0s;
+}
+
+.swiper-slide.swiper-slide-active .anim-order-1,
+.swiper-slide.swiper-slide-duplicate-active .anim-order-1 {
+    animation-name: fadeInUp;
+    animation-duration: .75s;
+    animation-delay: 1s;
+}
+
+.swiper-slide.swiper-slide-active .anim-order-2,
+.swiper-slide.swiper-slide-duplicate-active .anim-order-2 {
+    animation-name: fadeInUp;
+    animation-duration: .75s;
+    animation-delay: 1.3s;
+}
+
+.swiper-slide.swiper-slide-active .anim-order-3,
+.swiper-slide.swiper-slide-duplicate-active .anim-order-3 {
+    animation-name: fadeInUp;
+    animation-duration: .75s;
+    animation-delay: 1.6s;
+}
+
+/* ================================================== */
+/* Language Dropdown Styles - Enhanced Design */
+/* ================================================== */
+.language-dropdown-wrapper {
+    position: relative;
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.language-dropdown {
+    position: relative;
+}
+
+.language-dropdown-toggle {
+    background: linear-gradient(135deg, #ff7d1a, #ff5c00) !important;
+    border: none !important;
+    color: #ffffff !important;
+    padding: 8px 14px;
+    border-radius: 30px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 100px;
+    justify-content: space-between;
+    box-shadow: 0 14px 32px rgba(255, 107, 0, 0.32) !important;
+    height: 36px;
+}
+
+.language-dropdown-toggle:hover,
+.language-dropdown-toggle:focus {
+    background: linear-gradient(135deg, #ff8500, #ff6b00) !important;
+    transform: translateY(-1px) scale(1.04);
+    outline: none;
+    filter: brightness(1.05);
+    box-shadow: 0 16px 36px rgba(255, 107, 0, 0.4) !important;
+}
+
+.language-dropdown-toggle:active {
+    transform: translateY(0);
+}
+
+.language-dropdown-toggle svg {
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    opacity: 1;
+    color: #fff;
+    width: 12px;
+    height: 12px;
+    flex-shrink: 0;
+}
+
+.language-flag-icon {
+    width: 20px;
+    height: 14px;
+    border-radius: 3px;
+    object-fit: cover;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.language-dropdown-menu {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15), 0 4px 8px rgba(0, 0, 0, 0.1);
+    min-width: 160px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-8px) scale(0.95);
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1000;
+    overflow: hidden;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.language-dropdown.open .language-dropdown-menu {
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: translateY(0) scale(1) !important;
+}
+
+.language-dropdown.open .language-dropdown-toggle {
+    transform: translateY(-1px) scale(1.04);
+    filter: brightness(1.05);
+    box-shadow: 0 16px 36px rgba(255, 107, 0, 0.4);
+}
+
+.language-dropdown.open .language-dropdown-toggle svg {
+    transform: rotate(180deg);
+    opacity: 1;
+}
+
+.language-dropdown form {
+    margin: 0;
+}
+
+.language-option {
+    width: 100%;
+    padding: 12px 16px;
+    border: none;
+    color: #2d3748;
+    font-size: 14px;
+    font-weight: 600;
+    text-align: right;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: transparent;
+    position: relative;
+}
+
+.language-option:hover {
+    background: linear-gradient(90deg, rgba(220, 53, 69, 0.08) 0%, rgba(220, 53, 69, 0.05) 100%);
+    color: #dc3545;
+}
+
+.language-option.active {
+    background: linear-gradient(90deg, rgba(220, 53, 69, 0.12) 0%, rgba(220, 53, 69, 0.08) 100%);
+    color: #dc3545;
+    font-weight: 700;
+}
+
+.language-option.active::before {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: linear-gradient(180deg, #dc3545, #c82333);
+    border-radius: 0 12px 12px 0;
+}
+
+.language-dropdown-menu form:first-child .language-option {
+    border-radius: 12px 12px 0 0;
+}
+
+.language-dropdown-menu form:last-child .language-option {
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 0 0 12px 12px;
+}
+
+.language-flag-icon-small {
+    width: 24px;
+    height: 18px;
+    border-radius: 4px;
+    object-fit: cover;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    flex-shrink: 0;
+}
+
+.language-check-icon {
+    margin-right: auto;
+    margin-left: 0;
+    color: #dc3545;
+    opacity: 0.9;
+}
+
+/* Language Dropdown - White Header State (on scroll) */
+header.smaller.scroll-light .language-dropdown-toggle,
+header.smaller.scroll-light .language-dropdown-toggle {
+    background: rgba(0, 0, 0, 0.05) !important;
+    border: 2px solid rgba(0, 0, 0, 0.15) !important;
+    color: #2d3748 !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+}
+
+header.smaller.scroll-light .language-dropdown-toggle:hover,
+header.smaller.scroll-light .language-dropdown-toggle:hover {
+    border-color: rgba(220, 53, 69, 0.4) !important;
+    background: rgba(220, 53, 69, 0.08) !important;
+    color: #dc3545 !important;
+}
+
+header.smaller.scroll-light .language-dropdown-toggle svg,
+header.smaller.scroll-light .language-dropdown-toggle svg {
+    color: #2d3748 !important;
+    opacity: 0.9;
+}
+
+header.smaller.scroll-light .language-dropdown-toggle:hover svg,
+header.smaller.scroll-light .language-dropdown-toggle:hover svg {
+    color: #dc3545 !important;
+}
+
+header.smaller.scroll-light .language-flag-icon,
+header.smaller.scroll-light .language-flag-icon {
+    border: 1px solid rgba(0, 0, 0, 0.15) !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15) !important;
+}
+
+header.smaller.scroll-light .language-dropdown.open .language-dropdown-toggle,
+header.smaller.scroll-light .language-dropdown.open .language-dropdown-toggle {
+    border-color: rgba(220, 53, 69, 0.4) !important;
+    background: rgba(220, 53, 69, 0.08) !important;
+    color: #dc3545 !important;
+}
+
+header.smaller.scroll-light .language-dropdown.open .language-dropdown-toggle svg,
+header.smaller.scroll-light .language-dropdown.open .language-dropdown-toggle svg {
+    color: #dc3545 !important;
+}
+
+@media (max-width: 991px) {
+    .language-dropdown-wrapper {
+        display: none !important;
+    }
+    
+    /* إخفاء زر التبرع في الهيدر على الموبايل - لأنه موجود في المنيو الجانبي */
+    .donate-btn-epic {
+        display: none !important;
     }
 }
 

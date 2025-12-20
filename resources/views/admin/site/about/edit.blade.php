@@ -1,11 +1,11 @@
 @extends('layouts.admin')
-@section('title','تعديل من نحن')
+@section('title', __('admin.about_us.edit_title'))
 
 @section('content')
     @php
         // متغيّرات الـ breadcrumb للـ layout
-        $breadcrumbTitle     = 'تعديل البيانات';
-        $breadcrumbParent    = 'إعدادات الموقع';
+        $breadcrumbTitle     = __('admin.about_us.edit_data');
+        $breadcrumbParent    = __('admin.menu.site_settings');
         $breadcrumbParentUrl = route('admin.site-settings.edit', 1);
 
         // إعدادات الفورم الجزئي
@@ -24,15 +24,15 @@
             <div class="card-header bg-white border-bottom py-3">
                 <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
                     <div class="d-flex align-items-center gap-2">
-                        <span class="badge rounded-pill bg-orange text-white">من نحن</span>
-                        <h5 class="card-title mb-0 fw-semibold text-orange">تعديل المحتوى</h5>
+                        <span class="badge rounded-pill bg-orange text-white">{{ __('admin.about_us.title') }}</span>
+                        <h5 class="card-title mb-0 fw-semibold text-orange">{{ __('admin.about_us.edit_content') }}</h5>
                     </div>
                     <div class="d-flex align-items-center gap-2">
                         <a href="{{ route('admin.about.index') }}" class="btn btn-outline-secondary btn-sm">
-                            <i class="bi bi-arrow-right-circle me-1"></i> رجوع
+                            <i class="bi bi-arrow-right-circle me-1"></i> {{ __('admin.about_us.back') }}
                         </a>
                         <a href="{{ $publicPreviewUrl }}" target="_blank" rel="noopener" class="btn btn-outline-secondary btn-sm">
-                            <i class="bi bi-box-arrow-up-right me-1"></i> معاينة على الموقع
+                            <i class="bi bi-box-arrow-up-right me-1"></i> {{ __('admin.common.preview_on_site') }}
                         </a>
                     </div>
                 </div>
@@ -66,7 +66,7 @@
                 @endif
 
                 {{-- الفورم (جزئي) --}}
-                @include('admin.site.about._form', compact('route','method','model','col1','col2'))
+                @include('admin.site.about._form', compact('route','method','model','col1','col2','col1En','col2En'))
 
                 {{-- فورم إزالة الصورة (مستقل وخارج الجزئي) --}}
                 @if(!empty($about->id) && !empty($about->image))
@@ -82,16 +82,4 @@
         </div>
     </div>
 
-    @push('styles')
-        <style>
-            .text-orange   { color:#ff7700 !important; }
-            .bg-orange     { background-color:#ff7700 !important; }
-            .btn-orange{
-                background-color:#ff7700 !important;
-                border-color:#ff7700 !important;
-                color:#fff !important;
-            }
-            .btn-orange:hover{ opacity:.9; }
-        </style>
-    @endpush
 @endsection

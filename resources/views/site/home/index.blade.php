@@ -131,39 +131,72 @@
 
 
         {{-- ========= About ========= --}}
-        <section class="relative py-5" id="who-us" dir="rtl">
+        <section class="relative py-5" id="who-us" dir="{{ session('direction', 'rtl') }}">
             <div class="container">
+                @php
+                    $currentDir = session('direction', 'rtl');
+                    $isRtl = $currentDir === 'rtl';
+                @endphp
                 <div class="row align-items-start g-4">
 
                     <!-- العمود الأول: النص -->
-                    <div class="col-lg-6 text-end">
-                        <div class="d-flex align-items-center justify-content-end mb-3">
-                            <span class="badge bg-orange text-white px-3 py-2 fs-5 shadow-sm">من نحن</span>
+                    <div class="col-lg-6 {{ $isRtl ? 'text-end' : 'text-start' }}">
+                        <div class="d-flex align-items-center {{ $isRtl ? 'justify-content-end' : 'justify-content-start' }} mb-3">
+                            <span class="badge bg-orange text-white px-3 py-2 fs-5 shadow-sm">{{ __('common.about_us') }}</span>
                         </div>
 
+                        @php
+                            // استخدام المحتوى حسب اللغة - فقط الأعمدة المخصصة للغة (بدون fallback)
+                            if ($isRtl) {
+                                $displayTitle = $about->title ?? 'كهرباء غزة';
+                                $displaySubtitle = $about->subtitle ?? 'نبني النور من جديد... ونواصل العطاء بثبات وأمل';
+                                $displayParagraph1 = $about->paragraph1 ?? '';
+                                $displayParagraph2 = $about->paragraph2 ?? '';
+                                $displayImage = $about->image ?? null;
+                            } else {
+                                // في وضع الإنجليزي: فقط الأعمدة الإنجليزية (بدون fallback)
+                                $displayTitle = $about->title_en ?? '';
+                                $displaySubtitle = $about->subtitle_en ?? '';
+                                $displayParagraph1 = $about->paragraph1_en ?? '';
+                                $displayParagraph2 = $about->paragraph2_en ?? '';
+                                $displayImage = $about->image_en ?? null;
+                            }
+                        @endphp
+
                         <h2 class="mb-1 fw-bold text-orange">
-                            {{ $about->title ?? 'كهرباء غزة' }}
+                            {{ $displayTitle }}
                         </h2>
 
-                        <h3 class="mb-2 text-orange fw-semibold fs-5">
-                            {{ $about->subtitle ?? 'نبني النور من جديد... ونواصل العطاء بثبات وأمل' }}
-                        </h3>
+                        @if(!empty($displaySubtitle))
+                            <h3 class="mb-2 text-orange fw-semibold fs-5">
+                                {{ $displaySubtitle }}
+                            </h3>
+                        @endif
 
-                        <p class="text-muted mb-1">
-                            {{ $about->paragraph1 ?? '' }}
-                        </p>
-
-                        @if(!empty($about->paragraph2))
-                            <p class="text-muted mb-2">
-                                {{ $about->paragraph2 }}
+                        @if(!empty($displayParagraph1))
+                            <p class="text-muted mb-1">
+                                {{ $displayParagraph1 }}
                             </p>
                         @endif
 
-                        {{-- ✅ معالجة الـ features سواء كانت JSON أو Array --}}
+                        @if(!empty($displayParagraph2))
+                            <p class="text-muted mb-2">
+                                {{ $displayParagraph2 }}
+                            </p>
+                        @endif
+
+                        {{-- ✅ معالجة الـ features حسب اللغة --}}
                         @php
-                            $features = is_array($about->features ?? null)
-                                ? $about->features
-                                : json_decode($about->features ?? '[]', true);
+                            if ($isRtl) {
+                                $features = is_array($about->features ?? null)
+                                    ? $about->features
+                                    : json_decode($about->features ?? '[]', true);
+                            } else {
+                                // في وضع الإنجليزي: فقط features الإنجليزية (بدون fallback)
+                                $features = is_array($about->features_en ?? null)
+                                    ? $about->features_en
+                                    : json_decode($about->features_en ?? '[]', true);
+                            }
                         @endphp
 
                         @if(!empty($features) && (count($features[0] ?? []) || count($features[1] ?? [])))
@@ -189,27 +222,15 @@
                     <!-- العمود الثاني: الصورة -->
                     <div class="col-lg-6">
                         @php
-                            $fallback = asset('assets/site/images/c3.webp');
-                            $img = $fallback;
-
-                            if (!empty($about?->image)) {
-                                $val = $about->image;
-
-                                if (str_starts_with($val, 'http')) {
-                                    $img = $val; // رابط خارجي
-                                } elseif (str_starts_with($val, 'assets/')) {
-                                    $img = asset($val); // صورة من مجلد الأصول
-                                } elseif (str_starts_with($val, 'storage/')) {
-                                    $img = asset($val); // لو القيمة مسبوقة بـ storage/
-                                } else {
-                                    $img = asset('storage/'.$val); // مرفوعة من لوحة التحكم
-                                }
-                            }
+                            $fallbackImage = 'assets/site/images/content/c3.webp';
+                            $img = !empty($displayImage) 
+                                ? build_image_url($displayImage, $fallbackImage)
+                                : asset($fallbackImage);
                         @endphp
 
                         <img src="{{ $img }}"
                              class="w-100 rounded-3 shadow-sm"
-                             alt="{{ $about->title ?? 'شركة توزيع كهرباء محافظات غزة' }}">
+                             alt="{{ $displayTitle ?? 'شركة توزيع كهرباء محافظات غزة' }}">
                     </div>
 
                 </div>
@@ -218,17 +239,21 @@
 
 
         {{-- ========= Counters ========= --}}
-        <section class="relative py-5 bg-white" id="impact-stats">
+        <section class="relative py-5 bg-white" id="impact-stats" dir="{{ session('direction', 'rtl') }}">
             <div class="container">
+                @php
+                    $currentDir = session('direction', 'rtl');
+                    $isRtl = $currentDir === 'rtl';
+                @endphp
 
                 <!-- العنوان + الجملة + الخط -->
                 <div class="mb-5" id="impact-heading" data-aos="fade-down" data-aos-delay="100">
                     <div class="stack">
                         <h3 class="title m-0">
                             <i class="fas fa-chart-line ms-2 text-danger"></i>
-                            إحصائيات الخسائر
+                            {{ __('common.impact_stats_title') }}
                         </h3>
-                        <span class="subtitle">الأرقام تتحدث عن نفسها</span>
+                        <span class="subtitle">{{ __('common.impact_stats_subtitle') }}</span>
                     </div>
                 </div>
 
@@ -237,15 +262,23 @@
                     @foreach($impactStats as $stat)
                         @php
                             $value = $stat->amount_usd;
-                            $title = $stat->title_ar;
+                            // استخدام العنوان حسب اللغة - فقط الأعمدة المخصصة للغة (بدون fallback)
+                            // في وضع الإنجليزية: إخفاء الإحصائيات التي ليس لها title_en
+                            $title = $isRtl ? ($stat->title_ar ?? '') : ($stat->title_en ?? '');
+                            
+                            // تخطي الإحصائيات التي ليس لها عنوان في اللغة المطلوبة
+                            if (empty($title)) {
+                                continue;
+                            }
 
+                            // تحديد الأيقونة حسب العنوان (يعمل مع العربية والإنجليزية)
                             $icon = match(true) {
-                                str_contains($title, 'مباني') => 'fa-building',
-                                str_contains($title, 'تجاري') => 'fa-store',
-                                str_contains($title, 'شبكات') => 'fa-tower-broadcast',
-                                str_contains($title, 'مستودعات') => 'fa-warehouse',
-                                str_contains($title, 'مركبات') || str_contains($title, 'آليات') => 'fa-truck',
-                                str_contains($title, 'تشغيلية') => 'fa-cog',
+                                str_contains(strtolower($title), 'build') || str_contains($title, 'مباني') => 'fa-building',
+                                str_contains(strtolower($title), 'commerc') || str_contains(strtolower($title), 'store') || str_contains($title, 'تجاري') => 'fa-store',
+                                str_contains(strtolower($title), 'network') || str_contains(strtolower($title), 'grid') || str_contains($title, 'شبكات') => 'fa-tower-broadcast',
+                                str_contains(strtolower($title), 'warehouse') || str_contains(strtolower($title), 'storage') || str_contains($title, 'مستودعات') => 'fa-warehouse',
+                                str_contains(strtolower($title), 'vehicle') || str_contains(strtolower($title), 'fleet') || str_contains($title, 'مركبات') || str_contains($title, 'آليات') => 'fa-truck',
+                                str_contains(strtolower($title), 'operat') || str_contains($title, 'تشغيلية') => 'fa-cog',
                                 default => 'fa-chart-bar'
                             };
 
@@ -287,9 +320,11 @@
                                     <span class="text-danger fs-5 ms-1">$</span>
                                 </h3>
 
-                                <p class="small text-muted mb-0 mt-2 fw-medium text-center" style="font-size: 0.8rem; line-height: 1.4;">
-                                    {{ $title }}
-                                </p>
+                                @if(!empty($title))
+                                    <p class="small text-muted mb-0 mt-2 fw-medium text-center" style="font-size: 0.8rem; line-height: 1.4;" dir="{{ $isRtl ? 'rtl' : 'ltr' }}">
+                                        {{ $title }}
+                                    </p>
+                                @endif
                             </div>
                         </div>
                     @endforeach
@@ -298,7 +333,7 @@
                 <!-- الملاحظة -->
                 <div class="mt-5" data-aos="fade-up" data-aos-delay="300">
                     <p class="text-muted small text-center">
-                        * الأرقام تقريبية وتُحدَّث دوريًا بناءً على التقارير الهندسية والمالية
+                        {{ __('common.impact_stats_note') }}
                     </p>
                 </div>
             </div>
@@ -313,7 +348,7 @@
                 <div class="row g-0">
                     <div class="col-lg-6">
                         <div class="relative overflow-hidden">
-                            <img src="{{ asset('assets/site/images/photo4.png') }}" class="w-100" alt="">
+                            <img src="{{ asset('assets/site/images/content/photo4.png') }}" class="w-100" alt="">
                         </div>
                     </div>
                     <div class="col-lg-6">
@@ -333,8 +368,12 @@
 
 
         {{-- ========= Services ========= --}}
-        <section class="py-5 bg-white" id="services" dir="rtl">
+        <section class="py-5 bg-white" id="services" dir="{{ session('direction', 'rtl') }}">
             <div class="container">
+                @php
+                    $currentDir = session('direction', 'rtl');
+                    $isRtl = $currentDir === 'rtl';
+                @endphp
 
                 <!-- العنوان + الجملة + الخط (من اليسار) -->
                 <div class="mb-5" id="services-heading" data-aos="fade-right" data-aos-delay="100">
@@ -347,10 +386,10 @@
                         <!-- النصوص -->
                         <div>
                             <div class="subtitle" style="color: #fd7e14; font-weight: 700; font-size: 1.8rem; margin-bottom: 0.25rem;">
-                                خدماتنا
+                                {{ __('common.services_title') }}
                             </div>
                             <h3 style="margin: 0; font-weight: 600; font-size: 2rem;">
-                                خدمات مصممة خصيصاً لكم
+                                {{ __('common.services_subtitle') }}
                             </h3>
                             <div class="subtitle-line" style="position: relative; margin-top: 0.5rem;"></div>
                         </div>
@@ -364,9 +403,13 @@
                             <div class="service-card" style="text-align: center; padding: 1.5rem; border-radius: 1rem; height: 100%; display: flex; flex-direction: column; justify-content: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1); background: white; border: 1px solid #eee; transition: all 0.35s ease;"
                                  data-aos="fade-up" data-aos-delay="100">
 
+                                @php
+                                    $currentDir = session('direction', 'rtl');
+                                    $isRtl = $currentDir === 'rtl';
+                                @endphp
                                 <img src="{{ asset('assets/site/images/services/s1.png') }}"
-                                     style="width: 70px; height: 70px; margin: 0 auto 1rem; object-fit: contain;" alt="الخدمات الإلكترونية">
-                                <h4 style="margin: 0; font-weight: 700; color: #212529;" class="text-center">الخدمات الإلكترونية</h4>
+                                     style="width: 70px; height: 70px; margin: 0 auto 1rem; object-fit: contain;" alt="{{ __('common.e_services_full') }}">
+                                <h4 style="margin: 0; font-weight: 700; color: #212529;" class="text-center">{{ __('common.e_services_full') }}</h4>
                             </div>
                         </a>
                     </div>
@@ -378,8 +421,8 @@
                                  data-aos="fade-up" data-aos-delay="200">
 
                                 <img src="{{ asset('assets/site/images/services/s2.png') }}"
-                                     style="width: 70px; height: 70px; margin: 0 auto 1rem; object-fit: contain;" alt="المواصفات والمقاييس">
-                                <h4 style="margin: 0; font-weight: 700; color: #212529;" class="text-center">المواصفات والمقاييس</h4>
+                                     style="width: 70px; height: 70px; margin: 0 auto 1rem; object-fit: contain;" alt="{{ __('common.specs_full') }}">
+                                <h4 style="margin: 0; font-weight: 700; color: #212529;" class="text-center">{{ __('common.specs_full') }}</h4>
                             </div>
                         </a>
                     </div>
@@ -391,8 +434,8 @@
                                  data-aos="fade-up" data-aos-delay="300">
 
                                 <img src="{{ asset('assets/site/images/services/s3.png') }}"
-                                     style="width: 70px; height: 70px; margin: 0 auto 1rem; object-fit: contain;" alt="التبرع">
-                                <h4 style="margin: 0; font-weight: 700; color: #212529;" class="text-center">التبرع</h4>
+                                     style="width: 70px; height: 70px; margin: 0 auto 1rem; object-fit: contain;" alt="{{ __('common.donate') }}">
+                                <h4 style="margin: 0; font-weight: 700; color: #212529;" class="text-center">{{ __('common.donate') }}</h4>
                             </div>
                         </a>
                     </div>
@@ -404,8 +447,8 @@
                                  data-aos="fade-up" data-aos-delay="400">
 
                                 <img src="{{ asset('assets/site/images/services/s4.png') }}"
-                                     style="width: 70px; height: 70px; margin: 0 auto 1rem; object-fit: contain;" alt="إعلانات الوظائف">
-                                <h4 style="margin: 0; font-weight: 700; color: #212529;" class="text-center">إعلانات الوظائف</h4>
+                                     style="width: 70px; height: 70px; margin: 0 auto 1rem; object-fit: contain;" alt="{{ __('common.job_announcements') }}">
+                                <h4 style="margin: 0; font-weight: 700; color: #212529;" class="text-center">{{ __('common.job_announcements') }}</h4>
                             </div>
                         </a>
                     </div>
@@ -463,38 +506,67 @@
         @endphp
 
         @if($why)
-            <section id="section-why-choose-us" class="text-dark py-5 bg-light">
+            @php
+                $currentDir = session('direction', 'rtl');
+                $isRtl = $currentDir === 'rtl';
+                $badge = $isRtl ? ($why->badge ?? __('common.why_choose_us_title')) : ($why->badge_en ?? __('common.why_choose_us_title'));
+                $tagline = $isRtl ? ($why->tagline ?? __('common.why_choose_us_tagline')) : ($why->tagline_en ?? __('common.why_choose_us_tagline'));
+                $description = $isRtl ? ($why->description ?? __('common.why_choose_us_description')) : ($why->description_en ?? __('common.why_choose_us_description'));
+            @endphp
+            <section id="section-why-choose-us" class="text-dark py-5 bg-light" dir="{{ $currentDir }}">
                 <div class="container">
 
                     <div class="row justify-content-center mb-5 text-center">
                         <div class="col-lg-9">
                             <div class="why-subtitle fw-bold mb-3 d-flex justify-content-center align-items-center gap-2">
                                 <i class="bi bi-lightning-charge-fill text-orange"></i>
-                                <span class="badge bg-orange text-white px-3 py-2 fs-6 shadow-sm">{{ $why->badge }}</span>
+                                <span class="badge bg-orange text-white px-3 py-2 fs-6 shadow-sm">{{ $badge }}</span>
                             </div>
-                            <h2 class="why-tagline mb-3">{{ $why->tagline }}</h2>
-                            @if(!empty($why->description))
-                                <p class="text-muted why-desc">{{ $why->description }}</p>
+                            <h2 class="why-tagline mb-3">{{ $tagline }}</h2>
+                            @if(!empty($description))
+                                <p class="text-muted why-desc">{{ $description }}</p>
                             @endif
                         </div>
                     </div>
 
                     @if(is_array($why->features) && count($why->features))
-                        <div class="row g-4">
-                            @foreach($why->features as $f)
-                                <div class="col-lg-4 col-md-6">
-                                    <div class="feature-box h-100 position-relative">
-                                        <div class="icon-wrapper">
-                                            <i class="{{ $f['icon'] ?? 'bi bi-lightning-charge-fill' }}"></i>
+                        @php
+                            // فلترة العناصر حسب اللغة
+                            $filteredFeatures = collect($why->features)->filter(function($f) use ($isRtl) {
+                                if ($isRtl) {
+                                    return !empty($f['title'] ?? '');
+                                } else {
+                                    return !empty($f['title_en'] ?? '');
+                                }
+                            })->values();
+                        @endphp
+                        @if($filteredFeatures->count() > 0)
+                            <div class="row g-4">
+                                @foreach($filteredFeatures as $f)
+                                    @php
+                                        $displayTitle = $isRtl ? ($f['title'] ?? '') : ($f['title_en'] ?? '');
+                                        $displayText = $isRtl ? ($f['text'] ?? '') : ($f['text_en'] ?? '');
+                                    @endphp
+                                    @if(!empty($displayTitle) || !empty($displayText))
+                                        <div class="col-lg-4 col-md-6">
+                                            <div class="feature-box h-100 position-relative">
+                                                <div class="icon-wrapper">
+                                                    <i class="{{ $f['icon'] ?? 'bi bi-lightning-charge-fill' }}"></i>
+                                                </div>
+                                                <div class="content">
+                                                    @if(!empty($displayTitle))
+                                                        <h5>{{ $displayTitle }}</h5>
+                                                    @endif
+                                                    @if(!empty($displayText))
+                                                        <p>{{ $displayText }}</p>
+                                                    @endif
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div class="content">
-                                            <h5>{{ $f['title'] ?? '' }}</h5>
-                                            <p>{{ $f['text'] ?? '' }}</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            @endforeach
-                        </div>
+                                    @endif
+                                @endforeach
+                            </div>
+                        @endif
                     @endif
 
                 </div>

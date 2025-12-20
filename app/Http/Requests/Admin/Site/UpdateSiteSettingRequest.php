@@ -15,7 +15,13 @@ class UpdateSiteSettingRequest extends FormRequest
     {
         return [
             'footer_title_ar' => ['nullable','string','max:255'],
-            'logo_white_path' => ['nullable','string','max:255'],
+            'footer_title_en' => ['nullable','string','max:255'],
+            'logo_white_path_ar' => ['nullable','string','max:255'],
+            'logo_white_path_en' => ['nullable','string','max:255'],
+            'contact_us_title_ar' => ['nullable','string','max:255'],
+            'contact_us_title_en' => ['nullable','string','max:255'],
+            'copyright_ar' => ['nullable','string'],
+            'copyright_en' => ['nullable','string'],
 
             // قنوات التواصل
             'channels' => ['nullable','array','max:2'],
@@ -25,6 +31,7 @@ class UpdateSiteSettingRequest extends FormRequest
             'channels.*.email'      => ['nullable','email','max:255'],
             'channels.*.phone'      => ['nullable','regex:/^\+?[0-9 ]{7,20}$/'],
             'channels.*.address_ar' => ['nullable','string','max:255'],
+            'channels.*.address_en' => ['nullable','string','max:255'],
         ];
     }
 

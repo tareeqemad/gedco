@@ -288,7 +288,7 @@
     <!-- Subheader -->
     <section id="subheader"
              class="text-light relative rounded-1 overflow-hidden m-3 d-flex align-items-center justify-content-center text-center"
-             data-bgimage="url({{ asset('assets/site/images/site2.webp') }})">
+             data-bgimage="url({{ asset('assets/site/images/backgrounds/site2.webp') }})">
         <div class="container relative z-2">
             <div class="row justify-content-center text-center">
                 <div class="col-12">

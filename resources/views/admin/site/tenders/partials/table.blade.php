@@ -16,13 +16,13 @@
                 <th style="width:160px">THE_DATE_1</th>
                 <th style="width:120px">THE_USER_1</th>
                 <th style="width:110px">EVENT_1</th>
-                <th class="text-end" style="width:190px">إجراءات</th>
+                <th class="text-end" style="width:190px">{{ __('admin.tenders.actions') }}</th>
             </tr>
             </thead>
             <tbody>
             @forelse($tenders as $t)
                 @php
-                    // اختصار آمن: إزالة الوسوم ثم limit
+                    // Safe truncation: strip tags then limit
                     $oldShort = Str::limit(strip_tags((string)$t->old_value_1), 120);
                     $newShort = Str::limit(strip_tags((string)$t->new_value_1), 120);
                 @endphp
@@ -36,17 +36,17 @@
                     <td>{{ $t->the_user_1 }}</td>
                     <td title="{{ $t->event_1 }}">{{ Str::limit($t->event_1, 30) }}</td>
                     <td class="text-end">
-                        <a href="{{ route('admin.tenders.show',$t->id) }}" class="btn btn-sm btn-outline-primary">عرض</a>
+                        <a href="{{ route('admin.tenders.show',$t->id) }}" class="btn btn-sm btn-outline-primary">{{ __('admin.tenders.view') }}</a>
                         @can('tenders.edit')
-                            <a href="{{ route('admin.tenders.edit',$t->id) }}" class="btn btn-sm btn-outline-warning">تعديل</a>
+                            <a href="{{ route('admin.tenders.edit',$t->id) }}" class="btn btn-sm btn-outline-warning">{{ __('admin.tenders.edit') }}</a>
                         @endcan
                         @can('tenders.delete')
-                            <button type="button" class="btn btn-sm btn-outline-danger" onclick="delTender({{ $t->id }})">حذف</button>
+                            <button type="button" class="btn btn-sm btn-outline-danger" onclick="delTender({{ $t->id }})">{{ __('admin.tenders.delete') }}</button>
                         @endcan
                     </td>
                 </tr>
             @empty
-                <tr><td colspan="9" class="text-center py-4 text-muted">لا توجد بيانات</td></tr>
+                <tr><td colspan="9" class="text-center py-4 text-muted">{{ __('admin.tenders.no_data') }}</td></tr>
             @endforelse
             </tbody>
         </table>

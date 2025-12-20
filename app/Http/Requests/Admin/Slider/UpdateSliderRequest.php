@@ -31,6 +31,7 @@ class UpdateSliderRequest extends FormRequest
             'bullets.*'    => ['nullable','string','max:255'],
             'sort_order'   => ['nullable','integer','min:0'],
             'is_active'    => ['sometimes','boolean'],
+            'language'     => ['nullable','in:ar,en'],
         ];
     }
 }

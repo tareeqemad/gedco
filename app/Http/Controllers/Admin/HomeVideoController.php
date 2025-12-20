@@ -34,6 +34,9 @@ class HomeVideoController extends Controller
         SiteConfig::set('home_video_enabled', $enabled ? 1 : 0);
         SiteConfig::set('home_video_id', $videoId);
         SiteConfig::set('home_video_caption', $caption);
+        
+        // تنظيف الكاش للصفحة الرئيسية
+        clear_home_cache();
 
         return back()->with('status','🏁 تم تحديث فيديو الصفحة الرئيسية');
     }

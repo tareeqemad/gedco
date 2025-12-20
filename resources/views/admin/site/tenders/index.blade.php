@@ -1,15 +1,15 @@
 {{-- resources/views/admin/site/tenders/index.blade.php --}}
 @extends('layouts.admin')
-@section('title','العطاءات')
+@section('title', __('admin.tenders.title'))
 
 @section('content')
     <div class="container-fluid py-3">
 
         <div class="d-flex align-items-center justify-content-between mb-3">
-            <h4 class="mb-0">العطاءات</h4>
+            <h4 class="mb-0">{{ __('admin.tenders.title') }}</h4>
             @can('tenders.create')
                 <a href="{{ route('admin.tenders.create') }}" class="btn btn-primary">
-                    <i class="bi bi-plus-lg"></i> إضافة عطاء
+                    <i class="bi bi-plus-lg"></i> {{ __('admin.tenders.add_tender') }}
                 </a>
             @endcan
         </div>
@@ -19,15 +19,15 @@
             <div class="card-body">
                 <form id="filter-form" class="row g-3">
                     <div class="col-md-4">
-                        <label class="form-label">بحث عام</label>
-                        <input type="text" name="q" class="form-control" placeholder="كلمة مفتاحية"
+                        <label class="form-label">{{ __('admin.tenders.search_general') }}</label>
+                        <input type="text" name="q" class="form-control" placeholder="{{ __('admin.tenders.search_placeholder') }}"
                                value="{{ $q ?? '' }}">
                     </div>
 
                     <div class="col-md-3">
-                        <label class="form-label">المستخدم (the_user_1)</label>
+                        <label class="form-label">{{ __('admin.tenders.user_label') }}</label>
                         <select name="user" class="form-select">
-                            <option value="">-- الجميع --</option>
+                            <option value="">{{ __('admin.tenders.all_users') }}</option>
                             @foreach($distinctUsers as $u)
                                 <option value="{{ $u }}" @selected(($user ?? '') === $u)>{{ $u }}</option>
                             @endforeach
@@ -35,25 +35,25 @@
                     </div>
 
                     <div class="col-md-2">
-                        <label class="form-label">من تاريخ (the_date_1)</label>
-                        <input type="text" name="date_from" class="form-control" placeholder="YYYY-MM-DD أو جزء نصي"
+                        <label class="form-label">{{ __('admin.tenders.date_from') }}</label>
+                        <input type="text" name="date_from" class="form-control" placeholder="{{ __('admin.tenders.date_placeholder') }}"
                                value="{{ $dateFrom ?? '' }}">
                     </div>
 
                     <div class="col-md-2">
-                        <label class="form-label">إلى تاريخ (the_date_1)</label>
-                        <input type="text" name="date_to" class="form-control" placeholder="YYYY-MM-DD أو جزء نصي"
+                        <label class="form-label">{{ __('admin.tenders.date_to') }}</label>
+                        <input type="text" name="date_to" class="form-control" placeholder="{{ __('admin.tenders.date_placeholder') }}"
                                value="{{ $dateTo ?? '' }}">
                     </div>
 
                     <div class="col-md-1">
-                        <label class="form-label">/صفحة</label>
+                        <label class="form-label">{{ __('admin.tenders.per_page') }}</label>
                         <input type="number" min="5" max="200" name="per_page" class="form-control"
                                value="{{ $perPage ?? 20 }}">
                     </div>
 
                     <div class="col-md-2">
-                        <label class="form-label">فرز حسب</label>
+                        <label class="form-label">{{ __('admin.tenders.sort_by') }}</label>
                         <select name="sort" class="form-select">
                             @php $sorts = ['id'=>'ID','mnews_id'=>'MNEWS_ID','the_date_1'=>'THE_DATE_1','created_at'=>'Created','updated_at'=>'Updated']; @endphp
                             @foreach($sorts as $key=>$label)
@@ -63,19 +63,19 @@
                     </div>
 
                     <div class="col-md-2">
-                        <label class="form-label">الاتجاه</label>
+                        <label class="form-label">{{ __('admin.tenders.sort_direction') }}</label>
                         <select name="dir" class="form-select">
-                            <option value="desc" @selected(($dir ?? 'desc')==='desc')>تنازلي</option>
-                            <option value="asc"  @selected(($dir ?? '')==='asc')>تصاعدي</option>
+                            <option value="desc" @selected(($dir ?? 'desc')==='desc')>{{ __('admin.tenders.sort_desc') }}</option>
+                            <option value="asc"  @selected(($dir ?? '')==='asc')>{{ __('admin.tenders.sort_asc') }}</option>
                         </select>
                     </div>
 
                     <div class="col-md-3 d-flex align-items-end gap-2">
                         <button class="btn btn-outline-primary" type="submit">
-                            <i class="bi bi-search"></i> تطبيق
+                            <i class="bi bi-search"></i> {{ __('admin.tenders.apply') }}
                         </button>
                         <a href="{{ route('admin.tenders.index') }}" class="btn btn-outline-secondary">
-                            إعادة تعيين
+                            {{ __('admin.tenders.reset') }}
                         </a>
                     </div>
                 </form>
@@ -101,9 +101,9 @@
             const wrapper = document.getElementById('tenders-table-wrapper');
             const pagination = document.getElementById('tenders-pagination');
 
-            // حذف
+            // Delete
             window.delTender = function(id) {
-                if(!confirm('تأكيد الحذف؟')) return;
+                if(!confirm('{{ __('admin.tenders.delete_confirm') }}')) return;
                 fetch("{{ url('admin/tenders') }}/" + id, {
                     method: 'POST',
                     headers: {
@@ -114,11 +114,11 @@
                 }).then(r => r.json())
                     .then(json => {
                         if(json.success){
-                            submitAjax(); // حدّث القائمة
+                            submitAjax(); // Refresh list
                         } else {
-                            alert(json.message || 'فشل الحذف');
+                            alert(json.message || '{{ __('admin.tenders.delete_failed') }}');
                         }
-                    }).catch(() => alert('خطأ في الاتصال'));
+                    }).catch(() => alert('{{ __('admin.tenders.delete_connection_error') }}'));
             };
 
             // Debounce

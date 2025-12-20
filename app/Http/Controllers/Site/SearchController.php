@@ -101,8 +101,13 @@ class SearchController extends Controller
             ]);
         }
 
+        // Filter by current language
+        $direction = session('direction', 'rtl');
+        $language = $direction === 'rtl' ? 'ar' : 'en';
+        
         $news = News::query()
             ->published()
+            ->language($language)
             ->where(function ($builder) use ($query) {
                 $builder->where('title', 'like', "%{$query}%")
                     ->orWhere('body', 'like', "%{$query}%")

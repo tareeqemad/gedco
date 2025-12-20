@@ -354,7 +354,7 @@
 @section('content')
     <section id="subheader"
              class="text-light relative rounded-1 overflow-hidden m-3 d-flex align-items-center justify-content-center text-center"
-             data-bgimage="url({{ asset('assets/site/images/site2.webp') }})">
+             data-bgimage="url({{ asset('assets/site/images/backgrounds/site2.webp') }})">
         <div class="container relative z-2">
             <div class="row justify-content-center text-center">
                 <div class="col-12">
@@ -382,7 +382,7 @@
     <div id="extra-wrap" class="text-light">
         <div id="btn-close"><span></span><span></span></div>
         <div id="extra-content">
-            <img src="{{ asset('assets/site/images/logo-white.webp') }}" class="w-200px" alt="">
+            <img src="{{ asset('assets/site/images/logos/logo-white.webp') }}" class="w-200px" alt="">
             <div class="spacer-30-line"></div>
             <h5>خدماتنا</h5>
             <ul class="ul-check">

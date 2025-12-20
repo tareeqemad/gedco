@@ -1,200 +1,10 @@
 {{-- resources/views/admin/staff-profiles/edit.blade.php --}}
 @extends('layouts.admin')
 
-@section('page-title', 'تعديل بيانات الموظف')
+@section('page-title', __('admin.staff_profiles.edit_title'))
 
 @push('styles')
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-
-    <style>
-        :root {
-            --primary: #e67e22;
-            --primary-dark: #d35400;
-            --success: #27ae60;
-            --danger: #e74c3c;
-            --warning: #f39c12;
-            --light: #fdf2e9;
-            --border: #e2e8f0;
-            --shadow: 0 10px 30px rgba(0,0,0,0.08);
-        }
-
-        .card-admin {
-            border: none;
-            border-radius: 1.25rem;
-            overflow: hidden;
-            box-shadow: var(--shadow);
-            background: #fff;
-            transition: all 0.3s;
-        }
-
-        .card-admin:hover {
-            box-shadow: 0 15px 40px rgba(0,0,0,0.12);
-        }
-
-        .card-admin .card-header {
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            padding: 1rem 1.5rem;
-            border: none;
-        }
-
-        .section-title {
-            font-size: 1.15rem;
-            font-weight: 700;
-            color: var(--primary-dark);
-            margin: 2.5rem 0 1.5rem;
-            padding-bottom: 0.75rem;
-            position: relative;
-            transition: all 0.3s;
-        }
-
-        .section-title:hover {
-            color: var(--primary);
-            padding-right: 0.5rem;
-        }
-
-        .section-title::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 60px;
-            height: 4px;
-            background: var(--primary);
-            border-radius: 2px;
-            transition: width 0.3s;
-        }
-
-        .section-title:hover::after {
-            width: 100px;
-        }
-
-        .form-control-lg,
-        .form-select-lg {
-            border-radius: 0.75rem;
-            padding: 0.75rem 1rem;
-            border: 1.5px solid #ced4da;
-            transition: all 0.3s;
-        }
-
-        .form-control-lg:hover,
-        .form-select-lg:hover {
-            border-color: var(--primary);
-        }
-
-        .form-control-lg:focus,
-        .form-select-lg:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 0.25rem rgba(230, 126, 34, 0.2);
-            transform: translateY(-1px);
-        }
-
-        .btn-save {
-            background: linear-gradient(135deg, #27ae60, #2ecc71);
-            border: none;
-            border-radius: 0.75rem;
-            padding: 1rem 3rem;
-            font-size: 1.1rem;
-            font-weight: 600;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .btn-save::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            border-radius: 50%;
-            background: rgba(255,255,255,0.3);
-            transform: translate(-50%, -50%);
-            transition: width 0.6s, height 0.6s;
-        }
-
-        .btn-save:hover {
-            transform: translateY(-2px) scale(1.02);
-            box-shadow: 0 10px 25px rgba(39, 174, 96, 0.4);
-        }
-
-        .btn-save:hover::before {
-            width: 300px;
-            height: 300px;
-        }
-
-        .btn-save:active {
-            transform: translateY(0) scale(0.98);
-        }
-
-        .family-table th {
-            background: var(--light);
-            font-weight: 600;
-            color: var(--primary-dark);
-        }
-
-        .remove-member-btn {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .hidden { display: none !important; }
-        .show { display: block !important; }
-
-        .wa-wrapper {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            direction: ltr;
-            background: #fff;
-            border: 1.5px solid #ced4da;
-            border-radius: 0.75rem;
-            padding: 0 12px;
-            height: 48px;
-            transition: all 0.3s;
-        }
-
-        .wa-wrapper:hover {
-            border-color: var(--primary);
-        }
-
-        .wa-wrapper:focus-within {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 0.25rem rgba(230, 126, 34, 0.2);
-        }
-
-        .wa-plus {
-            font-size: 16px;
-            font-weight: bold;
-            color: #6c757d;
-        }
-
-        .wa-prefix {
-            width: 80px;
-            border: none;
-            background: transparent;
-            font-size: 15px;
-            outline: none;
-            font-weight: 600;
-            color: var(--primary-dark);
-        }
-
-        .wa-number {
-            flex: 1;
-            border: none;
-            background: transparent;
-            font-size: 15px;
-            outline: none;
-        }
-
-        .wa-number::placeholder {
-            color: #adb5bd;
-        }
-    </style>
 @endpush
 
 @section('content')
@@ -227,10 +37,10 @@
                     <div class="card-header text-white">
                         <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
                             <div>
-                                <h5 class="mb-0 text-white"><i class="bi bi-person-gear me-2"></i> تعديل بيانات الموظف</h5>
+                                <h5 class="mb-0 text-white"><i class="bi bi-person-gear me-2"></i> {{ __('admin.staff_profiles.edit_header_title') }}</h5>
                             </div>
                             <a href="{{ route('admin.staff-profiles.show', $profile) }}" class="btn btn-outline-light btn-sm">
-                                <i class="bi bi-arrow-right"></i> رجوع للعرض
+                                <i class="bi bi-arrow-right"></i> {{ __('admin.staff_profiles.edit_back_to_view') }}
                             </a>
                         </div>
                     </div>
@@ -240,9 +50,9 @@
                         <div class="text-center text-lg-start p-3 bg-light rounded-3 mb-4 border">
                             <h5 class="fw-bold text-primary mb-2">{{ $profile->full_name }}</h5>
                             <div class="d-flex flex-wrap gap-3 justify-content-center justify-content-lg-start text-muted small mt-1">
-                                <div><strong>رقم الهوية:</strong> {{ $profile->national_id }}</div>
-                                <div><strong>الرقم الوظيفي:</strong> {{ $profile->employee_number ?? 'غير محدد' }}</div>
-                                <div><strong>المتبقي من التعديلات:</strong>
+                                <div><strong>{{ __('admin.staff_profiles.edit_national_id') }}:</strong> {{ $profile->national_id }}</div>
+                                <div><strong>{{ __('admin.staff_profiles.edit_employee_number') }}:</strong> {{ $profile->employee_number ?? __('admin.staff_profiles.not_specified') }}</div>
+                                <div><strong>{{ __('admin.staff_profiles.edit_remaining_edits') }}:</strong>
                                     <span class="badge bg-warning text-dark">{{ $profile->edits_remaining }} / {{ $profile->edits_allowed }}</span>
                                 </div>
                             </div>
@@ -251,43 +61,43 @@
                         <form action="{{ route('admin.staff-profiles.update', $profile) }}" method="POST" class="needs-validation" novalidate>
                             @csrf @method('PUT')
 
-                            <!-- البيانات الأساسية -->
-                            <h5 class="section-title"><i class="bi bi-person-badge"></i> البيانات الأساسية</h5>
+                            <!-- Basic Data -->
+                            <h5 class="section-title"><i class="bi bi-person-badge"></i> {{ __('admin.staff_profiles.edit_basic_data') }}</h5>
                             <div class="row g-4">
-                                <div class="col-md-6 col-lg-4"><label class="formLABEL">رقم الهوية <span class="text-danger">*</span></label><input type="text" name="national_id" class="form-control form-control-lg" value="{{ old('national_id', $profile->national_id) }}" required maxlength="9" pattern="\d{9}"></div>
-                                <div class="col-md-6 col-lg-4"><label class="form-label">الاسم الرباعي <span class="text-danger">*</span></label><input type="text" name="full_name" class="form-control form-control-lg" value="{{ old('full_name', $profile->full_name) }}" required></div>
-                                <div class="col-md-6 col-lg-4"><label class="form-label">تاريخ الميلاد</label><input type="date" name="birth_date" class="form-control form-control-lg" value="{{ old('birth_date', $profile->birth_date?->format('Y-m-d')) }}"></div>
-                                <div class="col-md-6 col-lg-4"><label class="form-label">الرقم الوظيفي <span class="text-danger">*</span></label><input type="text" name="employee_number" class="form-control form-control-lg" value="{{ old('employee_number', $profile->employee_number) }}" required></div>
-                                <div class="col-md-6 col-lg-4"><label class="form-label">الوظيفة</label><input type="text" name="job_title" class="form-control form-control-lg" value="{{ old('job_title', $profile->job_title) }}"></div>
-                                <div class="col-md-6 col-lg-4"><label class="form-label">المقر <span class="text-danger">*</span></label>
+                                <div class="col-md-6 col-lg-4"><label class="form-label">{{ __('admin.staff_profiles.edit_national_id') }} <span class="text-danger">*</span></label><input type="text" name="national_id" class="form-control form-control-lg" value="{{ old('national_id', $profile->national_id) }}" required maxlength="9" pattern="\d{9}"></div>
+                                <div class="col-md-6 col-lg-4"><label class="form-label">{{ __('admin.staff_profiles.edit_full_name') }} <span class="text-danger">*</span></label><input type="text" name="full_name" class="form-control form-control-lg" value="{{ old('full_name', $profile->full_name) }}" required></div>
+                                <div class="col-md-6 col-lg-4"><label class="form-label">{{ __('admin.staff_profiles.edit_birth_date') }}</label><input type="date" name="birth_date" class="form-control form-control-lg" value="{{ old('birth_date', $profile->birth_date?->format('Y-m-d')) }}"></div>
+                                <div class="col-md-6 col-lg-4"><label class="form-label">{{ __('admin.staff_profiles.edit_employee_number') }} <span class="text-danger">*</span></label><input type="text" name="employee_number" class="form-control form-control-lg" value="{{ old('employee_number', $profile->employee_number) }}" required></div>
+                                <div class="col-md-6 col-lg-4"><label class="form-label">{{ __('admin.staff_profiles.edit_job_title') }}</label><input type="text" name="job_title" class="form-control form-control-lg" value="{{ old('job_title', $profile->job_title) }}"></div>
+                                <div class="col-md-6 col-lg-4"><label class="form-label">{{ __('admin.staff_profiles.edit_location') }} <span class="text-danger">*</span></label>
                                     <select name="location" class="form-select form-select-lg" required>
-                                        <option value="">اختر المقر</option>
+                                        <option value="">{{ __('admin.staff_profiles.edit_select_location') }}</option>
                                         @foreach($locations as $k => $v)
                                             <option value="{{ $k }}" {{ old('location', $profile->location) == $k ? 'selected' : '' }}>{{ $v }}</option>
                                         @endforeach
                                     </select>
                                 </div>
-                                <div class="col-md-6 col-lg-4"><label class="form-label">الإدارة</label><input type="text" name="department" class="form-control form-control-lg" value="{{ old('department', $profile->department) }}"></div>
-                                <div class="col-md-6 col-lg-4"><label class="form-label">الدائرة</label><input type="text" name="directorate" class="form-control form-control-lg" value="{{ old('directorate', $profile->directorate) }}"></div>
-                                <div class="col-md-6 col-lg-4"><label class="form-label">القسم</label><input type="text" name="section" class="form-control form-control-lg" value="{{ old('section', $profile->section) }}"></div>
-                                <div class="col-md-6 col-lg-4"><label class="form-label">الحالة الاجتماعية</label>
+                                <div class="col-md-6 col-lg-4"><label class="form-label">{{ __('admin.staff_profiles.edit_department') }}</label><input type="text" name="department" class="form-control form-control-lg" value="{{ old('department', $profile->department) }}"></div>
+                                <div class="col-md-6 col-lg-4"><label class="form-label">{{ __('admin.staff_profiles.edit_directorate') }}</label><input type="text" name="directorate" class="form-control form-control-lg" value="{{ old('directorate', $profile->directorate) }}"></div>
+                                <div class="col-md-6 col-lg-4"><label class="form-label">{{ __('admin.staff_profiles.edit_section') }}</label><input type="text" name="section" class="form-control form-control-lg" value="{{ old('section', $profile->section) }}"></div>
+                                <div class="col-md-6 col-lg-4"><label class="form-label">{{ __('admin.staff_profiles.edit_marital_status') }}</label>
                                     <select name="marital_status" class="form-select form-select-lg">
-                                        <option value="">غير محدد</option>
+                                        <option value="">{{ __('admin.staff_profiles.not_specified') }}</option>
                                         @foreach($maritalStatus as $k => $v)
                                             <option value="{{ $k }}" {{ old('marital_status', $profile->marital_status) == $k ? 'selected' : '' }}>{{ $v }}</option>
                                         @endforeach
                                     </select>
                                 </div>
-                                <div class="col-md-6 col-lg-4"><label class="form-label">عدد أفراد الأسرة</label>
+                                <div class="col-md-6 col-lg-4"><label class="form-label">{{ __('admin.staff_profiles.edit_family_members_count') }}</label>
                                     <input type="number" min="0" max="20" id="family-count-input" name="family_members_count" class="form-control form-control-lg" value="{{ old('family_members_count', $profile->family_members_count ?? 1) }}">
                                 </div>
                             </div>
 
-                            <!-- أفراد الأسرة -->
+                            <!-- Family Members -->
                             <div class="d-flex justify-content-between align-items-center mb-3">
-                                <h5 class="section-title mb-0"><i class="bi bi-people"></i> أفراد الأسرة</h5>
+                                <h5 class="section-title mb-0"><i class="bi bi-people"></i> {{ __('admin.staff_profiles.edit_family_members_title') }}</h5>
                                 <span class="badge bg-primary fs-6" id="family-count-badge">
-                                    {{ $profile->dependents?->count() ?? 0 }} فرد
+                                    {{ $profile->dependents?->count() ?? 0 }} {{ __('admin.staff_profiles.edit_family_member') }}
                                 </span>
                             </div>
                             <div class="table-responsive mb-4">
@@ -295,45 +105,45 @@
                                     <thead>
                                     <tr>
                                         <th width="50">#</th>
-                                        <th>الاسم</th>
-                                        <th>صلة القرابة</th>
-                                        <th>تاريخ الميلاد</th>
-                                        <th>طالب جامعي؟</th>
+                                        <th>{{ __('admin.staff_profiles.edit_family_table_name') }}</th>
+                                        <th>{{ __('admin.staff_profiles.edit_family_table_relation') }}</th>
+                                        <th>{{ __('admin.staff_profiles.edit_family_table_birth_date') }}</th>
+                                        <th>{{ __('admin.staff_profiles.edit_family_table_student') }}</th>
                                         <th width="60"></th>
                                     </tr>
                                     </thead>
                                     <tbody id="family-rows"></tbody>
                                 </table>
-                                <button type="button" id="add-family-member" class="btn btn-outline-primary btn-sm"><i class="bi bi-plus-lg"></i> إضافة فرد</button>
+                                <button type="button" id="add-family-member" class="btn btn-outline-primary btn-sm"><i class="bi bi-plus-lg"></i> {{ __('admin.staff_profiles.edit_add_family_member') }}</button>
                             </div>
 
-                            <!-- السكن والوضع الاجتماعي -->
-                            <h5 class="section-title"><i class="bi bi-house-door"></i> السكن والوضع الاجتماعي</h5>
+                            <!-- Housing & Social Status -->
+                            <h5 class="section-title"><i class="bi bi-house-door"></i> {{ __('admin.staff_profiles.edit_housing_social') }}</h5>
                             <div class="row g-4">
-                                <div class="col-12"><label class="form-label">عنوان السكن الأصلي</label><input type="text" name="original_address" class="form-control form-control-lg" value="{{ old('original_address', $profile->original_address) }}"></div>
-                                <div class="col-md-6"><label class="form-label">وضع المنزل حاليًا</label>
+                                <div class="col-12"><label class="form-label">{{ __('admin.staff_profiles.edit_original_address') }}</label><input type="text" name="original_address" class="form-control form-control-lg" value="{{ old('original_address', $profile->original_address) }}"></div>
+                                <div class="col-md-6"><label class="form-label">{{ __('admin.staff_profiles.edit_house_status') }}</label>
                                     <select name="house_status" class="form-select form-select-lg">
-                                        <option value="">غير محدد</option>
+                                        <option value="">{{ __('admin.staff_profiles.not_specified') }}</option>
                                         @foreach($houseStatus as $k => $v)
                                             <option value="{{ $k }}" {{ old('house_status', $profile->house_status) == $k ? 'selected' : '' }}>{{ $v }}</option>
                                         @endforeach
                                     </select>
                                 </div>
-                                <div class="col-md-6"><label class="form-label">الحالة (مقيم / نازح)</label>
+                                <div class="col-md-6"><label class="form-label">{{ __('admin.staff_profiles.edit_resident_status') }}</label>
                                     <select name="status" id="status-select" class="form-select form-select-lg">
-                                        <option value="">غير محدد</option>
+                                        <option value="">{{ __('admin.staff_profiles.not_specified') }}</option>
                                         @foreach($residentStatus as $k => $v)
                                             <option value="{{ $k }}" {{ old('status', $profile->status) == $k ? 'selected' : '' }}>{{ $v }}</option>
                                         @endforeach
                                     </select>
                                 </div>
                                 <div class="col-12 {{ old('status', $profile->status) == 'displaced' ? 'show' : 'hidden' }}" id="current-address-field">
-                                    <label class="form-label">العنوان الحالي بعد النزوح</label>
+                                    <label class="form-label">{{ __('admin.staff_profiles.edit_current_address') }}</label>
                                     <input type="text" name="current_address" class="form-control form-control-lg" value="{{ old('current_address', $profile->current_address) }}">
                                 </div>
-                                <div class="col-md-6"><label class="form-label">نوع السكن الحالي</label>
+                                <div class="col-md-6"><label class="form-label">{{ __('admin.staff_profiles.edit_housing_type') }}</label>
                                     <select name="housing_type" class="form-select form-select-lg">
-                                        <option value="">غير محدد</option>
+                                        <option value="">{{ __('admin.staff_profiles.not_specified') }}</option>
                                         @foreach($housingTypes as $k => $v)
                                             <option value="{{ $k }}" {{ old('housing_type', $profile->housing_type) == $k ? 'selected' : '' }}>{{ $v }}</option>
                                         @endforeach
@@ -341,11 +151,11 @@
                                 </div>
                             </div>
 
-                            <!-- وسائل التواصل -->
-                            <h5 class="section-title"><i class="bi bi-telephone"></i> وسائل التواصل</h5>
+                            <!-- Contact Information -->
+                            <h5 class="section-title"><i class="bi bi-telephone"></i> {{ __('admin.staff_profiles.edit_contact_info') }}</h5>
                             <div class="row g-4">
-                                <div class="col-md-6"><label class="form-label">رقم الجوال</label><input type="text" name="mobile" class="form-control form-control-lg" value="{{ old('mobile', $profile->mobile) }}"></div>
-                                <div class="col-md-6"><label class="form-label">جوال بديل</label><input type="text" name="mobile_alt" class="form-control form-control-lg" value="{{ old('mobile_alt', $profile->mobile_alt) }}"></div>
+                                <div class="col-md-6"><label class="form-label">{{ __('admin.staff_profiles.edit_mobile') }}</label><input type="text" name="mobile" class="form-control form-control-lg" value="{{ old('mobile', $profile->mobile) }}"></div>
+                                <div class="col-md-6"><label class="form-label">{{ __('admin.staff_profiles.edit_mobile_alt') }}</label><input type="text" name="mobile_alt" class="form-control form-control-lg" value="{{ old('mobile_alt', $profile->mobile_alt) }}"></div>
                                 
                                 @php
                                     $whats = old('whatsapp', $profile->whatsapp ?? '');
@@ -366,7 +176,7 @@
                                 @endphp
                                 
                                 <div class="col-md-6">
-                                    <label class="form-label">واتس آب</label>
+                                    <label class="form-label">{{ __('admin.staff_profiles.edit_whatsapp') }}</label>
                                     <div class="wa-wrapper">
                                         <span class="wa-plus">+</span>
                                         <select name="whatsapp_prefix" class="wa-prefix">
@@ -377,64 +187,64 @@
                                     </div>
                                 </div>
                                 
-                                <div class="col-md-6"><label class="form-label">تيليجرام</label><input type="text" name="telegram" class="form-control form-control-lg" value="{{ old('telegram', $profile->telegram) }}"></div>
-                                <div class="col-md-6"><label class="form-label">البريد الإلكتروني (Gmail)</label><input type="email" name="gmail" class="form-control form-control-lg" value="{{ old('gmail', $profile->gmail) }}"></div>
+                                <div class="col-md-6"><label class="form-label">{{ __('admin.staff_profiles.edit_telegram') }}</label><input type="text" name="telegram" class="form-control form-control-lg" value="{{ old('telegram', $profile->telegram) }}"></div>
+                                <div class="col-md-6"><label class="form-label">{{ __('admin.staff_profiles.edit_email') }}</label><input type="email" name="gmail" class="form-control form-control-lg" value="{{ old('gmail', $profile->gmail) }}"></div>
                             </div>
 
-                            <!-- الحوادث العائلية -->
-                            <h5 class="section-title"><i class="bi bi-exclamation-triangle"></i> الحوادث العائلية</h5>
+                            <!-- Family Incidents -->
+                            <h5 class="section-title"><i class="bi bi-exclamation-triangle"></i> {{ __('admin.staff_profiles.edit_family_incidents') }}</h5>
                             <div class="row g-4">
                                 <div class="col-md-6">
-                                    <label class="form-label">هل يوجد حوادث عائلية؟</label>
+                                    <label class="form-label">{{ __('admin.staff_profiles.edit_has_incidents') }}</label>
                                     <select name="has_family_incidents" class="form-select form-select-lg">
-                                        <option value="no" {{ old('has_family_incidents', $profile->has_family_incidents ?? 'no') == 'no' ? 'selected' : '' }}>لا</option>
-                                        <option value="yes" {{ old('has_family_incidents', $profile->has_family_incidents ?? 'no') == 'yes' ? 'selected' : '' }}>نعم</option>
+                                        <option value="no" {{ old('has_family_incidents', $profile->has_family_incidents ?? 'no') == 'no' ? 'selected' : '' }}>{{ __('admin.staff_profiles.edit_no') }}</option>
+                                        <option value="yes" {{ old('has_family_incidents', $profile->has_family_incidents ?? 'no') == 'yes' ? 'selected' : '' }}>{{ __('admin.staff_profiles.edit_yes') }}</option>
                                     </select>
                                 </div>
                                 <div class="col-12">
-                                    <label class="form-label">ملاحظات الحوادث العائلية</label>
-                                    <textarea name="family_notes" rows="3" class="form-control form-control-lg" placeholder="أدخل أي ملاحظات حول الحوادث العائلية إن وجدت">{{ old('family_notes', $profile->family_notes) }}</textarea>
+                                    <label class="form-label">{{ __('admin.staff_profiles.edit_incidents_notes') }}</label>
+                                    <textarea name="family_notes" rows="3" class="form-control form-control-lg" placeholder="{{ __('admin.staff_profiles.edit_incidents_notes_placeholder') }}">{{ old('family_notes', $profile->family_notes) }}</textarea>
                                 </div>
                             </div>
 
-                            <!-- الجاهزية -->
-                            <h5 class="section-title"><i class="bi bi-clipboard-check"></i> الجاهزية للعودة للعمل</h5>
+                            <!-- Readiness -->
+                            <h5 class="section-title"><i class="bi bi-clipboard-check"></i> {{ __('admin.staff_profiles.edit_readiness_title') }}</h5>
                             <div class="row g-4">
                                 <div class="col-md-6">
-                                    <label class="form-label">مستوى الجاهزية</label>
+                                    <label class="form-label">{{ __('admin.staff_profiles.edit_readiness_level') }}</label>
                                     <select name="readiness" id="readiness-select" class="form-select form-select-lg">
-                                        <option value="">غير محدد</option>
+                                        <option value="">{{ __('admin.staff_profiles.not_specified') }}</option>
                                         @foreach($readinessList as $k => $v)
                                             <option value="{{ $k }}" {{ old('readiness', $profile->readiness) == $k ? 'selected' : '' }}>{{ $v['label'] ?? $v }}</option>
                                         @endforeach
                                     </select>
                                 </div>
                                 <div class="col-12 {{ old('readiness', $profile->readiness) == 'not_ready' ? 'show' : 'hidden' }}" id="readiness-notes-field">
-                                    <label class="form-label">أسباب عدم الجاهزية</label>
+                                    <label class="form-label">{{ __('admin.staff_profiles.edit_readiness_reasons') }}</label>
                                     <textarea name="readiness_notes" rows="4" class="form-control form-control-lg">{{ old('readiness_notes', $profile->readiness_notes) }}</textarea>
                                 </div>
                             </div>
 
-                            <!-- إعدادات التعديل (خاص بالأدمن) -->
-                            <h5 class="section-title"><i class="bi bi-shield-lock"></i> إعدادات التعديل (لوحة التحكم فقط)</h5>
+                            <!-- Edit Settings (Admin Only) -->
+                            <h5 class="section-title"><i class="bi bi-shield-lock"></i> {{ __('admin.staff_profiles.edit_edit_settings') }}</h5>
                             <div class="row g-4">
                                 <div class="col-md-6">
-                                    <label class="form-label">إجمالي مرات التعديل المسموح بها</label>
+                                    <label class="form-label">{{ __('admin.staff_profiles.edit_total_edits_allowed') }}</label>
                                     <input type="number" min="0" name="edits_allowed" class="form-control form-control-lg" value="{{ old('edits_allowed', $profile->edits_allowed) }}">
                                 </div>
                                 <div class="col-md-6">
-                                    <label class="form-label">المتبقي للموظف حاليًا</label>
+                                    <label class="form-label">{{ __('admin.staff_profiles.edit_remaining_for_employee') }}</label>
                                     <input type="number" min="0" name="edits_remaining" class="form-control form-control-lg" value="{{ old('edits_remaining', $profile->edits_remaining) }}">
                                 </div>
                             </div>
                             <div class="alert alert-info mt-3 small">
-                                هذه الحقول لا تظهر للموظف أبدًا، وتُستخدم فقط من لوحة التحكم لإعادة منح محاولات التعديل.
+                                {{ __('admin.staff_profiles.edit_settings_note') }}
                             </div>
 
-                            <!-- زر الحفظ -->
+                            <!-- Save Button -->
                             <div class="text-center mt-5">
                                 <button type="submit" class="btn btn-save text-white shadow-lg">
-                                    <i class="bi bi-check2-all"></i> حفظ جميع التعديلات
+                                    <i class="bi bi-check2-all"></i> {{ __('admin.staff_profiles.edit_save_all') }}
                                 </button>
                             </div>
                         </form>
@@ -451,7 +261,7 @@
             <td><input type="text" data-field="name" class="form-control" required></td>
             <td>
                 <select data-field="relation" class="form-select" required>
-                    <option value="">اختر</option>
+                    <option value="">{{ __('admin.staff_profiles.edit_family_table_select') }}</option>
                     @foreach($relations as $k => $v)
                         <option value="{{ $k }}">{{ $v }}</option>
                     @endforeach
@@ -460,8 +270,8 @@
             <td><input type="date" data-field="birth_date" class="form-control"></td>
             <td>
                 <select data-field="is_student" class="form-select">
-                    <option value="no">لا</option>
-                    <option value="yes">نعم</option>
+                    <option value="no">{{ __('admin.staff_profiles.edit_no') }}</option>
+                    <option value="yes">{{ __('admin.staff_profiles.edit_yes') }}</option>
                 </select>
             </td>
             <td><button type="button" class="btn btn-danger btn-sm remove-member-btn"><i class="bi bi-trash"></i></button></td>
@@ -485,6 +295,7 @@
             const serverFamily = @json($serverFamily);
             const oldFamily = @json(old('family', []));
             const initialData = oldFamily.length ? oldFamily : serverFamily;
+            const memberText = @json(__('admin.staff_profiles.edit_family_member'));
 
             function updateIndices() {
                 container.querySelectorAll('tr').forEach((row, i) => {
@@ -500,7 +311,7 @@
                 const count = container.children.length;
                 countInput.value = count;
                 if (countBadge) {
-                    countBadge.textContent = count + ' فرد';
+                    countBadge.textContent = count + ' ' + memberText;
                 }
             }
 

@@ -34,9 +34,17 @@ class AboutUsRequest extends FormRequest
             'subtitle'      => ['nullable', 'string', 'max:255'],
             'paragraph1'    => ['required', 'string'],
             'paragraph2'    => ['nullable', 'string'],
+            'title_en'      => ['nullable', 'string', 'max:255'],
+            'subtitle_en'   => ['nullable', 'string', 'max:255'],
+            'paragraph1_en' => ['nullable', 'string'],
+            'paragraph2_en' => ['nullable', 'string'],
             'features_col1' => ['nullable', 'string'],
             'features_col2' => ['nullable', 'string'],
+            'features_col1_en' => ['nullable', 'string'],
+            'features_col2_en' => ['nullable', 'string'],
             'image'         => [$isUpdate ? 'nullable' : 'required', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
+            'image_en'      => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
+            'language'      => ['nullable', 'in:ar,en'],
         ];
     }
 

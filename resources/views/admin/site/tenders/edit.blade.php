@@ -1,30 +1,30 @@
 @extends('layouts.admin')
-@section('title', 'تعديل العطاء #' . $tender->id)
+@section('title', __('admin.tenders.edit_title') . ' #' . $tender->id)
 
 @section('content')
     @php
-        $breadcrumbTitle     = 'تعديل العطاء #' . $tender->id;
-        $breadcrumbParent    = 'سجل العطاءات';
+        $breadcrumbTitle     = __('admin.tenders.edit_title') . ' #' . $tender->id;
+        $breadcrumbParent    = __('admin.tenders.title');
         $breadcrumbParentUrl = route('admin.tenders.index');
     @endphp
 
     <div class="container-fluid p-0">
-        <!-- هيدر + تبويبات -->
+        <!-- Header + Tabs -->
         <div class="card border-0 shadow-sm rounded-3 bg-white mb-4">
             <div class="card-header bg-white border-bottom py-2 px-3 d-flex align-items-center justify-content-between">
                 <div class="d-flex align-items-center gap-1">
-                    <i class="ri-edit-box-line text-warning fs-6"></i>
-                    <h6 class="mb-0 fw-semibold text-dark-emphasis">تعديل العطاء #{{ $tender->id }}</h6>
+                    <i class="bi bi-pencil-square text-warning fs-6"></i>
+                    <h6 class="mb-0 fw-semibold text-dark-emphasis">{{ __('admin.tenders.edit_title') }} #{{ $tender->id }}</h6>
                 </div>
                 <ul class="nav nav-tabs nav-tabs-sm border-0" id="tenderTabs" role="tablist">
                     <li class="nav-item" role="presentation">
                         <button class="nav-link active px-3 py-1" id="form-tab" data-bs-toggle="tab" data-bs-target="#form-content" type="button">
-                            <i class="ri-edit-line me-1"></i> تعديل
+                            <i class="bi bi-pencil me-1"></i> {{ __('admin.tenders.tab_edit') }}
                         </button>
                     </li>
                     <li class="nav-item" role="presentation">
                         <button class="nav-link px-3 py-1" id="preview-tab" data-bs-toggle="tab" data-bs-target="#preview-content" type="button">
-                            <i class="ri-eye-line me-1"></i> معاينة
+                            <i class="bi bi-eye me-1"></i> {{ __('admin.tenders.tab_preview') }}
                         </button>
                     </li>
                 </ul>
@@ -44,52 +44,52 @@
                                 <div class="card-body p-4 row g-3">
 
                                     <div class="col-md-4">
-                                        <label class="form-label">MNEWS_ID</label>
+                                        <label class="form-label">{{ __('admin.tenders.form_mnews_id') }}</label>
                                         <input type="number" name="mnews_id"
                                                class="form-control @error('mnews_id') is-invalid @enderror"
-                                               value="{{ old('mnews_id', $tender->mnews_id) }}" placeholder="مثال: 57">
+                                               value="{{ old('mnews_id', $tender->mnews_id) }}" placeholder="{{ __('admin.tenders.form_example_number') }}">
                                         @error('mnews_id')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
                                     </div>
 
                                     <div class="col-md-8">
-                                        <label class="form-label">COLUMN_NAME_1</label>
+                                        <label class="form-label">{{ __('admin.tenders.form_column_name_1') }}</label>
                                         <input type="text" name="column_name_1"
                                                class="form-control @error('column_name_1') is-invalid @enderror"
                                                value="{{ old('column_name_1', $tender->column_name_1) }}"
-                                               placeholder="body / title / pdf ...">
+                                               placeholder="{{ __('admin.tenders.form_column_placeholder') }}">
                                         @error('column_name_1')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
                                     </div>
 
                                     <div class="col-md-6">
-                                        <label class="form-label">THE_DATE_1 <span class="text-muted">(نصي)</span></label>
+                                        <label class="form-label">{{ __('admin.tenders.form_the_date_1') }} <span class="text-muted">{{ __('admin.tenders.form_date_text') }}</span></label>
                                         <input type="text" name="the_date_1"
                                                class="form-control @error('the_date_1') is-invalid @enderror"
                                                value="{{ old('the_date_1', $tender->the_date_1) }}"
-                                               placeholder="مثال: 6/20/2016 11:55 AM">
+                                               placeholder="{{ __('admin.tenders.form_example_date') }}">
                                         @error('the_date_1')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
                                     </div>
 
                                     <div class="col-md-6">
-                                        <label class="form-label">COULM_SERIAL</label>
+                                        <label class="form-label">{{ __('admin.tenders.form_coulm_serial') }}</label>
                                         <input type="number" name="coulm_serial"
                                                class="form-control @error('coulm_serial') is-invalid @enderror"
-                                               value="{{ old('coulm_serial', $tender->coulm_serial) }}" placeholder="مثال: 57">
+                                               value="{{ old('coulm_serial', $tender->coulm_serial) }}" placeholder="{{ __('admin.tenders.form_example_number') }}">
                                         @error('coulm_serial')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
                                     </div>
 
                                     <div class="col-md-6">
-                                        <label class="form-label">EVENT_1</label>
+                                        <label class="form-label">{{ __('admin.tenders.form_event_1') }}</label>
                                         <input type="text" name="event_1"
                                                class="form-control @error('event_1') is-invalid @enderror"
-                                               value="{{ old('event_1', $tender->event_1) }}" placeholder="update / delete">
+                                               value="{{ old('event_1', $tender->event_1) }}" placeholder="{{ __('admin.tenders.form_event_placeholder') }}">
                                         @error('event_1')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
                                     </div>
 
                                     <div class="col-md-6">
-                                        <label class="form-label">THE_USER_1</label>
+                                        <label class="form-label">{{ __('admin.tenders.form_the_user_1') }}</label>
                                         <input type="text" name="the_user_1"
                                                class="form-control @error('the_user_1') is-invalid @enderror"
-                                               value="{{ old('the_user_1', $tender->the_user_1) }}" placeholder="admin@gedco">
+                                               value="{{ old('the_user_1', $tender->the_user_1) }}" placeholder="{{ __('admin.tenders.form_example_user') }}">
                                         @error('the_user_1')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
                                     </div>
 
@@ -103,10 +103,10 @@
                             <div class="card border-0 shadow-sm rounded-3 bg-white mb-4">
                                 <div class="card-header bg-white border-bottom py-2 px-3 d-flex align-items-center justify-content-between">
                                     <div class="d-flex align-items-center gap-1">
-                                        <i class="ri-file-text-line text-secondary"></i>
-                                        <span class="fw-semibold">النص القديم (OLD_VALUE_1)</span>
+                                        <i class="bi bi-file-text text-secondary"></i>
+                                        <span class="fw-semibold">{{ __('admin.tenders.form_old_value') }}</span>
                                     </div>
-                                    <small class="text-muted">HTML مدعوم</small>
+                                    <small class="text-muted">{{ __('admin.tenders.form_html_supported') }}</small>
                                 </div>
                                 <div class="card-body p-3">
                                     <div class="quill-shell border rounded-3 shadow-sm">
@@ -136,10 +136,10 @@
                             <div class="card border-0 shadow-sm rounded-3 bg-white">
                                 <div class="card-header bg-white border-bottom py-2 px-3 d-flex align-items-center justify-content-between">
                                     <div class="d-flex align-items-center gap-1">
-                                        <i class="ri-file-text-line text-success"></i>
-                                        <span class="fw-semibold">النص الجديد (NEW_VALUE_1)</span>
+                                        <i class="bi bi-file-text text-success"></i>
+                                        <span class="fw-semibold">{{ __('admin.tenders.form_new_value') }}</span>
                                     </div>
-                                    <small class="text-muted">HTML مدعوم</small>
+                                    <small class="text-muted">{{ __('admin.tenders.form_html_supported') }}</small>
                                 </div>
                                 <div class="card-body p-3">
                                     <div class="quill-shell border rounded-3 shadow-sm">
@@ -169,9 +169,9 @@
 
                     <div class="d-flex gap-2 justify-content-end mt-4">
                         <button type="submit" class="btn btn-success px-4">
-                            <i class="ri-check-line me-1"></i> تحديث
+                            <i class="bi bi-check me-1"></i> {{ __('admin.tenders.form_update') }}
                         </button>
-                        <a href="{{ route('admin.tenders.index') }}" class="btn btn-light px-4">رجوع</a>
+                        <a href="{{ route('admin.tenders.index') }}" class="btn btn-light px-4">{{ __('admin.tenders.back') }}</a>
                     </div>
                 </form>
             </div>
@@ -181,8 +181,8 @@
                 <div class="card border-0 shadow-sm rounded-3 bg-white">
                     <div class="card-body p-4" id="fullPreview">
                         <div class="text-center text-muted py-5">
-                            <i class="ri-file-search-line fs-5 d-block mb-2"></i>
-                            <small>ابدأ التعديل في تبويب "تعديل" لترى المعاينة</small>
+                            <i class="bi bi-eye fs-5 d-block mb-2"></i>
+                            <small>{{ __('admin.tenders.form_preview_start_editing') }}</small>
                         </div>
                     </div>
                 </div>
@@ -192,19 +192,6 @@
 
     @push('styles')
         <link rel="stylesheet" href="{{ asset('assets/admin/libs/quill/quill.snow.css') }}">
-        <style>
-            :root{ --primary:#4361ee; --success:#10b981; }
-            .quill-shell{ height: 420px; background:#fff; border-radius:.5rem; overflow:hidden; }
-            .quill-shell .ql-toolbar{ border-top-left-radius:.5rem; border-top-right-radius:.5rem; }
-            .quill-shell .ql-container{ height: calc(100% - 42px); border-bottom-left-radius:.5rem; border-bottom-right-radius:.5rem; }
-            .quill-shell .ql-editor{ height:100%; overflow-y:auto; direction:rtl; text-align:right; }
-            .form-control:focus{ box-shadow:0 0 0 .2rem rgba(67,97,238,.15); }
-            .btn-success{ background:var(--success); border:none; }
-            .btn-success:hover{ background:#0d9488; }
-            .nav-tabs .nav-link{ font-size:.875rem; border:none; color:#6c757d; }
-            .nav-tabs .nav-link.active{ color:var(--primary); font-weight:600; border-bottom:2px solid var(--primary); }
-            .nav-tabs .nav-link:hover{ color:var(--primary); }
-        </style>
     @endpush
 
     @push('scripts')
@@ -220,12 +207,12 @@
                 const qOld = new Quill('#editor-old', {
                     theme: 'snow',
                     modules: commonModules('#toolbar-old'),
-                    placeholder: 'الصق/اكتب النص القديم هنا...'
+                    placeholder: '{{ __('admin.tenders.form_old_value_placeholder') }}'
                 });
                 const qNew = new Quill('#editor-new', {
                     theme: 'snow',
                     modules: commonModules('#toolbar-new'),
-                    placeholder: 'الصق/اكتب النص الجديد هنا...'
+                    placeholder: '{{ __('admin.tenders.form_new_value_placeholder') }}'
                 });
 
                 // preload from hidden (old())

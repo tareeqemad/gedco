@@ -31,8 +31,8 @@
 
             <!-- Start::header-element -->
             <div class="main-header-center ms-3 d-sm-none d-md-none d-lg-block form-group">
-                <input class="form-control" placeholder="Search..." type="search">
-                <button class="btn"><i class="fas fa-search"></i></button>
+                <input class="form-control" placeholder="{{ __('admin.messages.search_placeholder') }}" type="search">
+                <button class="btn"><i class="bi bi-search"></i></button>
             </div>
             <!-- End::header-element -->
 
@@ -53,8 +53,8 @@
                     <li>
                                 <span class="dropdown-item d-flex align-items-center" >
                                     <span class="input-group">
-                                        <input type="text" class="form-control" placeholder="Search..." aria-label="Search input" aria-describedby="button-addon2">
-                                        <button class="btn btn-primary" type="button" id="button-addon2">Search</button>
+                                        <input type="text" class="form-control" placeholder="{{ __('admin.messages.search_placeholder') }}" aria-label="{{ __('admin.messages.search_placeholder') }}" aria-describedby="button-addon2">
+                                        <button class="btn btn-primary" type="button" id="button-addon2">{{ __('admin.actions.search') }}</button>
                                         <!-- <a href="#" id="button-addon2" class="btn btn-primary">Search</a> -->
                                     </span>
                                 </span>
@@ -66,20 +66,58 @@
             <!-- End::header-element -->
 
             <!-- Start::header-element -->
-            <div class="header-element country-selector">
+            @php
+                $currentDir = $direction ?? 'rtl';
+                $isRtl = $currentDir === 'rtl';
+                // Palestine flag - try JPG first (downloaded), then SVG, then fallback
+                $palestineFlagPath = public_path('assets/admin/images/flags/palestine_flag');
+                $palestineFlag = file_exists($palestineFlagPath . '.jpg') 
+                    ? asset('assets/admin/images/flags/palestine_flag.jpg')
+                    : (file_exists($palestineFlagPath . '.svg')
+                        ? asset('assets/admin/images/flags/palestine_flag.svg')
+                        : 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDQwIDI0Ij48cmVjdCB3aWR0aD0iNDAiIGhlaWdodD0iOCIgZmlsbD0iIzAwMCIvPjxyZWN0IHk9IjgiIHdpZHRoPSI0MCIgaGVpZ2h0PSI4IiBmaWxsPSIjRkZGIi8+PHJlY3QgeT0iMTYiIHdpZHRoPSI0MCIgaGVpZ2h0PSI4IiBmaWxsPSIjMDA3QTNEIi8+PHBhdGggZD0iTSAwIDAgTCAxMy4zMyAxMiBMIDAgMjQgWiIgZmlsbD0iI0NFMTEyNiIvPjwvc3ZnPg==');
+                // Try JPG first, then SVG
+                $usFlagPath = public_path('assets/admin/images/flags/us_flag');
+                $usFlag = file_exists($usFlagPath . '.jpg') && filesize($usFlagPath . '.jpg') > 1000
+                    ? asset('assets/admin/images/flags/us_flag.jpg')
+                    : (file_exists($usFlagPath . '.svg')
+                        ? asset('assets/admin/images/flags/us_flag.svg')
+                        : 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDQwIDI0Ij48cmVjdCB3aWR0aD0iNDAiIGhlaWdodD0iMjQiIGZpbGw9IiNGRkYiLz48cmVjdCB3aWR0aD0iNDAiIGhlaWdodD0iMS44NDYiIGZpbGw9IiNCMjIyMzQiLz48cmVjdCB5PSIzLjY5MiIgd2lkdGg9IjQwIiBoZWlnaHQ9IjEuODQ2IiBmaWxsPSIjQjIyMjM0Ii8+PHJlY3QgeT0iNy4zODQiIHdpZHRoPSI0MCIgaGVpZ2h0PSIxLjg0NiIgZmlsbD0iI0IyMjIzNCIvPjxyZWN0IHk9IjExLjA3NiIgd2lkdGg9IjQwIiBoZWlnaHQ9IjEuODQ2IiBmaWxsPSIjQjIyMjM0Ii8+PHJlY3QgeT0iMTQuNzY4IiB3aWR0aD0iNDAiIGhlaWdodD0iMS44NDYiIGZpbGw9IiNCMjIyMzQiLz48cmVjdCB5PSIxOC40NiIgd2lkdGg9IjQwIiBoZWlnaHQ9IjEuODQ2IiBmaWxsPSIjQjIyMjM0Ii8+PHJlY3QgeT0iMjIuMTUyIiB3aWR0aD0iNDAiIGhlaWdodD0iMS44NDYiIGZpbGw9IiNCMjIyMzQiLz48cmVjdCB3aWR0aD0iMTYiIGhlaWdodD0iOS4yMyIgZmlsbD0iIzNDM0I2RSIvPjwvc3ZnPg==');
+            @endphp
+            <div class="header-element language-selector">
                 <!-- Start::header-link|dropdown-toggle -->
-                <a href="javascript:void(0);" class="header-link dropdown-toggle" data-bs-auto-close="outside" data-bs-toggle="dropdown">
-                    <img src="{{ asset('assets/admin/images/flags/us_flag.jpg') }}" alt="img" class="rounded-circle">
+                <a href="javascript:void(0);" class="header-link dropdown-toggle" data-bs-auto-close="outside" data-bs-toggle="dropdown" id="language-dropdown-toggle">
+                    <img src="{{ $isRtl ? $palestineFlag : $usFlag }}" alt="{{ $isRtl ? 'العربية' : 'English' }}" class="rounded-circle" width="24" height="24" style="object-fit: cover;">
                 </a>
                 <!-- End::header-link|dropdown-toggle -->
                 <ul class="main-header-dropdown dropdown-menu dropdown-menu-end" data-popper-placement="none">
                     <li>
-                        <a class="dropdown-item d-flex align-items-center" href="javascript:void(0);">
-                                    <span class="avatar avatar-xs lh-1 me-2">
-                                        <img src="{{ asset('assets/admin/images/flags/us_flag.jpg') }}" alt="img">
-                                    </span>
-                            English
-                        </a>
+                        <form action="{{ route('direction.set', 'rtl') }}" method="POST" style="margin: 0;">
+                            @csrf
+                            <button type="submit" class="dropdown-item d-flex align-items-center w-100 {{ $isRtl ? 'active' : '' }}" style="background: none; border: none; width: 100%; text-align: {{ $isRtl ? 'right' : 'left' }};">
+                                <span class="avatar avatar-xs lh-1 me-2">
+                                    <img src="{{ $palestineFlag }}" alt="العربية" class="rounded-circle" width="20" height="20" style="object-fit: cover;">
+                                </span>
+                                <span class="text-default">العربية</span>
+                                @if($isRtl)
+                                    <i class="bi bi-check ms-auto"></i>
+                                @endif
+                            </button>
+                        </form>
+                    </li>
+                    <li>
+                        <form action="{{ route('direction.set', 'ltr') }}" method="POST" style="margin: 0;">
+                            @csrf
+                            <button type="submit" class="dropdown-item d-flex align-items-center w-100 {{ !$isRtl ? 'active' : '' }}" style="background: none; border: none; width: 100%; text-align: {{ $isRtl ? 'right' : 'left' }};">
+                                <span class="avatar avatar-xs lh-1 me-2">
+                                    <img src="{{ $usFlag }}" alt="English" class="rounded-circle" width="20" height="20" style="object-fit: cover;">
+                                </span>
+                                <span class="text-default">English</span>
+                                @if(!$isRtl)
+                                    <i class="bi bi-check ms-auto"></i>
+                                @endif
+                            </button>
+                        </form>
                     </li>
                 </ul>
             </div>
@@ -109,66 +147,30 @@
             <!-- Start::header-element -->
             <div class="header-element notifications-dropdown">
                 <!-- Start::header-link|dropdown-toggle -->
-                <a href="javascript:void(0);" class="header-link dropdown-toggle" data-bs-toggle="dropdown" data-bs-auto-close="outside" id="messageDropdown" aria-expanded="false">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="header-link-icon" width="24" height="24" viewBox="0 0 24 24"><path d="M19 13.586V10c0-3.217-2.185-5.927-5.145-6.742C13.562 2.52 12.846 2 12 2s-1.562.52-1.855 1.258C7.185 4.074 5 6.783 5 10v3.586l-1.707 1.707A.996.996 0 0 0 3 16v2a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1v-2a.996.996 0 0 0-.293-.707L19 13.586zM19 17H5v-.586l1.707-1.707A.996.996 0 0 0 7 14v-4c0-2.757 2.243-5 5-5s5 2.243 5 5v4c0 .266.105.52.293.707L19 16.414V17zm-7 5a2.98 2.98 0 0 0 2.818-2H9.182A2.98 2.98 0 0 0 12 22z"/></svg>
-                    <span class="badge bg-secondary rounded-pill header-icon-badge pulse pulse-secondary" id="notification-icon-badge">6</span>
+                <a href="javascript:void(0);" class="header-link dropdown-toggle" data-bs-toggle="dropdown" data-bs-auto-close="outside" id="notificationDropdown" aria-expanded="false">
+                    <i class="bi bi-bell header-link-icon"></i>
+                    <span class="badge bg-danger rounded-pill header-icon-badge pulse pulse-secondary" id="notification-icon-badge" style="display: none;">0</span>
                 </a>
                 <!-- End::header-link|dropdown-toggle -->
                 <!-- Start::main-header-dropdown -->
-                <div class="main-header-dropdown dropdown-menu dropdown-menu-end" data-popper-placement="none">
-                    <div class="p-3">
+                <div class="main-header-dropdown dropdown-menu dropdown-menu-end notification-dropdown-menu" data-popper-placement="none" style="width: 350px;">
+                    <div class="p-3 border-bottom">
                         <div class="d-flex align-items-center justify-content-between">
-                            <p class="mb-0 fs-17 fw-semibold">Notifications</p>
-                            <span class="badge bg-secondary-transparent" id="notifiation-data">6 Unread</span>
+                            <p class="mb-0 fs-17 fw-semibold">{{ __('admin.notifications.title') }}</p>
+                            <span class="badge bg-primary-transparent" id="notification-count">0 {{ __('admin.notifications.unread') }}</span>
                         </div>
                     </div>
-                    <div class="dropdown-divider"></div>
-                    <ul class="list-unstyled mb-0" id="header-notification-scroll">
-                        <li class="dropdown-item p-3">
-                            <div class="d-flex align-items-start">
-                                <div class="pe-3">
-                                    <span class="avatar bg-pink rounded-3"><i class="far fa-folder-open text-fixed-white fs-18"></i></span>
-                                </div>
-                                <div class="flex-grow-1 d-flex align-items-center justify-content-between">
-                                    <div>
-                                        <p class="mb-0 fw-semibold"><a href="notification.html">New Files available</a></p>
-                                        <span class="text-muted fw-normal fs-12 header-notification-text">10 hours ago</span>
-                                    </div>
-                                    <div>
-                                        <a href="javascript:void(0);" class="min-w-fit-content text-muted me-1 dropdown-item-close1"><i class="ti ti-x fs-16"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="dropdown-item p-3">
-                            <div class="d-flex align-items-start">
-                                <div class="pe-3">
-                                    <span class="avatar bg-purple rounded-3"><i class="fab fa-delicious text-fixed-white fs-18"></i></span>
-                                </div>
-                                <div class="flex-grow-1 d-flex align-items-center justify-content-between">
-                                    <div>
-                                        <p class="mb-0 fw-semibold"><a href="notification.html">Updates available</a></p>
-                                        <span class="text-muted fw-normal fs-12 header-notification-text">2 days ago</span>
-                                    </div>
-                                    <div>
-                                        <a href="javascript:void(0);" class="min-w-fit-content text-muted me-1 dropdown-item-close1"><i class="ti ti-x fs-16"></i></a>
-                                    </div>
-                                </div>
-                            </div>
+                    <div class="dropdown-divider mb-0"></div>
+                    <ul class="list-unstyled mb-0" id="notification-list" style="max-height: 400px; overflow-y: auto;">
+                        <li class="p-4 text-center text-muted">
+                            <i class="bi bi-bell-slash fs-1 d-block mb-2"></i>
+                            <p class="mb-0">{{ __('admin.notifications.no_notifications') }}</p>
                         </li>
                     </ul>
-                    <div class="p-2 empty-header-item1 border-top">
-                        <div class="d-grid">
-                            <a href="notification.html" class="btn btn-primary btn-sm">View All</a>
-                        </div>
-                    </div>
-                    <div class="p-5 empty-item1 d-none">
-                        <div class="text-center">
-                                    <span class="avatar avatar-xl avatar-rounded bg-secondary-transparent">
-                                        <i class="ri-notification-off-line fs-2"></i>
-                                    </span>
-                            <h6 class="fw-semibold mt-3">No New Notifications</h6>
-                        </div>
+                    <div class="p-2 border-top text-center">
+                        <a href="javascript:void(0);" class="text-primary small" id="mark-all-read" style="display: none;">
+                            {{ __('admin.notifications.mark_all_read') }}
+                        </a>
                     </div>
                 </div>
                 <!-- End::main-header-dropdown -->
@@ -180,20 +182,10 @@
             <div class="header-element header-fullscreen">
                 <!-- Start::header-link -->
                 <a onclick="openFullscreen();" href="#" class="header-link">
-                    <i class="bx bx-fullscreen full-screen-open header-link-icon"></i>
-                    <i class="bx bx-exit-fullscreen full-screen-close header-link-icon d-none"></i>
+                    <i class="bi bi-fullscreen full-screen-open header-link-icon"></i>
+                    <i class="bi bi-fullscreen-exit full-screen-close header-link-icon d-none"></i>
                 </a>
                 <!-- End::header-link -->
-            </div>
-            <!-- End::header-element -->
-
-            <!-- Start::header-element -->
-            <div class="header-element d-md-block d-none">
-                <!-- Start::header-link|switcher-icon -->
-                <a href="#" class="header-link" data-bs-toggle="offcanvas" data-bs-target="#sidebar-canvas">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="header-link-icon" width="24" height="24" viewBox="0 0 24 24"><path d="M4 6h16v2H4zm4 5h12v2H8zm5 5h7v2h-7z"/></svg>
-                </a>
-                <!-- End::header-link|switcher-icon -->
             </div>
             <!-- End::header-element -->
 
@@ -212,22 +204,49 @@
                     </div>
                 </a>
                 <!-- End::header-link|dropdown-toggle -->
-                <ul class="main-header-dropdown dropdown-menu pt-0 overflow-hidden header-profile-dropdown dropdown-menu-end" aria-labelledby="mainHeaderProfile">
-                    <li><a class="dropdown-item d-flex border-bottom" href="{{ route('admin.profile.edit') }}"><i class="far fa-user-circle fs-16 me-2 op-7"></i>ملفي الشخصي </a></li>
-                    <li>
-                        <form method="POST" action="{{ route('admin.logout') }}" class="w-100">
-                            @csrf
-                            <button type="submit" class="text-danger dropdown-item d-flex align-items-center w-100">
-                                <i class="bi bi-box-arrow-right me-2"></i>
-                                تسجيل الخروج
-                            </button>
-                        </form>
-                    </li>
-                </ul>
+                <!-- Start::main-header-dropdown -->
+                <div class="main-header-dropdown dropdown-menu dropdown-menu-end header-profile-dropdown" data-popper-placement="none">
+                    <div class="p-3 border-bottom">
+                        <div class="d-flex align-items-center">
+                            <div class="me-3">
+                                <img src="{{ auth()->user()->avatar_url }}" alt="profile" width="48" height="48" class="rounded-circle shadow-sm">
+                            </div>
+                            <div class="flex-grow-1">
+                                <p class="fw-semibold mb-0">{{ auth()->user()->name }}</p>
+                                <small class="text-muted">{{ auth()->user()->email }}</small>
+                            </div>
+                        </div>
+                    </div>
+                    <ul class="list-unstyled mb-0">
+                        <li>
+                            <a href="{{ route('admin.profile.edit') }}" class="dropdown-item">
+                                <i class="bi bi-person me-2"></i>
+                                {{ __('admin.profile.title') }}
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0);" class="dropdown-item">
+                                <i class="bi bi-gear me-2"></i>
+                                {{ __('admin.profile.settings') }}
+                            </a>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li>
+                            <form action="{{ route('admin.logout') }}" method="POST">
+                                @csrf
+                                <button type="submit" class="dropdown-item text-danger">
+                                    <i class="bi bi-box-arrow-right me-2"></i>
+                                    {{ __('admin.actions.logout') }}
+                                </button>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
+                <!-- End::main-header-dropdown -->
             </div>
             <!-- End::header-element -->
-
-
 
         </div>
         <!-- End::header-content-right -->

@@ -1,4 +1,4 @@
-<footer class="footer-modern" dir="rtl" id="contact-footer">
+<footer class="footer-modern" dir="{{ $direction ?? session('direction', 'rtl') }}" id="contact-footer">
     <style>
         /* عرض الأرقام/الإيميلات LTR داخل RTL */
         .ltr-inline{direction:ltr;unicode-bidi:plaintext}
@@ -7,13 +7,14 @@
     @php
         /** @var \App\Models\SiteSetting|null $settings */
         $settings = $footerData['settings'] ?? null;
+        $isRtl = ($direction ?? session('direction', 'rtl')) === 'rtl';
 
         // القنوات: من $footerData إن وُجد، ثم العلاقة، ثم الحقول القديمة كـ fallback
         $channels = collect($footerData['channels'] ?? [])->map(fn($c) => [
             'label'      => trim($c['label']      ?? ''),
             'email'      => trim($c['email']      ?? ''),
             'phone'      => trim($c['phone']      ?? ''),
-            'address_ar' => trim($c['address_ar'] ?? ''),
+                    'address'    => trim($isRtl ? ($c['address_ar'] ?? '') : ($c['address_en'] ?? '')),
         ]);
 
         if ($channels->isEmpty() && $settings && method_exists($settings, 'contactChannels')) {
@@ -23,7 +24,7 @@
                     'label'      => trim($c->label ?? ''),
                     'email'      => trim($c->email ?? ''),
                     'phone'      => trim(($c->phone_formatted ?? $c->phone) ?? ''),
-                    'address_ar' => trim($c->address_ar ?? ''),
+                    'address'    => trim($isRtl ? ($c->address_ar ?? '') : ($c->address_en ?? '')),
                 ]);
             }
         }
@@ -33,12 +34,12 @@
                 'label'      => '',
                 'email'      => trim($settings->contact_email ?? $settings->email ?? ''),
                 'phone'      => trim($settings->contact_phone ?? $settings->phone ?? ''),
-                'address_ar' => trim($settings->contact_address ?? $settings->address_ar ?? ''),
+                'address'    => trim($isRtl ? ($settings->contact_address ?? $settings->address_ar ?? '') : ($settings->address_en ?? '')),
             ]]);
         }
 
         // تجاهل القنوات الفارغة وخُذ حتى قناتين
-        $channels = $channels->filter(fn($c) => $c['email'] || $c['phone'] || $c['address_ar'])
+        $channels = $channels->filter(fn($c) => $c['email'] || $c['phone'] || $c['address'])
                              ->values()->take(2);
 
         // ====== السوشال من social_links (is_active + sort_order) ======
@@ -55,7 +56,7 @@
                     @php
                         $email = $ch['email'] ?? '';
                         $phone = $ch['phone'] ?? '';
-                        $addr  = $ch['address_ar'] ?? '';
+                        $addr  = $ch['address'] ?? '';
                         $mailtoHref = $email ? ('mailto:' . preg_replace('/\s+/', '', $email)) : null;
                         $telHref    = $phone ? ('tel:'   . preg_replace('/\s+/', '', $phone)) : null;
                     @endphp
@@ -86,8 +87,13 @@
             {{-- اللوجو في الوسط --}}
             <div class="col-lg-2 col-12 text-center">
                 <div class="footer-logo-wrapper">
+                    @php
+                        $logoPath = $isRtl 
+                            ? ($settings->logo_white_path_ar ?? 'assets/site/images/logos/logo-white.webp')
+                            : ($settings->logo_white_path_en ?? 'assets/site/images/logos/logo-white.webp');
+                    @endphp
                     <img
-                        src="{{ asset($settings->logo_white_path ?? 'assets/site/images/logo-white.webp') }}"
+                        src="{{ asset($logoPath) }}"
                         alt="Logo"
                         class="footer-logo-glow">
                 </div>
@@ -96,8 +102,15 @@
             {{-- السوشال ميديا + الحقوق --}}
             <div class="col-lg-5 col-12 text-center">
                 <div class="footer-copy mb-2">
-                    {{ $settings->copyright_ar
-                        ?? (($settings->footer_title_ar ?? 'كهرباء غزة').' © '.now()->year) }}
+                    @php
+                        $footerTitle = $isRtl 
+                            ? ($settings->footer_title_ar ?? 'كهرباء غزة')
+                            : ($settings->footer_title_en ?? 'Gaza Electricity');
+                        $copyright = $isRtl 
+                            ? ($settings->copyright_ar ?? ($footerTitle . ' © ' . now()->year))
+                            : ($settings->copyright_en ?? ($footerTitle . ' © ' . now()->year));
+                    @endphp
+                    {{ $copyright }}
                 </div>
 
                 @if($socials->count())

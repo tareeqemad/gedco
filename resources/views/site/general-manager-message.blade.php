@@ -11,7 +11,7 @@
             min-height: 100vh;
             padding: clamp(120px, 18vw, 168px) 0;
             overflow: hidden;
-            background: url('{{ asset('assets/site/images/site3.webp') }}') center center / cover no-repeat;
+            background: url('{{ asset('assets/site/images/backgrounds/site3.webp') }}') center center / cover no-repeat;
         }
 
         .gm-suite::before {
@@ -395,11 +395,11 @@
                 </div>
 
                 <aside class="gm-suite__profile">
-                    <img src="{{ asset('assets/site/images/dr.mohammed.webp') }}" alt="د. محمد طه الأسطل" class="gm-suite__photo">
+                    <img src="{{ asset('assets/site/images/content/dr.mohammed.webp') }}" alt="د. محمد طه الأسطل" class="gm-suite__photo">
                     <div class="gm-suite__nameplate">
                         <strong>د. محمد طه الأسطل</strong>
                         <span>مدير عام شركة توزيع كهرباء محافظات غزة</span>
-                        <img src="{{ asset('assets/site/images/logo-dark.webp') }}" alt="شركة توزيع كهرباء محافظات غزة">
+                        <img src="{{ asset('assets/site/images/logos/logo-dark.webp') }}" alt="شركة توزيع كهرباء محافظات غزة">
                     </div>
                 </aside>
             </div>

@@ -8,7 +8,7 @@
         $publishedAt = $news->published_at?->timezone('Asia/Hebron');
         $isFeatured = $news->featured;
         $isNew = $publishedAt?->isToday();
-        $badgeLabel = $isFeatured ? 'مميز' : ($isNew ? 'جديد' : null);
+        $badgeLabel = $isFeatured ? __('common.news_badge_featured') : ($isNew ? __('common.news_badge_new') : null);
         $badgeModifier = $isFeatured ? 'featured' : ($isNew ? 'new' : null);
         $badgeIcon = $isFeatured ? 'ri-vip-crown-line' : ($isNew ? 'ri-flashlight-fill' : null);
         $isThisWeek = $publishedAt?->isCurrentWeek();
@@ -35,7 +35,16 @@
             <div class="news-card__meta">
                 <i class="ri-calendar-line"></i>
                 <time datetime="{{ optional($news->published_at)->toDateString() }}">
-                    {{ $publishedAt?->translatedFormat('d F Y') ?? 'غير محدد' }}
+                    @if($publishedAt)
+                        @php
+                            $direction = session('direction', 'rtl');
+                            $format = $direction === 'rtl' ? 'd F Y' : 'F d, Y';
+                            $locale = $direction === 'rtl' ? 'ar' : 'en';
+                        @endphp
+                        {{ $publishedAt->locale($locale)->translatedFormat($format) }}
+                    @else
+                        {{ __('common.news_date_not_specified') }}
+                    @endif
                 </time>
             </div>
 
@@ -47,18 +56,18 @@
 
             <div class="news-card__footer">
                 <a href="{{ route('site.news.show', $news->id) }}" class="news-card__cta">
-                    اقرأ المزيد
-                    <i class="ri-arrow-left-up-line"></i>
+                    {{ __('common.news_read_more') }}
+                    <i class="bi bi-arrow-up-left"></i>
                 </a>
 
                 @if($news->pdf_url)
                     <a href="{{ $news->pdf_url }}" target="_blank" rel="noopener" class="news-card__cta news-card__cta--ghost">
-                        تحميل البيان
+                        {{ __('common.news_download_statement') }}
                         <i class="ri-file-text-line"></i>
                     </a>
                 @endif
                 <span class="news-card__tag">
-                    خبر رسمي
+                    {{ __('common.news_official_news') }}
                     <i class="ri-shield-check-line" aria-hidden="true"></i>
                 </span>
             </div>
@@ -67,7 +76,7 @@
 @empty
     <div class="news-empty">
         <i class="ri-newspaper-line"></i>
-        <p>لا توجد أخبار منشورة حالياً.</p>
+        <p>{{ __('common.news_no_news') }}</p>
     </div>
 @endforelse
 

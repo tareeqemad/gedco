@@ -8,7 +8,7 @@ class WhyChooseUs extends Model
 {
     protected $table = 'why_choose_us';
 
-    protected $fillable = ['badge','tagline','description','features','is_active'];
+    protected $fillable = ['badge','badge_en','tagline','tagline_en','description','description_en','features','is_active'];
 
     protected $casts = [
         'features' => 'array',

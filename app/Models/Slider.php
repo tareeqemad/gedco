@@ -8,7 +8,7 @@ class Slider extends Model
 {
     protected $fillable = [
         'title','subtitle','button_text','button_url',
-        'bg_image','bullets','sort_order','is_active'
+        'bg_image','bullets','sort_order','is_active','language'
     ];
 
     protected $casts = [
@@ -57,5 +57,18 @@ class Slider extends Model
 
         // إذا Laravel cast عمل array خلاص نرجعها
         return is_array($val) ? $val : [];
+    }
+
+    /**
+     * Filter sliders by language (ar for rtl, en for ltr).
+     */
+    public function scopeLanguage($query, ?string $lang = null)
+    {
+        if ($lang === null) {
+            // Auto-detect from session direction
+            $direction = session('direction', 'rtl');
+            $lang = $direction === 'rtl' ? 'ar' : 'en';
+        }
+        return $query->where('language', $lang);
     }
 }

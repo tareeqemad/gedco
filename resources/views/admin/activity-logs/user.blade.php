@@ -1,0 +1,223 @@
+@extends('layouts.admin')
+@section('title', 'أنشطة المستخدم')
+
+@section('content')
+    <div class="page-header">
+        <div class="page-block">
+            <div class="row align-items-center">
+                <div class="col-md-12">
+                    <div class="page-header-title">
+                        <h5 class="m-b-10">أنشطة المستخدم: {{ $user->name }}</h5>
+                    </div>
+                    <ul class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="{{ route('admin.dashboard') }}">
+                                <i class="bi bi-house"></i>
+                            </a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a href="{{ route('admin.activity-logs.index') }}">سجل الأنشطة</a>
+                        </li>
+                        <li class="breadcrumb-item active">{{ $user->name }}</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- معلومات المستخدم -->
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="avatar avatar-lg bg-primary text-white rounded-circle me-3">
+                            {{ substr($user->name, 0, 1) }}
+                        </div>
+                        <div>
+                            <h5 class="mb-0 fw-bold">{{ $user->name }}</h5>
+                            <small class="text-muted">{{ $user->email }}</small>
+                        </div>
+                    </div>
+                    @if($user->roles->count() > 0)
+                        <div class="mb-2">
+                            <small class="text-muted d-block mb-1">الصلاحيات</small>
+                            @foreach($user->roles as $role)
+                                <span class="badge bg-info me-1">{{ $role->name }}</span>
+                            @endforeach
+                        </div>
+                    @endif
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="row g-3">
+                <div class="col-md-3">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body text-center">
+                            <h3 class="mb-0 fw-bold text-primary">{{ number_format($stats['total_activities']) }}</h3>
+                            <small class="text-muted">إجمالي الأنشطة</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body text-center">
+                            <h3 class="mb-0 fw-bold text-success">{{ number_format($stats['today_activities']) }}</h3>
+                            <small class="text-muted">أنشطة اليوم</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body text-center">
+                            <h6 class="mb-0 text-muted small">أول نشاط</h6>
+                            <small class="fw-semibold">{{ $stats['first_activity']?->format('Y-m-d') ?? 'N/A' }}</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body text-center">
+                            <h6 class="mb-0 text-muted small">آخر نشاط</h6>
+                            <small class="fw-semibold">{{ $stats['last_activity']?->diffForHumans() ?? 'N/A' }}</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- إحصائيات -->
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white border-bottom">
+                    <h6 class="mb-0">أكثر الصفحات زيارة</h6>
+                </div>
+                <div class="list-group list-group-flush">
+                    @foreach($topPages as $page)
+                        <div class="list-group-item d-flex justify-content-between align-items-center">
+                            <div>
+                                <small class="fw-semibold d-block">{{ $page->route_name ?? $page->route_uri }}</small>
+                                <small class="text-muted">{{ $page->route_uri }}</small>
+                            </div>
+                            <span class="badge bg-primary">{{ $page->count }}</span>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white border-bottom">
+                    <h6 class="mb-0">أكثر العمليات</h6>
+                </div>
+                <div class="list-group list-group-flush">
+                    @foreach($topActions as $action)
+                        @php
+                            $badgeColor = match($action->action) {
+                                'login' => 'success',
+                                'logout' => 'secondary',
+                                'create' => 'primary',
+                                'update' => 'warning',
+                                'delete' => 'danger',
+                                'view' => 'info',
+                                default => 'dark',
+                            };
+                        @endphp
+                        <div class="list-group-item d-flex justify-content-between align-items-center">
+                            <span class="badge bg-{{ $badgeColor }}">{{ $action->action }}</span>
+                            <strong>{{ $action->count }}</strong>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- سجل الأنشطة -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white border-bottom">
+                    <h5 class="mb-0">سجل الأنشطة</h5>
+                </div>
+                <div class="card-body border-bottom bg-light">
+                    <form method="GET" action="{{ route('admin.activity-logs.user', $user->id) }}" class="row g-3">
+                        <div class="col-md-3">
+                            <select name="action" class="form-select form-select-sm">
+                                <option value="">جميع العمليات</option>
+                                <option value="login" {{ request('action') == 'login' ? 'selected' : '' }}>تسجيل الدخول</option>
+                                <option value="logout" {{ request('action') == 'logout' ? 'selected' : '' }}>تسجيل الخروج</option>
+                                <option value="view" {{ request('action') == 'view' ? 'selected' : '' }}>عرض</option>
+                                <option value="create" {{ request('action') == 'create' ? 'selected' : '' }}>إضافة</option>
+                                <option value="update" {{ request('action') == 'update' ? 'selected' : '' }}>تعديل</option>
+                                <option value="delete" {{ request('action') == 'delete' ? 'selected' : '' }}>حذف</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <input type="date" name="date_from" class="form-control form-control-sm" value="{{ request('date_from') }}" placeholder="من تاريخ">
+                        </div>
+                        <div class="col-md-3">
+                            <input type="date" name="date_to" class="form-control form-control-sm" value="{{ request('date_to') }}" placeholder="إلى تاريخ">
+                        </div>
+                        <div class="col-md-3">
+                            <button type="submit" class="btn btn-primary btn-sm w-100">
+                                <i class="bi bi-search me-1"></i> تصفية
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>العملية</th>
+                                <th>الوصف</th>
+                                <th>الراوت</th>
+                                <th>IP</th>
+                                <th>التاريخ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse($logs as $log)
+                                @php
+                                    $badgeColor = match($log->action) {
+                                        'login' => 'success',
+                                        'logout' => 'secondary',
+                                        'create' => 'primary',
+                                        'update' => 'warning',
+                                        'delete' => 'danger',
+                                        'view' => 'info',
+                                        default => 'dark',
+                                    };
+                                @endphp
+                                <tr>
+                                    <td>
+                                        <span class="badge bg-{{ $badgeColor }}">{{ $log->action }}</span>
+                                    </td>
+                                    <td>{{ $log->description }}</td>
+                                    <td><small class="text-muted">{{ $log->route_name ?? $log->route_uri }}</small></td>
+                                    <td><small class="text-muted">{{ $log->ip_address }}</small></td>
+                                    <td><small>{{ $log->created_at->format('Y-m-d H:i:s') }}</small></td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="5" class="text-center py-5 text-muted">
+                                        <i class="bi bi-inbox fs-1 d-block mb-2"></i>
+                                        لا توجد أنشطة
+                                    </td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-footer bg-white">
+                    {{ $logs->links() }}
+                </div>
+            </div>
+        </div>
+    </div>
+@endsection
+

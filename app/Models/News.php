@@ -22,6 +22,12 @@ class News extends Model
         'tags' => 'array',
     ];
 
+    protected $fillable = [
+        'title', 'slug', 'excerpt', 'body', 'cover_path', 'pdf_path',
+        'status', 'featured', 'views', 'published_at', 'tags', 'language',
+        'created_by', 'updated_by',
+    ];
+
     protected $appends = [
         'cover_url',
         'pdf_url',
@@ -131,6 +137,19 @@ class News extends Model
             ->when($sort === 'published_at', fn($qq) => $qq->orderBy('featured', 'desc')->orderBy('published_at', $dir))
             ->when($sort !== 'published_at', fn($qq) => $qq->orderBy($sort, $dir))
             ->orderBy('id', 'desc');
+    }
+
+    /**
+     * Filter news by language (ar for rtl, en for ltr).
+     */
+    public function scopeLanguage(Builder $q, ?string $lang = null): Builder
+    {
+        if ($lang === null) {
+            // Auto-detect from session direction
+            $direction = session('direction', 'rtl');
+            $lang = $direction === 'rtl' ? 'ar' : 'en';
+        }
+        return $q->where('language', $lang);
     }
 
     /* =======================

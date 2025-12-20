@@ -10,18 +10,23 @@ class AuthController extends Controller
 {
     public function create()
     {
-        return view('admin.auth.login');
+        $direction = session('direction', 'rtl');
+        return view('admin.auth.login', compact('direction'));
     }
 
     public function store(Request $request)
     {
+        $direction = session('direction', 'rtl');
+        $locale = $direction === 'rtl' ? 'ar' : 'en';
+        \App::setLocale($locale);
+
         $cred = $request->validate([
             'email'    => ['required','email'],
             'password' => ['required'],
         ], [
-            'email.required'    => 'البريد الإلكتروني مطلوب.',
-            'email.email'       => 'صيغة البريد غير صحيحة.',
-            'password.required' => 'كلمة المرور مطلوبة.',
+            'email.required'    => __('admin.auth.email_required'),
+            'email.email'       => __('admin.auth.email_invalid'),
+            'password.required' => __('admin.auth.password_required'),
         ]);
 
         // لو عندك guard مخصص للإدمن:
@@ -40,12 +45,12 @@ class AuthController extends Controller
             // لو مش إدمن، طلّعه برسالة عامة
             Auth::logout();
             return back()
-                ->withErrors(['email' => 'بيانات الدخول غير صحيحة.']) // ما نكشف أنه “مش إدمن”
+                ->withErrors(['email' => __('admin.auth.invalid_credentials')])
                 ->onlyInput('email');
         }
 
         return back()
-            ->withErrors(['email' => 'بيانات الدخول غير صحيحة.'])
+            ->withErrors(['email' => __('admin.auth.invalid_credentials')])
             ->onlyInput('email');
     }
 

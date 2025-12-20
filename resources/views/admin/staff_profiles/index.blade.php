@@ -1,128 +1,8 @@
 
 {{-- resources/views/admin/staff_profiles/index.blade.php --}}
 @extends('layouts.admin')
-@section('title', 'استمارات بيانات الموظفين')
+@section('title', __('admin.staff_profiles.title'))
 
-@push('styles')
-<style>
-    .stat-card {
-        cursor: pointer;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        position: relative;
-        overflow: hidden;
-        border: 2px solid transparent !important;
-        background: white !important;
-    }
-
-    .stat-card.bg-gradient {
-        background: linear-gradient(135deg, #e67e22, #d35400) !important;
-    }
-
-    .stat-card::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-        transition: left 0.5s;
-    }
-
-    .stat-card:hover {
-        transform: translateY(-5px) scale(1.02);
-        box-shadow: 0 10px 25px rgba(0,0,0,0.15) !important;
-        border-color: currentColor !important;
-        background: white !important;
-    }
-
-    .stat-card.bg-gradient:hover {
-        background: linear-gradient(135deg, #f97316, #ea580c) !important;
-        border-color: rgba(255,255,255,0.5) !important;
-    }
-
-    .stat-card:hover::before {
-        left: 100%;
-    }
-
-    .stat-card.active {
-        transform: translateY(-3px) scale(1.05);
-        box-shadow: 0 12px 30px rgba(0,0,0,0.2) !important;
-        border-width: 3px !important;
-        animation: pulse 2s infinite;
-        background: white !important;
-    }
-
-    .stat-card.bg-gradient.active {
-        background: linear-gradient(135deg, #f97316, #ea580c) !important;
-        border-color: rgba(255,255,255,0.6) !important;
-    }
-
-    .stat-card.active::after {
-        content: '✓';
-        position: absolute;
-        top: 8px;
-        left: 8px;
-        background: rgba(0,0,0,0.7);
-        color: white;
-        width: 24px;
-        height: 24px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 12px;
-        font-weight: bold;
-    }
-
-    @keyframes pulse {
-        0%, 100% { box-shadow: 0 12px 30px rgba(0,0,0,0.2); }
-        50% { box-shadow: 0 12px 35px rgba(0,0,0,0.3); }
-    }
-
-    .stat-card i {
-        transition: transform 0.3s;
-    }
-
-    .stat-card:hover i,
-    .stat-card.active i {
-        transform: scale(1.2) rotate(5deg);
-    }
-
-    .table-row-hidden {
-        display: none !important;
-    }
-
-    .filter-badge {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        padding: 6px 12px;
-        background: #e67e22;
-        color: white;
-        border-radius: 20px;
-        font-size: 0.85rem;
-        margin: 4px;
-    }
-
-    .filter-badge .close-btn {
-        cursor: pointer;
-        background: rgba(255,255,255,0.3);
-        border-radius: 50%;
-        width: 18px;
-        height: 18px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 12px;
-        transition: background 0.2s;
-    }
-
-    .filter-badge .close-btn:hover {
-        background: rgba(255,255,255,0.5);
-    }
-</style>
-@endpush
 
 @section('content')
     <div class="container-fluid py-4">
@@ -140,13 +20,13 @@
                     <div>
                         <h5 class="mb-0 fw-bold d-flex align-items-center gap-2 text-white">
                             <i class="bi bi-people-fill"></i>
-                            استمارات بيانات الموظفين
+                            {{ __('admin.staff_profiles.title') }}
                         </h5>
-                        <p class="mb-0 opacity-90 small mt-1">متابعة جاهزية الموظفين للعودة بعد الأزمة</p>
+                        <p class="mb-0 opacity-90 small mt-1">{{ __('admin.staff_profiles.subtitle') }}</p>
                     </div>
                     <div class="rounded-2 px-3 py-1 text-center border border-white border-opacity-40" style="background: rgba(0,0,0,0.25); backdrop-filter: blur(10px);">
                         <div class="fs-5 fw-bold mb-0 text-white">{{ $stats['total'] }}</div>
-                        <small class="text-white fw-semibold" style="font-size: 0.75rem; opacity: 1;">إجمالي المسجلين</small>
+                        <small class="text-white fw-semibold" style="font-size: 0.75rem; opacity: 1;">{{ __('admin.staff_profiles.total_registered') }}</small>
                     </div>
                 </div>
             </div>
@@ -159,51 +39,51 @@
         <div class="row g-3 g-md-4 mb-4">
             <div class="col-6 col-md-3 col-lg-2">
                 <div class="stat-card bg-white rounded-3 shadow-sm p-3 text-center border border-3 border-danger" 
-                     data-filter="status" data-value="displaced" data-label="نازحون"
+                     data-filter="status" data-value="displaced" data-label="{{ __('admin.staff_profiles.status_displaced') }}"
                      style="border-color: #dc2626 !important;">
                     <i class="bi bi-truck fs-4 text-danger mb-1"></i>
                     <div class="fs-4 fw-bold text-danger">{{ $stats['displaced'] }}</div>
-                    <small class="text-dark fw-semibold">نازحون</small>
+                    <small class="text-dark fw-semibold">{{ __('admin.staff_profiles.status_displaced') }}</small>
                 </div>
             </div>
 
             <div class="col-6 col-md-3 col-lg-2">
                 <div class="stat-card bg-white rounded-3 shadow-sm p-3 text-center border border-3 border-success" 
-                     data-filter="status" data-value="resident" data-label="مقيمون"
+                     data-filter="status" data-value="resident" data-label="{{ __('admin.staff_profiles.status_resident') }}"
                      style="border-color: #22c55e !important;">
                     <i class="bi bi-house-door-fill fs-4 text-success mb-1"></i>
                     <div class="fs-4 fw-bold text-success">{{ $stats['resident'] }}</div>
-                    <small class="text-dark fw-semibold">مقيمون</small>
+                    <small class="text-dark fw-semibold">{{ __('admin.staff_profiles.status_resident') }}</small>
                 </div>
             </div>
 
             <div class="col-6 col-md-3 col-lg-2">
                 <div class="stat-card bg-white rounded-3 shadow-sm p-3 text-center border border-3 border-warning" 
-                     data-filter="readiness" data-value="not_ready" data-label="غير جاهزين"
+                     data-filter="readiness" data-value="not_ready" data-label="{{ __('admin.staff_profiles.readiness_not_ready') }}"
                      style="border-color: #f59e0b !important;">
                     <i class="bi bi-person-x fs-4 text-warning mb-1"></i>
                     <div class="fs-4 fw-bold text-warning">{{ $stats['not_ready'] }}</div>
-                    <small class="text-dark fw-semibold">غير جاهزين</small>
+                    <small class="text-dark fw-semibold">{{ __('admin.staff_profiles.readiness_not_ready') }}</small>
                 </div>
             </div>
 
             <div class="col-6 col-md-3 col-lg-2">
                 <div class="stat-card bg-white rounded-3 shadow-sm p-3 text-center border border-3 border-info" 
-                     data-filter="readiness" data-value="ready" data-label="جاهزون"
+                     data-filter="readiness" data-value="ready" data-label="{{ __('admin.staff_profiles.readiness_ready') }}"
                      style="border-color: #3b82f6 !important;">
                     <i class="bi bi-hand-thumbs-up-fill fs-4 text-info mb-1"></i>
                     <div class="fs-4 fw-bold text-info">{{ $stats['ready'] }}</div>
-                    <small class="text-dark fw-semibold">جاهزون</small>
+                    <small class="text-dark fw-semibold">{{ __('admin.staff_profiles.readiness_ready') }}</small>
                 </div>
             </div>
 
             <div class="col-6 col-md-3 col-lg-2">
                 <div class="stat-card bg-white rounded-3 shadow-sm p-3 text-center border border-3 border-success" 
-                     data-filter="readiness" data-value="working" data-label="باشروا العمل"
+                     data-filter="readiness" data-value="working" data-label="{{ __('admin.staff_profiles.readiness_working') }}"
                      style="border-color: #22c55e !important;">
                     <i class="bi bi-person-check-fill fs-4 text-success mb-1"></i>
                     <div class="fs-4 fw-bold text-success">{{ $stats['working'] }}</div>
-                    <small class="text-dark fw-semibold">باشروا العمل</small>
+                    <small class="text-dark fw-semibold">{{ __('admin.staff_profiles.readiness_working') }}</small>
                 </div>
             </div>
         </div>
@@ -213,18 +93,18 @@
             <div class="card-body p-4">
                 <form method="GET" class="row g-3 align-items-end">
                     <div class="col-lg-8">
-                        <label class="form-label fw-semibold small mb-1">بحث في الموظفين</label>
+                        <label class="form-label fw-semibold small mb-1">{{ __('admin.staff_profiles.search_in_employees') }}</label>
                         <div class="input-group">
                             <span class="input-group-text bg-white border-end-0"><i class="bi bi-search"></i></span>
-                            <input type="text" name="q" value="{{ request('q') }}" class="form-control border-start-0" placeholder="الاسم • الهوية • الرقم الوظيفي">
+                            <input type="text" name="q" value="{{ request('q') }}" class="form-control border-start-0" placeholder="{{ __('admin.staff_profiles.search_placeholder') }}">
                         </div>
                     </div>
                     <div class="col-lg-2">
-                        <button type="submit" class="btn btn-primary w-100 rounded-3">بحث</button>
+                        <button type="submit" class="btn btn-primary w-100 rounded-3">{{ __('admin.staff_profiles.search') }}</button>
                     </div>
                     @if(request()->filled('q'))
                         <div class="col-lg-2">
-                            <a href="{{ route('admin.staff-profiles.index') }}" class="btn btn-outline-secondary w-100 rounded-3">مسح</a>
+                            <a href="{{ route('admin.staff-profiles.index') }}" class="btn btn-outline-secondary w-100 rounded-3">{{ __('admin.staff_profiles.clear') }}</a>
                         </div>
                     @endif
                 </form>
@@ -238,14 +118,14 @@
                     <table class="table table-hover mb-0">
                         <thead class="bg-light">
                         <tr class="text-secondary small fw-bold">
-                            <th class="ps-4">#</th>
-                            <th>الموظف</th>
-                            <th>الهوية</th>
-                            <th>المقر</th>
-                            <th>الحالة</th>
-                            <th>الجاهزية</th>
-                            <th>التسجيل</th>
-                            <th class="text-center">عرض</th>
+                            <th class="ps-4">{{ __('admin.staff_profiles.table_id') }}</th>
+                            <th>{{ __('admin.staff_profiles.table_employee') }}</th>
+                            <th>{{ __('admin.staff_profiles.table_national_id') }}</th>
+                            <th>{{ __('admin.staff_profiles.table_location') }}</th>
+                            <th>{{ __('admin.staff_profiles.table_status') }}</th>
+                            <th>{{ __('admin.staff_profiles.table_readiness') }}</th>
+                            <th>{{ __('admin.staff_profiles.table_registration') }}</th>
+                            <th class="text-center">{{ __('admin.staff_profiles.table_view') }}</th>
                         </tr>
                         </thead>
                         <tbody class="text-dark" id="profiles-table-body">
@@ -288,7 +168,7 @@
                             <tr>
                                 <td colspan="8" class="text-center py-5 text-muted">
                                     <i class="bi bi-inbox display-5 opacity-25 d-block mb-3"></i>
-                                    لا توجد بيانات
+                                    {{ __('admin.staff_profiles.no_data') }}
                                 </td>
                             </tr>
                         @endforelse
@@ -301,7 +181,7 @@
                 <div class="card-footer bg-white border-top-0 py-3">
                     <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 small">
                         <div class="text-muted">
-                            عرض {{ $profiles->firstItem() }} - {{ $profiles->lastItem() }} من {{ $profiles->total() }}
+                            {{ __('admin.staff_profiles.showing') }} {{ $profiles->firstItem() }} - {{ $profiles->lastItem() }} {{ __('admin.staff_profiles.of') }} {{ $profiles->total() }}
                         </div>
                         {{ $profiles->withQueryString()->links() }}
                     </div>

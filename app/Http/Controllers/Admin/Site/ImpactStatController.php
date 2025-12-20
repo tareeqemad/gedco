@@ -30,11 +30,14 @@ class ImpactStatController extends Controller
         $data['sort_order'] = ImpactStat::max('sort_order') + 1;
 
         $item = ImpactStat::create($data);
+        
+        // تنظيف الكاش للصفحة الرئيسية
+        clear_home_cache();
 
         return response()->json([
             'success' => true,
             'message' => 'تمت الإضافة بنجاح',
-            'item' => $item->only(['id', 'title_ar', 'amount_usd', 'is_active', 'sort_order'])
+            'item' => $item->only(['id', 'title_ar', 'title_en', 'amount_usd', 'is_active', 'sort_order'])
         ]);
     }
 
@@ -46,6 +49,9 @@ class ImpactStatController extends Controller
         $data['is_active'] = $request->has('is_active') && $request->boolean('is_active');
 
         $impactStat->update($data);
+        
+        // تنظيف الكاش للصفحة الرئيسية
+        clear_home_cache();
 
         return response()->json([
             'success' => true,
@@ -59,6 +65,9 @@ class ImpactStatController extends Controller
     public function destroy(ImpactStat $impactStat)
     {
         $impactStat->delete();
+        
+        // تنظيف الكاش للصفحة الرئيسية
+        clear_home_cache();
 
         return response()->json([
             'success' => true,
@@ -72,6 +81,9 @@ class ImpactStatController extends Controller
     public function toggle(ImpactStat $impactStat)
     {
         $impactStat->update(['is_active' => !$impactStat->is_active]);
+        
+        // تنظيف الكاش للصفحة الرئيسية
+        clear_home_cache();
 
         return response()->json([
             'success' => true,
@@ -93,6 +105,9 @@ class ImpactStatController extends Controller
         foreach ($request->order as $id => $sort_order) {
             ImpactStat::where('id', $id)->update(['sort_order' => (int) $sort_order]);
         }
+        
+        // تنظيف الكاش للصفحة الرئيسية
+        clear_home_cache();
 
         return response()->json([
             'success' => true,

@@ -1,10 +1,10 @@
 @extends('layouts.admin')
-@section('title', 'تفاصيل الخبر #' . $item->id)
+@section('title', __('admin.news.show_title') . ' #' . $item->id)
 
 @section('content')
     @php
-        $breadcrumbTitle = 'تفاصيل الخبر #' . $item->id;
-        $breadcrumbParent = 'الأخبار';
+        $breadcrumbTitle = __('admin.news.show_title') . ' #' . $item->id;
+        $breadcrumbParent = __('admin.menu.news');
         $breadcrumbParentUrl = route('admin.news.index');
         $published = $item->is_published ?? (($item->status ?? 'published') === 'published');
         $publishedAt = optional($item->published_at)->format('Y-m-d') ?? '—';
@@ -17,21 +17,21 @@
         <div class="card border-0 shadow-sm rounded-3 bg-white mb-4">
             <div class="card-header bg-white border-bottom py-2 px-3 d-flex align-items-center justify-content-between">
                 <div class="d-flex align-items-center gap-2">
-                    <i class="ri-newspaper-line text-primary fs-5"></i>
-                    <h6 class="mb-0 fw-semibold text-dark-emphasis">تفاصيل الخبر #{{ $item->id }}</h6>
+                    <i class="bi bi-newspaper text-primary fs-5"></i>
+                    <h6 class="mb-0 fw-semibold text-dark-emphasis">{{ __('admin.news.show_title') }} #{{ $item->id }}</h6>
                 </div>
                 <div class="d-flex align-items-center gap-2">
                     <a href="{{ route('admin.news.index') }}" class="btn btn-light btn-sm">
-                        <i class="ri-arrow-go-back-line"></i> رجوع
+                        <i class="bi bi-arrow-left"></i> {{ __('admin.news.back') }}
                     </a>
                     @can('news.edit')
                         <a href="{{ route('admin.news.edit', $item) }}" class="btn btn-warning btn-sm">
-                            <i class="ri-edit-2-line"></i> تعديل
+                            <i class="bi bi-pencil-square"></i> {{ __('admin.news.edit_news') }}
                         </a>
                     @endcan
                     @can('news.delete')
                         <button type="button" id="btnDelete" class="btn btn-outline-danger btn-sm">
-                            <i class="ri-delete-bin-line"></i> حذف
+                            <i class="bi bi-trash"></i> {{ __('admin.news.delete') }}
                         </button>
                     @endcan
                 </div>
@@ -48,12 +48,12 @@
                             <h4 class="fw-bold mb-2">{{ $item->title }}</h4>
                             <div class="d-flex flex-wrap align-items-center gap-2 small text-muted">
                                 <span class="d-inline-flex align-items-center gap-1">
-                                    <i class="ri-calendar-line"></i>
+                                    <i class="bi bi-calendar"></i>
                                     {{ $publishedAt !== '—' ? \Carbon\Carbon::parse($publishedAt)->locale('ar')->translatedFormat('d F Y') : '—' }}
                                 </span>
                                 <span>•</span>
                                 <span class="d-inline-flex align-items-center gap-1">
-                                    <i class="ri-eye-line"></i>
+                                    <i class="bi bi-eye"></i>
                                     الحالة:
                                     <span class="badge {{ $published ? 'bg-success-subtle text-success' : 'bg-secondary-subtle text-secondary' }}">
                                         {{ $published ? 'منشور' : 'مسودة' }}
@@ -62,7 +62,7 @@
                                 @if($item->featured)
                                     <span>•</span>
                                     <span class="d-inline-flex align-items-center gap-1">
-                                        <i class="ri-star-smile-line text-warning"></i> مميّز
+                                        <i class="bi bi-star-fill text-warning"></i> مميّز
                                     </span>
                                 @endif
                                 <span class="ms-auto d-none d-md-inline text-xxs">
@@ -75,17 +75,17 @@
                         <ul class="nav nav-tabs nav-tabs-sm border-0 mb-3" role="tablist">
                             <li class="nav-item" role="presentation">
                                 <button class="nav-link active px-3 py-1" data-bs-toggle="tab" data-bs-target="#tab-html">
-                                    <i class="ri-article-line me-1"></i> المحتوى (HTML)
+                                    <i class="bi bi-file-earmark-text me-1"></i> المحتوى (HTML)
                                 </button>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <button class="nav-link px-3 py-1" data-bs-toggle="tab" data-bs-target="#tab-text">
-                                    <i class="ri-file-text-line me-1"></i> نص مجرد
+                                    <i class="bi bi-file-text me-1"></i> نص مجرد
                                 </button>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <button class="nav-link px-3 py-1" data-bs-toggle="tab" data-bs-target="#tab-preview">
-                                    <i class="ri-eye-line me-1"></i> معاينة مقال
+                                    <i class="bi bi-eye me-1"></i> معاينة مقال
                                 </button>
                             </li>
                         </ul>
@@ -107,7 +107,7 @@
                                     @endif
                                     <h3 class="fw-bold mb-2">{{ $item->title }}</h3>
                                     <div class="small text-muted mb-3 d-flex align-items-center gap-2">
-                                        <i class="ri-calendar-line"></i>
+                                        <i class="bi bi-calendar"></i>
                                         <span>{{ $publishedAt !== '—' ? \Carbon\Carbon::parse($publishedAt)->locale('ar')->translatedFormat('d F Y') : '—' }}</span>
                                     </div>
                                     <div class="lh-lg" style="direction: rtl; text-align: right;">
@@ -125,7 +125,7 @@
                 <div class="card border-0 shadow-sm rounded-3 bg-white mb-3">
                     <div class="card-body p-3">
                         <div class="d-flex align-items-center gap-2 mb-2">
-                            <i class="ri-information-line text-primary"></i>
+                            <i class="bi bi-info-circle text-primary"></i>
                             <h6 class="mb-0 fw-semibold">البيانات</h6>
                         </div>
                         <div class="list-group list-group-flush small">
@@ -145,7 +145,7 @@
                             </div>
                             <div class="list-group-item d-flex justify-content-between">
                                 <span class="text-muted">مميّز</span>
-                                <span>{!! $item->featured ? '<i class="ri-check-line text-success"></i>' : '<i class="ri-close-line text-danger"></i>' !!}</span>
+                                <span>{!! $item->featured ? '<i class="bi bi-check text-success"></i>' : '<i class="bi bi-x text-danger"></i>' !!}</span>
                             </div>
                             <div class="list-group-item d-flex justify-content-between">
                                 <span class="text-muted">أُنشئ</span>
@@ -171,11 +171,11 @@
                     <div class="card border-0 shadow-sm rounded-3 bg-white">
                         <div class="card-body p-3">
                             <div class="d-flex align-items-center gap-2 mb-2">
-                                <i class="ri-file-pdf-line text-danger"></i>
+                                <i class="bi bi-file-pdf text-danger"></i>
                                 <h6 class="mb-0 fw-semibold">المرفق</h6>
                             </div>
                             <a href="{{ $pdfUrl }}" class="btn btn-outline-primary w-100" target="_blank">
-                                <i class="ri-eye-line"></i> فتح PDF
+                                <i class="bi bi-eye"></i> فتح PDF
                             </a>
                         </div>
                     </div>
@@ -187,12 +187,6 @@
 
 @push('styles')
     <link rel="stylesheet" href="{{ asset('assets/admin/libs/sweetalert2/sweetalert2.min.css') }}">
-    <style>
-        .nav-tabs .nav-link { font-size: .875rem; border: none; color: #6c757d; }
-        .nav-tabs .nav-link.active { color: #4361ee; font-weight: 600; border-bottom: 2px solid #4361ee; }
-        .article-html h1, .article-html h2, .article-html h3 { margin-top: 1rem; }
-        .article-html img { max-width: 100%; height: auto; border-radius: .5rem; }
-    </style>
 @endpush
 
 @push('scripts')

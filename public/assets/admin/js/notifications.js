@@ -1,60 +1,166 @@
-(function () {
-	"use strict";
-	var options = {}
-	var notifier = new AWN(options);
+/**
+ * Notification System for Admin Panel
+ */
+class AdminNotifications {
+    constructor() {
+        this.toastContainer = document.getElementById('toast-container');
+        this.init();
+    }
 
-	/* Basic notifications */
-	document.querySelector('#basic').addEventListener('click', function () {
-		notifier.tip('This is an example of tip')
-	})
+    init() {
+        // Show flash messages as toasts
+        this.showFlashMessagesAsToasts();
+        
+        // Auto-hide alerts after 5 seconds
+        this.autoHideAlerts();
+    }
 
-	/* Async notifications */
-	document.querySelector('#async-error').addEventListener('click', function () {
-		notifier.async(Promise.reject("some error"))
-	})
-	/* Async notifications */
-	document.querySelector('#async-success').addEventListener('click', function () {
-		notifier.async(Promise.resolve("some message"))
-	})
+    /**
+     * Show flash messages as Bootstrap Toasts
+     */
+    showFlashMessagesAsToasts() {
+        // Check for session flash messages
+        const successMsg = this.getFlashMessage('success');
+        const errorMsg = this.getFlashMessage('error');
+        const warningMsg = this.getFlashMessage('warning');
+        const infoMsg = this.getFlashMessage('info');
 
-	/* Info notifications */
-	document.querySelector('#info').addEventListener('click', function () {
-		notifier.info('This Is An Example Of Info')
-	})
+        if (successMsg) {
+            this.showToast(successMsg, 'success');
+        }
+        if (errorMsg) {
+            this.showToast(errorMsg, 'danger');
+        }
+        if (warningMsg) {
+            this.showToast(warningMsg, 'warning');
+        }
+        if (infoMsg) {
+            this.showToast(infoMsg, 'info');
+        }
+    }
 
-	/* Success notifications */
-	document.querySelector('#success').addEventListener('click', function () {
-		notifier.success('This Is An Example Of Success')
-	})
+    /**
+     * Get flash message from alert element
+     */
+    getFlashMessage(type) {
+        const alert = document.querySelector(`.alert-${type}`);
+        if (alert) {
+            const text = alert.querySelector('.flex-grow-1')?.textContent.trim() || alert.textContent.trim();
+            return text.replace(new RegExp(`^${this.getTypeLabel(type)}:\\s*`, 'i'), '');
+        }
+        return null;
+    }
 
-	/* Warning notifications */
-	document.querySelector('#warning').addEventListener('click', function () {
-		notifier.warning('This Is An Example Of Warning')
-	})
+    /**
+     * Get type label
+     */
+    getTypeLabel(type) {
+        const labels = {
+            'success': 'نجاح',
+            'danger': 'خطأ',
+            'warning': 'تحذير',
+            'info': 'معلومة'
+        };
+        return labels[type] || '';
+    }
 
-	/* Error notifications */
-	document.querySelector('#error').addEventListener('click', function () {
-		notifier.alert('This Is An Example Of Error')
-	})
+    /**
+     * Show Bootstrap Toast
+     */
+    showToast(message, type = 'info', duration = 5000) {
+        if (!this.toastContainer) {
+            this.toastContainer = document.createElement('div');
+            this.toastContainer.className = 'toast-container position-fixed top-0 end-0 p-3';
+            this.toastContainer.style.zIndex = '9999';
+            document.body.appendChild(this.toastContainer);
+        }
 
-	/* Confirmation notifications */
-	document.querySelector('#confirm').addEventListener('click', function () {
-		notifier.confirm('Are you sure you want to reset the password')
-	})
+        const toastId = 'toast-' + Date.now();
+        const icons = {
+            'success': 'bi-check-circle-fill',
+            'danger': 'bi-exclamation-triangle-fill',
+            'warning': 'bi-exclamation-circle-fill',
+            'info': 'bi-info-circle-fill'
+        };
 
-	/* Popup notifications */
-	document.querySelector('#popup').addEventListener('click', function () {
-		notifier.modal(`<h3 class="font-semibold mb-1 text-xl">Welcome To Bootstrap Admin Template </h3><small class="text-gray-500 dark:text-white/70 text-sm">Click outside the modal window to close it.</small>`, 'demo')
-	})
+        const bgColors = {
+            'success': 'bg-success',
+            'danger': 'bg-danger',
+            'warning': 'bg-warning',
+            'info': 'bg-info'
+        };
 
-	/* Async Block With Error notifications */
-	document.querySelector('#async').addEventListener('click', function () {
-		new AWN().asyncBlock(Promise.reject("some error"))
-	})
+        const toastHtml = `
+            <div id="${toastId}" class="toast align-items-center text-white ${bgColors[type] || 'bg-primary'} border-0" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="d-flex">
+                    <div class="toast-body d-flex align-items-center">
+                        <i class="bi ${icons[type] || 'bi-info-circle-fill'} me-2 fs-5"></i>
+                        <span>${message}</span>
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+            </div>
+        `;
 
-	/* Async Block With Success notifications */
-	document.querySelector('#async-block').addEventListener('click', function () {
-		new AWN().asyncBlock(Promise.resolve("some message"))
-	})
+        this.toastContainer.insertAdjacentHTML('beforeend', toastHtml);
+        
+        const toastElement = document.getElementById(toastId);
+        const toast = new bootstrap.Toast(toastElement, {
+            autohide: true,
+            delay: duration
+        });
 
-})();
+        toast.show();
+
+        // Remove toast element after it's hidden
+        toastElement.addEventListener('hidden.bs.toast', () => {
+            toastElement.remove();
+        });
+    }
+
+    /**
+     * Auto-hide alert messages after 5 seconds
+     */
+    autoHideAlerts() {
+        const alerts = document.querySelectorAll('.alert:not(.alert-permanent)');
+        alerts.forEach(alert => {
+            setTimeout(() => {
+                const bsAlert = new bootstrap.Alert(alert);
+                bsAlert.close();
+            }, 5000);
+        });
+    }
+
+    /**
+     * Show success notification
+     */
+    success(message, duration = 5000) {
+        this.showToast(message, 'success', duration);
+    }
+
+    /**
+     * Show error notification
+     */
+    error(message, duration = 5000) {
+        this.showToast(message, 'danger', duration);
+    }
+
+    /**
+     * Show warning notification
+     */
+    warning(message, duration = 5000) {
+        this.showToast(message, 'warning', duration);
+    }
+
+    /**
+     * Show info notification
+     */
+    info(message, duration = 5000) {
+        this.showToast(message, 'info', duration);
+    }
+}
+
+// Initialize on DOM load
+document.addEventListener('DOMContentLoaded', function() {
+    window.adminNotifications = new AdminNotifications();
+});

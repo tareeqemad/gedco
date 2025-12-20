@@ -12,7 +12,7 @@
     {{-- نفس الـ sections من الصفحة الأولى لكن بدون الهيدر والفوتر --}}
     <section id="subheader"
              class="text-light relative rounded-1 overflow-hidden m-3 d-flex align-items-center justify-content-center text-center"
-             data-bgimage="url({{ asset('assets/site/images/site1.webp') }})">
+             data-bgimage="url({{ asset('assets/site/images/backgrounds/site1.webp') }})">
         <div class="container relative z-2">
             <div class="row justify-content-center text-center">
                 <div class="col-12">
@@ -64,7 +64,7 @@
             <span></span>
         </div>
         <div id="extra-content">
-            <img src="{{ asset('assets/site/images/logo-white.webp') }}" class="w-200px" alt="">
+            <img src="{{ asset('assets/site/images/logos/logo-white.webp') }}" class="w-200px" alt="">
             <div class="spacer-30-line"></div>
 
             <h5>خدماتنا</h5>

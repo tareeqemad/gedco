@@ -1,0 +1,68 @@
+<?php
+
+return [
+    // Language Selector
+    'arabic' => 'عربي',
+    'english' => 'ENG',
+    'choose_language' => 'اختر اللغة',
+    
+    // Menu Items
+    'home' => 'الرئيسية',
+    'services' => 'الخدمات',
+    'e_services' => 'الخدمات الالكترونية',
+    'specs' => 'المواصفات والمقايس',
+    'company' => 'الشركة',
+    'about_us' => 'من نحن',
+    'why_choose' => 'لماذا تختارنا',
+    'gm_message' => 'كلمة مدير عام الشركة',
+    'board' => 'مجلس الإدارة',
+    'news' => 'الاخبار',
+    'advertisements' => 'الاعلانات',
+    'jobs' => 'الإعلانات والوظائف',
+    'tenders' => 'العطاءات',
+    'contact' => 'اتصل بنا',
+    
+    // Static Texts
+    'donate_now' => 'تبرع الآن',
+    'search_site' => 'ابحث في الموقع',
+    'search_here' => 'ابحث هنا',
+    'search' => 'نفّذ البحث',
+    
+    // Services
+    'e_services_full' => 'الخدمات الإلكترونية',
+    'specs_full' => 'المواصفات والمقاييس',
+    'donate' => 'التبرع',
+    'job_announcements' => 'إعلانات الوظائف',
+    
+    // Homepage Sections
+    'impact_stats_title' => 'إحصائيات الخسائر',
+    'impact_stats_subtitle' => 'الأرقام تتحدث عن نفسها',
+    'impact_stats_note' => '* الأرقام تقريبية وتُحدَّث دوريًا بناءً على التقارير الهندسية والمالية',
+    'services_title' => 'خدماتنا',
+    'services_subtitle' => 'خدمات مصممة خصيصاً لكم',
+    'why_choose_us_title' => 'لماذا تختارنا',
+    'why_choose_us_tagline' => 'شريكك الموثوق في الخدمة الكهربائية',
+    'why_choose_us_description' => 'نقدّم لك الأفضل لأننا نؤمن بحقك في خدمة كهربائية آمنة، موثوقة، ومتطورة. في شركة توزيع كهرباء محافظات غزة، نسعى لأن نكون الشريك الذي تعتمد عليه في كل لحظة.',
+    
+    // News Page
+    'news_page_title' => 'أخبار الشركة',
+    'news_page_subtitle' => 'أحدث المستجدات',
+    'news_page_heading' => 'مركز أخبار الشركة',
+    'news_page_description' => 'مصدر موثوق للبيانات والتحديثات الرسمية الصادرة عن شركة توزيع كهرباء غزة، مع تغطية مستمرة لآخر التطورات.',
+    'news_search_placeholder' => 'ابحث عن خبر...',
+    'news_filter_all' => 'الكل',
+    'news_filter_featured' => 'المميزة',
+    'news_filter_fresh' => 'أخبار اليوم',
+    'news_filter_week' => 'هذا الأسبوع',
+    'news_badge_featured' => 'مميز',
+    'news_badge_new' => 'جديد',
+    'news_read_more' => 'اقرأ المزيد',
+    'news_download_statement' => 'تحميل البيان',
+    'news_official_news' => 'خبر رسمي',
+    'news_no_news' => 'لا توجد أخبار منشورة حالياً.',
+    'news_date_not_specified' => 'غير محدد',
+];
+
+
+
+

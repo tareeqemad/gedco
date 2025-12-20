@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="{{ ($direction ?? 'rtl') === 'rtl' ? 'ar' : 'en' }}" dir="{{ $direction ?? 'rtl' }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title','تسجيل الدخول - كهرباء غزة')</title>
+    <title>@yield('title', __('admin.auth.login_title') . ' - ' . __('admin.auth.company_name'))</title>
 
-    <link id="style" href="{{ asset('assets/admin/libs/bootstrap/css/bootstrap.rtl.min.css') }}" rel="stylesheet">
+    <link id="style" href="{{ asset('assets/admin/libs/bootstrap/css/bootstrap' . (($direction ?? 'rtl') === 'rtl' ? '.rtl' : '') . '.min.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/admin/css/icons.css') }}" rel="stylesheet" >
     <link href="{{ asset('assets/admin/css/auth-modern.css') }}" rel="stylesheet">
 

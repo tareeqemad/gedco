@@ -7,7 +7,7 @@ class SiteContactChannel extends Model
 {
     protected $table = 'site_contact_channels';
     protected $fillable = [
-        'site_setting_id', 'position', 'label', 'email', 'phone', 'address_ar'
+        'site_setting_id', 'position', 'label', 'email', 'phone', 'address_ar', 'address_en'
     ];
 
     public function setting()

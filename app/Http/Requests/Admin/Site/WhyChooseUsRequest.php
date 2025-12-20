@@ -41,17 +41,29 @@ class WhyChooseUsRequest extends FormRequest
     public function rules(): array
     {
         return [
-            // معلومات القسم العامة
+            // معلومات القسم العامة - العربية
             'badge'       => ['required', 'string', 'max:100'],
             'tagline'     => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
 
-            // عناصر الميزات (features)
+            // معلومات القسم العامة - الإنجليزية
+            'badge_en'       => ['nullable', 'string', 'max:100'],
+            'tagline_en'     => ['nullable', 'string', 'max:255'],
+            'description_en' => ['nullable', 'string'],
+
+            // عناصر الميزات (features) - العربية
             'feature_title'   => ['sometimes', 'array'],
             'feature_title.*' => ['nullable', 'string', 'max:255'],
 
             'feature_text'    => ['sometimes', 'array'],
             'feature_text.*'  => ['nullable', 'string'],
+
+            // عناصر الميزات (features) - الإنجليزية
+            'feature_title_en'   => ['sometimes', 'array'],
+            'feature_title_en.*' => ['nullable', 'string', 'max:255'],
+
+            'feature_text_en'    => ['sometimes', 'array'],
+            'feature_text_en.*'  => ['nullable', 'string'],
 
             'feature_icon'    => ['sometimes', 'array'],
             'feature_icon.*'  => ['nullable', 'string', 'max:80'],

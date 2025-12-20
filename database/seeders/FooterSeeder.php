@@ -13,10 +13,14 @@ class FooterSeeder extends Seeder
     {
         SiteSetting::query()->updateOrCreate(['id' => 1], [
             'footer_title_ar' => 'تواصل معنا',
+            'footer_title_en' => 'Contact Us',
+            'logo_white_path_ar' => 'assets/site/images/logos/logo-white.webp',
+            'logo_white_path_en' => 'assets/site/images/logos/logo-white.webp',
+            'contact_us_title_ar' => 'تواصل معنا (حتى قناتين)',
+            'contact_us_title_en' => 'Contact Us (up to 2 channels)',
             'email'           => 'info@gedco.ps',
             'phone'           => '+970 566 700 055',
             'address_ar'      => 'مكتب مؤقت النصر',
-            'logo_white_path' => 'assets/site/images/logo-white.webp',
         ]);
 
         $services = [

@@ -2,25 +2,18 @@
     use Illuminate\Support\Str;
     use Carbon\Carbon;
 
-    $rel = function (?string $url) {
-        if (!$url) return '#';
-        $parts = parse_url($url);
-        $path  = $parts['path']  ?? '/';
-        $query = isset($parts['query']) ? ('?' . $parts['query']) : '';
-        return $query ? ($path . $query) : $path;
-    };
 @endphp
 
 <table class="table table-hover align-middle mb-0 responsive-table table-sticky">
     <thead class="table-light">
     <tr>
-        <th class="text-center" style="width:60px">#</th>
-        <th>العنوان</th>
-        <th class="text-center" style="width:120px">تاريخ الخبر</th>
-        <th class="text-center" style="width:130px">أضيف بواسطة</th>
-        <th class="text-center" style="width:130px">آخر تحديث</th>
-        <th class="text-center" style="width:80px">ملف</th>
-        <th class="text-center" style="width:160px">الإجراءات</th>
+        <th class="text-center" style="width:60px">{{ __('admin.advertisements.table_id') }}</th>
+        <th>{{ __('admin.advertisements.table_title') }}</th>
+        <th class="text-center" style="width:120px">{{ __('admin.advertisements.table_date_news') }}</th>
+        <th class="text-center" style="width:130px">{{ __('admin.advertisements.table_added_by') }}</th>
+        <th class="text-center" style="width:130px">{{ __('admin.advertisements.table_last_update') }}</th>
+        <th class="text-center" style="width:80px">{{ __('admin.advertisements.table_file') }}</th>
+        <th class="text-center" style="width:160px">{{ __('admin.advertisements.table_actions') }}</th>
     </tr>
     </thead>
     <tbody>
@@ -35,21 +28,21 @@
             $isOld     = $newsDate?->lt(now('Asia/Hebron')->subMonths(6));
             $dateClass = $isToday ? 'text-primary' : ($isYday ? 'text-info' : ($isOld ? 'text-muted' : 'text-body'));
 
-            $showUrl    = $rel(route('admin.advertisements.show', $ad));
-            $editUrl    = $rel(route('admin.advertisements.edit', $ad));
-            $pdfUrl     = $ad->PDF ? $rel(Storage::url($ad->PDF)) : null;
-            $destroyUrl = $rel(route('admin.advertisements.destroy', $ad));
+            $showUrl    = get_relative_path(route('admin.advertisements.show', $ad), '#');
+            $editUrl    = get_relative_path(route('admin.advertisements.edit', $ad), '#');
+            $pdfUrl     = $ad->PDF ? get_relative_path(Storage::url($ad->PDF)) : null;
+            $destroyUrl = get_relative_path(route('admin.advertisements.destroy', $ad), '#');
         @endphp
         <tr id="ad-row-{{ $ad->ID_ADVER }}">
-            <td class="text-center fw-medium" data-label="#">{{ $ad->ID_ADVER }}</td>
+            <td class="text-center fw-medium" data-label="{{ __('admin.advertisements.table_id') }}">{{ $ad->ID_ADVER }}</td>
 
-            <td data-label="العنوان">
+            <td data-label="{{ __('admin.advertisements.table_title') }}">
                 <div class="line-clamp-2" style="max-width:320px" title="{{ $ad->TITLE }}">
                     <span class="fw-medium">{{ Str::limit($ad->TITLE, 110) }}</span>
                 </div>
             </td>
 
-            <td class="text-center" data-label="تاريخ الخبر">
+            <td class="text-center" data-label="{{ __('admin.advertisements.table_date_news') }}">
                 @if($newsDate)
                     <div class="fw-medium {{ $dateClass }}">{{ $newsDate->format('d/m/Y') }}</div>
                     <small class="text-muted">{{ $newsDate->format('H:i') }}</small>
@@ -58,14 +51,14 @@
                 @endif
             </td>
 
-            <td class="text-center" data-label="أضيف بواسطة">
+            <td class="text-center" data-label="{{ __('admin.advertisements.table_added_by') }}">
                 <div class="fw-medium text-primary">{{ $ad->INSERT_USER }}</div>
                 @if($insertDate)
                     <small class="text-muted">{{ $insertDate->format('d/m H:i') }}</small>
                 @endif
             </td>
 
-            <td class="text-center" data-label="آخر تحديث">
+            <td class="text-center" data-label="{{ __('admin.advertisements.table_last_update') }}">
                 @if($ad->UPDATE_USER)
                     <div class="fw-medium text-success">{{ $ad->UPDATE_USER }}</div>
                     @if($updateDate)
@@ -76,30 +69,30 @@
                 @endif
             </td>
 
-            <td class="text-center" data-label="ملف">
+            <td class="text-center" data-label="{{ __('admin.advertisements.table_file') }}">
                 @if($pdfUrl)
-                    <a href="{{ $pdfUrl }}" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-outline-danger" title="عرض الملف">
-                        <i class="ri-file-pdf-line"></i>
+                    <a href="{{ $pdfUrl }}" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-outline-danger" title="{{ __('admin.advertisements.view_file') }}">
+                        <i class="bi bi-file-pdf"></i>
                     </a>
                 @else
                     <span class="text-muted">—</span>
                 @endif
             </td>
 
-            <td class="text-center" data-label="الإجراءات">
+            <td class="text-center" data-label="{{ __('admin.advertisements.table_actions') }}">
                 <div class="d-inline-block d-md-none">
                     <div class="dropdown">
                         <button class="btn btn-light btn-sm dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                            إجراءات
+                            {{ __('admin.advertisements.actions') }}
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="{{ $showUrl }}"><i class="ri-eye-line me-1"></i> عرض</a></li>
-                            <li><a class="dropdown-item" href="{{ $editUrl }}"><i class="ri-edit-line me-1"></i> تعديل</a></li>
+                            <li><a class="dropdown-item" href="{{ $showUrl }}"><i class="bi bi-eye me-1"></i> {{ __('admin.advertisements.view') }}</a></li>
+                            <li><a class="dropdown-item" href="{{ $editUrl }}"><i class="bi bi-pencil me-1"></i> {{ __('admin.advertisements.edit') }}</a></li>
                             <li>
                                 <form action="{{ $destroyUrl }}" method="POST" onsubmit="return confirmDelete(this,'{{ $ad->ID_ADVER }}')" class="px-3 py-1">
                                     @csrf @method('DELETE')
                                     <button type="submit" class="btn btn-link text-danger p-0">
-                                        <i class="ri-delete-bin-line me-1"></i> حذف
+                                        <i class="bi bi-trash me-1"></i> {{ __('admin.advertisements.delete') }}
                                     </button>
                                 </form>
                             </li>
@@ -108,12 +101,12 @@
                 </div>
 
                 <div class="btn-group btn-group-sm d-none d-md-inline-flex">
-                    <a href="{{ $showUrl }}" class="btn btn-primary" title="عرض" aria-label="عرض"><i class="ri-eye-line"></i></a>
-                    <a href="{{ $editUrl }}" class="btn btn-warning" title="تعديل" aria-label="تعديل"><i class="ri-edit-line"></i></a>
+                    <a href="{{ $showUrl }}" class="btn btn-primary" title="{{ __('admin.advertisements.view') }}" aria-label="{{ __('admin.advertisements.view') }}"><i class="bi bi-eye"></i></a>
+                    <a href="{{ $editUrl }}" class="btn btn-warning" title="{{ __('admin.advertisements.edit') }}" aria-label="{{ __('admin.advertisements.edit') }}"><i class="bi bi-pencil"></i></a>
                     <form action="{{ $destroyUrl }}" method="POST" onsubmit="return confirmDelete(this,'{{ $ad->ID_ADVER }}')">
                         @csrf @method('DELETE')
-                        <button type="submit" class="btn btn-danger" title="حذف" aria-label="حذف">
-                            <i class="ri-delete-bin-line"></i>
+                        <button type="submit" class="btn btn-danger" title="{{ __('admin.advertisements.delete') }}" aria-label="{{ __('admin.advertisements.delete') }}">
+                            <i class="bi bi-trash"></i>
                         </button>
                     </form>
                 </div>
@@ -121,7 +114,7 @@
         </tr>
     @empty
         <tr>
-            <td colspan="7" class="text-center py-5 text-muted">لا توجد إعلانات</td>
+            <td colspan="7" class="text-center py-5 text-muted">{{ __('admin.advertisements.no_advertisements') }}</td>
         </tr>
     @endforelse
     </tbody>

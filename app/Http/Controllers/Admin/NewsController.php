@@ -14,6 +14,10 @@ class NewsController extends Controller
 {
     public function index(Request $req)
     {
+        // Filter by current admin panel language
+        $adminDirection = session('direction', 'rtl');
+        $currentLanguage = $adminDirection === 'rtl' ? 'ar' : 'en';
+        
         $q        = $req->string('q')->toString();
         $status   = $req->get('status');
         $featured = $req->has('featured') ? $req->boolean('featured') : null;
@@ -24,6 +28,7 @@ class NewsController extends Controller
         $dir      = $req->get('dir', 'desc');
 
         $items = News::query()
+            ->language($currentLanguage) // Filter by current admin panel language
             ->search($q)
             ->status($status)
             ->featured($featured)
@@ -41,7 +46,7 @@ class NewsController extends Controller
         }
 
         return view('admin.site.news.index', compact(
-            'items', 'q', 'status', 'featured', 'dateFrom', 'dateTo', 'perPage', 'sort', 'dir'
+            'items', 'q', 'status', 'featured', 'dateFrom', 'dateTo', 'perPage', 'sort', 'dir', 'currentLanguage'
         ));
     }
 
@@ -58,9 +63,14 @@ class NewsController extends Controller
             'status'       => ['required','in:published,draft'],
             'featured'     => ['nullable','boolean'],
             'body'         => ['required','string'],
+            'language'     => ['nullable','in:ar,en'],
             'cover'        => ['nullable','image','mimes:jpg,jpeg,png,webp','max:2048'],   // 2MB
             'pdf'          => ['nullable','mimes:pdf','max:10240'], // 10MB
         ]);
+
+        // Determine language from current admin direction
+        $adminDirection = session('direction', 'rtl');
+        $defaultLanguage = $adminDirection === 'rtl' ? 'ar' : 'en';
 
         $data = [
             'title'        => $validated['title'],
@@ -69,6 +79,7 @@ class NewsController extends Controller
             'status'       => $validated['status'],
             'featured'     => (bool)($validated['featured'] ?? false),
             'body'         => $validated['body'],
+            'language'     => $validated['language'] ?? $defaultLanguage, // Use admin direction as default
 
             'created_by'   => auth()->id(),
         ];
@@ -115,6 +126,7 @@ class NewsController extends Controller
             'status'       => ['required','in:draft,published'],
             'featured'     => ['nullable','boolean'],
             'body'         => ['required','string'], // نحفظه كما هو
+            'language'     => ['nullable','in:ar,en'],
             'cover'        => ['nullable','image','mimes:jpg,jpeg,png,webp','max:2048','dimensions:min_width=300,min_height=200'],
             'pdf'          => ['nullable','mimetypes:application/pdf','max:10240'],
             'remove_cover' => ['nullable','boolean'],
@@ -173,6 +185,7 @@ class NewsController extends Controller
         $news->status       = (string) $request->input('status');
         $news->featured     = $request->boolean('featured');
         $news->body         = $raw; // ← زي ما هو
+        $news->language     = $request->input('language', 'ar'); // Default to Arabic
 
         if ($request->user()) {
             $news->updated_by = $request->user()->id;

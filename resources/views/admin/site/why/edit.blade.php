@@ -1,10 +1,10 @@
 @extends('layouts.admin')
-@section('title','تعديل - لماذا تختارنا')
+@section('title', __('admin.why_choose_us.edit_title'))
 
 @section('content')
     @php
-        $breadcrumbTitle     = 'لماذا تختارنا';
-        $breadcrumbParent    = 'إعدادات الموقع';
+        $breadcrumbTitle     = __('admin.why_choose_us.title');
+        $breadcrumbParent    = __('admin.menu.site_settings');
         $breadcrumbParentUrl = route('admin.site-settings.edit', 1);
 
         $route  = route('admin.why.update', $why);
@@ -20,21 +20,23 @@
             <div class="card-header bg-white border-bottom py-3">
                 <div class="row w-100 g-0 align-items-center">
 
-                    {{-- العنوان يسار --}}
+                    {{-- Title Left --}}
                     <div class="col">
-                        <h5 class="card-title mb-0 text-orange fw-semibold">
-                            تعديل - لماذا تختارنا
+                        <h5 class="card-title mb-0 text-primary fw-bold" style="font-size: 1.25rem;">
+                            {{ __('admin.why_choose_us.edit_title') }}
                         </h5>
                     </div>
 
-                    {{-- الأزرار يمين --}}
+                    {{-- Buttons Right --}}
                     <div class="col-auto">
                         <div class="d-flex gap-2">
-                            <a href="{{ route('admin.why.index') }}" class="btn btn-ghost-orange btn-sm">
-                                رجوع
+                            <a href="{{ route('admin.why.index') }}" class="btn btn-outline-primary btn-sm">
+                                <i class="bi bi-arrow-right me-1"></i>
+                                {{ __('admin.why_choose_us.back') }}
                             </a>
-                            <a href="{{ $publicPreviewUrl }}" target="_blank" class="btn btn-ghost-orange btn-sm">
-                                معاينة على الموقع
+                            <a href="{{ $publicPreviewUrl }}" target="_blank" class="btn btn-primary btn-sm">
+                                <i class="bi bi-eye me-1"></i>
+                                {{ __('admin.why_choose_us.preview_on_site') }}
                             </a>
                         </div>
                     </div>
@@ -48,32 +50,4 @@
         </div>
     </div>
 
-    @push('styles')
-        <style>
-            .text-orange   { color:#ff7700 !important; }
-            .bg-orange     { background-color:#ff7700 !important; }
-
-            .border-orange-soft {
-                border-color: rgba(255,119,0,.35) !important;
-            }
-            .feature-card {
-                border:2px solid rgba(255,119,0,.25);
-                background: rgba(255,119,0,.05);
-                border-radius: .50rem;
-                padding:1rem;
-                margin-bottom:1rem;
-            }
-            .btn-ghost-orange{
-                background:#fff !important;
-                color:#ff7700 !important;
-                border:1px solid rgba(255,119,0,.35) !important;
-            }
-            .btn-ghost-orange:hover{
-                background:rgba(255,119,0,.10) !important;
-                color:#ff7700 !important;
-                border-color:rgba(255,119,0,.55) !important;
-            }
-
-        </style>
-    @endpush
 @endsection

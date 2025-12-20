@@ -1,116 +1,136 @@
-{{-- resources/views/admin/roles/create.blade.php --}}
 @extends('layouts.admin')
-@section('title', 'إضافة دور جديد')
+@section('title', __('admin.menu.add_role'))
+
 
 @section('content')
-    <div class="card">
-        <div class="card-header d-flex justify-content-between align-items-center">
-            <h5 class="mb-0">إضافة دور جديد</h5>
-            <a href="{{ route('admin.roles.index') }}" class="btn btn-sm btn-secondary">رجوع</a>
-        </div>
-
-        <div class="card-body">
-            @if ($errors->any())
-                <div class="alert alert-danger">
-                    <ul class="mb-0">
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
+    <div class="page-header">
+        <div class="page-block">
+            <div class="row align-items-center">
+                <div class="col-md-12">
+                    <div class="page-header-title">
+                        <h5 class="m-b-10">{{ __('admin.menu.add_role') }}</h5>
+                    </div>
+                    <ul class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="{{ route('admin.dashboard') }}">
+                                <i class="bi bi-house"></i>
+                            </a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a href="{{ route('admin.roles.index') }}">{{ __('admin.menu.roles') }}</a>
+                        </li>
+                        <li class="breadcrumb-item active">{{ __('admin.menu.add_role') }}</li>
                     </ul>
                 </div>
-            @endif
+            </div>
+        </div>
+    </div>
 
-            <form action="{{ route('admin.roles.store') }}" method="POST">
-                @csrf
-
-                <div class="mb-3">
-                    <label class="form-label">اسم الدور <span class="text-danger">*</span></label>
-                    <input type="text" name="name" class="form-control" value="{{ old('name') }}" required
-                           placeholder="مثال: editor, manager">
-                    <small class="text-muted">استخدم حروف صغيرة وشرطة (-) مثل: content-editor</small>
+    <div class="row">
+        <div class="col-md-10 mx-auto">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white border-bottom">
+                    <h5 class="mb-0">
+                        <i class="bi bi-plus-circle me-2 text-primary"></i>
+                        {{ __('admin.menu.add_role') }}
+                    </h5>
                 </div>
+                <div class="card-body">
+                    <form action="{{ route('admin.roles.store') }}" method="POST">
+                        @csrf
 
-                <!-- === الصلاحيات === -->
-                <div class="mb-4">
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <label class="form-label mb-0">الصلاحيات</label>
-                        <div>
-                            <input type="text" id="permissionSearch" class="form-control form-control-sm d-inline-block"
-                                   placeholder="ابحث..." style="width: 200px;">
-                            <button type="button" id="selectAll" class="btn btn-sm btn-outline-primary">تحديد الكل</button>
-                            <button type="button" id="deselectAll" class="btn btn-sm btn-outline-secondary">إلغاء الكل</button>
+                        <div class="mb-4">
+                            <label class="form-label fw-semibold">
+                                {{ __('admin.roles.form_name') }} <span class="text-danger">*</span>
+                            </label>
+                            <input type="text" 
+                                   name="name" 
+                                   class="form-control @error('name') is-invalid @enderror" 
+                                   placeholder="{{ __('admin.roles.form_name_placeholder') }}"
+                                   value="{{ old('name') }}"
+                                   required>
+                            @error('name')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
                         </div>
-                    </div>
 
-                    @php $selectedPermissions = old('permissions', []); @endphp
+                        <div class="mb-4">
+                            <label class="form-label fw-semibold mb-3">
+                                {{ __('admin.roles.form_permissions') }}
+                            </label>
 
-                    <div class="permissions-container border rounded p-3 bg-light" style="max-height: 400px; overflow-y: auto;">
-                        @forelse($permissions as $guard => $perms)
-                            <div class="permission-group mb-4">
-                                <h6 class="text-primary fw-bold mb-2 border-bottom pb-2">
-                                    {{ $guard === 'web' ? 'لوحة التحكم (Web)' : ucfirst($guard) }}
-                                    <span class="badge bg-light text-dark float-end">{{ $perms->count() }}</span>
-                                </h6>
-
-                                <div class="row g-3">
-                                    @foreach($perms as $perm)
-                                        <div class="col-md-6 col-lg-4 permission-item">
-                                            <div class="form-check">
-                                                <input class="form-check-input permission-checkbox"
-                                                       type="checkbox"
-                                                       name="permissions[]"
-                                                       value="{{ $perm->id }}"
-                                                       id="perm{{ $perm->id }}"
-                                                    {{ in_array($perm->id, $selectedPermissions) ? 'checked' : '' }}>
-                                                <label class="form-check-label" for="perm{{ $perm->id }}">
-                                                    <small>{{ str_replace(['.', '_'], ' ', $perm->name) }}</small>
-                                                </label>
+                            @foreach($permissions as $group => $groupPermissions)
+                                <div class="permission-group">
+                                    <div class="permission-group-header d-flex justify-content-between align-items-center">
+                                        <span>
+                                            <i class="bi bi-folder me-2"></i>
+                                            {{ ucfirst($group) }}
+                                        </span>
+                                        <button type="button" 
+                                                class="btn btn-sm btn-link p-0 select-all-group-btn"
+                                                data-group="{{ $group }}">
+                                            تحديد الكل
+                                        </button>
+                                    </div>
+                                    <div class="row">
+                                        @foreach($groupPermissions as $permission)
+                                            <div class="col-md-4 mb-2">
+                                                <div class="permission-item">
+                                                    <input type="checkbox" 
+                                                           name="permissions[]" 
+                                                           value="{{ $permission->id }}"
+                                                           id="perm_{{ $permission->id }}"
+                                                           class="permission-checkbox"
+                                                           data-group="{{ $group }}"
+                                                           {{ in_array($permission->id, old('permissions', [])) ? 'checked' : '' }}>
+                                                    <label for="perm_{{ $permission->id }}">
+                                                        {{ $permission->name }}
+                                                    </label>
+                                                </div>
                                             </div>
-                                        </div>
-                                    @endforeach
+                                        @endforeach
+                                    </div>
                                 </div>
-                            </div>
-                        @empty
-                            <p class="text-muted text-center">لا توجد صلاحيات متاحة.</p>
-                        @endforelse
-                    </div>
-                </div>
+                            @endforeach
 
-                <div class="text-end">
-                    <button type="submit" class="btn btn-primary px-5">إضافة الدور</button>
+                            @error('permissions.*')
+                                <div class="text-danger small mt-2">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-check-circle me-1"></i>
+                                {{ __('admin.common.form_save') }}
+                            </button>
+                            <a href="{{ route('admin.roles.index') }}" class="btn btn-light">
+                                {{ __('admin.actions.cancel') }}
+                            </a>
+                        </div>
+                    </form>
                 </div>
-            </form>
+            </div>
         </div>
     </div>
 @endsection
 
 @push('scripts')
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const searchInput = document.getElementById('permissionSearch');
-            const items = document.querySelectorAll('.permission-item');
-            const checkboxes = document.querySelectorAll('.permission-checkbox');
-            const selectAll = document.getElementById('selectAll');
-            const deselectAll = document.getElementById('deselectAll');
-
-            // البحث
-            searchInput?.addEventListener('input', function () {
-                const term = this.value.toLowerCase();
-                items.forEach(item => {
-                    const label = item.textContent.toLowerCase();
-                    item.style.display = label.includes(term) ? '' : 'none';
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // تحديد/إلغاء تحديد جميع الصلاحيات في مجموعة
+        document.querySelectorAll('.select-all-group-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const group = this.getAttribute('data-group');
+                const checkboxes = document.querySelectorAll(`.permission-checkbox[data-group="${group}"]`);
+                const allChecked = Array.from(checkboxes).every(cb => cb.checked);
+                
+                checkboxes.forEach(cb => {
+                    cb.checked = !allChecked;
                 });
-            });
 
-            // تحديد الكل
-            selectAll?.addEventListener('click', () => {
-                checkboxes.forEach(cb => cb.checked = true);
-            });
-
-            // إلغاء الكل
-            deselectAll?.addEventListener('click', () => {
-                checkboxes.forEach(cb => cb.checked = false);
+                this.textContent = allChecked ? 'تحديد الكل' : 'إلغاء تحديد الكل';
             });
         });
-    </script>
+    });
+</script>
 @endpush

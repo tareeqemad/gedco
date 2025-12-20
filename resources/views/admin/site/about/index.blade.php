@@ -1,19 +1,12 @@
 @extends('layouts.admin')
-@section('title','تعديل من نحن')
+@section('title', __('admin.about_us.edit_title'))
 
 @section('content')
     @php
-        $breadcrumbTitle     = 'من نحن';
-        $breadcrumbParent    = 'إعدادات الموقع';
+        $breadcrumbTitle     = __('admin.about_us.title');
+        $breadcrumbParent    = __('admin.menu.site_settings');
         $breadcrumbParentUrl = route('admin.site-settings.edit', 1);
 
-        $buildImageUrl = function ($val) {
-            if (blank($val)) return asset('assets/site/images/c3.webp');
-            if (str_starts_with($val,'http')) return $val;
-            if (str_starts_with($val,'assets/')) return asset($val);
-            if (str_starts_with($val,'storage/')) return asset($val);
-            return asset('storage/'.ltrim($val,'/'));
-        };
 
         // preview link هنا:
         $publicPreviewUrl = route('site.home') . '#who-us';
@@ -26,8 +19,18 @@
 
         @if($about)
             @php
-                $img = $buildImageUrl($about->image ?? null);
-                $featuresRaw = $about->features ?? '[]';
+                // تحديد الصورة والـ features حسب اللغة
+                $adminDirection = session('direction', 'rtl');
+                $isRtl = $adminDirection === 'rtl';
+                $imagePath = $isRtl ? ($about->image ?? null) : ($about->image_en ?? null);
+                $img = build_image_url($imagePath, 'assets/site/images/content/c3.webp');
+                
+                // Features حسب اللغة (بدون fallback)
+                if ($isRtl) {
+                    $featuresRaw = $about->features ?? '[]';
+                } else {
+                    $featuresRaw = $about->features_en ?? '[]';
+                }
                 $featuresArr = is_array($featuresRaw) ? $featuresRaw : (json_decode($featuresRaw, true) ?? []);
                 $colA = array_values($featuresArr[0] ?? []);
                 $colB = array_values($featuresArr[1] ?? []);
@@ -38,16 +41,16 @@
                     <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
 
                         <div class="d-flex align-items-center gap-2">
-                            <span class="badge rounded-pill bg-orange text-white">من نحن</span>
-                            <h5 class="mb-0 fw-semibold text-orange">تفاصيل المحتوى</h5>
+                            <span class="badge rounded-pill bg-orange text-white">{{ __('admin.about_us.title') }}</span>
+                            <h5 class="mb-0 fw-semibold text-orange">{{ __('admin.about_us.content_details') }}</h5>
                         </div>
 
                         <div class="d-flex gap-2">
                             <a href="{{ route('admin.about.edit', $about) }}" class="btn btn-orange btn-sm">
-                                <i class="bi bi-pencil-square me-1"></i> تعديل
+                                <i class="bi bi-pencil-square me-1"></i> {{ __('admin.about_us.edit') }}
                             </a>
                             <a href="{{ $publicPreviewUrl }}" class="btn btn-outline-secondary btn-sm" target="_blank">
-                                <i class="bi bi-box-arrow-up-right me-1"></i> معاينة على الموقع
+                                <i class="bi bi-box-arrow-up-right me-1"></i> {{ __('admin.common.preview_on_site') }}
                             </a>
                         </div>
                     </div>
@@ -64,28 +67,46 @@
 
                             <div class="d-flex gap-2 mt-2">
                                 <button type="button" class="btn btn-light btn-sm border" data-bs-toggle="modal" data-bs-target="#aboutImageModal">
-                                    <i class="bi bi-arrows-fullscreen me-1"></i> تكبير الصورة
+                                    <i class="bi bi-arrows-fullscreen me-1"></i> {{ __('admin.about_us.zoom_image') }}
                                 </button>
 
                                 <a href="{{ $img }}" class="btn btn-outline-secondary btn-sm" target="_blank">
-                                    <i class="bi bi-download me-1"></i> فتح الأصل
+                                    <i class="bi bi-download me-1"></i> {{ __('admin.about_us.open_original') }}
                                 </a>
                             </div>
                         </div>
 
                         {{-- النص --}}
                         <div class="col-lg-7">
-                            <h3 class="fw-bold mb-1 text-orange">{{ $about->title }}</h3>
-
-                            @if(filled($about->subtitle))
-                                <div class="fw-semibold text-orange mb-3">{{ $about->subtitle }}</div>
-                            @endif
-
                             @php
-                                $p1 = trim($about->paragraph1 ?? '');
-                                $p2 = trim($about->paragraph2 ?? '');
+                                $adminDirection = session('direction', 'rtl');
+                                $isRtl = $adminDirection === 'rtl';
+                                
+                                // في لوحة التحكم: فقط الأعمدة المخصصة للغة (بدون fallback)
+                                if ($isRtl) {
+                                    $displayTitle = $about->title ?? '';
+                                    $displaySubtitle = $about->subtitle ?? '';
+                                    $displayP1 = $about->paragraph1 ?? '';
+                                    $displayP2 = $about->paragraph2 ?? '';
+                                    $displayImage = $about->image ?? null;
+                                } else {
+                                    $displayTitle = $about->title_en ?? '';
+                                    $displaySubtitle = $about->subtitle_en ?? '';
+                                    $displayP1 = $about->paragraph1_en ?? '';
+                                    $displayP2 = $about->paragraph2_en ?? '';
+                                    $displayImage = $about->image_en ?? null;
+                                }
+                                
+                                $p1 = trim($displayP1);
+                                $p2 = trim($displayP2);
                                 $long = (mb_strlen($p1.$p2) > 450);
                             @endphp
+
+                            <h3 class="fw-bold mb-1 text-orange">{{ $displayTitle }}</h3>
+
+                            @if(filled($displaySubtitle))
+                                <div class="fw-semibold text-orange mb-3">{{ $displaySubtitle }}</div>
+                            @endif
 
                             <div id="about-text-wrapper" class="{{ $long ? 'collapsed-text' : '' }}">
                                 @if(filled($p1))
@@ -98,14 +119,14 @@
 
                             @if($long)
                                 <button id="toggle-text" type="button" class="btn btn-link p-0 mt-1">
-                                    عرض المزيد
+                                    {{ __('admin.about_us.show_more') }}
                                 </button>
                             @endif
 
                             @if(count($colA) || count($colB))
                                 <div class="mt-4">
                                     <h6 class="fw-bold text-orange mb-2">
-                                        <i class="bi bi-stars me-1"></i> أبرز ما يميزنا
+                                        <i class="bi bi-stars me-1"></i> {{ __('admin.about_us.our_features') }}
                                     </h6>
                                     <div class="row g-2">
                                         <div class="col-md-6">
@@ -146,7 +167,7 @@
                 <div class="modal-dialog modal-xl modal-dialog-centered">
                     <div class="modal-content border-0">
                         <div class="modal-header">
-                            <h6 class="modal-title">معاينة الصورة بالحجم الكامل</h6>
+                            <h6 class="modal-title">{{ __('admin.about_us.full_image_preview') }}</h6>
                             <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                         </div>
                         <div class="modal-body p-0">
@@ -158,24 +179,6 @@
         @endif
     </div>
 
-    @push('styles')
-        <style>
-            .text-orange   { color:#ff7700 !important; }
-            .bg-orange     { background-color:#ff7700 !important; }
-            .btn-orange{
-                background-color:#ff7700 !important;
-                border-color:#ff7700 !important;
-                color:#fff !important;
-            }
-            .btn-orange:hover{opacity:.9;}
-
-            .collapsed-text { position:relative; max-height:220px; overflow:hidden; }
-            .collapsed-text:after{
-                content:""; position:absolute; inset-inline:0; bottom:0; height:60px;
-                background:linear-gradient(to bottom, rgba(255,255,255,0), #fff);
-            }
-        </style>
-    @endpush
 
     @push('scripts')
         <script>
@@ -185,7 +188,7 @@
                 if(w && b){
                     b.onclick=()=>{
                         const c=w.classList.toggle('collapsed-text');
-                        b.textContent = c ? 'عرض المزيد' : 'عرض أقل';
+                        b.textContent = c ? '{{ __('admin.about_us.show_more') }}' : '{{ __('admin.about_us.show_less') }}';
                     }
                 }
             })

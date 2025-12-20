@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\UserTemporaryPassword;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
@@ -63,6 +64,11 @@ class UserController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
+        // حفظ كلمة المرور مؤقتاً (مشفرة) للـ super-admin فقط
+        if (auth()->user()->hasRole('super-admin')) {
+            UserTemporaryPassword::storeForUser($user->id, $request->password, 24); // صالحة لمدة 24 ساعة
+        }
+
         // === تعيين الدور ===
         if ($request->filled('role_id')) {
             $role = Role::find($request->role_id);
@@ -73,7 +79,8 @@ class UserController extends Controller
         $this->syncUserPermissions($user, $request->input('permissions', []));
 
         return redirect()->route('admin.users.index')
-            ->with('success', 'تم إضافة المستخدم بنجاح');
+            ->with('success', 'تم إضافة المستخدم بنجاح')
+            ->with('new_user_id', $user->id); // لإظهار كلمة المرور
     }
 
     public function edit(User $user)
@@ -107,6 +114,11 @@ class UserController extends Controller
 
         if ($request->filled('password')) {
             $user->password = Hash::make($request->password);
+            
+            // حفظ كلمة المرور مؤقتاً (مشفرة) للـ super-admin فقط
+            if (auth()->user()->hasRole('super-admin')) {
+                UserTemporaryPassword::storeForUser($user->id, $request->password, 24); // صالحة لمدة 24 ساعة
+            }
         }
 
         $user->save();
@@ -153,6 +165,87 @@ class UserController extends Controller
 
         // تعيين الصلاحيات
         $user->syncPermissions($permissions);
+    }
+
+    /**
+     * عرض كلمة المرور المؤقتة للمستخدم (فقط لـ super-admin)
+     */
+    public function showTemporaryPassword(Request $request, User $user)
+    {
+        // التأكد من أن المستخدم الحالي super-admin
+        if (!auth()->user()->hasRole('super-admin')) {
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'غير مصرح لك بهذا الإجراء'
+                ], 403);
+            }
+            abort(403, 'غير مصرح لك بهذا الإجراء');
+        }
+
+        $tempPassword = $user->getLatestTemporaryPassword();
+
+        if (!$tempPassword) {
+            return response()->json([
+                'success' => false,
+                'message' => 'لا توجد كلمة مرور مؤقتة متاحة. كلمة المرور المؤقتة تنتهي بعد 24 ساعة من الإنشاء/التعديل.'
+            ], 404);
+        }
+
+        // تحديد كلمة المرور كمقروءة
+        $tempPassword->update(['viewed' => true]);
+
+        $plainPassword = $tempPassword->decryptPassword();
+
+        return response()->json([
+            'success' => true,
+            'password' => $plainPassword,
+            'expires_at' => $tempPassword->expires_at->format('Y-m-d H:i:s'),
+            'message' => 'تم جلب كلمة المرور بنجاح'
+        ]);
+    }
+
+    /**
+     * تغيير كلمة المرور للمستخدم (فقط لـ super-admin)
+     */
+    public function updatePassword(Request $request, User $user)
+    {
+        // التأكد من أن المستخدم الحالي super-admin
+        if (!auth()->user()->hasRole('super-admin')) {
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'غير مصرح لك بهذا الإجراء'
+                ], 403);
+            }
+            abort(403, 'غير مصرح لك بهذا الإجراء');
+        }
+
+        $validated = $request->validate([
+            'password' => 'required|min:8|confirmed',
+        ], [
+            'password.required' => 'كلمة المرور مطلوبة',
+            'password.min' => 'كلمة المرور يجب أن تكون على الأقل 8 أحرف',
+            'password.confirmed' => 'تأكيد كلمة المرور غير متطابق',
+        ]);
+
+        $user->password = Hash::make($validated['password']);
+        $user->save();
+
+        // حفظ كلمة المرور مؤقتاً (مشفرة) للـ super-admin فقط
+        UserTemporaryPassword::storeForUser($user->id, $validated['password'], 24); // صالحة لمدة 24 ساعة
+
+        if ($request->expectsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'تم تغيير كلمة المرور بنجاح',
+                'temp_password_id' => $user->getLatestTemporaryPassword()?->id
+            ]);
+        }
+
+        return redirect()->route('admin.users.index')
+            ->with('success', 'تم تغيير كلمة المرور بنجاح')
+            ->with('updated_user_id', $user->id); // لإظهار كلمة المرور
     }
 
     private function getFilteredPermissions()

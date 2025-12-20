@@ -1,7 +1,7 @@
 @extends('layouts.site')
 
-@section('title', 'أخبار الشركة | كهرباء غزة')
-@section('meta_description', 'استعرض آخر الأخبار من شركة توزيع كهرباء غزة.')
+@section('title', __('common.news_page_title') . ' | ' . __('common.home'))
+@section('meta_description', __('common.news_page_description'))
 
 @push('styles')
     <style>
@@ -203,6 +203,10 @@
             display: block;
             text-align: right;
         }
+        
+        [dir="ltr"] .news-heading h2 {
+            text-align: left;
+        }
 
         .news-heading p {
             margin: 0 0 0 auto;
@@ -212,6 +216,15 @@
             line-height: 1.8;
             text-align: right;
             white-space: nowrap;
+        }
+        
+        [dir="ltr"] .news-heading p {
+            margin: 0 auto 0 0;
+            text-align: left;
+        }
+        
+        [dir="ltr"] .news-heading .news-heading__kicker {
+            margin: 0 0 .6rem 0;
         }
 
         .news-grid {
@@ -623,17 +636,22 @@
 @endpush
 
 @section('content')
+    @php
+        $currentDir = session('direction', 'rtl');
+        $isRtl = $currentDir === 'rtl';
+    @endphp
     <section id="subheader"
              class="text-light relative rounded-1 overflow-hidden m-3 d-flex align-items-center justify-content-center text-center"
-             data-bgimage="url({{ asset('assets/site/images/site3.webp') }}) center center / cover">
+             data-bgimage="url({{ asset('assets/site/images/backgrounds/site3.webp') }}) center center / cover"
+             dir="{{ $currentDir }}">
         <div class="container relative z-2">
             <div class="row justify-content-center text-center">
                 <div class="col-12">
-                    <h1 class="split mb-3 fw-bold d-block w-100">أخبار الشركة</h1>
+                    <h1 class="split mb-3 fw-bold d-block w-100">{{ __('common.news_page_title') }}</h1>
                     <div class="w-100 mt-2">
                         <ul class="crumb">
-                            <li><a href="{{ route('site.home') }}">الرئيسية</a></li>
-                            <li class="active">أخبار الشركة</li>
+                            <li><a href="{{ route('site.home') }}">{{ __('common.home') }}</a></li>
+                            <li class="active">{{ __('common.news_page_title') }}</li>
                         </ul>
                     </div>
                 </div>
@@ -643,15 +661,15 @@
         <div class="sw-overlay op-7"></div>
     </section>
 
-    <section class="news-section">
+    <section class="news-section" dir="{{ $currentDir }}">
         <div class="container news-wrapper--expanded" id="news-wrapper">
             @php
                 $activeFilter = $activeFilter ?? request('filter', 'all');
             @endphp
             <div class="news-heading">
-                <span class="news-heading__kicker"><i class="ri-bar-chart-fill"></i> أحدث المستجدات</span>
-                <h2>مركز أخبار الشركة</h2>
-                <p>مصدر موثوق للبيانات والتحديثات الرسمية الصادرة عن شركة توزيع كهرباء غزة، مع تغطية مستمرة لآخر التطورات.</p>
+                <span class="news-heading__kicker"><i class="ri-bar-chart-fill"></i> {{ __('common.news_page_subtitle') }}</span>
+                <h2>{{ __('common.news_page_heading') }}</h2>
+                <p>{{ __('common.news_page_description') }}</p>
             </div>
 
             <div class="news-filters" id="news-filters" aria-label="مرشحات الأخبار">
@@ -660,31 +678,31 @@
                         type="text"
                         name="search"
                         value="{{ request('search') }}"
-                        placeholder="ابحث عن خبر..."
-                        aria-label="ابحث عن خبر"
+                        placeholder="{{ __('common.news_search_placeholder') }}"
+                        aria-label="{{ __('common.news_search_placeholder') }}"
                         dir="auto"
                     >
                     <input type="hidden" name="filter" value="{{ $activeFilter }}">
                     <button type="submit">
                         <i class="ri-search-line"></i>
-                        بحث
+                        {{ __('common.search') }}
                     </button>
                 </form>
                 <button type="button" class="news-filters__button {{ $activeFilter === 'all' ? 'is-active' : '' }}" data-filter="all">
                     <i class="ri-apps-2-line"></i>
-                    الكل
+                    {{ __('common.news_filter_all') }}
                 </button>
                 <button type="button" class="news-filters__button {{ $activeFilter === 'featured' ? 'is-active' : '' }}" data-filter="featured">
                     <i class="ri-vip-crown-line"></i>
-                    المميزة
+                    {{ __('common.news_filter_featured') }}
                 </button>
                 <button type="button" class="news-filters__button {{ $activeFilter === 'fresh' ? 'is-active' : '' }}" data-filter="fresh">
                     <i class="ri-flashlight-fill"></i>
-                    أخبار اليوم
+                    {{ __('common.news_filter_fresh') }}
                 </button>
                 <button type="button" class="news-filters__button {{ $activeFilter === 'week' ? 'is-active' : '' }}" data-filter="week">
                     <i class="ri-calendar-todo-line"></i>
-                    هذا الأسبوع
+                    {{ __('common.news_filter_week') }}
                 </button>
             </div>
 

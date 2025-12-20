@@ -7,8 +7,10 @@ class SiteSetting extends Model
 {
     protected $table = 'site_settings';
     protected $fillable = [
-        'footer_title_ar', 'logo_white_path',
-
+        'footer_title_ar', 'footer_title_en', 
+        'logo_white_path_ar', 'logo_white_path_en',
+        'contact_us_title_ar', 'contact_us_title_en',
+        'copyright_ar', 'copyright_en',
         'email','phone','address_ar','contact_email','contact_phone','contact_address',
     ];
 

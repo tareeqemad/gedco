@@ -1,5 +1,5 @@
 @extends('layouts.admin')
-@section('title','إضافة مستخدم')
+@section('title', __('admin.users.add_user'))
 
 @section('content')
     <div class="page-header">
@@ -7,12 +7,12 @@
             <div class="row align-items-center">
                 <div class="col-md-12">
                     <div class="page-header-title">
-                        <h5 class="m-b-10">إضافة مستخدم جديد</h5>
+                        <h5 class="m-b-10">{{ __('admin.users.add_new_user') }}</h5>
                     </div>
                     <ul class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}"><i class="feather icon-home"></i></a></li>
-                        <li class="breadcrumb-item"><a href="{{ route('admin.users.index') }}">المستخدمون</a></li>
-                        <li class="breadcrumb-item active">إضافة مستخدم</li>
+                        <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}"><i class="bi bi-house"></i></a></li>
+                        <li class="breadcrumb-item"><a href="{{ route('admin.users.index') }}">{{ __('admin.menu.users') }}</a></li>
+                        <li class="breadcrumb-item active">{{ __('admin.users.add_user') }}</li>
                     </ul>
                 </div>
             </div>
@@ -21,7 +21,7 @@
 
     <div class="card shadow-sm">
         <div class="card-header bg-white">
-            <h5 class="mb-0">إضافة مستخدم جديد</h5>
+            <h5 class="mb-0">{{ __('admin.users.add_new_user') }}</h5>
         </div>
         <div class="card-body">
             @if ($errors->any())
@@ -40,24 +40,24 @@
 
                 <div class="row">
                     <div class="col-md-6 mb-3">
-                        <label class="form-label">الاسم <span class="text-danger">*</span></label>
+                        <label class="form-label">{{ __('admin.users.name') }} <span class="text-danger">*</span></label>
                         <input type="text" name="name" class="form-control" value="{{ old('name') }}" required>
                     </div>
                     <div class="col-md-6 mb-3">
-                        <label class="form-label">البريد الإلكتروني <span class="text-danger">*</span></label>
+                        <label class="form-label">{{ __('admin.users.email') }} <span class="text-danger">*</span></label>
                         <input type="email" name="email" class="form-control" value="{{ old('email') }}" required>
                     </div>
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label">كلمة المرور <span class="text-danger">*</span></label>
+                    <label class="form-label">{{ __('admin.users.password') }} <span class="text-danger">*</span></label>
                     <input type="password" name="password" class="form-control" required>
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label">الدور</label>
+                    <label class="form-label">{{ __('admin.users.role') }}</label>
                     <select name="role_id" class="form-select">
-                        <option value="">— بدون دور —</option>
+                        <option value="">{{ __('admin.users.no_role') }}</option>
                         @foreach($roles as $role)
                             <option value="{{ $role->id }}" {{ old('role_id') == $role->id ? 'selected' : '' }}>
                                 {{ ucfirst(str_replace('-', ' ', $role->name)) }}
@@ -66,15 +66,15 @@
                     </select>
                 </div>
 
-                <!-- === الصلاحيات الإضافية (محدثة) === -->
+                <!-- === Additional Permissions === -->
                 <div class="mb-4">
                     <div class="d-flex justify-content-between align-items-center mb-3">
-                        <label class="form-label mb-0 fw-bold">صلاحيات إضافية</label>
+                        <label class="form-label mb-0 fw-bold">{{ __('admin.users.additional_permissions') }}</label>
                         <div>
                             <input type="text" id="permissionSearch" class="form-control form-control-sm d-inline-block"
-                                   placeholder="ابحث..." style="width: 220px;">
-                            <button type="button" id="selectAll" class="btn btn-sm btn-outline-success ms-2">تحديد الكل</button>
-                            <button type="button" id="deselectAll" class="btn btn-sm btn-outline-danger">إلغاء الكل</button>
+                                   placeholder="{{ __('admin.users.search_permissions') }}" style="width: 220px;">
+                            <button type="button" id="selectAll" class="btn btn-sm btn-outline-success ms-2">{{ __('admin.users.select_all') }}</button>
+                            <button type="button" id="deselectAll" class="btn btn-sm btn-outline-danger">{{ __('admin.users.deselect_all') }}</button>
                         </div>
                     </div>
 
@@ -84,7 +84,7 @@
                         @forelse($permissions as $guard => $perms)
                             <div class="permission-group mb-4">
                                 <h6 class="text-primary fw-bold mb-3 border-bottom pb-2 d-flex justify-content-between">
-                                    <span><i class="bi bi-shield-lock-fill me-1"></i> {{ $guard === 'web' ? 'لوحة التحكم (Web)' : ucfirst($guard) }}</span>
+                                    <span><i class="bi bi-shield-lock-fill me-1"></i> {{ $guard === 'web' ? __('admin.users.dashboard_web') : ucfirst($guard) }}</span>
                                     <span class="badge bg-primary rounded-pill">{{ $perms->count() }}</span>
                                 </h6>
                                 <div class="row g-3">
@@ -105,14 +105,14 @@
                         @empty
                             <div class="text-center text-muted py-4">
                                 <i class="bi bi-shield-lock fs-1"></i>
-                                <p class="mt-2">لا توجد صلاحيات متاحة.</p>
+                                <p class="mt-2">{{ __('admin.users.no_permissions') }}</p>
                             </div>
                         @endforelse
                     </div>
                 </div>
 
                 <div class="text-end">
-                    <button type="submit" class="btn btn-primary px-5">حفظ المستخدم</button>
+                    <button type="submit" class="btn btn-primary px-5">{{ __('admin.users.save_user') }}</button>
                 </div>
             </form>
         </div>

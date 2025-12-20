@@ -1,5 +1,5 @@
 @extends('layouts.admin')
-@section('title','إنشاء من نحن')
+@section('title', __('admin.about_us.create_title'))
 @section('content')
     @php
         $route  = route('admin.about.store');
@@ -8,7 +8,7 @@
     @endphp
 
     <div class="py-4">
-        <h1 class="mb-4 fw-bold">إنشاء - من نحن</h1>
+        <h1 class="mb-4 fw-bold">{{ __('admin.about_us.create_title') }}</h1>
 
         @if(session('success'))
             <div class="alert alert-success">{{ session('success') }}</div>
@@ -26,6 +26,6 @@
             </div>
         @endif
 
-        @include('admin.site.about._form', compact('route','method','model','col1','col2'))
+        @include('admin.site.about._form', compact('route','method','model','col1','col2','col1En','col2En'))
     </div>
 @endsection

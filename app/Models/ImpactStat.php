@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class ImpactStat extends Model
 {
-    protected $fillable = ['title_ar', 'amount_usd', 'sort_order', 'is_active'];
+    protected $fillable = ['title_ar', 'title_en', 'amount_usd', 'sort_order', 'is_active'];
     protected $casts = ['amount_usd' => 'float', 'is_active' => 'boolean'];
 
 

@@ -41,17 +41,22 @@ class SiteSettingController extends Controller
             $setting->load(['contactChannels' => fn($q) => $q->orderBy('position')]);
             return [
                 'footer_title_ar' => $setting->footer_title_ar,
-                'logo_white_path' => $setting->logo_white_path,
+                'footer_title_en' => $setting->footer_title_en,
+                'logo_white_path_ar' => $setting->logo_white_path_ar,
+                'logo_white_path_en' => $setting->logo_white_path_en,
+                'contact_us_title_ar' => $setting->contact_us_title_ar,
+                'contact_us_title_en' => $setting->contact_us_title_en,
                 'channels' => $setting->contactChannels->map(fn($c) => [
                     'label'      => $c->label,
                     'email'      => $c->email,
                     'phone'      => $c->phone_formatted ?? $c->phone,
                     'address_ar' => $c->address_ar,
+                    'address_en' => $c->address_en,
                 ])->values()->all(),
             ];
         });
 
-        return back()->with('success', 'تم تحديث الإعدادات بنجاح');
+        return back()->with('success', __('admin.settings.updated_successfully'));
     }
 
     private function syncContactChannels(SiteSetting $setting, array $channels): void
@@ -65,9 +70,10 @@ class SiteSettingController extends Controller
                     'email'      => $row['email']      ?? null,
                     'phone'      => $row['phone']      ?? null,
                     'address_ar' => $row['address_ar'] ?? null,
+                    'address_en' => $row['address_en'] ?? null,
                 ];
             })
-            ->filter(fn ($r) => $r['email'] || $r['phone'] || $r['address_ar'])
+            ->filter(fn ($r) => $r['email'] || $r['phone'] || $r['address_ar'] || $r['address_en'])
             ->slice(0, 2)
             ->values();
 
@@ -83,6 +89,7 @@ class SiteSettingController extends Controller
                         'email'      => $row['email'],
                         'phone'      => $row['phone'],
                         'address_ar' => $row['address_ar'],
+                        'address_en' => $row['address_en'],
                     ]);
                     $keepIds[] = $model->id;
                     continue;
@@ -95,6 +102,7 @@ class SiteSettingController extends Controller
                 'email'      => $row['email'],
                 'phone'      => $row['phone'],
                 'address_ar' => $row['address_ar'],
+                'address_en' => $row['address_en'],
             ]);
             $keepIds[] = $new->id;
         }

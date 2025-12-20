@@ -44,4 +44,23 @@ class User extends Authenticatable
         // الحالة الطبيعية: avatars/xxx.jpg
         return Storage::url($this->avatar);
     }
+
+    /**
+     * العلاقة مع كلمات المرور المؤقتة
+     */
+    public function temporaryPasswords()
+    {
+        return $this->hasMany(UserTemporaryPassword::class)->orderBy('created_at', 'desc');
+    }
+
+    /**
+     * الحصول على آخر كلمة مرور مؤقتة غير منتهية
+     */
+    public function getLatestTemporaryPassword()
+    {
+        return $this->temporaryPasswords()
+            ->where('expires_at', '>', now())
+            ->where('viewed', false)
+            ->first();
+    }
 }

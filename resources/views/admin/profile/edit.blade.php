@@ -10,14 +10,14 @@
             <!-- رسائل النجاح -->
             @if(session('success'))
                 <div class="alert alert-success alert-dismissible fade show">
-                    <i class="fas fa-check-circle me-2"></i> {{ session('success') }}
+                    <i class="bi bi-check-circle me-2"></i> {{ session('success') }}
                     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>
             @endif
 
             @if(session('success_password'))
                 <div class="alert alert-info alert-dismissible fade show">
-                    <i class="fas fa-key me-2"></i> {{ session('success_password') }}
+                    <i class="bi bi-key me-2"></i> {{ session('success_password') }}
                     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>
             @endif
@@ -64,7 +64,7 @@
 
                                 <div class="mt-4">
                                     <button type="submit" class="btn btn-primary btn-lg px-5">
-                                        <i class="fas fa-save me-2"></i> حفظ التغييرات
+                                        <i class="bi bi-save me-2"></i> حفظ التغييرات
                                     </button>
                                 </div>
                             </form>
@@ -89,7 +89,7 @@
                                 </div>
                                 <div class="mt-4">
                                     <button type="submit" class="btn btn-danger btn-lg px-5">
-                                        <i class="fas fa-key me-2"></i> تغيير كلمة المرور
+                                        <i class="bi bi-key me-2"></i> تغيير كلمة المرور
                                     </button>
                                 </div>
                             </form>

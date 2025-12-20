@@ -1,20 +1,12 @@
 @extends('layouts.admin')
-@section('title', 'سلايدر الموقع')
+@section('title', __('admin.slider.title'))
 
 @section('content')
     @php
-        $breadcrumbTitle     = 'السلايدر';
-        $breadcrumbParent    = 'لوحةالتحكم';
+        $breadcrumbTitle     = __('admin.menu.slider');
+        $breadcrumbParent    = __('admin.breadcrumbs.home');
         $breadcrumbParentUrl = route('admin.dashboard');
 
-        use Illuminate\Support\Str;
-
-        $getImageUrl = function ($path) {
-            if (!$path) return asset('assets/admin/images/placeholder.png');
-            if (Str::startsWith($path, ['http://', 'https://'])) return $path;
-            if (Str::startsWith($path, ['assets/', 'public/', 'storage/'])) return asset($path);
-            return asset('storage/' . $path);
-        };
     @endphp
 
     <div class="py-4">
@@ -24,13 +16,16 @@
             <div class="card-header bg-white border-bottom d-flex align-items-center justify-content-between flex-wrap gap-3 py-3">
                 <h5 class="card-title mb-0 text-dark fw-semibold d-flex align-items-center gap-2">
                     <i class="bi bi-images text-primary"></i>
-                    شرائح السلايدر
+                    {{ __('admin.slider.slider_items') }}
                     <span class="badge bg-primary rounded-pill small">{{ $sliders->total() }}</span>
+                    <span class="badge bg-info rounded-pill small">
+                        {{ $currentLanguage === 'ar' ? __('admin.labels.arabic') : __('admin.labels.english') }}
+                    </span>
                 </h5>
                 <a href="{{ route('admin.sliders.create') }}"
                    class="btn btn-primary btn-sm d-flex align-items-center gap-1 shadow-sm">
                     <i class="bi bi-plus-lg"></i>
-                    إضافة شريحة جديدة
+                    {{ __('admin.slider.add_new_slide') }}
                 </a>
             </div>
 
@@ -40,11 +35,11 @@
                         <thead class="table-light">
                         <tr>
                             <th class="text-muted small fw-semibold" width="6%">#</th>
-                            <th class="text-muted small fw-semibold" width="30%">العنوان</th>
-                            <th class="text-muted small fw-semibold" width="28%">صورة الخلفية</th>
-                            <th class="text-muted small fw-semibold text-center" width="10%">ترتيب</th>
-                            <th class="text-muted small fw-semibold text-center" width="10%">الحالة</th>
-                            <th class="text-muted small fw-semibold text-end" width="16%">إجراءات</th>
+                            <th class="text-muted small fw-semibold" width="30%">{{ __('admin.slider.table_title') }}</th>
+                            <th class="text-muted small fw-semibold" width="28%">{{ __('admin.slider.table_bg_image') }}</th>
+                            <th class="text-muted small fw-semibold text-center" width="10%">{{ __('admin.slider.table_order') }}</th>
+                            <th class="text-muted small fw-semibold text-center" width="10%">{{ __('admin.slider.table_status') }}</th>
+                            <th class="text-muted small fw-semibold text-end" width="16%">{{ __('admin.slider.table_actions') }}</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -64,8 +59,8 @@
                                 </td>
 
                                 <td>
-                                    <img src="{{ $getImageUrl($s->bg_image) }}"
-                                         alt="صورة الخلفية"
+                                    <img src="{{ build_image_url($s->bg_image) }}"
+                                         alt="{{ __('admin.slider.table_bg_image') }}"
                                          width="100"
                                          height="56"
                                          class="rounded shadow-sm object-fit-cover"
@@ -82,7 +77,7 @@
 
                                 <td class="text-center">
                                         <span class="badge {{ $s->is_active ? 'bg-success' : 'bg-secondary' }} small">
-                                            {{ $s->is_active ? 'مفعل' : 'معطل' }}
+                                            {{ $s->is_active ? __('admin.slider.form_active') : __('admin.slider.form_inactive') }}
                                         </span>
                                 </td>
 
@@ -90,16 +85,16 @@
                                     <div class="btn-group btn-group-sm" role="group">
                                         <a href="{{ route('admin.sliders.edit', $s) }}"
                                            class="btn btn-outline-primary"
-                                           title="تعديل">
-                                            تعديل
+                                           title="{{ __('admin.actions.edit') }}">
+                                            {{ __('admin.actions.edit') }}
                                         </a>
 
                                        <button type="button"
                                                 class="btn btn-outline-danger"
                                                 data-bs-toggle="modal"
                                                 data-bs-target="#deleteModal-{{ $s->id }}"
-                                                title="حذف">
-                                            حذف
+                                                title="{{ __('admin.actions.delete') }}">
+                                            {{ __('admin.actions.delete') }}
                                         </button>
 
                                     </div>
@@ -110,8 +105,8 @@
                                 <td colspan="6" class="text-center py-5">
                                     <div class="text-muted">
                                         <i class="bi bi-images display-5 d-block mb-3 opacity-50"></i>
-                                        <p class="mb-1">لا توجد شرائح بعد</p>
-                                        <a href="{{ route('admin.sliders.create') }}" class="small text-primary">+ أضف أول شريحة</a>
+                                        <p class="mb-1">{{ __('admin.slider.no_slides') }}</p>
+                                        <a href="{{ route('admin.sliders.create') }}" class="small text-primary">{{ __('admin.slider.add_first_slide') }}</a>
                                     </div>
                                 </td>
                             </tr>
@@ -137,24 +132,24 @@
                         <div class="modal-content shadow-lg border-0">
                             <div class="modal-header border-0 pb-2">
                                 <h5 class="modal-title text-danger fw-bold">
-                                    حذف الشريحة
+                                    {{ __('admin.slider.delete_modal_title') }}
                                 </h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="إغلاق"></button>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ __('admin.slider.close') }}"></button>
                             </div>
                             <div class="modal-body pt-2 pb-3 text-center">
                                 <i class="bi bi-exclamation-triangle-fill text-danger display-5 mb-3"></i>
-                                <p class="mb-2 text-muted small">هل أنت متأكد من حذف هذه الشريحة؟</p>
+                                <p class="mb-2 text-muted small">{{ __('admin.slider.delete_confirm') }}</p>
                                 <p class="fw-semibold text-dark mb-0">
                                     "{{ Str::limit($s->title, 40) }}"
                                 </p>
-                                <small class="text-danger d-block mt-2">هذا الإجراء لا يمكن التراجع عنه</small>
+                                <small class="text-danger d-block mt-2">{{ __('admin.slider.delete_irreversible') }}</small>
                             </div>
                             <div class="modal-footer border-0 pt-2 justify-content-center gap-2">
                                 <button type="button" class="btn btn-secondary btn-sm px-4" data-bs-dismiss="modal">
-                                    إلغاء
+                                    {{ __('admin.actions.cancel') }}
                                 </button>
                                 <button type="submit" class="btn btn-danger btn-sm px-4">
-                                    حذف نهائيًا
+                                    {{ __('admin.slider.delete_final') }}
                                 </button>
                             </div>
                         </div>
@@ -166,30 +161,4 @@
 
     </div>
 
-    @push('styles')
-        <style>
-            .status-dot {
-                width: 10px;
-                height: 10px;
-                border-radius: 50%;
-                display: inline-block;
-                flex-shrink: 0;
-            }
-            .table-hover tbody tr:hover {
-                background-color: rgba(0, 0, 0, 0.025) !important;
-            }
-            .object-fit-cover { object-fit: cover; }
-            .badge { font-weight: 500; }
-
-            /* تحسين المودال */
-            .modal-content {
-                border-radius: 1rem;
-            }
-            .modal-dialog-centered {
-                display: flex;
-                align-items: center;
-                min-height: calc(100% - 1rem);
-            }
-        </style>
-    @endpush
 @endsection

@@ -9,18 +9,46 @@ use Spatie\Permission\Models\Permission;
 
 class RoleController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $roles = Role::withCount('users')->orderBy('name')->paginate(10);
-        return view('admin.roles.index', compact('roles'));
+        $query = Role::withCount(['users', 'permissions']);
+
+        // البحث
+        if ($search = $request->get('search')) {
+            $query->where('name', 'like', "%{$search}%");
+        }
+
+        $roles = $query->orderBy('name')->paginate(20)->appends($request->query());
+
+        // إحصائيات
+        $stats = [
+            'total' => Role::count(),
+            'total_users' => \App\Models\User::role(Role::pluck('name')->toArray())->count(),
+            'total_permissions' => Permission::count(),
+        ];
+
+        // الأدوار مع معلومات إضافية
+        $rolesWithDetails = $roles->map(function ($role) {
+            return [
+                'role' => $role,
+                'users' => $role->users()->limit(5)->get(),
+                'permissions_count' => $role->permissions()->count(),
+                'permissions' => $role->permissions()->limit(5)->pluck('name')->toArray(),
+            ];
+        });
+
+        return view('admin.roles.index', compact('roles', 'stats', 'rolesWithDetails'));
     }
 
     public function create()
     {
-        $permissions = Permission::orderBy('guard_name')
+        $permissions = Permission::where('guard_name', 'web')
             ->orderBy('name')
             ->get(['id', 'name', 'guard_name'])
-            ->groupBy('guard_name');
+            ->groupBy(function ($permission) {
+                $parts = explode('.', $permission->name);
+                return $parts[0] ?? 'other';
+            });
 
         return view('admin.roles.create', compact('permissions'));
     }
@@ -41,15 +69,18 @@ class RoleController extends Controller
         $this->syncRolePermissions($role, $request->input('permissions', []));
 
         return redirect()->route('admin.roles.index')
-            ->with('success', 'تم إنشاء الدور بنجاح');
+            ->with('success', __('admin.roles.created_successfully'));
     }
 
     public function edit(Role $role)
     {
-        $permissions = Permission::orderBy('guard_name')
+        $permissions = Permission::where('guard_name', 'web')
             ->orderBy('name')
             ->get(['id', 'name', 'guard_name'])
-            ->groupBy('guard_name');
+            ->groupBy(function ($permission) {
+                $parts = explode('.', $permission->name);
+                return $parts[0] ?? 'other';
+            });
 
         $rolePermissionIds = $role->permissions->pluck('id')->toArray();
 
@@ -73,32 +104,33 @@ class RoleController extends Controller
         $this->syncRolePermissions($role, $request->input('permissions', []));
 
         return redirect()->route('admin.roles.index')
-            ->with('success', 'تم تحديث الدور بنجاح');
+            ->with('success', __('admin.roles.updated_successfully'));
     }
 
     public function destroy(Role $role)
     {
         // منع حذف super-admin
         if ($role->name === 'super-admin') {
-            return back()->with('error', 'لا يمكن حذف دور Super Admin');
+            return back()->with('error', __('admin.roles.cannot_delete_super_admin'));
         }
 
         // منع حذف إذا كان مستخدم
         if ($role->users()->exists()) {
-            return back()->with('error', 'لا يمكن حذف دور مستخدم من قبل مستخدمين');
+            return back()->with('error', __('admin.roles.cannot_delete_with_users'));
         }
 
         $role->delete();
 
         return redirect()->route('admin.roles.index')
-            ->with('success', 'تم حذف الدور بنجاح');
+            ->with('success', __('admin.roles.deleted_successfully'));
     }
 
     // === دالة مساعدة لتعيين الصلاحيات ===
     private function syncRolePermissions(Role $role, array $permissionIds)
     {
-        $permissions = Permission::find($permissionIds);
-        $permissions = $permissions->where('guard_name', 'web');
+        $permissions = Permission::whereIn('id', $permissionIds)
+            ->where('guard_name', 'web')
+            ->get();
         $role->syncPermissions($permissions);
     }
 }

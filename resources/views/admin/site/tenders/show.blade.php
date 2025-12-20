@@ -1,27 +1,27 @@
 @extends('layouts.admin')
 
-@section('title', 'تفاصيل العطاء #' . $tender->id)
+@section('title', __('admin.tenders.show_title') . ' #' . $tender->id)
 
 @section('content')
     <div class="container-fluid">
 
         <div class="d-flex justify-content-between align-items-center mb-3">
-            <h4 class="mb-0">تفاصيل العطاء <span class="text-muted">#{{ $tender->id }}</span></h4>
+            <h4 class="mb-0">{{ __('admin.tenders.show_details') }} <span class="text-muted">#{{ $tender->id }}</span></h4>
             <div class="d-flex gap-2">
                 <a href="{{ route('admin.tenders.index') }}" class="btn btn-light">
-                    <i class="bi bi-arrow-right-short"></i> رجوع
+                    <i class="bi bi-arrow-right-short"></i> {{ __('admin.tenders.back') }}
                 </a>
                 @can('tenders.edit')
                     <a href="{{ route('admin.tenders.edit', $tender->id) }}" class="btn btn-warning">
-                        <i class="bi bi-pencil"></i> تعديل
+                        <i class="bi bi-pencil"></i> {{ __('admin.tenders.edit') }}
                     </a>
                 @endcan
             </div>
         </div>
 
-        {{-- بطاقة بيانات عامة --}}
+        {{-- General Data Card --}}
         <div class="card mb-4">
-            <div class="card-header fw-semibold">البيانات العامة</div>
+            <div class="card-header fw-semibold">{{ __('admin.tenders.show_general_data') }}</div>
             <div class="card-body p-0">
                 <div class="list-group list-group-flush">
 
@@ -74,10 +74,10 @@
             </div>
         </div>
 
-        {{-- بطاقة المحتوى OLD/NEW مع فواصل واضحة --}}
+        {{-- Detailed Content Card OLD/NEW --}}
         <div class="card">
             <div class="card-header fw-semibold d-flex align-items-center gap-2">
-                المحتوى التفصيلي
+                {{ __('admin.tenders.show_detailed_content') }}
                 <span class="badge bg-secondary">OLD_VALUE_1 & NEW_VALUE_1</span>
             </div>
             <div class="card-body">
@@ -85,22 +85,22 @@
                 <ul class="nav nav-tabs" id="valueTabs" role="tablist">
                     <li class="nav-item" role="presentation">
                         <button class="nav-link active" id="old-html-tab" data-bs-toggle="tab" data-bs-target="#old-html" type="button" role="tab">
-                            OLD (HTML)
+                            {{ __('admin.tenders.show_old_value_html') }}
                         </button>
                     </li>
                     <li class="nav-item" role="presentation">
                         <button class="nav-link" id="new-html-tab" data-bs-toggle="tab" data-bs-target="#new-html" type="button" role="tab">
-                            NEW (HTML)
+                            {{ __('admin.tenders.show_new_value_html') }}
                         </button>
                     </li>
                     <li class="nav-item" role="presentation">
                         <button class="nav-link" id="old-text-tab" data-bs-toggle="tab" data-bs-target="#old-text" type="button" role="tab">
-                            OLD (Text)
+                            {{ __('admin.tenders.show_old_value_text') }}
                         </button>
                     </li>
                     <li class="nav-item" role="presentation">
                         <button class="nav-link" id="new-text-tab" data-bs-toggle="tab" data-bs-target="#new-text" type="button" role="tab">
-                            NEW (Text)
+                            {{ __('admin.tenders.show_new_value_text') }}
                         </button>
                     </li>
                 </ul>
@@ -113,7 +113,7 @@
                                 {!! $tender->old_value_1 !!}
                             </div>
                         @else
-                            <div class="text-muted">لا يوجد محتوى.</div>
+                            <div class="text-muted">{{ __('admin.tenders.show_no_content') }}</div>
                         @endif
                     </div>
 
@@ -124,7 +124,7 @@
                                 {!! $tender->new_value_1 !!}
                             </div>
                         @else
-                            <div class="text-muted">لا يوجد محتوى.</div>
+                            <div class="text-muted">{{ __('admin.tenders.show_no_content') }}</div>
                         @endif
                     </div>
 
@@ -145,13 +145,13 @@
                 <div class="row g-3">
                     <div class="col-md-6">
                         <div class="border rounded p-3 h-100">
-                            <div class="fw-semibold mb-2">OLD_VALUE_1 (ملخّص)</div>
+                            <div class="fw-semibold mb-2">{{ __('admin.tenders.show_old_summary') }}</div>
                             <div class="text-muted">{{ \Illuminate\Support\Str::limit(strip_tags((string)$tender->old_value_1), 300) ?: '—' }}</div>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="border rounded p-3 h-100">
-                            <div class="fw-semibold mb-2">NEW_VALUE_1 (ملخّص)</div>
+                            <div class="fw-semibold mb-2">{{ __('admin.tenders.show_new_summary') }}</div>
                             <div class="text-muted">{{ \Illuminate\Support\Str::limit(strip_tags((string)$tender->new_value_1), 300) ?: '—' }}</div>
                         </div>
                     </div>

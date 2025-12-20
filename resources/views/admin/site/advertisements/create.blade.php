@@ -1,10 +1,10 @@
 @extends('layouts.admin')
-@section('title', 'إضافة إعلان جديد')
+@section('title', __('admin.advertisements.create_title'))
 
 @section('content')
     @php
-        $breadcrumbTitle     = 'إضافة إعلان جديد';
-        $breadcrumbParent    = 'الإعلانات والوظائف';
+        $breadcrumbTitle     = __('admin.advertisements.create_title');
+        $breadcrumbParent    = __('admin.advertisements.title');
         $breadcrumbParentUrl = route('admin.advertisements.index');
 
         // حدود الصور داخل المحرر
@@ -17,18 +17,18 @@
         <div class="card border-0 shadow-sm rounded-3 bg-white mb-4">
             <div class="card-header bg-white border-bottom py-2 px-3 d-flex align-items-center justify-content-between flex-wrap gap-2">
                 <div class="d-flex align-items-center gap-2">
-                    <i class="ri-add-circle-line text-primary fs-5"></i>
-                    <h6 class="mb-0 fw-semibold text-dark-emphasis">إنشاء إعلان جديد</h6>
+                    <i class="bi bi-plus-circle text-primary fs-5"></i>
+                    <h6 class="mb-0 fw-semibold text-dark-emphasis">{{ __('admin.advertisements.create_new') }}</h6>
                 </div>
                 <ul class="nav nav-tabs nav-tabs-sm border-0" id="adTabs" role="tablist">
                     <li class="nav-item" role="presentation">
                         <button class="nav-link active px-3 py-1 rounded-3" data-bs-toggle="tab" data-bs-target="#form-content">
-                            <i class="ri-edit-line me-1"></i> إدخال
+                            <i class="bi bi-pencil me-1"></i> {{ __('admin.advertisements.form_tab_input') }}
                         </button>
                     </li>
                     <li class="nav-item" role="presentation">
                         <button class="nav-link px-3 py-1 rounded-3" data-bs-toggle="tab" data-bs-target="#preview-content">
-                            <i class="ri-eye-line me-1"></i> معاينة
+                            <i class="bi bi-eye me-1"></i> {{ __('admin.advertisements.form_tab_preview') }}
                         </button>
                     </li>
                 </ul>
@@ -48,22 +48,22 @@
                                     <!-- input مخفي لرفع صور Quill -->
                                     <input type="file" id="quillImageInput" accept="image/*" multiple class="visually-hidden">
 
-                                    <!-- العنوان -->
+                                    <!-- Title -->
                                     <div class="mb-4">
                                         <label class="form-label fw-medium text-secondary d-flex align-items-center gap-1">
-                                            <i class="ri-heading fs-6 text-primary"></i> عنوان الإعلان
+                                            <i class="bi bi-type-h1 fs-6 text-primary"></i> {{ __('admin.advertisements.form_title') }}
                                         </label>
                                         <input type="text" name="TITLE" id="titleInput"
                                                class="form-control rounded-3 border-0 shadow-sm focus-ring focus-ring-primary @error('TITLE') is-invalid @enderror"
-                                               placeholder="أدخل عنوانًا جذابًا..." value="{{ old('TITLE') }}">
+                                               placeholder="{{ __('admin.advertisements.form_title_placeholder') }}" value="{{ old('TITLE') }}">
                                         @error('TITLE') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
                                         <div class="form-text text-muted small"><span id="titleCount">{{ old('TITLE') ? strlen(old('TITLE')) : 0 }}</span>/255</div>
                                     </div>
 
-                                    <!-- تاريخ الخبر -->
+                                    <!-- News Date -->
                                     <div class="mb-4">
                                         <label class="form-label fw-medium text-secondary d-flex align-items-center gap-1">
-                                            <i class="ri-calendar-line fs-6 text-info"></i> تاريخ الخبر
+                                            <i class="bi bi-calendar fs-6 text-info"></i> {{ __('admin.advertisements.form_date_news') }}
                                         </label>
                                         <input type="date" name="DATE_NEWS" id="dateInput"
                                                class="form-control rounded-3 border-0 shadow-sm focus-ring focus-ring-info @error('DATE_NEWS') is-invalid @enderror"
@@ -71,15 +71,15 @@
                                         @error('DATE_NEWS') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
                                     </div>
 
-                                    <!-- المحتوى (Quill) + عدّادات -->
+                                    <!-- Content (Quill) + Counters -->
                                     <div class="mb-4">
                                         <label class="form-label fw-medium text-secondary d-flex align-items-center gap-2 flex-wrap">
                                         <span class="d-inline-flex align-items-center gap-1">
-                                            <i class="ri-file-text-line fs-6 text-success"></i> محتوى الإعلان
+                                            <i class="bi bi-file-text fs-6 text-success"></i> {{ __('admin.advertisements.form_content') }}
                                         </span>
-                                            <small class="text-muted">(حتى {{ $MAX_IMAGES }} صور × 2MB كحد أقصى — ويمكن بدون صور)</small>
+                                            <small class="text-muted">{{ __('admin.advertisements.form_content_info') }} {{ $MAX_IMAGES }} {{ __('admin.advertisements.form_content_info_end') }}</small>
                                             <span id="imgCounter" class="badge img-counter bg-primary">0 / {{ $MAX_IMAGES }}</span>
-                                            <span id="textCounter" class="badge text-counter bg-secondary ms-1">الحروف: 0 | الكلمات: 0</span>
+                                            <span id="textCounter" class="badge text-counter bg-secondary ms-1">{{ __('admin.advertisements.characters') }} 0 | {{ __('admin.advertisements.words') }} 0</span>
                                         </label>
 
                                         <div class="quill-wrapper border rounded-3 shadow-sm overflow-hidden">
@@ -112,10 +112,10 @@
                                             </span>
                                                 <span class="ql-formats">
                                                 <select class="ql-header">
-                                                    <option value="1">عنوان 1</option>
-                                                    <option value="2">عنوان 2</option>
-                                                    <option value="3">عنوان 3</option>
-                                                    <option selected>نص عادي</option>
+                                                    <option value="1">{{ __('admin.advertisements.quill_header_1') }}</option>
+                                                    <option value="2">{{ __('admin.advertisements.quill_header_2') }}</option>
+                                                    <option value="3">{{ __('admin.advertisements.quill_header_3') }}</option>
+                                                    <option selected>{{ __('admin.advertisements.quill_normal') }}</option>
                                                 </select>
                                             </span>
                                                 <span class="ql-formats">
@@ -138,7 +138,7 @@
                                                 <button class="ql-align" value="left"></button>
                                             </span>
                                                 <span class="ql-formats">
-                                                <button class="ql-image" id="imageUploader" title="إضافة صور متعددة (اختيار/سحب/لصق)"></button>
+                                                <button class="ql-image" id="imageUploader" title="{{ __('admin.advertisements.quill_add_images') }}"></button>
                                             </span>
                                                 <span class="ql-formats">
                                                 <button type="button" class="ql-undo" title="Undo">↶</button>
@@ -156,34 +156,34 @@
                                     <!-- PDF -->
                                     <div class="mb-4">
                                         <label class="form-label fw-medium text-secondary d-flex align-items-center gap-1">
-                                            <i class="ri-file-pdf-line fs-6 text-danger"></i> ملف PDF (اختياري)
+                                            <i class="bi bi-file-pdf fs-6 text-danger"></i> {{ __('admin.advertisements.form_pdf') }}
                                         </label>
                                         <div class="dropzone border border-2 border-dashed rounded-3 p-4 text-center bg-light-subtle transition" id="pdfDrop">
                                             <input type="file" name="PDF" id="pdfInput" class="visually-hidden" accept="application/pdf">
                                             <div class="text-primary">
-                                                <i class="ri-upload-cloud-2-line fs-1 mb-2 d-block"></i>
+                                                <i class="bi bi-cloud-upload fs-1 mb-2 d-block"></i>
                                                 <p class="mb-1 fw-medium">
-                                                    اسحب ملف أو
-                                                    <label for="pdfInput" class="text-primary" style="text-decoration: underline; cursor: pointer;">اختر ملف</label>
+                                                    {{ __('admin.advertisements.form_pdf_drag') }}
+                                                    <label for="pdfInput" class="text-primary" style="text-decoration: underline; cursor: pointer;">{{ __('admin.advertisements.form_pdf_select') }}</label>
                                                 </p>
-                                                <small class="text-muted">PDF • حتى 10MB</small>
+                                                <small class="text-muted">{{ __('admin.advertisements.form_pdf_formats') }}</small>
                                             </div>
                                         </div>
                                         <div id="pdfPreview" class="mt-3"></div>
                                         @error('PDF') <div class="invalid-feedback d-block mt-2">{{ $message }}</div> @enderror
                                     </div>
 
-                                    <!-- أزرار -->
+                                    <!-- Buttons -->
                                     <div class="d-flex flex-wrap gap-2 mt-5">
                                         <button type="button" id="submitBtn" class="btn btn-primary px-4 d-flex align-items-center gap-2 shadow-sm">
-                                            <i class="ri-check-line"></i>
-                                            <span id="submitText">نشر الإعلان</span>
+                                            <i class="bi bi-check"></i>
+                                            <span id="submitText">{{ __('admin.advertisements.form_publish') }}</span>
                                             <span id="submitSpinner" class="spinner-border spinner-border-sm d-none" role="status"></span>
                                         </button>
                                         <button type="button" id="saveDraft" class="btn btn-outline-secondary px-4 d-flex align-items-center gap-2">
-                                            <i class="ri-draft-line"></i> حفظ مسودة
+                                            <i class="bi bi-file-earmark"></i> {{ __('admin.advertisements.form_save_draft') }}
                                         </button>
-                                        <a href="{{ route('admin.advertisements.index') }}" class="btn btn-link text-muted">إلغاء</a>
+                                        <a href="{{ route('admin.advertisements.index') }}" class="btn btn-link text-muted">{{ __('admin.advertisements.form_cancel') }}</a>
                                     </div>
                                 </form>
                             </div>
@@ -192,16 +192,16 @@
                 </div> <!-- /row -->
             </div> <!-- /tab-pane form -->
 
-            <!-- تبويب المعاينة الكاملة -->
+            <!-- Preview Tab -->
             <div class="tab-pane fade" id="preview-content">
                 <div class="card border-0 shadow-sm rounded-3 bg-white">
                     <div class="card-header bg-light py-2 px-3">
-                        <h6 class="mb-0 fw-semibold text-primary"><i class="ri-file-search-line me-1"></i> معاينة كاملة</h6>
+                        <h6 class="mb-0 fw-semibold text-primary"><i class="bi bi-eye me-1"></i> {{ __('admin.advertisements.form_preview_title') }}</h6>
                     </div>
                     <div class="card-body p-4" id="fullPreview">
                         <div class="text-center text-muted py-5">
-                            <i class="ri-file-search-line fs-4 d-block mb-2"></i>
-                            <small>ابدأ الكتابة في تبويب "إدخال"</small>
+                            <i class="bi bi-eye fs-4 d-block mb-2"></i>
+                            <small>{{ __('admin.advertisements.form_preview_start_writing') }}</small>
                         </div>
                     </div>
                 </div>
@@ -213,28 +213,6 @@
 @push('styles')
     <link rel="stylesheet" href="{{ asset('assets/admin/libs/quill/quill.snow.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/admin/libs/sweetalert2/sweetalert2.min.css') }}">
-    <style>
-        :root { --primary:#4361ee; --success:#10b981; --danger:#ef4444; }
-
-        .quill-wrapper{height:480px;background:#fff;display:flex;flex-direction:column;}
-        #quill-toolbar{flex:0 0 auto;}
-        #quill-editor{flex:1 1 auto;min-height:0;}
-        .ql-container{height:100%!important;font-size:1.05rem;overflow-y:auto;}
-        .ql-editor{direction:rtl;text-align:right;min-height:100%;padding:1rem;overflow-wrap:anywhere;word-break:break-word;}
-
-        .ql-editor img,.content-preview img{
-            max-width:100%!important;height:auto!important;max-height:420px!important;object-fit:contain!important;display:block;margin:.5rem 0;
-        }
-        .ql-editor .ql-video,.ql-editor iframe{width:100%!important;max-width:100%!important;height:auto;aspect-ratio:16/9;}
-
-        .dropzone { cursor:pointer; transition: all .2s ease; }
-        .dropzone.dragover { background:#ebf2ff!important; border-color:var(--primary)!important; }
-        .focus-ring:focus { box-shadow:0 0 0 .2rem rgba(67,97,238,.15); }
-        .btn[disabled]{ opacity:.7; cursor:not-allowed; }
-
-        .img-counter,.text-counter{ font-size:.8rem; padding:.35rem .5rem; border-radius:.5rem; }
-        #quill-toolbar .ql-image[disabled]{ opacity:.5; cursor:not-allowed; }
-    </style>
 @endpush
 
 @push('scripts')
@@ -278,7 +256,7 @@
 
             quill = new Quill('#quill-editor', {
                 theme: 'snow',
-                placeholder: 'اكتب محتوى الإعلان هنا... (يمكنك إضافة صور متعددة)',
+                placeholder: @json(__('admin.advertisements.form_content_placeholder')),
                 modules: {
                     toolbar: {
                         container: '#quill-toolbar',
@@ -319,7 +297,7 @@
             function updateTextCounter() {
                 const badge = document.getElementById('textCounter'); if (!badge) return;
                 let plain = quill.getText() || ''; if (plain.endsWith('\n')) plain = plain.slice(0,-1);
-                badge.textContent = `الحروف: ${plain.length} | الكلمات: ${countWords(plain)}`;
+                badge.textContent = `{{ __('admin.advertisements.characters') }} ${plain.length} | {{ __('admin.advertisements.words') }} ${countWords(plain)}`;
             }
 
             function updateImageCounter() {
@@ -439,16 +417,16 @@
             quill.on('text-change', updateTextAndPreview);
 
             function updatePreview(){
-                const title = el.title.value || 'عنوان الإعلان';
-                const date  = el.date.value ? new Date(el.date.value).toLocaleDateString('ar-EG',{year:'numeric',month:'long',day:'numeric'}) : 'تاريخ الخبر';
-                const content = quill.root.innerHTML || '<p class="text-muted">ابدأ الكتابة...</p>';
-                const pdfBadge = el.pdfPreview.innerHTML ? `<div class="mt-3"><span class="badge bg-danger-subtle text-danger"><i class="ri-file-pdf-line me-1"></i> مرفق PDF</span></div>` : '';
+                const title = el.title.value || @json(__('admin.advertisements.form_title'));
+                const date  = el.date.value ? new Date(el.date.value).toLocaleDateString('ar-EG',{year:'numeric',month:'long',day:'numeric'}) : @json(__('admin.advertisements.form_date_news'));
+                const content = quill.root.innerHTML || '<p class="text-muted">{{ __('admin.news.preview_start_writing') }}</p>';
+                const pdfBadge = el.pdfPreview.innerHTML ? `<div class="mt-3"><span class="badge bg-danger-subtle text-danger"><i class="bi bi-file-pdf me-1"></i> PDF</span></div>` : '';
 
                 const html = `
             <article class="p-3">
                 <h5 class="fw-bold text-primary mb-2">${title}</h5>
                 <div class="text-muted small mb-3 d-flex align-items-center gap-1">
-                    <i class="ri-calendar-line"></i> <span>${date}</span>
+                    <i class="bi bi-calendar"></i> <span>${date}</span>
                 </div>
                 <div class="content-preview lh-lg" style="font-size:.95rem;">${content}</div>
                 ${pdfBadge}
@@ -486,7 +464,7 @@
                     el.pdfPreview.innerHTML = `
                 <div class="alert alert-success d-flex align-items-center justify-content-between p-2 rounded shadow-sm">
                     <div class="d-flex align-items-center gap-2">
-                        <i class="ri-file-pdf-line fs-5"></i>
+                        <i class="bi bi-file-pdf fs-5"></i>
                         <div><strong>${file.name}</strong><br><small>${(file.size/1024/1024).toFixed(2)} MB</small></div>
                     </div>
                     <button type="button" class="btn-close btn-close-sm" onclick="removePDF()"></button>

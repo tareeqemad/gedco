@@ -11,6 +11,7 @@ class ImpactStatRequest extends FormRequest
     public function rules(): array {
         return [
             'title_ar'   => 'required|string|max:255',
+            'title_en'   => 'nullable|string|max:255',
             'amount_usd' => 'required|numeric|min:0',
             'sort_order' => 'nullable|integer|min:0',
         ];

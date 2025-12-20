@@ -24,6 +24,10 @@ class WhyChooseUsController extends Controller
     {
         $data = $this->payload($request);
         WhyChooseUs::create($data);
+        
+        // تنظيف الكاش للصفحة الرئيسية
+        clear_home_cache();
+        
         return redirect()->route('admin.why.index')->with('success','تم الإنشاء بنجاح.');
     }
 
@@ -36,12 +40,20 @@ class WhyChooseUsController extends Controller
     public function update(WhyChooseUsRequest $request, WhyChooseUs $why)
     {
         $why->update($this->payload($request));
+        
+        // تنظيف الكاش للصفحة الرئيسية
+        clear_home_cache();
+        
         return redirect()->route('admin.why.index')->with('success','تم التحديث بنجاح.');
     }
 
     public function destroy(WhyChooseUs $why)
     {
         $why->delete();
+        
+        // تنظيف الكاش للصفحة الرئيسية
+        clear_home_cache();
+        
         return back()->with('success','تم الحذف.');
     }
 
@@ -51,24 +63,37 @@ class WhyChooseUsController extends Controller
 
         $titles = $v['feature_title'] ?? [];
         $texts  = $v['feature_text']  ?? [];
+        $titlesEn = $v['feature_title_en'] ?? [];
+        $textsEn  = $v['feature_text_en']  ?? [];
         $icons  = $v['feature_icon']  ?? [];
 
         $features = [];
-        $count = max(count($titles), count($texts), count($icons));
+        $count = max(count($titles), count($texts), count($titlesEn), count($textsEn), count($icons));
         for ($i=0; $i<$count; $i++) {
             $t = trim($titles[$i] ?? '');
             $p = trim($texts[$i] ?? '');
+            $tEn = trim($titlesEn[$i] ?? '');
+            $pEn = trim($textsEn[$i] ?? '');
             $ic = trim($icons[$i] ?? '');
-            if ($t === '' && $p === '' && $ic === '') continue;
-            $features[] = ['title'=>$t, 'text'=>$p, 'icon'=>$ic ?: 'bi bi-lightning-charge-fill'];
+            if ($t === '' && $p === '' && $tEn === '' && $pEn === '' && $ic === '') continue;
+            $features[] = [
+                'title' => $t, 
+                'text' => $p,
+                'title_en' => $tEn ?: null,
+                'text_en' => $pEn ?: null,
+                'icon' => $ic ?: 'bi bi-lightning-charge-fill'
+            ];
         }
 
         return [
-            'badge'       => $v['badge'],
-            'tagline'     => $v['tagline'],
-            'description' => $v['description'] ?? null,
-            'features'    => $features,
-            'is_active'   => (bool)($v['is_active'] ?? true),
+            'badge'          => $v['badge'],
+            'badge_en'       => $v['badge_en'] ?? null,
+            'tagline'        => $v['tagline'],
+            'tagline_en'     => $v['tagline_en'] ?? null,
+            'description'    => $v['description'] ?? null,
+            'description_en' => $v['description_en'] ?? null,
+            'features'       => $features,
+            'is_active'      => (bool)($v['is_active'] ?? true),
         ];
     }
 }

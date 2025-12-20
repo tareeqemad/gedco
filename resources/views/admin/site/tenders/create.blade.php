@@ -1,17 +1,17 @@
 {{-- resources/views/admin/site/tenders/create.blade.php --}}
 @extends('layouts.admin')
-@section('title','إضافة عطاء')
+@section('title', __('admin.tenders.create_title'))
 
 @section('content')
     <div class="container-fluid p-0">
         <div class="card border-0 shadow-sm rounded-3 bg-white mb-4">
             <div class="card-header bg-white border-bottom py-2 px-3 d-flex align-items-center justify-content-between">
                 <div class="d-flex align-items-center gap-1">
-                    <i class="ri-add-circle-line text-primary fs-6"></i>
-                    <h6 class="mb-0 fw-semibold text-dark-emphasis">إضافة عطاء</h6>
+                    <i class="bi bi-plus-circle text-primary fs-6"></i>
+                    <h6 class="mb-0 fw-semibold text-dark-emphasis">{{ __('admin.tenders.create_title') }}</h6>
                 </div>
                 <a href="{{ route('admin.tenders.index') }}" class="btn btn-outline-secondary btn-sm">
-                    <i class="ri-arrow-go-back-line me-1"></i> رجوع للقائمة
+                    <i class="bi bi-arrow-left me-1"></i> {{ __('admin.tenders.back_to_list') }}
                 </a>
             </div>
         </div>
@@ -25,44 +25,44 @@
                         <div class="card-body p-4 row g-3">
 
                             <div class="col-md-4">
-                                <label class="form-label">MNEWS_ID</label>
+                                <label class="form-label">{{ __('admin.tenders.form_mnews_id') }}</label>
                                 <input type="number" name="mnews_id" class="form-control @error('mnews_id') is-invalid @enderror"
-                                       value="{{ old('mnews_id') }}" placeholder="مثال: 57">
+                                       value="{{ old('mnews_id') }}" placeholder="{{ __('admin.tenders.form_example_number') }}">
                                 @error('mnews_id')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
                             </div>
 
                             <div class="col-md-8">
-                                <label class="form-label">COLUMN_NAME_1</label>
+                                <label class="form-label">{{ __('admin.tenders.form_column_name_1') }}</label>
                                 <input type="text" name="column_name_1" class="form-control @error('column_name_1') is-invalid @enderror"
-                                       value="{{ old('column_name_1') }}" placeholder="body / title / pdf ...">
+                                       value="{{ old('column_name_1') }}" placeholder="{{ __('admin.tenders.form_column_placeholder') }}">
                                 @error('column_name_1')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
                             </div>
 
                             <div class="col-md-6">
-                                <label class="form-label">THE_DATE_1 <span class="text-muted">(نصي)</span></label>
+                                <label class="form-label">{{ __('admin.tenders.form_the_date_1') }} <span class="text-muted">{{ __('admin.tenders.form_date_text') }}</span></label>
                                 <input type="text" name="the_date_1" class="form-control @error('the_date_1') is-invalid @enderror"
-                                       value="{{ old('the_date_1') }}" placeholder="مثال: 6/20/2016 11:55 AM">
+                                       value="{{ old('the_date_1') }}" placeholder="{{ __('admin.tenders.form_example_date') }}">
                                 @error('the_date_1')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
                             </div>
 
                             <div class="col-md-6">
-                                <label class="form-label">COULM_SERIAL</label>
+                                <label class="form-label">{{ __('admin.tenders.form_coulm_serial') }}</label>
                                 <input type="number" name="coulm_serial" class="form-control @error('coulm_serial') is-invalid @enderror"
-                                       value="{{ old('coulm_serial') }}" placeholder="مثال: 57">
+                                       value="{{ old('coulm_serial') }}" placeholder="{{ __('admin.tenders.form_example_number') }}">
                                 @error('coulm_serial')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
                             </div>
 
                             <div class="col-md-6">
-                                <label class="form-label">EVENT_1</label>
+                                <label class="form-label">{{ __('admin.tenders.form_event_1') }}</label>
                                 <input type="text" name="event_1" class="form-control @error('event_1') is-invalid @enderror"
-                                       value="{{ old('event_1') }}" placeholder="update / delete">
+                                       value="{{ old('event_1') }}" placeholder="{{ __('admin.tenders.form_event_placeholder') }}">
                                 @error('event_1')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
                             </div>
 
                             <div class="col-md-6">
-                                <label class="form-label">THE_USER_1</label>
+                                <label class="form-label">{{ __('admin.tenders.form_the_user_1') }}</label>
                                 <input type="text" name="the_user_1" class="form-control @error('the_user_1') is-invalid @enderror"
-                                       value="{{ old('the_user_1') }}" placeholder="admin@gedco">
+                                       value="{{ old('the_user_1') }}" placeholder="{{ __('admin.tenders.form_example_user') }}">
                                 @error('the_user_1')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
                             </div>
 
@@ -75,10 +75,10 @@
                     <div class="card border-0 shadow-sm rounded-3 bg-white mb-4">
                         <div class="card-header bg-white border-bottom py-2 px-3 d-flex align-items-center justify-content-between">
                             <div class="d-flex align-items-center gap-1">
-                                <i class="ri-file-text-line text-secondary"></i>
-                                <span class="fw-semibold">النص القديم (OLD_VALUE_1)</span>
+                                <i class="bi bi-file-text text-secondary"></i>
+                                <span class="fw-semibold">{{ __('admin.tenders.form_old_value') }}</span>
                             </div>
-                            <small class="text-muted">HTML مدعوم</small>
+                            <small class="text-muted">{{ __('admin.tenders.form_html_supported') }}</small>
                         </div>
                         <div class="card-body p-3">
                             <div class="quill-shell border rounded-3 shadow-sm">
@@ -108,10 +108,10 @@
                     <div class="card border-0 shadow-sm rounded-3 bg-white">
                         <div class="card-header bg-white border-bottom py-2 px-3 d-flex align-items-center justify-content-between">
                             <div class="d-flex align-items-center gap-1">
-                                <i class="ri-file-text-line text-success"></i>
-                                <span class="fw-semibold">النص الجديد (NEW_VALUE_1)</span>
+                                <i class="bi bi-file-text text-success"></i>
+                                <span class="fw-semibold">{{ __('admin.tenders.form_new_value') }}</span>
                             </div>
-                            <small class="text-muted">HTML مدعوم</small>
+                            <small class="text-muted">{{ __('admin.tenders.form_html_supported') }}</small>
                         </div>
                         <div class="card-body p-3">
                             <div class="quill-shell border rounded-3 shadow-sm">
@@ -141,9 +141,9 @@
 
             <div class="d-flex gap-2 justify-content-end mt-4">
                 <button type="submit" class="btn btn-primary px-4">
-                    <i class="ri-check-line me-1"></i> حفظ
+                    <i class="bi bi-check me-1"></i> {{ __('admin.tenders.form_save') }}
                 </button>
-                <a href="{{ route('admin.tenders.index') }}" class="btn btn-light px-4">إلغاء</a>
+                <a href="{{ route('admin.tenders.index') }}" class="btn btn-light px-4">{{ __('admin.tenders.form_cancel') }}</a>
             </div>
         </form>
     </div>
@@ -153,14 +153,6 @@
     {{-- نفس أسلوب الاستدعاء المستخدم عندك --}}
     <link rel="stylesheet" href="{{ asset('assets/admin/libs/quill/quill.snow.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/admin/libs/quill/quill.bubble.css') }}">
-    <style>
-        :root{ --primary:#4361ee; }
-        .quill-shell{ height: 360px; background:#fff; border-radius:.5rem; overflow:hidden; }
-        .quill-shell .ql-container{ height: calc(100% - 42px); }
-        .ql-editor{ direction: rtl; text-align: right; }
-        .btn-primary{ background:var(--primary); border:none; }
-        .btn-primary:hover{ background:#3b56d7; }
-    </style>
 @endpush
 
 @push('scripts')
@@ -176,14 +168,14 @@
             const qOld = new Quill('#editor-old', {
                 theme: 'snow',
                 modules: commonModules('#toolbar-old'),
-                placeholder: 'الصق/اكتب النص القديم هنا...'
+                placeholder: '{{ __('admin.tenders.form_old_value_placeholder') }}'
             });
 
             // NEW editor
             const qNew = new Quill('#editor-new', {
                 theme: 'snow',
                 modules: commonModules('#toolbar-new'),
-                placeholder: 'الصق/اكتب النص الجديد هنا...'
+                placeholder: '{{ __('admin.tenders.form_new_value_placeholder') }}'
             });
 
             // preload from old()
