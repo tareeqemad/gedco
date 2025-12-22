@@ -80,6 +80,33 @@
             <!-- Flash Messages -->
             @include('admin.partials.flash-messages')
 
+            <!-- Impersonation Banner -->
+            @if(session()->has('impersonator_id'))
+                @php
+                    $impersonator = \App\Models\User::find(session('impersonator_id'));
+                @endphp
+                @if($impersonator)
+                    <div class="alert alert-warning alert-dismissible fade show border-0 shadow-sm mb-3" role="alert" style="background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%); color: #000;">
+                        <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+                            <div class="d-flex align-items-center gap-2">
+                                <i class="bi bi-person-check-fill fs-4"></i>
+                                <div>
+                                    <strong>{{ __('admin.users.impersonating_as') }}:</strong> {{ auth()->user()->name }} ({{ auth()->user()->email }})
+                                    <br>
+                                    <small>{{ __('admin.users.original_user') }}: {{ $impersonator->name }}</small>
+                                </div>
+                            </div>
+                            <form action="{{ route('admin.users.stop-impersonating') }}" method="POST" class="d-inline">
+                                @csrf
+                                <button type="submit" class="btn btn-sm btn-dark">
+                                    <i class="bi bi-arrow-left me-1"></i>{{ __('admin.users.stop_impersonating') }}
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                @endif
+            @endif
+
             @yield('content')
 
         </div>
@@ -119,8 +146,12 @@
 <!-- Sticky JS -->
 <script src="{{ asset('assets/admin/js/sticky.js') }}"></script>
 
+<!-- Flatpickr JS -->
+<script src="{{ asset('assets/admin/libs/flatpickr/flatpickr.min.js') }}"></script>
+<script src="{{ asset('assets/admin/libs/flatpickr/l10n/ar.js') }}"></script>
 
-
+<!-- Admin Date Picker -->
+<script src="{{ asset('assets/admin/js/admin-datepicker.js') }}"></script>
 
 <!-- Custom JS -->
 <script src="{{ asset('assets/admin/js/custom.js') }}"></script>

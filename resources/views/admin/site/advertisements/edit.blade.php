@@ -17,24 +17,30 @@
 
     <div class="container-fluid p-0" id="ad-edit-page">
         <!-- هيدر + تبويبات -->
-        <div class="card border-0 shadow-sm rounded-3 bg-white mb-4">
-            <div class="card-header bg-white border-bottom py-2 px-3 d-flex align-items-center justify-content-between flex-wrap gap-2">
-                <div class="d-flex align-items-center gap-2">
-                    <i class="bi bi-pencil-square text-primary fs-5"></i>
-                    <h6 class="mb-0 fw-semibold text-dark-emphasis">{{ __('admin.advertisements.edit_ad') }}: <span class="text-primary">#{{ $ad->ID_ADVER ?? $ad->id }}</span></h6>
+        <div class="card border-0 shadow-sm rounded-4 bg-white mb-4">
+            <div class="card-header bg-gradient-primary text-white border-0 py-2 px-3">
+                <div class="d-flex justify-content-between align-items-center flex-wrap w-100" style="gap: 1rem;">
+                    <div class="d-flex align-items-center gap-2" style="flex: 0 0 auto;">
+                        <div>
+                            <h5 class="mb-0 fw-bold text-white d-flex align-items-center gap-2 flex-wrap" style="font-size: 1.25rem; line-height: 1.3;">
+                                <i class="bi bi-pencil-square"></i>
+                                <span>{{ __('admin.advertisements.edit_title') }} <span class="text-white-50">#{{ $ad->ID_ADVER ?? $ad->id }}</span></span>
+                            </h5>
+                        </div>
+                    </div>
+                    <ul class="nav nav-tabs nav-tabs-sm border-0" id="adTabs" role="tablist" style="background: rgba(255, 255, 255, 0.15); border-radius: 0.5rem; padding: 0.2rem;">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active px-2 py-1 rounded-3 text-white" data-bs-toggle="tab" data-bs-target="#form-content" style="background: rgba(255, 255, 255, 0.25); border: 1px solid rgba(255, 255, 255, 0.4); font-weight: 600; font-size: 0.85rem;">
+                                <i class="bi bi-pencil me-1"></i> {{ __('admin.advertisements.form_tab_input') }}
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link px-2 py-1 rounded-3 text-white" data-bs-toggle="tab" data-bs-target="#preview-content" style="background: transparent; border: 1px solid rgba(255, 255, 255, 0.3); font-size: 0.85rem;">
+                                <i class="bi bi-eye me-1"></i> {{ __('admin.advertisements.form_tab_preview') }}
+                            </button>
+                        </li>
+                    </ul>
                 </div>
-                <ul class="nav nav-tabs nav-tabs-sm border-0" id="adTabs" role="tablist">
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link active px-3 py-1 rounded-3" data-bs-toggle="tab" data-bs-target="#form-content">
-                            <i class="bi bi-pencil me-1"></i> {{ __('admin.advertisements.form_tab_input') }}
-                        </button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link px-3 py-1 rounded-3" data-bs-toggle="tab" data-bs-target="#preview-content">
-                            <i class="bi bi-eye me-1"></i> {{ __('admin.advertisements.form_tab_preview') }}
-                        </button>
-                    </li>
-                </ul>
             </div>
         </div>
 
@@ -54,11 +60,12 @@
 
                                     <!-- Title -->
                                     <div class="mb-4">
-                                        <label class="form-label fw-medium text-secondary d-flex align-items-center gap-1">
-                                            <i class="bi bi-type-h1 fs-6 text-primary"></i> {{ __('admin.advertisements.form_title') }}
+                                        <label class="form-label fw-semibold text-dark d-flex align-items-center gap-1">
+                                            <i class="bi bi-type-h1 text-primary"></i> {{ __('admin.advertisements.form_title') }}
                                         </label>
                                         <input type="text" name="TITLE" id="titleInput"
-                                               class="form-control rounded-3 border-0 shadow-sm focus-ring focus-ring-primary @error('TITLE') is-invalid @enderror"
+                                               class="form-control rounded-3 border-0 bg-light @error('TITLE') is-invalid @enderror"
+                                               style="height: 45px;"
                                                placeholder="{{ __('admin.advertisements.form_title_placeholder') }}" value="{{ old('TITLE', $ad->TITLE) }}">
                                         @error('TITLE') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
                                         <div class="form-text text-muted small"><span id="titleCount">{{ strlen(old('TITLE', $ad->TITLE ?? '')) }}</span>/255</div>
@@ -66,11 +73,12 @@
 
                                     <!-- News Date -->
                                     <div class="mb-4">
-                                        <label class="form-label fw-medium text-secondary d-flex align-items-center gap-1">
-                                            <i class="bi bi-calendar fs-6 text-info"></i> {{ __('admin.advertisements.form_date_news') }}
+                                        <label class="form-label fw-semibold text-dark d-flex align-items-center gap-1">
+                                            <i class="bi bi-calendar text-primary"></i> {{ __('admin.advertisements.form_date_news') }}
                                         </label>
                                         <input type="date" name="DATE_NEWS" id="dateInput"
-                                               class="form-control rounded-3 border-0 shadow-sm focus-ring focus-ring-info @error('DATE_NEWS') is-invalid @enderror"
+                                               class="form-control rounded-3 border-0 bg-light @error('DATE_NEWS') is-invalid @enderror"
+                                               style="height: 45px;"
                                                value="{{ old('DATE_NEWS', optional(\Carbon\Carbon::parse($ad->DATE_NEWS))->format('Y-m-d')) }}">
                                         @error('DATE_NEWS') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
                                     </div>
@@ -211,9 +219,11 @@
 
             <!-- Preview Tab -->
             <div class="tab-pane fade" id="preview-content">
-                <div class="card border-0 shadow-sm rounded-3 bg-white">
-                    <div class="card-header bg-light py-2 px-3">
-                        <h6 class="mb-0 fw-semibold text-primary"><i class="bi bi-eye me-1"></i> {{ __('admin.advertisements.form_preview_title') }}</h6>
+                <div class="card border-0 shadow-sm rounded-4 bg-white">
+                    <div class="card-header bg-gradient-primary text-white border-0 py-3 px-4">
+                        <h6 class="mb-0 fw-bold text-white d-flex align-items-center gap-2">
+                            <i class="bi bi-eye"></i> {{ __('admin.advertisements.form_preview_title') }}
+                        </h6>
                     </div>
                     <div class="card-body p-4" id="fullPreview">
                         <div class="text-center text-muted py-5">

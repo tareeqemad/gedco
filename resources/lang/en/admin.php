@@ -135,6 +135,8 @@ return [
         
         // Common Actions
         'preview_on_site' => 'Preview on Site',
+        'preview' => 'Preview',
+        'add' => 'Add',
     ],
 
     // Breadcrumbs
@@ -149,6 +151,24 @@ return [
         'my_profile' => 'My Profile',
         'settings' => 'Settings',
         'logout' => 'Logout',
+        'personal_info' => 'Personal Information',
+        'name' => 'Name',
+        'name_placeholder' => 'Enter your name',
+        'email' => 'Email',
+        'email_placeholder' => 'name@example.com',
+        'save_changes' => 'Save Changes',
+        'reset' => 'Reset',
+        'change_password' => 'Change Password',
+        'current_password' => 'Current Password',
+        'current_password_placeholder' => 'Enter current password',
+        'new_password' => 'New Password',
+        'new_password_placeholder' => 'Enter new password',
+        'confirm_password' => 'Confirm Password',
+        'confirm_password_placeholder' => 'Re-enter password',
+        'update_password' => 'Update Password',
+        'change_avatar' => 'Change Avatar',
+        'avatar_alt' => 'Profile Picture',
+        'member_since' => 'Member Since',
     ],
 
     // Authentication
@@ -442,6 +462,24 @@ return [
         'no_permissions' => 'No permissions available.',
         'total_permissions' => 'total permissions (from role + direct)',
         'dashboard_web' => 'Dashboard (Web)',
+        'basic_information' => 'Basic Information',
+        'name_placeholder' => 'Enter user name',
+        'email_placeholder' => 'Enter email address',
+        'password_placeholder' => 'Enter password (at least 8 characters)',
+        'password_hint' => 'Password must be at least 8 characters',
+    ],
+    
+    'common' => [
+        'back' => 'Back',
+        'cancel' => 'Cancel',
+        'error' => 'Error',
+        'success' => 'Success',
+        // Form Actions
+        'form_save' => 'Save',
+        'form_cancel' => 'Cancel',
+        'save_changes' => 'Save Changes',
+        // Common Actions
+        'preview_on_site' => 'Preview on Site',
     ],
 
     // Tenders
@@ -632,6 +670,7 @@ return [
         'edit_statistic' => 'Edit Statistic',
         'confirm_delete' => 'Confirm Delete',
         'confirm_delete_text' => 'Are you sure you want to delete:',
+        'delete_irreversible' => 'This action cannot be undone',
         'form_title' => 'Title',
         'form_amount' => 'Amount (USD)',
         'form_active' => 'Active',
@@ -644,6 +683,7 @@ return [
         'cancel' => 'Cancel',
         'save' => 'Save',
         'add' => 'Add',
+        'no_data' => 'No Statistics',
     ],
 
     // Staff Profiles

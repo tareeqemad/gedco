@@ -38,7 +38,7 @@ class HomeVideoController extends Controller
         // تنظيف الكاش للصفحة الرئيسية
         clear_home_cache();
 
-        return back()->with('status','🏁 تم تحديث فيديو الصفحة الرئيسية');
+        return back()->with('success', 'تم تحديث فيديو الصفحة الرئيسية بنجاح');
     }
 
     private function extractYoutubeId(?string $url): ?string

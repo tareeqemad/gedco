@@ -12,10 +12,33 @@
         $publicPreviewUrl = route('site.home') . '#who-us';
     @endphp
 
-    <div class="py-4">
-
-        @if(session('success')) <div class="alert alert-success shadow-sm">{{ session('success') }}</div> @endif
-        @if(session('warning')) <div class="alert alert-warning shadow-sm">{{ session('warning') }}</div> @endif
+    <div class="container-fluid p-0">
+        <!-- Header Section -->
+        <div class="card border-0 shadow-sm rounded-4 bg-white mb-4">
+            <div class="card-header bg-gradient-primary text-white border-0 py-2 px-3">
+                <div class="d-flex justify-content-between align-items-center flex-wrap w-100" style="gap: 1rem;">
+                    <div class="d-flex align-items-center gap-2" style="flex: 0 0 auto;">
+                        <div>
+                            <h5 class="mb-0 fw-bold text-white d-flex align-items-center gap-2 flex-wrap" style="font-size: 1.25rem; line-height: 1.3;">
+                                <i class="bi bi-info-circle-fill"></i>
+                                <span class="d-none d-sm-inline">{{ __('admin.about_us.title') }}</span>
+                                <span class="d-sm-none">{{ __('admin.menu.about_us') }}</span>
+                            </h5>
+                        </div>
+                    </div>
+                    @if($about)
+                        <div class="d-flex gap-2 flex-wrap">
+                            <a href="{{ route('admin.about.edit', $about) }}" class="btn btn-light btn-sm shadow-sm">
+                                <i class="bi bi-pencil-square me-2"></i><span class="d-none d-md-inline">{{ __('admin.about_us.edit') }}</span><span class="d-md-none">{{ __('admin.actions.edit') }}</span>
+                            </a>
+                            <a href="{{ $publicPreviewUrl }}" class="btn btn-light btn-sm shadow-sm" target="_blank">
+                                <i class="bi bi-box-arrow-up-right me-2"></i><span class="d-none d-md-inline">{{ __('admin.common.preview_on_site') }}</span><span class="d-md-none">{{ __('admin.common.preview') }}</span>
+                            </a>
+                        </div>
+                    @endif
+                </div>
+            </div>
+        </div>
 
         @if($about)
             @php
@@ -36,27 +59,8 @@
                 $colB = array_values($featuresArr[1] ?? []);
             @endphp
 
-            <div class="card border-0 shadow-sm">
-                <div class="card-header bg-white border-bottom py-3">
-                    <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
-
-                        <div class="d-flex align-items-center gap-2">
-                            <span class="badge rounded-pill bg-orange text-white">{{ __('admin.about_us.title') }}</span>
-                            <h5 class="mb-0 fw-semibold text-orange">{{ __('admin.about_us.content_details') }}</h5>
-                        </div>
-
-                        <div class="d-flex gap-2">
-                            <a href="{{ route('admin.about.edit', $about) }}" class="btn btn-orange btn-sm">
-                                <i class="bi bi-pencil-square me-1"></i> {{ __('admin.about_us.edit') }}
-                            </a>
-                            <a href="{{ $publicPreviewUrl }}" class="btn btn-outline-secondary btn-sm" target="_blank">
-                                <i class="bi bi-box-arrow-up-right me-1"></i> {{ __('admin.common.preview_on_site') }}
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card-body p-4">
+            <div class="card border-0 shadow-sm rounded-4 bg-white">
+                <div class="card-body p-4 p-md-5">
                     <div class="row g-4 align-items-start flex-lg-row-reverse">
 
                         {{-- الصورة --}}
@@ -65,13 +69,12 @@
                                 <img src="{{ $img }}" alt="{{ $about->title }}" class="img-fluid w-100 d-block">
                             </div>
 
-                            <div class="d-flex gap-2 mt-2">
-                                <button type="button" class="btn btn-light btn-sm border" data-bs-toggle="modal" data-bs-target="#aboutImageModal">
-                                    <i class="bi bi-arrows-fullscreen me-1"></i> {{ __('admin.about_us.zoom_image') }}
+                            <div class="d-flex gap-2 mt-3">
+                                <button type="button" class="btn btn-outline-primary btn-sm shadow-sm" data-bs-toggle="modal" data-bs-target="#aboutImageModal">
+                                    <i class="bi bi-arrows-fullscreen me-1"></i>{{ __('admin.about_us.zoom_image') }}
                                 </button>
-
-                                <a href="{{ $img }}" class="btn btn-outline-secondary btn-sm" target="_blank">
-                                    <i class="bi bi-download me-1"></i> {{ __('admin.about_us.open_original') }}
+                                <a href="{{ $img }}" class="btn btn-outline-secondary btn-sm shadow-sm" target="_blank">
+                                    <i class="bi bi-download me-1"></i>{{ __('admin.about_us.open_original') }}
                                 </a>
                             </div>
                         </div>
@@ -102,10 +105,10 @@
                                 $long = (mb_strlen($p1.$p2) > 450);
                             @endphp
 
-                            <h3 class="fw-bold mb-1 text-orange">{{ $displayTitle }}</h3>
+                            <h3 class="fw-bold mb-1 text-primary">{{ $displayTitle }}</h3>
 
                             @if(filled($displaySubtitle))
-                                <div class="fw-semibold text-orange mb-3">{{ $displaySubtitle }}</div>
+                                <div class="fw-semibold text-primary mb-3">{{ $displaySubtitle }}</div>
                             @endif
 
                             <div id="about-text-wrapper" class="{{ $long ? 'collapsed-text' : '' }}">
@@ -125,17 +128,17 @@
 
                             @if(count($colA) || count($colB))
                                 <div class="mt-4">
-                                    <h6 class="fw-bold text-orange mb-2">
-                                        <i class="bi bi-stars me-1"></i> {{ __('admin.about_us.our_features') }}
+                                    <h6 class="fw-bold text-primary mb-3 d-flex align-items-center gap-2">
+                                        <i class="bi bi-stars"></i>{{ __('admin.about_us.our_features') }}
                                     </h6>
-                                    <div class="row g-2">
+                                    <div class="row g-3">
                                         <div class="col-md-6">
                                             <ul class="list-unstyled m-0">
                                                 @foreach($colA as $item)
                                                     @if(filled($item))
                                                         <li class="mb-2 d-flex align-items-start">
-                                                            <i class="bi bi-check-circle-fill me-2 mt-1 text-orange"></i>
-                                                            <span>{{ $item }}</span>
+                                                            <i class="bi bi-check-circle-fill me-2 mt-1 text-primary"></i>
+                                                            <span class="text-dark">{{ $item }}</span>
                                                         </li>
                                                     @endif
                                                 @endforeach
@@ -146,8 +149,8 @@
                                                 @foreach($colB as $item)
                                                     @if(filled($item))
                                                         <li class="mb-2 d-flex align-items-start">
-                                                            <i class="bi bi-check-circle-fill me-2 mt-1 text-orange"></i>
-                                                            <span>{{ $item }}</span>
+                                                            <i class="bi bi-check-circle-fill me-2 mt-1 text-primary"></i>
+                                                            <span class="text-dark">{{ $item }}</span>
                                                         </li>
                                                     @endif
                                                 @endforeach
@@ -165,15 +168,27 @@
             {{-- Modal --}}
             <div class="modal fade" id="aboutImageModal" tabindex="-1">
                 <div class="modal-dialog modal-xl modal-dialog-centered">
-                    <div class="modal-content border-0">
-                        <div class="modal-header">
-                            <h6 class="modal-title">{{ __('admin.about_us.full_image_preview') }}</h6>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    <div class="modal-content border-0 shadow-lg rounded-4">
+                        <div class="modal-header bg-gradient-primary text-white border-0 rounded-top-4">
+                            <h6 class="modal-title fw-bold text-white">
+                                <i class="bi bi-image me-2"></i>{{ __('admin.about_us.full_image_preview') }}
+                            </h6>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                         </div>
                         <div class="modal-body p-0">
                             <img src="{{ $img }}" class="img-fluid w-100">
                         </div>
                     </div>
+                </div>
+            </div>
+        @else
+            <div class="card border-0 shadow-sm rounded-4 bg-white">
+                <div class="card-body p-5 text-center">
+                    <i class="bi bi-info-circle text-muted" style="font-size: 4rem;"></i>
+                    <h5 class="mt-3 text-muted">{{ __('admin.about_us.no_content') }}</h5>
+                    <a href="{{ route('admin.about.create') }}" class="btn btn-primary mt-3">
+                        <i class="bi bi-plus-circle me-2"></i>{{ __('admin.about_us.create_content') }}
+                    </a>
                 </div>
             </div>
         @endif

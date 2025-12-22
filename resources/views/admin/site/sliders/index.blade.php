@@ -1,164 +1,293 @@
+@php
+    $breadcrumbTitle     = __('admin.menu.slider');
+    $breadcrumbParent    = __('admin.breadcrumbs.home');
+    $breadcrumbParentUrl = route('admin.dashboard');
+@endphp
 @extends('layouts.admin')
 @section('title', __('admin.slider.title'))
 
 @section('content')
-    @php
-        $breadcrumbTitle     = __('admin.menu.slider');
-        $breadcrumbParent    = __('admin.breadcrumbs.home');
-        $breadcrumbParentUrl = route('admin.dashboard');
-
-    @endphp
-
-    <div class="py-4">
-
-        <!-- Card -->
-        <div class="card border-0 shadow-sm">
-            <div class="card-header bg-white border-bottom d-flex align-items-center justify-content-between flex-wrap gap-3 py-3">
-                <h5 class="card-title mb-0 text-dark fw-semibold d-flex align-items-center gap-2">
-                    <i class="bi bi-images text-primary"></i>
-                    {{ __('admin.slider.slider_items') }}
-                    <span class="badge bg-primary rounded-pill small">{{ $sliders->total() }}</span>
-                    <span class="badge bg-info rounded-pill small">
-                        {{ $currentLanguage === 'ar' ? __('admin.labels.arabic') : __('admin.labels.english') }}
-                    </span>
-                </h5>
-                <a href="{{ route('admin.sliders.create') }}"
-                   class="btn btn-primary btn-sm d-flex align-items-center gap-1 shadow-sm">
-                    <i class="bi bi-plus-lg"></i>
-                    {{ __('admin.slider.add_new_slide') }}
-                </a>
+    <div class="container-fluid">
+        <!-- Header Section -->
+        <div class="card border-0 shadow-sm rounded-4 bg-white mb-4">
+            <div class="card-header bg-gradient-primary text-white border-0 py-2 px-3">
+                <div class="d-flex justify-content-between align-items-center flex-wrap w-100" style="gap: 1rem;">
+                    <div class="d-flex align-items-center gap-2" style="flex: 0 0 auto;">
+                        <div>
+                            <h5 class="mb-0 fw-bold text-white d-flex align-items-center gap-2 flex-wrap" style="font-size: 1.25rem; line-height: 1.3;">
+                                <i class="bi bi-images"></i>
+                                <span>{{ __('admin.slider.slider_items') }}</span>
+                            </h5>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-center gap-2" style="flex: 0 0 auto;">
+                        <span class="badge bg-white text-primary rounded-pill px-3 py-1">
+                            {{ $currentLanguage === 'ar' ? __('admin.labels.arabic') : __('admin.labels.english') }}
+                        </span>
+                        <a href="{{ route('admin.sliders.create') }}" class="btn btn-light btn-sm shadow-sm">
+                            <i class="bi bi-plus-circle me-1"></i>
+                            <span class="d-none d-md-inline">{{ __('admin.slider.add_new_slide') }}</span>
+                            <span class="d-md-none">{{ __('admin.actions.add') }}</span>
+                        </a>
+                    </div>
+                </div>
             </div>
 
-            <div class="card-body p-0">
-                <div class="table-responsive">
-                    <table class="table table-hover align-middle mb-0">
-                        <thead class="table-light">
-                        <tr>
-                            <th class="text-muted small fw-semibold" width="6%">#</th>
-                            <th class="text-muted small fw-semibold" width="30%">{{ __('admin.slider.table_title') }}</th>
-                            <th class="text-muted small fw-semibold" width="28%">{{ __('admin.slider.table_bg_image') }}</th>
-                            <th class="text-muted small fw-semibold text-center" width="10%">{{ __('admin.slider.table_order') }}</th>
-                            <th class="text-muted small fw-semibold text-center" width="10%">{{ __('admin.slider.table_status') }}</th>
-                            <th class="text-muted small fw-semibold text-end" width="16%">{{ __('admin.slider.table_actions') }}</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        @forelse($sliders as $index => $s)
-                            <tr class="{{ $s->is_active ? '' : 'opacity-75' }}">
-                                <td class="small">
-                                    {{ $loop->iteration + ($sliders->currentPage() - 1) * $sliders->perPage() }}
-                                </td>
-
-                                <td>
-                                    <div class="d-flex align-items-center gap-2">
-                                        <span class="status-dot {{ $s->is_active ? 'bg-success' : 'bg-secondary' }}"></span>
-                                        <div class="text-truncate" style="max-width: 220px;" title="{{ $s->title }}">
-                                            <strong>{{ Str::limit($s->title, 45) }}</strong>
-                                        </div>
-                                    </div>
-                                </td>
-
-                                <td>
-                                    <img src="{{ build_image_url($s->bg_image) }}"
-                                         alt="{{ __('admin.slider.table_bg_image') }}"
-                                         width="100"
-                                         height="56"
-                                         class="rounded shadow-sm object-fit-cover"
-                                         loading="lazy"
-                                         onerror="this.src='{{ asset('assets/admin/images/placeholder.png') }}'"
-                                         style="border: 1px solid #eee;">
-                                </td>
-
-                                <td class="text-center">
-                                        <span class="badge bg-light text-dark small px-2 py-1">
-                                            {{ $s->sort_order }}
-                                        </span>
-                                </td>
-
-                                <td class="text-center">
-                                        <span class="badge {{ $s->is_active ? 'bg-success' : 'bg-secondary' }} small">
-                                            {{ $s->is_active ? __('admin.slider.form_active') : __('admin.slider.form_inactive') }}
-                                        </span>
-                                </td>
-
-                                <td class="text-end">
-                                    <div class="btn-group btn-group-sm" role="group">
-                                        <a href="{{ route('admin.sliders.edit', $s) }}"
-                                           class="btn btn-outline-primary"
-                                           title="{{ __('admin.actions.edit') }}">
-                                            {{ __('admin.actions.edit') }}
-                                        </a>
-
-                                       <button type="button"
-                                                class="btn btn-outline-danger"
-                                                data-bs-toggle="modal"
-                                                data-bs-target="#deleteModal-{{ $s->id }}"
-                                                title="{{ __('admin.actions.delete') }}">
-                                            {{ __('admin.actions.delete') }}
-                                        </button>
-
-                                    </div>
-                                </td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="6" class="text-center py-5">
-                                    <div class="text-muted">
-                                        <i class="bi bi-images display-5 d-block mb-3 opacity-50"></i>
-                                        <p class="mb-1">{{ __('admin.slider.no_slides') }}</p>
-                                        <a href="{{ route('admin.sliders.create') }}" class="small text-primary">{{ __('admin.slider.add_first_slide') }}</a>
-                                    </div>
-                                </td>
-                            </tr>
-                        @endforelse
-                        </tbody>
-                    </table>
-                </div>
-
-                @if($sliders->hasPages())
-                    <div class="card-footer bg-transparent border-top-0 py-3">
-                        {{ $sliders->appends(request()->query())->links('pagination::bootstrap-5') }}
+            <!-- Filters Section -->
+            <div class="card-body p-3">
+                <div class="slider-filters">
+            <form id="sliderFilterForm" class="slider-filter-form">
+                <div class="slider-filter-row">
+                    <div class="slider-filter-group">
+                        <input type="text" 
+                               name="search" 
+                               id="sliderSearchInput"
+                               class="form-control rounded-3"
+                               placeholder="{{ __('admin.slider.search_placeholder') }}"
+                               value="{{ $search ?? '' }}">
                     </div>
-                @endif
+                    <div class="slider-filter-group">
+                        <select name="status" id="sliderStatusSelect" class="form-select rounded-3">
+                            <option value="">{{ __('admin.slider.filter_all') }}</option>
+                            <option value="active" {{ ($status ?? '') === 'active' ? 'selected' : '' }}>
+                                {{ __('admin.slider.filter_active') }}
+                            </option>
+                            <option value="inactive" {{ ($status ?? '') === 'inactive' ? 'selected' : '' }}>
+                                {{ __('admin.slider.filter_inactive') }}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="slider-filter-group">
+                        <button type="submit" class="btn btn-primary rounded-3" id="sliderSearchBtn">
+                            <i class="bi bi-search me-1"></i>
+                            {{ __('admin.slider.search_button') }}
+                        </button>
+                    </div>
+                </div>
+            </form>
+                </div>
+            </div>
+
+        <!-- Stats -->
+        <div class="card border-0 shadow-sm rounded-4 bg-white mb-4">
+            <div class="card-body py-2 px-3">
+                <div class="d-flex align-items-center gap-2">
+                    <i class="bi bi-images text-primary"></i>
+                    <span class="text-muted small">{{ __('admin.slider.total_slides') }}:</span>
+                    <strong class="text-primary" id="sliderTotalCount">{{ $sliders->total() }}</strong>
+                </div>
             </div>
         </div>
 
-        <!-- ====================== المودال خارج الجدول ====================== -->
-        @foreach($sliders as $s)
-            <div class="modal fade" id="deleteModal-{{ $s->id }}" tabindex="-1" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered modal-sm">
-                    <form action="{{ route('admin.sliders.destroy', $s) }}" method="POST" class="d-inline">
-                        @csrf @method('DELETE')
-                        <div class="modal-content shadow-lg border-0">
-                            <div class="modal-header border-0 pb-2">
-                                <h5 class="modal-title text-danger fw-bold">
-                                    {{ __('admin.slider.delete_modal_title') }}
-                                </h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ __('admin.slider.close') }}"></button>
-                            </div>
-                            <div class="modal-body pt-2 pb-3 text-center">
-                                <i class="bi bi-exclamation-triangle-fill text-danger display-5 mb-3"></i>
-                                <p class="mb-2 text-muted small">{{ __('admin.slider.delete_confirm') }}</p>
-                                <p class="fw-semibold text-dark mb-0">
-                                    "{{ Str::limit($s->title, 40) }}"
-                                </p>
-                                <small class="text-danger d-block mt-2">{{ __('admin.slider.delete_irreversible') }}</small>
-                            </div>
-                            <div class="modal-footer border-0 pt-2 justify-content-center gap-2">
-                                <button type="button" class="btn btn-secondary btn-sm px-4" data-bs-dismiss="modal">
-                                    {{ __('admin.actions.cancel') }}
-                                </button>
-                                <button type="submit" class="btn btn-danger btn-sm px-4">
-                                    {{ __('admin.slider.delete_final') }}
-                                </button>
-                            </div>
-                        </div>
-                    </form>
+        <!-- Loading Indicator -->
+        <div class="slider-loading" id="sliderLoading">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">جاري التحميل...</span>
+            </div>
+        </div>
+
+        <!-- Main Card -->
+        <div class="card border-0 shadow-sm rounded-4 bg-white mb-4">
+            <div class="slider-table-wrapper">
+            <div class="table-responsive">
+                <table class="table slider-table" id="sliderTable">
+                    <thead>
+                        <tr>
+                            <th style="width: 60px;" class="text-center">#</th>
+                            <th style="width: 150px;" class="text-center">{{ __('admin.slider.table_bg_image') }}</th>
+                            <th>{{ __('admin.slider.table_title') }}</th>
+                            <th style="width: 100px;" class="text-center">{{ __('admin.slider.table_order') }}</th>
+                            <th style="width: 100px;" class="text-center">{{ __('admin.slider.table_status') }}</th>
+                            <th style="width: 120px;" class="text-center">{{ __('admin.slider.table_actions') }}</th>
+                        </tr>
+                    </thead>
+                    <tbody id="sliderGrid">
+                        @include('admin.site.sliders.partials.cards', ['sliders' => $sliders])
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        </div>
+
+        <!-- Pagination -->
+        @if($sliders->hasPages())
+            <div class="card border-0 shadow-sm rounded-4 bg-white mb-4">
+                <div class="card-body py-3">
+                    <div id="sliderPagination">
+                        @include('admin.site.sliders.partials.pagination', ['sliders' => $sliders])
+                    </div>
                 </div>
             </div>
-        @endforeach
-        <!-- ====================== نهاية المودال ====================== -->
-
+        @endif
     </div>
 
+    <!-- Delete Modals -->
+    @foreach($sliders as $slider)
+        <div class="modal fade" id="deleteModal-{{ $slider->id }}" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-sm">
+                <form action="{{ route('admin.sliders.destroy', $slider) }}" method="POST" class="delete-form">
+                    @csrf
+                    @method('DELETE')
+                    <div class="modal-content shadow-lg border-0 rounded-4">
+                        <div class="modal-header bg-gradient-primary text-white border-0 py-3 px-4 rounded-top-4">
+                            <h5 class="modal-title text-white fw-bold mb-0 d-flex align-items-center gap-2">
+                                <i class="bi bi-exclamation-triangle-fill"></i>
+                                {{ __('admin.slider.delete_modal_title') }}
+                            </h5>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body py-4 text-center">
+                            <i class="bi bi-exclamation-triangle-fill text-danger" style="font-size: 3rem;"></i>
+                            <p class="mb-2 text-muted mt-3">{{ __('admin.slider.delete_confirm') }}</p>
+                            <p class="fw-semibold text-dark mb-0">"{{ Str::limit($slider->title, 40) }}"</p>
+                            <small class="text-danger d-block mt-2">{{ __('admin.slider.delete_irreversible') }}</small>
+                        </div>
+                        <div class="modal-footer border-0 pt-2 pb-4 px-4 justify-content-center gap-2">
+                            <button type="button" class="btn btn-outline-secondary rounded-3 px-4" data-bs-dismiss="modal">
+                                {{ __('admin.common.cancel') }}
+                            </button>
+                            <button type="submit" class="btn btn-danger rounded-3 px-4 shadow-sm delete-submit-btn">
+                                <i class="bi bi-trash me-1"></i>
+                                {{ __('admin.slider.delete_final') }}
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    @endforeach
+
+    @push('styles')
+    <link rel="stylesheet" href="{{ asset('assets/admin/css/sliders.css') }}">
+    @endpush
+
+    @push('scripts')
+    <script>
+        (function() {
+            'use strict';
+
+            const filterForm = document.getElementById('sliderFilterForm');
+            const searchInput = document.getElementById('sliderSearchInput');
+            const statusSelect = document.getElementById('sliderStatusSelect');
+            const searchBtn = document.getElementById('sliderSearchBtn');
+            const sliderGrid = document.getElementById('sliderGrid');
+            const sliderPagination = document.getElementById('sliderPagination');
+            const sliderLoading = document.getElementById('sliderLoading');
+            const sliderTotalCount = document.getElementById('sliderTotalCount');
+
+            let isLoading = false;
+
+            function showLoading() {
+                isLoading = true;
+                sliderLoading.classList.add('active');
+                sliderGrid.style.opacity = '0.5';
+                sliderPagination.style.opacity = '0.5';
+            }
+
+            function hideLoading() {
+                isLoading = false;
+                sliderLoading.classList.remove('active');
+                sliderGrid.style.opacity = '1';
+                sliderPagination.style.opacity = '1';
+            }
+
+            function buildUrl(params) {
+                const url = new URL(window.location.href);
+                Object.keys(params).forEach(key => {
+                    if (params[key]) {
+                        url.searchParams.set(key, params[key]);
+                    } else {
+                        url.searchParams.delete(key);
+                    }
+                });
+                url.searchParams.delete('page'); // Reset to page 1 on new search
+                return url.toString();
+            }
+
+            function loadSliders(url) {
+                if (isLoading) return;
+                
+                showLoading();
+                
+                fetch(url, {
+                    method: 'GET',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Accept': 'application/json',
+                    }
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    sliderGrid.innerHTML = data.html;
+                    sliderPagination.innerHTML = data.pagination;
+                    sliderTotalCount.textContent = data.total;
+                    window.history.pushState({}, '', url);
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    
+                    // Re-initialize delete forms
+                    initDeleteForms();
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    if (window.adminNotifications) {
+                        window.adminNotifications.error('حدث خطأ أثناء تحميل البيانات');
+                    }
+                })
+                .finally(() => {
+                    hideLoading();
+                });
+            }
+
+            function initDeleteForms() {
+                document.querySelectorAll('.delete-form').forEach(form => {
+                    form.addEventListener('submit', function(e) {
+                        const submitBtn = form.querySelector('.delete-submit-btn');
+                        if (submitBtn && !submitBtn.disabled) {
+                            submitBtn.disabled = true;
+                            submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>جاري الحذف...';
+                            submitBtn.classList.add('disabled');
+                        }
+                    });
+                });
+            }
+
+            // Form submit
+            filterForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const formData = new FormData(filterForm);
+                const params = Object.fromEntries(formData);
+                const url = buildUrl(params);
+                loadSliders(url);
+            });
+
+            // Pagination links
+            document.addEventListener('click', function(e) {
+                const paginationLink = e.target.closest('.pagination a');
+                if (paginationLink) {
+                    e.preventDefault();
+                    const url = paginationLink.href;
+                    const urlObj = new URL(url);
+                    
+                    // Update form values from URL
+                    if (urlObj.searchParams.get('search')) {
+                        searchInput.value = urlObj.searchParams.get('search');
+                    }
+                    if (urlObj.searchParams.get('status')) {
+                        statusSelect.value = urlObj.searchParams.get('status');
+                    }
+                    
+                    loadSliders(url);
+                }
+            });
+
+            // Initialize delete forms on page load
+            initDeleteForms();
+        })();
+    </script>
+    @endpush
 @endsection

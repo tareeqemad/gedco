@@ -1,7 +1,10 @@
-{{-- resources/views/admin/staff-profiles/edit.blade.php --}}
+@php
+    $breadcrumbTitle     = __('admin.staff_profiles.edit_title') . ' - ' . $profile->full_name;
+    $breadcrumbParent    = __('admin.staff_profiles.title');
+    $breadcrumbParentUrl = route('admin.staff-profiles.index');
+@endphp
 @extends('layouts.admin')
-
-@section('page-title', __('admin.staff_profiles.edit_title'))
+@section('title', __('admin.staff_profiles.edit_title'))
 
 @push('styles')
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
@@ -30,24 +33,27 @@
         })->values();
     @endphp
 
-    <div class="container-fluid py-4">
+    <div class="container-fluid p-0">
         <div class="row justify-content-center">
             <div class="col-xxl-11">
-                <div class="card card-admin">
-                    <div class="card-header text-white">
-                        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                <div class="card border-0 shadow-sm rounded-4 bg-white">
+                    <div class="card-header bg-gradient-primary text-white border-0 py-2 px-3">
+                        <div class="d-flex justify-content-between align-items-center flex-wrap w-100" style="gap: 1rem;">
                             <div>
-                                <h5 class="mb-0 text-white"><i class="bi bi-person-gear me-2"></i> {{ __('admin.staff_profiles.edit_header_title') }}</h5>
+                                <h5 class="mb-0 fw-bold text-white d-flex align-items-center gap-2 flex-wrap" style="font-size: 1.25rem; line-height: 1.3;">
+                                    <i class="bi bi-person-gear"></i>
+                                    <span>{{ __('admin.staff_profiles.edit_header_title') }}</span>
+                                </h5>
                             </div>
-                            <a href="{{ route('admin.staff-profiles.show', $profile) }}" class="btn btn-outline-light btn-sm">
-                                <i class="bi bi-arrow-right"></i> {{ __('admin.staff_profiles.edit_back_to_view') }}
+                            <a href="{{ route('admin.staff-profiles.show', $profile) }}" class="btn btn-outline-light btn-sm rounded-3 shadow-sm d-flex align-items-center gap-1">
+                                <i class="bi bi-arrow-right"></i><span class="d-none d-md-inline">{{ __('admin.staff_profiles.edit_back_to_view') }}</span>
                             </a>
                         </div>
                     </div>
 
                     <div class="card-body p-4 p-xl-5">
                         <!-- بطاقة معلومات سريعة -->
-                        <div class="text-center text-lg-start p-3 bg-light rounded-3 mb-4 border">
+                        <div class="text-center text-lg-start p-3 bg-light rounded-4 mb-4 border-0 shadow-sm">
                             <h5 class="fw-bold text-primary mb-2">{{ $profile->full_name }}</h5>
                             <div class="d-flex flex-wrap gap-3 justify-content-center justify-content-lg-start text-muted small mt-1">
                                 <div><strong>{{ __('admin.staff_profiles.edit_national_id') }}:</strong> {{ $profile->national_id }}</div>
@@ -64,32 +70,59 @@
                             <!-- Basic Data -->
                             <h5 class="section-title"><i class="bi bi-person-badge"></i> {{ __('admin.staff_profiles.edit_basic_data') }}</h5>
                             <div class="row g-4">
-                                <div class="col-md-6 col-lg-4"><label class="form-label">{{ __('admin.staff_profiles.edit_national_id') }} <span class="text-danger">*</span></label><input type="text" name="national_id" class="form-control form-control-lg" value="{{ old('national_id', $profile->national_id) }}" required maxlength="9" pattern="\d{9}"></div>
-                                <div class="col-md-6 col-lg-4"><label class="form-label">{{ __('admin.staff_profiles.edit_full_name') }} <span class="text-danger">*</span></label><input type="text" name="full_name" class="form-control form-control-lg" value="{{ old('full_name', $profile->full_name) }}" required></div>
-                                <div class="col-md-6 col-lg-4"><label class="form-label">{{ __('admin.staff_profiles.edit_birth_date') }}</label><input type="date" name="birth_date" class="form-control form-control-lg" value="{{ old('birth_date', $profile->birth_date?->format('Y-m-d')) }}"></div>
-                                <div class="col-md-6 col-lg-4"><label class="form-label">{{ __('admin.staff_profiles.edit_employee_number') }} <span class="text-danger">*</span></label><input type="text" name="employee_number" class="form-control form-control-lg" value="{{ old('employee_number', $profile->employee_number) }}" required></div>
-                                <div class="col-md-6 col-lg-4"><label class="form-label">{{ __('admin.staff_profiles.edit_job_title') }}</label><input type="text" name="job_title" class="form-control form-control-lg" value="{{ old('job_title', $profile->job_title) }}"></div>
-                                <div class="col-md-6 col-lg-4"><label class="form-label">{{ __('admin.staff_profiles.edit_location') }} <span class="text-danger">*</span></label>
-                                    <select name="location" class="form-select form-select-lg" required>
+                                <div class="col-md-6 col-lg-4">
+                                    <label class="form-label fw-semibold text-dark d-flex align-items-center gap-1">{{ __('admin.staff_profiles.edit_national_id') }} <span class="text-danger">*</span></label>
+                                    <input type="text" name="national_id" class="form-control rounded-3 border-0 bg-light" style="height: 45px;" value="{{ old('national_id', $profile->national_id) }}" required maxlength="9" pattern="\d{9}">
+                                </div>
+                                <div class="col-md-6 col-lg-4">
+                                    <label class="form-label fw-semibold text-dark d-flex align-items-center gap-1">{{ __('admin.staff_profiles.edit_full_name') }} <span class="text-danger">*</span></label>
+                                    <input type="text" name="full_name" class="form-control rounded-3 border-0 bg-light" style="height: 45px;" value="{{ old('full_name', $profile->full_name) }}" required>
+                                </div>
+                                <div class="col-md-6 col-lg-4">
+                                    <label class="form-label fw-semibold text-dark d-flex align-items-center gap-1">{{ __('admin.staff_profiles.edit_birth_date') }}</label>
+                                    <input type="date" name="birth_date" class="form-control rounded-3 border-0 bg-light" style="height: 45px;" value="{{ old('birth_date', $profile->birth_date?->format('Y-m-d')) }}">
+                                </div>
+                                <div class="col-md-6 col-lg-4">
+                                    <label class="form-label fw-semibold text-dark d-flex align-items-center gap-1">{{ __('admin.staff_profiles.edit_employee_number') }} <span class="text-danger">*</span></label>
+                                    <input type="text" name="employee_number" class="form-control rounded-3 border-0 bg-light" style="height: 45px;" value="{{ old('employee_number', $profile->employee_number) }}" required>
+                                </div>
+                                <div class="col-md-6 col-lg-4">
+                                    <label class="form-label fw-semibold text-dark d-flex align-items-center gap-1">{{ __('admin.staff_profiles.edit_job_title') }}</label>
+                                    <input type="text" name="job_title" class="form-control rounded-3 border-0 bg-light" style="height: 45px;" value="{{ old('job_title', $profile->job_title) }}">
+                                </div>
+                                <div class="col-md-6 col-lg-4">
+                                    <label class="form-label fw-semibold text-dark d-flex align-items-center gap-1">{{ __('admin.staff_profiles.edit_location') }} <span class="text-danger">*</span></label>
+                                    <select name="location" class="form-select rounded-3 border-0 bg-light" style="height: 45px;" required>
                                         <option value="">{{ __('admin.staff_profiles.edit_select_location') }}</option>
                                         @foreach($locations as $k => $v)
                                             <option value="{{ $k }}" {{ old('location', $profile->location) == $k ? 'selected' : '' }}>{{ $v }}</option>
                                         @endforeach
                                     </select>
                                 </div>
-                                <div class="col-md-6 col-lg-4"><label class="form-label">{{ __('admin.staff_profiles.edit_department') }}</label><input type="text" name="department" class="form-control form-control-lg" value="{{ old('department', $profile->department) }}"></div>
-                                <div class="col-md-6 col-lg-4"><label class="form-label">{{ __('admin.staff_profiles.edit_directorate') }}</label><input type="text" name="directorate" class="form-control form-control-lg" value="{{ old('directorate', $profile->directorate) }}"></div>
-                                <div class="col-md-6 col-lg-4"><label class="form-label">{{ __('admin.staff_profiles.edit_section') }}</label><input type="text" name="section" class="form-control form-control-lg" value="{{ old('section', $profile->section) }}"></div>
-                                <div class="col-md-6 col-lg-4"><label class="form-label">{{ __('admin.staff_profiles.edit_marital_status') }}</label>
-                                    <select name="marital_status" class="form-select form-select-lg">
+                                <div class="col-md-6 col-lg-4">
+                                    <label class="form-label fw-semibold text-dark d-flex align-items-center gap-1">{{ __('admin.staff_profiles.edit_department') }}</label>
+                                    <input type="text" name="department" class="form-control rounded-3 border-0 bg-light" style="height: 45px;" value="{{ old('department', $profile->department) }}">
+                                </div>
+                                <div class="col-md-6 col-lg-4">
+                                    <label class="form-label fw-semibold text-dark d-flex align-items-center gap-1">{{ __('admin.staff_profiles.edit_directorate') }}</label>
+                                    <input type="text" name="directorate" class="form-control rounded-3 border-0 bg-light" style="height: 45px;" value="{{ old('directorate', $profile->directorate) }}">
+                                </div>
+                                <div class="col-md-6 col-lg-4">
+                                    <label class="form-label fw-semibold text-dark d-flex align-items-center gap-1">{{ __('admin.staff_profiles.edit_section') }}</label>
+                                    <input type="text" name="section" class="form-control rounded-3 border-0 bg-light" style="height: 45px;" value="{{ old('section', $profile->section) }}">
+                                </div>
+                                <div class="col-md-6 col-lg-4">
+                                    <label class="form-label fw-semibold text-dark d-flex align-items-center gap-1">{{ __('admin.staff_profiles.edit_marital_status') }}</label>
+                                    <select name="marital_status" class="form-select rounded-3 border-0 bg-light" style="height: 45px;">
                                         <option value="">{{ __('admin.staff_profiles.not_specified') }}</option>
                                         @foreach($maritalStatus as $k => $v)
                                             <option value="{{ $k }}" {{ old('marital_status', $profile->marital_status) == $k ? 'selected' : '' }}>{{ $v }}</option>
                                         @endforeach
                                     </select>
                                 </div>
-                                <div class="col-md-6 col-lg-4"><label class="form-label">{{ __('admin.staff_profiles.edit_family_members_count') }}</label>
-                                    <input type="number" min="0" max="20" id="family-count-input" name="family_members_count" class="form-control form-control-lg" value="{{ old('family_members_count', $profile->family_members_count ?? 1) }}">
+                                <div class="col-md-6 col-lg-4">
+                                    <label class="form-label fw-semibold text-dark d-flex align-items-center gap-1">{{ __('admin.staff_profiles.edit_family_members_count') }}</label>
+                                    <input type="number" min="0" max="20" id="family-count-input" name="family_members_count" class="form-control rounded-3 border-0 bg-light" style="height: 45px;" value="{{ old('family_members_count', $profile->family_members_count ?? 1) }}">
                                 </div>
                             </div>
 
@@ -120,17 +153,22 @@
                             <!-- Housing & Social Status -->
                             <h5 class="section-title"><i class="bi bi-house-door"></i> {{ __('admin.staff_profiles.edit_housing_social') }}</h5>
                             <div class="row g-4">
-                                <div class="col-12"><label class="form-label">{{ __('admin.staff_profiles.edit_original_address') }}</label><input type="text" name="original_address" class="form-control form-control-lg" value="{{ old('original_address', $profile->original_address) }}"></div>
-                                <div class="col-md-6"><label class="form-label">{{ __('admin.staff_profiles.edit_house_status') }}</label>
-                                    <select name="house_status" class="form-select form-select-lg">
+                                <div class="col-12">
+                                    <label class="form-label fw-semibold text-dark d-flex align-items-center gap-1">{{ __('admin.staff_profiles.edit_original_address') }}</label>
+                                    <input type="text" name="original_address" class="form-control rounded-3 border-0 bg-light" style="height: 45px;" value="{{ old('original_address', $profile->original_address) }}">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold text-dark d-flex align-items-center gap-1">{{ __('admin.staff_profiles.edit_house_status') }}</label>
+                                    <select name="house_status" class="form-select rounded-3 border-0 bg-light" style="height: 45px;">
                                         <option value="">{{ __('admin.staff_profiles.not_specified') }}</option>
                                         @foreach($houseStatus as $k => $v)
                                             <option value="{{ $k }}" {{ old('house_status', $profile->house_status) == $k ? 'selected' : '' }}>{{ $v }}</option>
                                         @endforeach
                                     </select>
                                 </div>
-                                <div class="col-md-6"><label class="form-label">{{ __('admin.staff_profiles.edit_resident_status') }}</label>
-                                    <select name="status" id="status-select" class="form-select form-select-lg">
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold text-dark d-flex align-items-center gap-1">{{ __('admin.staff_profiles.edit_resident_status') }}</label>
+                                    <select name="status" id="status-select" class="form-select rounded-3 border-0 bg-light" style="height: 45px;">
                                         <option value="">{{ __('admin.staff_profiles.not_specified') }}</option>
                                         @foreach($residentStatus as $k => $v)
                                             <option value="{{ $k }}" {{ old('status', $profile->status) == $k ? 'selected' : '' }}>{{ $v }}</option>
@@ -138,11 +176,12 @@
                                     </select>
                                 </div>
                                 <div class="col-12 {{ old('status', $profile->status) == 'displaced' ? 'show' : 'hidden' }}" id="current-address-field">
-                                    <label class="form-label">{{ __('admin.staff_profiles.edit_current_address') }}</label>
-                                    <input type="text" name="current_address" class="form-control form-control-lg" value="{{ old('current_address', $profile->current_address) }}">
+                                    <label class="form-label fw-semibold text-dark d-flex align-items-center gap-1">{{ __('admin.staff_profiles.edit_current_address') }}</label>
+                                    <input type="text" name="current_address" class="form-control rounded-3 border-0 bg-light" style="height: 45px;" value="{{ old('current_address', $profile->current_address) }}">
                                 </div>
-                                <div class="col-md-6"><label class="form-label">{{ __('admin.staff_profiles.edit_housing_type') }}</label>
-                                    <select name="housing_type" class="form-select form-select-lg">
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold text-dark d-flex align-items-center gap-1">{{ __('admin.staff_profiles.edit_housing_type') }}</label>
+                                    <select name="housing_type" class="form-select rounded-3 border-0 bg-light" style="height: 45px;">
                                         <option value="">{{ __('admin.staff_profiles.not_specified') }}</option>
                                         @foreach($housingTypes as $k => $v)
                                             <option value="{{ $k }}" {{ old('housing_type', $profile->housing_type) == $k ? 'selected' : '' }}>{{ $v }}</option>
@@ -154,8 +193,14 @@
                             <!-- Contact Information -->
                             <h5 class="section-title"><i class="bi bi-telephone"></i> {{ __('admin.staff_profiles.edit_contact_info') }}</h5>
                             <div class="row g-4">
-                                <div class="col-md-6"><label class="form-label">{{ __('admin.staff_profiles.edit_mobile') }}</label><input type="text" name="mobile" class="form-control form-control-lg" value="{{ old('mobile', $profile->mobile) }}"></div>
-                                <div class="col-md-6"><label class="form-label">{{ __('admin.staff_profiles.edit_mobile_alt') }}</label><input type="text" name="mobile_alt" class="form-control form-control-lg" value="{{ old('mobile_alt', $profile->mobile_alt) }}"></div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold text-dark d-flex align-items-center gap-1">{{ __('admin.staff_profiles.edit_mobile') }}</label>
+                                    <input type="text" name="mobile" class="form-control rounded-3 border-0 bg-light" style="height: 45px;" value="{{ old('mobile', $profile->mobile) }}">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold text-dark d-flex align-items-center gap-1">{{ __('admin.staff_profiles.edit_mobile_alt') }}</label>
+                                    <input type="text" name="mobile_alt" class="form-control rounded-3 border-0 bg-light" style="height: 45px;" value="{{ old('mobile_alt', $profile->mobile_alt) }}">
+                                </div>
                                 
                                 @php
                                     $whats = old('whatsapp', $profile->whatsapp ?? '');
@@ -176,34 +221,40 @@
                                 @endphp
                                 
                                 <div class="col-md-6">
-                                    <label class="form-label">{{ __('admin.staff_profiles.edit_whatsapp') }}</label>
-                                    <div class="wa-wrapper">
-                                        <span class="wa-plus">+</span>
-                                        <select name="whatsapp_prefix" class="wa-prefix">
+                                    <label class="form-label fw-semibold text-dark d-flex align-items-center gap-1">{{ __('admin.staff_profiles.edit_whatsapp') }}</label>
+                                    <div class="wa-wrapper d-flex align-items-center rounded-3 border-0 bg-light" style="height: 45px; padding: 0 0.75rem;">
+                                        <span class="wa-plus me-1">+</span>
+                                        <select name="whatsapp_prefix" class="wa-prefix border-0 bg-transparent" style="height: 100%;">
                                             <option value="970" @selected(old('whatsapp_prefix', $waPref)=='970')>970</option>
                                             <option value="972" @selected(old('whatsapp_prefix', $waPref)=='972')>972</option>
                                         </select>
-                                        <input type="tel" name="whatsapp" placeholder="59xxxxxxx" value="{{ old('whatsapp', $waNum) }}" maxlength="10" class="wa-number">
+                                        <input type="tel" name="whatsapp" placeholder="59xxxxxxx" value="{{ old('whatsapp', $waNum) }}" maxlength="10" class="wa-number form-control border-0 bg-transparent" style="height: 100%;">
                                     </div>
                                 </div>
                                 
-                                <div class="col-md-6"><label class="form-label">{{ __('admin.staff_profiles.edit_telegram') }}</label><input type="text" name="telegram" class="form-control form-control-lg" value="{{ old('telegram', $profile->telegram) }}"></div>
-                                <div class="col-md-6"><label class="form-label">{{ __('admin.staff_profiles.edit_email') }}</label><input type="email" name="gmail" class="form-control form-control-lg" value="{{ old('gmail', $profile->gmail) }}"></div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold text-dark d-flex align-items-center gap-1">{{ __('admin.staff_profiles.edit_telegram') }}</label>
+                                    <input type="text" name="telegram" class="form-control rounded-3 border-0 bg-light" style="height: 45px;" value="{{ old('telegram', $profile->telegram) }}">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold text-dark d-flex align-items-center gap-1">{{ __('admin.staff_profiles.edit_email') }}</label>
+                                    <input type="email" name="gmail" class="form-control rounded-3 border-0 bg-light" style="height: 45px;" value="{{ old('gmail', $profile->gmail) }}">
+                                </div>
                             </div>
 
                             <!-- Family Incidents -->
                             <h5 class="section-title"><i class="bi bi-exclamation-triangle"></i> {{ __('admin.staff_profiles.edit_family_incidents') }}</h5>
                             <div class="row g-4">
                                 <div class="col-md-6">
-                                    <label class="form-label">{{ __('admin.staff_profiles.edit_has_incidents') }}</label>
-                                    <select name="has_family_incidents" class="form-select form-select-lg">
+                                    <label class="form-label fw-semibold text-dark d-flex align-items-center gap-1">{{ __('admin.staff_profiles.edit_has_incidents') }}</label>
+                                    <select name="has_family_incidents" class="form-select rounded-3 border-0 bg-light" style="height: 45px;">
                                         <option value="no" {{ old('has_family_incidents', $profile->has_family_incidents ?? 'no') == 'no' ? 'selected' : '' }}>{{ __('admin.staff_profiles.edit_no') }}</option>
                                         <option value="yes" {{ old('has_family_incidents', $profile->has_family_incidents ?? 'no') == 'yes' ? 'selected' : '' }}>{{ __('admin.staff_profiles.edit_yes') }}</option>
                                     </select>
                                 </div>
                                 <div class="col-12">
-                                    <label class="form-label">{{ __('admin.staff_profiles.edit_incidents_notes') }}</label>
-                                    <textarea name="family_notes" rows="3" class="form-control form-control-lg" placeholder="{{ __('admin.staff_profiles.edit_incidents_notes_placeholder') }}">{{ old('family_notes', $profile->family_notes) }}</textarea>
+                                    <label class="form-label fw-semibold text-dark d-flex align-items-center gap-1">{{ __('admin.staff_profiles.edit_incidents_notes') }}</label>
+                                    <textarea name="family_notes" rows="3" class="form-control rounded-3 border-0 bg-light" placeholder="{{ __('admin.staff_profiles.edit_incidents_notes_placeholder') }}">{{ old('family_notes', $profile->family_notes) }}</textarea>
                                 </div>
                             </div>
 
@@ -211,8 +262,8 @@
                             <h5 class="section-title"><i class="bi bi-clipboard-check"></i> {{ __('admin.staff_profiles.edit_readiness_title') }}</h5>
                             <div class="row g-4">
                                 <div class="col-md-6">
-                                    <label class="form-label">{{ __('admin.staff_profiles.edit_readiness_level') }}</label>
-                                    <select name="readiness" id="readiness-select" class="form-select form-select-lg">
+                                    <label class="form-label fw-semibold text-dark d-flex align-items-center gap-1">{{ __('admin.staff_profiles.edit_readiness_level') }}</label>
+                                    <select name="readiness" id="readiness-select" class="form-select rounded-3 border-0 bg-light" style="height: 45px;">
                                         <option value="">{{ __('admin.staff_profiles.not_specified') }}</option>
                                         @foreach($readinessList as $k => $v)
                                             <option value="{{ $k }}" {{ old('readiness', $profile->readiness) == $k ? 'selected' : '' }}>{{ $v['label'] ?? $v }}</option>
@@ -220,8 +271,8 @@
                                     </select>
                                 </div>
                                 <div class="col-12 {{ old('readiness', $profile->readiness) == 'not_ready' ? 'show' : 'hidden' }}" id="readiness-notes-field">
-                                    <label class="form-label">{{ __('admin.staff_profiles.edit_readiness_reasons') }}</label>
-                                    <textarea name="readiness_notes" rows="4" class="form-control form-control-lg">{{ old('readiness_notes', $profile->readiness_notes) }}</textarea>
+                                    <label class="form-label fw-semibold text-dark d-flex align-items-center gap-1">{{ __('admin.staff_profiles.edit_readiness_reasons') }}</label>
+                                    <textarea name="readiness_notes" rows="4" class="form-control rounded-3 border-0 bg-light">{{ old('readiness_notes', $profile->readiness_notes) }}</textarea>
                                 </div>
                             </div>
 
@@ -229,12 +280,12 @@
                             <h5 class="section-title"><i class="bi bi-shield-lock"></i> {{ __('admin.staff_profiles.edit_edit_settings') }}</h5>
                             <div class="row g-4">
                                 <div class="col-md-6">
-                                    <label class="form-label">{{ __('admin.staff_profiles.edit_total_edits_allowed') }}</label>
-                                    <input type="number" min="0" name="edits_allowed" class="form-control form-control-lg" value="{{ old('edits_allowed', $profile->edits_allowed) }}">
+                                    <label class="form-label fw-semibold text-dark d-flex align-items-center gap-1">{{ __('admin.staff_profiles.edit_total_edits_allowed') }}</label>
+                                    <input type="number" min="0" name="edits_allowed" class="form-control rounded-3 border-0 bg-light" style="height: 45px;" value="{{ old('edits_allowed', $profile->edits_allowed) }}">
                                 </div>
                                 <div class="col-md-6">
-                                    <label class="form-label">{{ __('admin.staff_profiles.edit_remaining_for_employee') }}</label>
-                                    <input type="number" min="0" name="edits_remaining" class="form-control form-control-lg" value="{{ old('edits_remaining', $profile->edits_remaining) }}">
+                                    <label class="form-label fw-semibold text-dark d-flex align-items-center gap-1">{{ __('admin.staff_profiles.edit_remaining_for_employee') }}</label>
+                                    <input type="number" min="0" name="edits_remaining" class="form-control rounded-3 border-0 bg-light" style="height: 45px;" value="{{ old('edits_remaining', $profile->edits_remaining) }}">
                                 </div>
                             </div>
                             <div class="alert alert-info mt-3 small">
@@ -243,7 +294,7 @@
 
                             <!-- Save Button -->
                             <div class="text-center mt-5">
-                                <button type="submit" class="btn btn-save text-white shadow-lg">
+                                <button type="submit" class="btn btn-primary rounded-3 shadow-sm px-5 py-2 d-flex align-items-center gap-2 mx-auto">
                                     <i class="bi bi-check2-all"></i> {{ __('admin.staff_profiles.edit_save_all') }}
                                 </button>
                             </div>

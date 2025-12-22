@@ -37,7 +37,20 @@ class UserController extends Controller
         // === الحفاظ على الفلاتر في الـ Pagination ===
         $users->appends($request->query());
 
-        return view('admin.users.index', compact('users'));
+        // جلب الأدوار للفلتر (بدلاً من استدعائها في Blade)
+        $roles = Role::orderBy('name')->get(['id', 'name']);
+
+        // إذا كان الطلب AJAX، أرجع JSON
+        if ($request->expectsJson() || $request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'html' => view('admin.users.partials.table', compact('users'))->render(),
+                'pagination' => view('admin.users.partials.pagination', compact('users'))->render(),
+                'total' => $users->total(),
+            ]);
+        }
+
+        return view('admin.users.index', compact('users', 'roles'));
     }
 
     public function create()
@@ -266,5 +279,101 @@ class UserController extends Controller
 
         return $query->get(['id', 'name', 'guard_name'])
             ->groupBy('guard_name');
+    }
+
+    /**
+     * الدخول كالمستخدم (Impersonation) - فقط لـ super-admin
+     */
+    public function impersonate(Request $request, User $user)
+    {
+        // التأكد من أن المستخدم الحالي super-admin
+        if (!auth()->user()->hasRole('super-admin')) {
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'غير مصرح لك بهذا الإجراء'
+                ], 403);
+            }
+            abort(403, 'غير مصرح لك بهذا الإجراء');
+        }
+
+        // منع الدخول كـ super-admin آخر
+        if ($user->hasRole('super-admin') && $user->id !== auth()->id()) {
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'لا يمكنك الدخول كـ super-admin آخر'
+                ], 403);
+            }
+            return back()->with('error', 'لا يمكنك الدخول كـ super-admin آخر');
+        }
+
+        // حفظ المستخدم الأصلي في session
+        session()->put('impersonator_id', auth()->id());
+        session()->put('impersonator_name', auth()->user()->name);
+
+        // تسجيل الدخول كالمستخدم المطلوب
+        auth()->login($user);
+
+        if ($request->expectsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'تم الدخول كالمستخدم بنجاح',
+                'redirect' => route('admin.dashboard')
+            ]);
+        }
+
+        return redirect()->route('admin.dashboard')
+            ->with('success', 'تم الدخول كالمستخدم: ' . $user->name);
+    }
+
+    /**
+     * العودة إلى المستخدم الأصلي
+     */
+    public function stopImpersonating(Request $request)
+    {
+        // التأكد من وجود impersonator_id في session
+        if (!session()->has('impersonator_id')) {
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'لا يوجد مستخدم أصلي للعودة إليه'
+                ], 404);
+            }
+            return redirect()->route('admin.dashboard')
+                ->with('error', 'لا يوجد مستخدم أصلي للعودة إليه');
+        }
+
+        $impersonatorId = session()->get('impersonator_id');
+        $impersonator = User::find($impersonatorId);
+
+        if (!$impersonator) {
+            session()->forget(['impersonator_id', 'impersonator_name']);
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'المستخدم الأصلي غير موجود'
+                ], 404);
+            }
+            return redirect()->route('admin.dashboard')
+                ->with('error', 'المستخدم الأصلي غير موجود');
+        }
+
+        // العودة إلى المستخدم الأصلي
+        auth()->login($impersonator);
+
+        // حذف بيانات الـ impersonation من session
+        session()->forget(['impersonator_id', 'impersonator_name']);
+
+        if ($request->expectsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'تم العودة إلى المستخدم الأصلي بنجاح',
+                'redirect' => route('admin.users.index')
+            ]);
+        }
+
+        return redirect()->route('admin.users.index')
+            ->with('success', 'تم العودة إلى المستخدم الأصلي: ' . $impersonator->name);
     }
 }

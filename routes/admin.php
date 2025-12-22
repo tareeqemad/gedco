@@ -53,6 +53,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::middleware('role:super-admin')->group(function () {
             Route::post('/users/{user}/update-password', [UserController::class, 'updatePassword'])->name('users.update-password');
             Route::get('/users/{user}/show-temporary-password', [UserController::class, 'showTemporaryPassword'])->name('users.show-temporary-password');
+            // Impersonation routes
+            Route::post('/users/{user}/impersonate', [UserController::class, 'impersonate'])->name('users.impersonate');
+            Route::post('/users/stop-impersonating', [UserController::class, 'stopImpersonating'])->name('users.stop-impersonating');
         });
 
         // === إعدادات الموقع ===

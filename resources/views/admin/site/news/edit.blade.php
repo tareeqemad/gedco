@@ -287,6 +287,7 @@
 @endsection
 
 @push('styles')
+    <link rel="stylesheet" href="{{ asset('assets/admin/css/news.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/admin/libs/quill/quill.snow.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/admin/libs/sweetalert2/sweetalert2.min.css') }}">
 @endpush

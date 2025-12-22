@@ -13,24 +13,28 @@
     @endphp
 
     <div class="container-fluid p-0" id="news-create-page">
-        <div class="card border-0 shadow-sm rounded-3 bg-white mb-4">
-            <div class="card-header bg-white border-bottom py-2 px-3 d-flex align-items-center justify-content-between flex-wrap gap-2">
-                <div class="d-flex align-items-center gap-2">
-                    <i class="bi bi-plus-circle text-primary fs-5"></i>
-                    <h6 class="mb-0 fw-semibold text-dark-emphasis">{{ __('admin.news.create_news') }}</h6>
+        <!-- Header Section -->
+        <div class="card border-0 shadow-sm rounded-4 bg-white mb-4">
+            <div class="card-header bg-gradient-primary text-white border-0 py-2 py-md-3 px-3 px-md-4">
+                <div class="d-flex justify-content-between align-items-center w-100" style="gap: 1rem;">
+                    <div class="d-flex align-items-center gap-2" style="flex: 0 0 auto;">
+                        <div>
+                            <h5 class="mb-0 fw-bold text-white" style="font-size: 1.25rem; line-height: 1.3;">{{ __('admin.news.create_news') }}</h5>
+                        </div>
+                    </div>
+                    <ul class="nav nav-tabs nav-tabs-sm border-0" id="newsTabs" role="tablist" style="margin-inline-start: auto;">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active px-3 py-2 rounded-3 text-white" data-bs-toggle="tab" data-bs-target="#form-content" style="background: rgba(255, 255, 255, 0.2); border: 1px solid rgba(255, 255, 255, 0.3);">
+                                <i class="bi bi-pencil me-1"></i> {{ __('admin.news.form_tab_input') }}
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link px-3 py-2 rounded-3 text-white" data-bs-toggle="tab" data-bs-target="#preview-content" style="background: transparent; border: 1px solid rgba(255, 255, 255, 0.3);">
+                                <i class="bi bi-eye me-1"></i> {{ __('admin.news.form_tab_preview') }}
+                            </button>
+                        </li>
+                    </ul>
                 </div>
-                <ul class="nav nav-tabs nav-tabs-sm border-0" id="newsTabs" role="tablist">
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link active px-3 py-1 rounded-3" data-bs-toggle="tab" data-bs-target="#form-content">
-                            <i class="bi bi-pencil me-1"></i> {{ __('admin.news.form_tab_input') }}
-                        </button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link px-3 py-1 rounded-3" data-bs-toggle="tab" data-bs-target="#preview-content">
-                            <i class="bi bi-eye me-1"></i> {{ __('admin.news.form_tab_preview') }}
-                        </button>
-                    </li>
-                </ul>
             </div>
         </div>
 
@@ -38,8 +42,8 @@
             <div class="tab-pane fade show active" id="form-content">
                 <div class="row g-4">
                     <div class="col-12">
-                        <div class="card border-0 shadow-sm rounded-3 bg-white">
-                            <div class="card-body p-4">
+                        <div class="card border-0 shadow-sm rounded-4 bg-white">
+                            <div class="card-body p-3 p-md-4">
                                 <form id="newsForm" method="POST" enctype="multipart/form-data" action="{{ route('admin.news.store') }}">
                                     @csrf
 
@@ -47,38 +51,38 @@
 
                                     <!-- Title -->
                                     <div class="mb-4">
-                                        <label class="form-label fw-medium text-secondary d-flex align-items-center gap-1">
-                                            <i class="bi bi-type-h1 fs-6 text-primary"></i> {{ __('admin.news.form_title') }}
+                                        <label class="form-label fw-semibold text-dark d-flex align-items-center gap-2 mb-2">
+                                            <i class="bi bi-type-h1 text-primary"></i> {{ __('admin.news.form_title') }}
                                         </label>
                                         <input type="text" name="title" id="titleInput"
-                                               class="form-control rounded-3 border-0 shadow-sm focus-ring focus-ring-primary @error('title') is-invalid @enderror"
-                                               placeholder="{{ __('admin.news.form_title_placeholder') }}" value="{{ old('title') }}">
-                                        @error('title') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
+                                               class="form-control rounded-3 border-0 bg-light focus-ring focus-ring-primary @error('title') is-invalid @enderror"
+                                               placeholder="{{ __('admin.news.form_title_placeholder') }}" value="{{ old('title') }}" style="height: 45px; font-size: 1rem;">
+                                        @error('title') <div class="invalid-feedback d-block mt-1">{{ $message }}</div> @enderror
                                     </div>
 
                                     <!-- Date + Status + Featured -->
                                     <div class="row g-3 mb-4">
                                         <div class="col-md-5">
-                                            <label class="form-label fw-medium text-secondary d-flex align-items-center gap-1">
-                                                <i class="bi bi-calendar fs-6 text-info"></i> {{ __('admin.news.form_publish_date') }}
+                                            <label class="form-label fw-semibold text-dark d-flex align-items-center gap-2 mb-2">
+                                                <i class="bi bi-calendar text-info"></i> {{ __('admin.news.form_publish_date') }}
                                             </label>
                                             <input type="date" name="published_at" id="dateInput"
-                                                   class="form-control rounded-3 border-0 shadow-sm focus-ring focus-ring-info @error('published_at') is-invalid @enderror"
-                                                   value="{{ old('published_at', now()->format('Y-m-d')) }}">
-                                            @error('published_at') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
+                                                   class="form-control rounded-3 border-0 bg-light focus-ring focus-ring-info @error('published_at') is-invalid @enderror"
+                                                   value="{{ old('published_at', now()->format('Y-m-d')) }}" style="height: 45px;">
+                                            @error('published_at') <div class="invalid-feedback d-block mt-1">{{ $message }}</div> @enderror
                                         </div>
                                         <div class="col-md-4">
-                                            <label class="form-label fw-medium text-secondary">{{ __('admin.news.form_status') }}</label>
-                                            <select name="status" id="statusInput" class="form-select rounded-3 shadow-sm @error('status') is-invalid @enderror">
+                                            <label class="form-label fw-semibold text-dark mb-2">{{ __('admin.news.form_status') }}</label>
+                                            <select name="status" id="statusInput" class="form-select rounded-3 border-0 bg-light @error('status') is-invalid @enderror" style="height: 45px;">
                                                 <option value="published" @selected(old('status','published')==='published')>{{ __('admin.news.status_published') }}</option>
                                                 <option value="draft" @selected(old('status')==='draft')>{{ __('admin.news.status_draft') }}</option>
                                             </select>
-                                            @error('status') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
+                                            @error('status') <div class="invalid-feedback d-block mt-1">{{ $message }}</div> @enderror
                                         </div>
                                         <div class="col-md-3 d-flex align-items-end">
-                                            <div class="form-check form-switch">
-                                                <input class="form-check-input" type="checkbox" name="featured" id="featuredInput" value="1" @checked(old('featured'))>
-                                                <label class="form-check-label fw-medium" for="featuredInput">{{ __('admin.news.form_featured') }}</label>
+                                            <div class="form-check form-switch form-switch-lg mb-2">
+                                                <input class="form-check-input" type="checkbox" name="featured" id="featuredInput" value="1" @checked(old('featured')) style="width: 3rem; height: 1.5rem;">
+                                                <label class="form-check-label fw-semibold text-dark ms-2" for="featuredInput">{{ __('admin.news.form_featured') }}</label>
                                             </div>
                                         </div>
                                     </div>
@@ -90,32 +94,32 @@
                                     @endphp
                                     <input type="hidden" name="language" value="{{ old('language', $defaultLang) }}">
                                     <div class="mb-4">
-                                        <div class="d-flex align-items-center gap-2">
-                                            <label class="form-label fw-medium text-secondary mb-0 d-flex align-items-center gap-1">
-                                                <i class="bi bi-globe fs-6 text-primary"></i> {{ __('admin.labels.language') }}:
+                                        <div class="d-flex align-items-center gap-2 flex-wrap">
+                                            <label class="form-label fw-semibold text-dark mb-0 d-flex align-items-center gap-2">
+                                                <i class="bi bi-globe text-primary"></i> {{ __('admin.labels.language') }}:
                                             </label>
-                                            <span class="badge bg-info rounded-pill">
+                                            <span class="badge bg-info rounded-pill px-3 py-2" style="font-size: 0.9rem;">
                                                 {{ $defaultLang === 'ar' ? __('admin.labels.arabic') : __('admin.labels.english') }}
                                             </span>
                                             <small class="text-muted">({{ __('admin.common.language_default_selected') }})</small>
                                         </div>
-                                        @error('language') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
+                                        @error('language') <div class="invalid-feedback d-block mt-1">{{ $message }}</div> @enderror
                                     </div>
 
                                     <!-- Content (Quill) -->
                                     <div class="mb-4">
-                                        <label class="form-label fw-medium text-secondary d-flex align-items-center gap-2 flex-wrap">
-                                            <span class="d-inline-flex align-items-center gap-1">
-                                                <i class="bi bi-file-text fs-6 text-success"></i> {{ __('admin.news.form_content') }}
+                                        <label class="form-label fw-semibold text-dark d-flex align-items-center gap-2 flex-wrap mb-3">
+                                            <span class="d-inline-flex align-items-center gap-2">
+                                                <i class="bi bi-file-text text-success"></i> {{ __('admin.news.form_content') }}
                                             </span>
                                             <small class="text-muted">{{ __('admin.news.form_content_info') }} {{ $MAX_IMAGES }} {{ __('admin.news.form_content_info_end') }}</small>
                                             <!-- Image Counter -->
-                                            <span id="imgCounter" class="badge img-counter bg-primary">0 / {{ $MAX_IMAGES }}</span>
+                                            <span id="imgCounter" class="badge img-counter bg-primary rounded-pill px-3 py-2">0 / {{ $MAX_IMAGES }}</span>
                                             <!-- Text Counter -->
-                                            <span id="textCounter" class="badge text-counter bg-secondary ms-1">{{ __('admin.news.characters') }} 0 | {{ __('admin.news.words') }} 0</span>
+                                            <span id="textCounter" class="badge text-counter bg-secondary rounded-pill px-3 py-2 ms-1">{{ __('admin.news.characters') }} 0 | {{ __('admin.news.words') }} 0</span>
                                         </label>
 
-                                        <div class="quill-wrapper border rounded-3 shadow-sm overflow-hidden">
+                                        <div class="quill-wrapper border rounded-4 shadow-sm overflow-hidden">
                                             <div id="quill-toolbar" class="px-2 py-1">
                                                 <span class="ql-formats">
                                                     <select class="ql-font">
@@ -188,14 +192,14 @@
 
                                     <!-- Cover Image -->
                                     <div class="mb-4">
-                                        <label class="form-label fw-medium text-secondary d-flex align-items-center gap-1">
-                                            <i class="bi bi-image fs-6 text-primary"></i> {{ __('admin.news.form_cover_image') }}
+                                        <label class="form-label fw-semibold text-dark d-flex align-items-center gap-2 mb-2">
+                                            <i class="bi bi-image text-primary"></i> {{ __('admin.news.form_cover_image') }}
                                         </label>
-                                        <div class="dropzone border border-2 border-dashed rounded-3 p-4 text-center bg-light-subtle transition" id="coverDrop">
+                                        <div class="dropzone border border-2 border-dashed rounded-4 p-4 p-md-5 text-center bg-light transition-all" id="coverDrop" style="cursor: pointer; min-height: 180px; display: flex; align-items: center; justify-content: center;">
                                             <input type="file" name="cover" id="coverInput" class="visually-hidden" accept="image/*">
                                             <div class="text-primary">
-                                                <i class="bi bi-image fs-1 mb-2 d-block"></i>
-                                                <p class="mb-1 fw-medium">
+                                                <i class="bi bi-image fs-1 mb-3 d-block"></i>
+                                                <p class="mb-2 fw-semibold" style="font-size: 1rem;">
                                                     {{ __('admin.news.form_cover_drag') }}
                                                     <label for="coverInput" class="text-primary" style="text-decoration: underline; cursor: pointer;">{{ __('admin.news.form_cover_select') }}</label>
                                                 </p>
@@ -208,14 +212,14 @@
 
                                     <!-- PDF -->
                                     <div class="mb-4">
-                                        <label class="form-label fw-medium text-secondary d-flex align-items-center gap-1">
-                                            <i class="bi bi-file-pdf fs-6 text-danger"></i> {{ __('admin.news.form_pdf') }}
+                                        <label class="form-label fw-semibold text-dark d-flex align-items-center gap-2 mb-2">
+                                            <i class="bi bi-file-pdf text-danger"></i> {{ __('admin.news.form_pdf') }}
                                         </label>
-                                        <div class="dropzone border border-2 border-dashed rounded-3 p-4 text-center bg-light-subtle transition" id="pdfDrop">
+                                        <div class="dropzone border border-2 border-dashed rounded-4 p-4 p-md-5 text-center bg-light transition-all" id="pdfDrop" style="cursor: pointer; min-height: 180px; display: flex; align-items: center; justify-content: center;">
                                             <input type="file" name="pdf" id="pdfInput" class="visually-hidden" accept="application/pdf">
                                             <div class="text-primary">
-                                                <i class="bi bi-cloud-upload fs-1 mb-2 d-block"></i>
-                                                <p class="mb-1 fw-medium">
+                                                <i class="bi bi-cloud-upload fs-1 mb-3 d-block"></i>
+                                                <p class="mb-2 fw-semibold" style="font-size: 1rem;">
                                                     {{ __('admin.news.form_pdf_drag') }}
                                                     <label for="pdfInput" class="text-primary" style="text-decoration: underline; cursor: pointer;">{{ __('admin.news.form_pdf_select') }}</label>
                                                 </p>
@@ -227,16 +231,18 @@
                                     </div>
 
                                     <!-- Buttons -->
-                                    <div class="d-flex flex-wrap gap-2 mt-5">
-                                        <button type="button" id="submitBtn" class="btn btn-primary px-4 d-flex align-items-center gap-2 shadow-sm">
-                                            <i class="bi bi-check"></i>
+                                    <div class="d-flex flex-wrap gap-3 mt-5 pt-3 border-top">
+                                        <button type="button" id="submitBtn" class="btn btn-primary px-5 py-2 d-flex align-items-center gap-2 shadow-sm rounded-3" style="min-width: 150px; font-weight: 600;">
+                                            <i class="bi bi-check-lg"></i>
                                             <span id="submitText">{{ __('admin.news.form_publish') }}</span>
                                             <span id="submitSpinner" class="spinner-border spinner-border-sm d-none" role="status"></span>
                                         </button>
-                                        <button type="button" id="saveDraft" class="btn btn-outline-secondary px-4 d-flex align-items-center gap-2">
+                                        <button type="button" id="saveDraft" class="btn btn-outline-secondary px-5 py-2 d-flex align-items-center gap-2 rounded-3" style="min-width: 150px; font-weight: 600;">
                                             <i class="bi bi-file-earmark"></i> {{ __('admin.news.form_save_draft') }}
                                         </button>
-                                        <a href="{{ route('admin.news.index') }}" class="btn btn-link text-muted">{{ __('admin.news.form_cancel') }}</a>
+                                        <a href="{{ route('admin.news.index') }}" class="btn btn-link text-muted px-3 py-2 d-flex align-items-center" style="font-weight: 500;">
+                                            <i class="bi bi-x-circle me-1"></i> {{ __('admin.news.form_cancel') }}
+                                        </a>
                                     </div>
                                 </form>
                             </div>
@@ -247,14 +253,16 @@
 
             <!-- Preview Tab -->
             <div class="tab-pane fade" id="preview-content">
-                <div class="card border-0 shadow-sm rounded-3 bg-white">
-                    <div class="card-header bg-light py-2 px-3">
-                        <h6 class="mb-0 fw-semibold text-primary"><i class="bi bi-eye me-1"></i> {{ __('admin.news.form_preview_title') }}</h6>
+                <div class="card border-0 shadow-sm rounded-4 bg-white">
+                    <div class="card-header bg-gradient-primary text-white py-2 py-md-3 px-3 px-md-4">
+                        <h5 class="mb-0 fw-bold text-white d-flex align-items-center gap-2" style="font-size: 1.1rem;">
+                            <i class="bi bi-eye"></i> {{ __('admin.news.form_preview_title') }}
+                        </h5>
                     </div>
-                    <div class="card-body p-4" id="fullPreview">
+                    <div class="card-body p-4 p-md-5" id="fullPreview">
                         <div class="text-center text-muted py-5">
-                            <i class="bi bi-eye fs-4 d-block mb-2"></i>
-                            <small>{{ __('admin.news.form_preview_start_writing') }}</small>
+                            <i class="bi bi-eye fs-1 d-block mb-3 text-primary opacity-50"></i>
+                            <p class="mb-0" style="font-size: 1rem;">{{ __('admin.news.form_preview_start_writing') }}</p>
                         </div>
                     </div>
                 </div>
@@ -264,6 +272,7 @@
 @endsection
 
 @push('styles')
+    <link rel="stylesheet" href="{{ asset('assets/admin/css/news.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/admin/libs/quill/quill.snow.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/admin/libs/sweetalert2/sweetalert2.min.css') }}">
 @endpush
@@ -790,6 +799,23 @@
 
             // معاينة أولية
             updatePreview();
+
+            // تحسين التبويبات
+            const tabs = document.querySelectorAll('#newsTabs .nav-link');
+            tabs.forEach(tab => {
+                tab.addEventListener('shown.bs.tab', function (e) {
+                    // تحديث التصميم عند تغيير التبويب
+                    tabs.forEach(t => {
+                        if (t === e.target) {
+                            t.style.background = 'rgba(255, 255, 255, 0.25)';
+                            t.style.borderColor = 'rgba(255, 255, 255, 0.5)';
+                        } else {
+                            t.style.background = 'transparent';
+                            t.style.borderColor = 'rgba(255, 255, 255, 0.3)';
+                        }
+                    });
+                });
+            });
         });
     </script>
 @endpush

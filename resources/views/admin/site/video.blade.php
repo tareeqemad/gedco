@@ -1,113 +1,196 @@
+@php
+    $breadcrumbTitle     = __('admin.settings.homepage_video_settings');
+    $breadcrumbParent    = __('admin.breadcrumbs.home');
+    $breadcrumbParentUrl = route('admin.dashboard');
+    
+    $videoUrl = $videoId ? 'https://www.youtube.com/watch?v='.$videoId : '';
+    $thumb = $videoId ? "https://img.youtube.com/vi/$videoId/maxresdefault.jpg" : null;
+@endphp
 @extends('layouts.admin')
 @section('title', __('admin.settings.homepage_video_settings'))
 
 @section('content')
     <div class="container-fluid p-0">
-        <div class="card border-0 shadow-sm rounded-3 bg-white">
-            <div class="card-header bg-white d-flex align-items-center justify-content-between">
-                <h6 class="mb-0 fw-semibold">{{ __('admin.settings.homepage_video_settings') }}</h6>
+        <!-- Header Section -->
+        <div class="card border-0 shadow-sm rounded-4 bg-white mb-4">
+            <div class="card-header bg-gradient-primary text-white border-0 py-2 px-3">
+                <div class="d-flex justify-content-between align-items-center flex-wrap w-100" style="gap: 0.75rem;">
+                    <div class="d-flex align-items-center gap-2 flex-wrap" style="flex: 1 1 auto;">
+                        <i class="bi bi-camera-video fs-5"></i>
+                        <h5 class="mb-0 fw-bold text-white" style="font-size: 1.1rem; line-height: 1.2;">
+                            {{ __('admin.settings.homepage_video_settings') }}
+                        </h5>
+                    </div>
+                </div>
             </div>
+        </div>
 
-            <div class="card-body">
-                @if (session('status'))
-                    <div class="alert alert-success">{{ session('status') }}</div>
-                @endif
+        <form action="{{ route('admin.homeVideo.update') }}" method="POST">
+            @csrf @method('PUT')
 
-                <form action="{{ route('admin.homeVideo.update') }}" method="POST">
-                    @csrf @method('PUT')
+            <div class="row g-4">
+                <!-- Left Column: Form -->
+                <div class="col-lg-5">
+                    <div class="card border-0 shadow-sm rounded-4 bg-white">
+                        <div class="card-body p-4">
+                            <!-- Enable/Disable Toggle -->
+                            <div class="mb-4 pb-3 border-bottom">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="enabled" name="enabled" value="1" {{ $enabled ? 'checked' : '' }}>
+                                    <label class="form-check-label fw-semibold text-dark" for="enabled">
+                                        {{ __('admin.settings.enable_video_display') }}
+                                    </label>
+                                </div>
+                            </div>
 
-                    <div class="mb-3 form-check form-switch">
-                        <input class="form-check-input" type="checkbox" id="enabled" name="enabled" value="1" {{ $enabled ? 'checked' : '' }}>
-                        <label class="form-check-label" for="enabled">{{ __('admin.settings.enable_video_display') }}</label>
+                            <!-- Video URL -->
+                            <div class="mb-4">
+                                <label class="form-label fw-semibold text-dark mb-2">
+                                    {{ __('admin.labels.video_url') }}
+                                </label>
+                                <input type="text" name="video_url" id="video_url"
+                                       class="form-control rounded-3 border-0 bg-light @error('video_url') is-invalid @enderror"
+                                       style="height: 45px;"
+                                       placeholder="https://youtu.be/abcdEFGhijk"
+                                       value="{{ old('video_url', $videoUrl) }}">
+                                @error('video_url')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                                <small class="text-muted d-block mt-2">
+                                    {{ __('admin.settings.video_url_help') }}
+                                </small>
+                            </div>
+
+                            <!-- Caption -->
+                            <div class="mb-4">
+                                <label class="form-label fw-semibold text-dark mb-2">
+                                    {{ __('admin.settings.video_caption') }}
+                                </label>
+                                <input type="text" name="caption" id="caption"
+                                       class="form-control rounded-3 border-0 bg-light @error('caption') is-invalid @enderror"
+                                       style="height: 45px;"
+                                       value="{{ old('caption', $caption) }}"
+                                       placeholder="مثال: شاهد فيديو تعريفي عن خدماتنا"
+                                       maxlength="255">
+                                @error('caption')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <!-- Submit Button -->
+                            <div class="d-flex gap-2 justify-content-end">
+                                <a href="{{ route('admin.dashboard') }}" class="btn btn-outline-secondary rounded-3 px-4 shadow-sm">
+                                    إلغاء
+                                </a>
+                                <button type="submit" class="btn btn-primary rounded-3 px-4 shadow-sm d-flex align-items-center gap-2">
+                                    <i class="bi bi-check-circle"></i>
+                                    {{ __('admin.settings.save') }}
+                                </button>
+                            </div>
+                        </div>
                     </div>
+                </div>
 
-                    <div class="mb-3">
-                        <label class="form-label">{{ __('admin.labels.video_url') }}</label>
-                        @php
-                            $videoUrl = $videoId ? 'https://www.youtube.com/watch?v='.$videoId : '';
-                        @endphp
-                        <input type="text" name="video_url" id="video_url"
-                               class="form-control @error('video_url') is-invalid @enderror"
-                               placeholder="https://youtu.be/abcdEFGhijk"
-                               value="{{ old('video_url', $videoUrl) }}">
-                        @error('video_url') <div class="invalid-feedback">{{ $message }}</div> @enderror
-                        <div class="form-text">{{ __('admin.settings.video_url_help') }}</div>
-                    </div>
+                <!-- Right Column: Preview -->
+                <div class="col-lg-7">
+                    <div class="card border-0 shadow-sm rounded-4 bg-white">
+                        <div class="card-body p-4">
+                            <h6 class="fw-semibold text-dark mb-3">معاينة الفيديو</h6>
+                            <div id="video-preview" class="border rounded-4 overflow-hidden position-relative bg-light" style="aspect-ratio:16/9; min-height: 300px;">
+                                @if($videoId)
+                                    <img src="{{ $thumb }}" 
+                                         onerror="this.src='https://img.youtube.com/vi/{{ $videoId }}/hqdefault.jpg'"
+                                         alt="Video Preview" 
+                                         class="w-100 h-100" 
+                                         style="object-fit:cover;">
+                                    <div class="position-absolute top-50 start-50 translate-middle" 
+                                         style="width: 80px; height: 80px; border-radius: 50%; background: rgba(220, 53, 69, 0.9); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 36px; cursor: pointer;" 
+                                         onclick="window.open('https://www.youtube.com/watch?v={{ $videoId }}', '_blank')">
+                                        <i class="bi bi-play-fill" style="margin-left: 4px;"></i>
+                                    </div>
+                                    @if($caption)
+                                        <div class="position-absolute bottom-0 start-0 w-100 p-3 text-white" style="background: rgba(0,0,0,0.6);">
+                                            <span class="small">{{ $caption }}</span>
+                                        </div>
+                                    @endif
+                                @else
+                                    <div class="w-100 h-100 d-flex flex-column align-items-center justify-content-center text-muted p-4">
+                                        <i class="bi bi-camera-video-off fs-1 mb-2 opacity-50"></i>
+                                        <p class="mb-0 text-center small">أدخل رابط YouTube لرؤية المعاينة</p>
+                                    </div>
+                                @endif
+                            </div>
 
-                    <div class="mb-3">
-                        <label class="form-label">{{ __('admin.settings.video_caption') }}</label>
-                        <input type="text" name="caption" class="form-control @error('caption') is-invalid @enderror"
-                               value="{{ old('caption', $caption) }}" maxlength="255">
-                        @error('caption') <div class="invalid-feedback">{{ $message }}</div> @enderror
-                    </div>
-
-                    <div class="mb-4">
-                        <label class="form-label">{{ __('admin.settings.video_preview') }}</label>
-                        @php
-                            $thumb = $videoId ? "https://img.youtube.com/vi/$videoId/maxresdefault.jpg" : null;
-                        @endphp
-                        <div id="video-preview" class="border rounded-3 overflow-hidden" style="aspect-ratio:16/9; position:relative; background:#f5f7fb;">
                             @if($videoId)
-                                <img src="{{ $thumb }}" onerror="this.src='https://img.youtube.com/vi/{{ $videoId }}/hqdefault.jpg'"
-                                     alt="Preview" style="width:100%; height:100%; object-fit:cover;">
-                                <div style="position:absolute; inset:0; background:linear-gradient(to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5));"></div>
-                                <div style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:90px; height:90px; border-radius:50%; background:rgba(220,53,69,.9); display:flex; align-items:center; justify-content:center; color:#fff; font-size:38px; box-shadow:0 8px 25px rgba(220,53,69,.4);">
-                                    <i class="bi bi-play-fill" style="margin-left:6px;"></i>
+                                <div class="mt-3 d-flex align-items-center justify-content-between">
+                                    <small class="text-muted">معرف الفيديو: <code class="text-primary">{{ $videoId }}</code></small>
+                                    <a href="https://www.youtube.com/watch?v={{ $videoId }}" target="_blank" class="btn btn-sm btn-outline-danger rounded-3">
+                                        <i class="bi bi-youtube me-1"></i>فتح في YouTube
+                                    </a>
                                 </div>
-                                <div style="position:absolute; bottom:1rem; left:1rem; color:#fff; font-weight:600; text-shadow:0 2px 4px rgba(0,0,0,.5);">
-                                    {{ $caption }}
-                                </div>
-                            @else
-                                <div class="w-100 h-100 d-flex align-items-center justify-content-center text-muted">{{ __('admin.settings.no_video_selected') }}</div>
                             @endif
                         </div>
                     </div>
-
-                    <button class="btn btn-primary">
-                        <i class="bi bi-save"></i> {{ __('admin.settings.save') }}
-                    </button>
-                </form>
+                </div>
             </div>
-        </div>
+        </form>
     </div>
 
     @push('scripts')
-        <script>
-            document.addEventListener('DOMContentLoaded', () => {
-                const url = document.getElementById('video_url');
-                const preview = document.getElementById('video-preview');
-                const noVideoText = @json(__('admin.settings.no_video_selected'));
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const url = document.getElementById('video_url');
+            const caption = document.getElementById('caption');
+            const preview = document.getElementById('video-preview');
 
-                const extractId = (val) => {
-                    if (!val) return null;
-                    if (/^[A-Za-z0-9_-]{11}$/.test(val)) return val;
-                    let m;
-                    if (m = val.match(/youtu\.be\/([A-Za-z0-9_-]{11})/i)) return m[1];
-                    if (m = val.match(/[?&]v=([A-Za-z0-9_-]{11})/i)) return m[1];
-                    if (m = val.match(/embed\/([A-Za-z0-9_-]{11})/i)) return m[1];
-                    if (m = val.match(/shorts\/([A-Za-z0-9_-]{11})/i)) return m[1];
-                    return null;
-                };
+            const extractId = (val) => {
+                if (!val) return null;
+                if (/^[A-Za-z0-9_-]{11}$/.test(val)) return val;
+                let m;
+                if (m = val.match(/youtu\.be\/([A-Za-z0-9_-]{11})/i)) return m[1];
+                if (m = val.match(/[?&]v=([A-Za-z0-9_-]{11})/i)) return m[1];
+                if (m = val.match(/embed\/([A-Za-z0-9_-]{11})/i)) return m[1];
+                if (m = val.match(/shorts\/([A-Za-z0-9_-]{11})/i)) return m[1];
+                return null;
+            };
 
-                const renderPreview = () => {
-                    const id = extractId(url.value);
-                    if (!id) {
-                        preview.innerHTML = `<div class="w-100 h-100 d-flex align-items-center justify-content-center text-muted">${noVideoText}</div>`;
-                        return;
-                    }
-                    const thumb = `https://img.youtube.com/vi/${id}/maxresdefault.jpg`;
+            const renderPreview = () => {
+                const id = extractId(url.value);
+                const captionText = caption.value || '';
+                
+                if (!id) {
                     preview.innerHTML = `
-      <img src="${thumb}" onerror="this.src='https://img.youtube.com/vi/${id}/hqdefault.jpg'"
-           alt="Preview" style="width:100%; height:100%; object-fit:cover;">
-      <div style="position:absolute; inset:0; background:linear-gradient(to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5));"></div>
-      <div style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:90px; height:90px; border-radius:50%; background:rgba(220,53,69,.9); display:flex; align-items:center; justify-content:center; color:#fff; font-size:38px; box-shadow:0 8px 25px rgba(220,53,69,.4);">
-        <i class="bi bi-play-fill" style="margin-left:6px;"></i>
-      </div>
-    `;
-                };
+                        <div class="w-100 h-100 d-flex flex-column align-items-center justify-content-center text-muted p-4">
+                            <i class="bi bi-camera-video-off fs-1 mb-2 opacity-50"></i>
+                            <p class="mb-0 text-center small">أدخل رابط YouTube لرؤية المعاينة</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                const thumb = `https://img.youtube.com/vi/${id}/maxresdefault.jpg`;
+                preview.innerHTML = `
+                    <img src="${thumb}" 
+                         onerror="this.src='https://img.youtube.com/vi/${id}/hqdefault.jpg'"
+                         alt="Video Preview" 
+                         class="w-100 h-100" 
+                         style="object-fit:cover;">
+                    <div class="position-absolute top-50 start-50 translate-middle" 
+                         style="width: 80px; height: 80px; border-radius: 50%; background: rgba(220, 53, 69, 0.9); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 36px; cursor: pointer;" 
+                         onclick="window.open('https://www.youtube.com/watch?v=${id}', '_blank')">
+                        <i class="bi bi-play-fill" style="margin-left: 4px;"></i>
+                    </div>
+                    ${captionText ? `
+                        <div class="position-absolute bottom-0 start-0 w-100 p-3 text-white" style="background: rgba(0,0,0,0.6);">
+                            <span class="small">${captionText}</span>
+                        </div>
+                    ` : ''}
+                `;
+            };
 
-                url?.addEventListener('input', renderPreview);
-            });
-        </script>
+            url?.addEventListener('input', renderPreview);
+            caption?.addEventListener('input', renderPreview);
+        });
+    </script>
     @endpush
 @endsection

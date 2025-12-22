@@ -10,17 +10,42 @@ use Illuminate\Support\Facades\Storage;
 
 class SliderController extends Controller
 {
-    public function index()
+    public function index(\Illuminate\Http\Request $request)
     {
         // Filter by current admin panel language
         $adminDirection = session('direction', 'rtl');
         $currentLanguage = $adminDirection === 'rtl' ? 'ar' : 'en';
         
-        $sliders = Slider::where('language', $currentLanguage)
-            ->orderBy('sort_order')
-            ->paginate(20);
+        $search = $request->string('search')->toString();
+        $status = $request->get('status');
+        $perPage = max(10, min(50, (int)($request->get('per_page') ?? 20)));
+        
+        $query = Slider::where('language', $currentLanguage);
+        
+        // Search
+        if ($search) {
+            $query->where(function($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                  ->orWhere('subtitle', 'like', "%{$search}%");
+            });
+        }
+        
+        // Status filter
+        if ($status !== null) {
+            $query->where('is_active', $status === 'active');
+        }
+        
+        $sliders = $query->orderBy('sort_order')->paginate($perPage)->appends($request->query());
+        
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'html' => view('admin.site.sliders.partials.cards', compact('sliders'))->render(),
+                'pagination' => view('admin.site.sliders.partials.pagination', compact('sliders'))->render(),
+                'total' => $sliders->total(),
+            ]);
+        }
             
-        return view('admin.site.sliders.index', compact('sliders', 'currentLanguage'));
+        return view('admin.site.sliders.index', compact('sliders', 'currentLanguage', 'search', 'status', 'perPage'));
     }
 
     public function create()

@@ -17,53 +17,34 @@
         $publicPreviewUrl = route('site.home') . '#who-us';
     @endphp
 
-    <div class="py-4">
-        <div class="card shadow-sm border-0">
-
-            {{-- Header مع أكشنات --}}
-            <div class="card-header bg-white border-bottom py-3">
-                <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
-                    <div class="d-flex align-items-center gap-2">
-                        <span class="badge rounded-pill bg-orange text-white">{{ __('admin.about_us.title') }}</span>
-                        <h5 class="card-title mb-0 fw-semibold text-orange">{{ __('admin.about_us.edit_content') }}</h5>
+    <div class="container-fluid p-0">
+        <!-- Header Section -->
+        <div class="card border-0 shadow-sm rounded-4 bg-white mb-4">
+            <div class="card-header bg-gradient-primary text-white border-0 py-2 py-md-3 px-3 px-md-4">
+                <div class="d-flex justify-content-between align-items-center w-100" style="gap: 1rem;">
+                    <div class="d-flex align-items-center gap-2" style="flex: 0 0 auto;">
+                        <div>
+                            <h5 class="mb-0 fw-bold text-white" style="font-size: 1.25rem; line-height: 1.3;">
+                                <i class="bi bi-pencil-square me-2"></i>{{ __('admin.about_us.edit_content') }}
+                            </h5>
+                        </div>
                     </div>
-                    <div class="d-flex align-items-center gap-2">
-                        <a href="{{ route('admin.about.index') }}" class="btn btn-outline-secondary btn-sm">
-                            <i class="bi bi-arrow-right-circle me-1"></i> {{ __('admin.about_us.back') }}
+                    <div class="d-flex gap-2">
+                        <a href="{{ route('admin.about.index') }}" class="btn btn-light btn-sm shadow-sm">
+                            <i class="bi bi-arrow-left me-2"></i>{{ __('admin.common.back') }}
                         </a>
-                        <a href="{{ $publicPreviewUrl }}" target="_blank" rel="noopener" class="btn btn-outline-secondary btn-sm">
-                            <i class="bi bi-box-arrow-up-right me-1"></i> {{ __('admin.common.preview_on_site') }}
+                        <a href="{{ $publicPreviewUrl }}" target="_blank" rel="noopener" class="btn btn-light btn-sm shadow-sm">
+                            <i class="bi bi-box-arrow-up-right me-2"></i>{{ __('admin.common.preview_on_site') }}
                         </a>
                     </div>
                 </div>
             </div>
+        </div>
 
-            {{-- Body --}}
-            <div class="card-body p-4">
+        <!-- Main Card -->
+        <div class="card border-0 shadow-sm rounded-4 bg-white">
+            <div class="card-body p-4 p-md-5">
 
-                {{-- تنبيهات --}}
-                @if(session('success'))
-                    <div class="alert alert-success shadow-sm mb-3">
-                        <i class="bi bi-check2-circle me-1"></i> {{ session('success') }}
-                    </div>
-                @endif
-                @if(session('warning'))
-                    <div class="alert alert-warning shadow-sm mb-3">
-                        <i class="bi bi-exclamation-triangle me-1"></i> {{ session('warning') }}
-                    </div>
-                @endif
-                @if($errors->any())
-                    <div class="alert alert-danger shadow-sm mb-3">
-                        <div class="d-flex align-items-start">
-                            <i class="bi bi-x-octagon me-2 mt-1"></i>
-                            <ul class="mb-0">
-                                @foreach($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
-                        </div>
-                    </div>
-                @endif
 
                 {{-- الفورم (جزئي) --}}
                 @include('admin.site.about._form', compact('route','method','model','col1','col2','col1En','col2En'))

@@ -59,6 +59,7 @@ return [
         'deactivate' => 'تعطيل',
         'export' => 'تصدير',
         'import' => 'استيراد',
+        'logout' => 'تسجيل الخروج',
     ],
 
     // Form Labels
@@ -135,6 +136,11 @@ return [
         
         // Common Actions
         'preview_on_site' => 'معاينة على الموقع',
+        'preview' => 'معاينة',
+        'add' => 'إضافة',
+        'back' => 'رجوع',
+        'edit' => 'تعديل',
+        'print' => 'طباعة',
     ],
 
     // Breadcrumbs
@@ -149,6 +155,24 @@ return [
         'my_profile' => 'ملفي الشخصي',
         'settings' => 'الإعدادات',
         'logout' => 'تسجيل الخروج',
+        'personal_info' => 'المعلومات الشخصية',
+        'name' => 'الاسم',
+        'name_placeholder' => 'أدخل الاسم',
+        'email' => 'البريد الإلكتروني',
+        'email_placeholder' => 'name@example.com',
+        'save_changes' => 'حفظ التغييرات',
+        'reset' => 'إعادة تعيين',
+        'change_password' => 'تغيير كلمة المرور',
+        'current_password' => 'كلمة المرور الحالية',
+        'current_password_placeholder' => 'أدخل كلمة المرور الحالية',
+        'new_password' => 'كلمة المرور الجديدة',
+        'new_password_placeholder' => 'أدخل كلمة المرور الجديدة',
+        'confirm_password' => 'تأكيد كلمة المرور',
+        'confirm_password_placeholder' => 'أعد إدخال كلمة المرور',
+        'update_password' => 'تحديث كلمة المرور',
+        'change_avatar' => 'تغيير الصورة',
+        'avatar_alt' => 'الصورة الشخصية',
+        'member_since' => 'عضو منذ',
     ],
 
     // Authentication
@@ -171,6 +195,9 @@ return [
         'email_required' => 'البريد الإلكتروني مطلوب.',
         'email_invalid' => 'صيغة البريد غير صحيحة.',
         'password_required' => 'كلمة المرور مطلوبة.',
+        'login_success' => 'تم تسجيل الدخول بنجاح. مرحباً بك!',
+        'too_many_attempts' => 'تم تجاوز عدد المحاولات المسموح بها. يرجى المحاولة مرة أخرى بعد :seconds ثانية.',
+        'attempts_remaining' => 'محاولات متبقية',
     ],
 
     // Settings
@@ -239,6 +266,14 @@ return [
         'form_bullets_placeholder' => 'مثال: جهودنا لا تنطفئ',
         'invalid_image_format' => 'الرجاء اختيار صورة بصيغة WEBP, JPG أو PNG فقط.',
         'image_too_large' => 'حجم الصورة كبير جدًا. الحد الأقصى: 5 ميجابايت.',
+        'search_placeholder' => 'ابحث في العنوان أو الوصف...',
+        'search_button' => 'بحث',
+        'filter_all' => 'الكل',
+        'filter_active' => 'نشط',
+        'filter_inactive' => 'معطل',
+        'no_results' => 'لا توجد نتائج',
+        'total_slides' => 'إجمالي الشرائح',
+        'showing_results' => 'عرض :from - :to من :total',
     ],
 
     // News
@@ -252,7 +287,7 @@ return [
         'edit_news' => 'تعديل',
         'back' => 'رجوع',
         'delete' => 'حذف',
-        'apply' => 'تطبيق',
+        'apply' => 'بحث',
         'clear' => 'تفريغ',
         'status' => 'الحالة',
         'status_all' => 'الحالة',
@@ -442,6 +477,30 @@ return [
         'no_permissions' => 'لا توجد صلاحيات متاحة.',
         'total_permissions' => 'صلاحية إجمالية (من الدور + مباشرة)',
         'dashboard_web' => 'لوحة التحكم (Web)',
+        'basic_information' => 'المعلومات الأساسية',
+        'name_placeholder' => 'أدخل اسم المستخدم',
+        'email_placeholder' => 'أدخل البريد الإلكتروني',
+        'password_placeholder' => 'أدخل كلمة المرور (8 أحرف على الأقل)',
+        'password_hint' => 'كلمة المرور يجب أن تكون 8 أحرف على الأقل',
+        'total_users_text' => 'إجمالي المستخدمين',
+        'impersonate' => 'الدخول كالمستخدم',
+        'impersonate_confirm' => 'هل أنت متأكد من الدخول كالمستخدم: :name؟',
+        'stop_impersonating' => 'العودة إلى المستخدم الأصلي',
+        'impersonating_as' => 'أنت تدخل كالمستخدم',
+        'original_user' => 'المستخدم الأصلي',
+    ],
+    
+    'common' => [
+        'back' => 'رجوع',
+        'cancel' => 'إلغاء',
+        'error' => 'خطأ',
+        'success' => 'نجح',
+        // Form Actions
+        'form_save' => 'حفظ',
+        'form_cancel' => 'إلغاء',
+        'save_changes' => 'حفظ التغييرات',
+        // Common Actions
+        'preview_on_site' => 'معاينة على الموقع',
     ],
 
     // Tenders
@@ -472,6 +531,7 @@ return [
         'edit' => 'تعديل',
         'delete' => 'حذف',
         'delete_confirm' => 'تأكيد الحذف؟',
+        'delete_success' => 'تم الحذف بنجاح',
         'delete_failed' => 'فشل الحذف',
         'delete_connection_error' => 'خطأ في الاتصال',
         'no_data' => 'لا توجد بيانات',
@@ -632,6 +692,7 @@ return [
         'edit_statistic' => 'تعديل الإحصائية',
         'confirm_delete' => 'تأكيد الحذف',
         'confirm_delete_text' => 'هل أنت متأكد من حذف:',
+        'delete_irreversible' => 'هذا الإجراء لا يمكن التراجع عنه',
         'form_title' => 'العنوان',
         'form_amount' => 'القيمة (USD)',
         'form_active' => 'مفعل',
@@ -644,6 +705,7 @@ return [
         'cancel' => 'إلغاء',
         'save' => 'حفظ',
         'add' => 'إضافة',
+        'no_data' => 'لا توجد إحصائيات',
     ],
 
     // Staff Profiles

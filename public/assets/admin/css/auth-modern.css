@@ -1,43 +1,77 @@
 
+/* ========== Tajawal Font ========== */
 @font-face {
-    font-family: 'Cairo'; src: url('../../fonts/cairo/Cairo-Light.ttf') format('truetype'); font-weight: 300; }
-@font-face { font-family: 'Cairo'; src: url('../../fonts/cairo/Cairo-Regular.ttf') format('truetype'); font-weight: 400; }
-@font-face { font-family: 'Cairo'; src: url('../../fonts/cairo/Cairo-Medium.ttf') format('truetype'); font-weight: 500; }
-@font-face { font-family: 'Cairo'; src: url('../../fonts/cairo/Cairo-SemiBold.ttf') format('truetype'); font-weight: 600; }
-@font-face { font-family: 'Cairo'; src: url('../../fonts/cairo/Cairo-Bold.ttf') format('truetype'); font-weight: 700; }
-@font-face { font-family: 'Cairo'; src: url('../../fonts/cairo/Cairo-Black.ttf') format('truetype'); font-weight: 900; }
+    font-family: 'Tajawal';
+    src: url('../../fonts/tajawal/Tajawal-Regular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Tajawal';
+    src: url('../../fonts/tajawal/Tajawal-Medium.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Tajawal';
+    src: url('../../fonts/tajawal/Tajawal-Bold.ttf') format('truetype');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
 
+/* ========== Inter Font (English) ========== */
 @font-face {
-    font-family: 'Inter'; src: url('../../fonts/inter/Inter-Thin.ttf') format('truetype'); font-weight: 100; }
-@font-face { font-family: 'Inter'; src: url('../../fonts/inter/Inter-ExtraLight.ttf') format('truetype'); font-weight: 200; }
-@font-face { font-family: 'Inter'; src: url('../../fonts/inter/Inter-Light.ttf') format('truetype'); font-weight: 300; }
-@font-face { font-family: 'Inter'; src: url('../../fonts/inter/Inter-Regular.ttf') format('truetype'); font-weight: 400; }
-@font-face { font-family: 'Inter'; src: url('../../fonts/inter/Inter-Medium.ttf') format('truetype'); font-weight: 500; }
-@font-face { font-family: 'Inter'; src: url('../../fonts/inter/Inter-SemiBold.ttf') format('truetype'); font-weight: 600; }
-@font-face { font-family: 'Inter'; src: url('../../fonts/inter/Inter-Bold.ttf') format('truetype'); font-weight: 700; }
-@font-face { font-family: 'Inter'; src: url('../../fonts/inter/Inter-ExtraBold.ttf') format('truetype'); font-weight: 800; }
-@font-face { font-family: 'Inter'; src: url('../../fonts/inter/Inter-Black.ttf') format('truetype'); font-weight: 900; }
+    font-family: 'Inter';
+    src: url('../../fonts/inter/Inter-Regular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Inter';
+    src: url('../../fonts/inter/Inter-Medium.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Inter';
+    src: url('../../fonts/inter/Inter-SemiBold.ttf') format('truetype');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Inter';
+    src: url('../../fonts/inter/Inter-Bold.ttf') format('truetype');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
 html[dir="ltr"] body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
 
 html[dir="rtl"] body {
-    font-family: 'Tajawal', 'Cairo', sans-serif;
-}
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box
+    font-family: 'Tajawal', sans-serif;
 }
 
 body {
-    font-family: 'Tajawal', 'Cairo', sans-serif;
+    font-family: 'Tajawal', sans-serif;
     background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #f8fafc 100%);
     min-height: 100vh;
     position: relative;
-    overflow-x: hidden
+    overflow-x: hidden;
 }
 
 body::before {
@@ -48,7 +82,7 @@ body::before {
     width: 100%;
     height: 100%;
     background-image: radial-gradient(circle at 20% 80%, rgba(255, 215, 0, 0.05) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(255, 140, 0, 0.03) 0%, transparent 50%), radial-gradient(circle at 40% 40%, rgba(255, 69, 0, 0.02) 0%, transparent 50%);
-    z-index: 1
+    z-index: 1;
 }
 
 .login-container {
@@ -246,7 +280,7 @@ html[dir="ltr"] .input-icon {
     justify-content: center;
     text-align: center;
     position: relative;
-    overflow: hidden
+    overflow: hidden;
 }
 
 .logo-section::before {
@@ -325,9 +359,10 @@ html[dir="ltr"] .input-icon {
     color: white;
     font-size: 2.5rem;
     font-weight: 700;
+    font-family: 'Tajawal', sans-serif;
     text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.4);
-    letter-spacing: 2px;
-    margin-bottom: 15px
+    letter-spacing: 1px;
+    margin-bottom: 15px;
 }
 
 .company-subtitle {
@@ -344,8 +379,9 @@ html[dir="ltr"] .input-icon {
     color: rgba(255, 255, 255, 0.9);
     font-size: 1.1rem;
     font-weight: 400;
+    font-family: 'Tajawal', sans-serif;
     line-height: 1.6;
-    max-width: 300px
+    max-width: 300px;
 }
 
 .form-section {
@@ -363,14 +399,16 @@ html[dir="ltr"] .input-icon {
 .welcome-text h2 {
     color: #FF8C00;
     font-size: 2rem;
-    font-weight: 600;
+    font-weight: 700;
+    font-family: 'Tajawal', sans-serif;
     margin-bottom: 10px;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1)
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 .welcome-text p {
     color: #64748b;
-    font-size: 1.1rem
+    font-size: 1.1rem;
+    font-family: 'Tajawal', sans-serif;
 }
 
 .form-group {
@@ -380,9 +418,10 @@ html[dir="ltr"] .input-icon {
 .form-label {
     color: #FF8C00;
     font-size: 1rem;
-    font-weight: 500;
+    font-weight: 600;
+    font-family: 'Tajawal', sans-serif;
     margin-bottom: 10px;
-    display: block
+    display: block;
 }
 
 .input-group {
@@ -395,9 +434,10 @@ html[dir="ltr"] .input-icon {
     border: 2px solid #e2e8f0;
     border-radius: 15px;
     font-size: 1.1rem;
+    font-family: 'Tajawal', sans-serif;
     background: #f8fafc;
     transition: all 0.3s ease;
-    outline: none
+    outline: none;
 }
 
 .form-control.is-invalid {
@@ -416,7 +456,7 @@ html[dir="ltr"] .input-icon {
     border-color: #FF8C00;
     background: white;
     box-shadow: 0 0 0 3px rgba(255, 140, 0, 0.1);
-    transform: translateY(-2px)
+    transform: translateY(-2px);
 }
 
 .input-icon {
@@ -426,12 +466,12 @@ html[dir="ltr"] .input-icon {
     transform: translateY(-50%);
     color: #FF8C00;
     font-size: 1.2rem;
-    transition: all 0.3s ease
+    transition: all 0.3s ease;
 }
 
 .form-control:focus ~ .input-icon {
     color: #FF4500;
-    transform: translateY(-50%) scale(1.1)
+    transform: translateY(-50%) scale(1.1);
 }
 
 .input-icon {
@@ -460,7 +500,7 @@ html[dir="ltr"] .input-icon {
 .password-toggle:hover {
     color: #FF8C00;
     background: rgba(255, 140, 0, 0.1);
-    transform: translateY(-50%) scale(1.1)
+    transform: translateY(-50%) scale(1.1);
 }
 
 .form-options {
@@ -481,32 +521,34 @@ html[dir="ltr"] .input-icon {
 .remember-me input[type="checkbox"] {
     width: 20px;
     height: 20px;
-    accent-color: #FF8C00
+    accent-color: #FF8C00;
 }
 
 .remember-me label {
     color: #64748b;
     font-size: 0.95rem;
+    font-family: 'Tajawal', sans-serif;
     cursor: pointer;
     user-select: none;
-    transition: color 0.3s ease
+    transition: color 0.3s ease;
 }
 
 .remember-me label:hover {
-    color: #FF8C00
+    color: #FF8C00;
 }
 
 .forgot-password {
     color: #FF8C00;
     text-decoration: none;
     font-size: 0.95rem;
-    transition: all 0.3s ease
+    font-family: 'Tajawal', sans-serif;
+    transition: all 0.3s ease;
 }
 
 .forgot-password:hover {
     color: #FF4500;
     text-decoration: underline;
-    transform: translateY(-1px)
+    transform: translateY(-1px);
 }
 
 .login-btn {
@@ -518,18 +560,19 @@ html[dir="ltr"] .input-icon {
     color: white;
     font-size: 1.2rem;
     font-weight: 700;
+    font-family: 'Tajawal', sans-serif;
     cursor: pointer;
     position: relative;
     overflow: hidden;
     transition: all 0.4s ease;
     box-shadow: 0 8px 25px rgba(255, 140, 0, 0.3);
     margin-bottom: 25px;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2)
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
 .login-btn:hover {
     transform: translateY(-3px);
-    box-shadow: 0 12px 35px rgba(255, 140, 0, 0.4)
+    box-shadow: 0 12px 35px rgba(255, 140, 0, 0.4);
 }
 
 .login-btn:active {
@@ -571,7 +614,8 @@ html[dir="ltr"] .input-icon {
 .form-footer p {
     color: #94a3b8;
     font-size: 0.9rem;
-    margin: 0
+    font-family: 'Tajawal', sans-serif;
+    margin: 0;
 }
 
 @media (max-width: 768px) {

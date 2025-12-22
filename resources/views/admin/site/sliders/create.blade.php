@@ -1,41 +1,30 @@
+@php
+    $breadcrumbTitle     = __('admin.slider.add_slide');
+    $breadcrumbParent    = __('admin.slider.slider_items');
+    $breadcrumbParentUrl = route('admin.sliders.index');
+@endphp
 @extends('layouts.admin')
 @section('title', __('admin.slider.add_slide'))
 
 @section('content')
-    @php
-          $breadcrumbTitle     = __('admin.slider.add_slide');
-          $breadcrumbParent    = __('admin.breadcrumbs.home');
-          $breadcrumbParentUrl = route('admin.dashboard');
-
-          $title      = __('admin.slider.add_slide');
-          $parent     = __('admin.slider.slider_items');
-          $parent_url = route('admin.sliders.index');
-    @endphp
-
-    <div class="py-4">
-        <div class="card border-0 shadow-sm">
-            <!-- Card Header -->
-            <div class="card-header bg-white border-bottom d-flex align-items-center justify-content-between flex-wrap gap-3 py-3">
-                <h5 class="card-title mb-0 text-dark fw-semibold d-flex align-items-center gap-2">
-                    {{ __('admin.slider.add_slide') }}
-                </h5>
-                <a href="{{ route('admin.sliders.index') }}"
-                   class="btn btn-outline-secondary btn-sm d-flex align-items-center gap-1 shadow-sm">
-                    {{ __('admin.slider.back_to_list') }}
-                </a>
-            </div>
-
-            <!-- Card Body -->
-            <div class="card-body">
-                <form action="{{ route('admin.sliders.store') }}"
-                      method="POST"
-                      enctype="multipart/form-data"
-                      class="needs-validation"
-                      novalidate>
-                    @csrf
-                    @include('admin.site.sliders._form', ['slider' => null])
-                </form>
+    <div class="container-fluid p-0">
+        <!-- Header Section -->
+        <div class="card border-0 shadow-sm rounded-4 bg-white mb-4">
+            <div class="card-header bg-gradient-primary text-white border-0 py-2 px-3">
+                <div class="d-flex justify-content-between align-items-center flex-wrap w-100" style="gap: 0.75rem;">
+                    <div class="d-flex align-items-center gap-2 flex-wrap" style="flex: 1 1 auto;">
+                        <i class="bi bi-images fs-5"></i>
+                        <h5 class="mb-0 fw-bold text-white" style="font-size: 1.1rem; line-height: 1.2;">
+                            {{ __('admin.slider.add_slide') }}
+                        </h5>
+                    </div>
+                </div>
             </div>
         </div>
+
+        <form action="{{ route('admin.sliders.store') }}" method="POST" enctype="multipart/form-data">
+            @csrf
+            @include('admin.site.sliders._form', ['slider' => null, 'nextOrder' => $nextOrder ?? 0])
+        </form>
     </div>
 @endsection

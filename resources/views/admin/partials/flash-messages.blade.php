@@ -1,6 +1,6 @@
 {{-- Flash Messages Component --}}
 @if(session('success'))
-    <div class="alert alert-success alert-dismissible fade show border-0 shadow-sm mb-3" role="alert">
+    <div class="alert alert-success alert-dismissible fade show border-0 shadow-sm mb-3 alert-success d-none" role="alert" data-toast-message="{{ session('success') }}">
         <div class="d-flex align-items-center">
             <i class="bi bi-check-circle-fill me-2 fs-5"></i>
             <div class="flex-grow-1">
@@ -12,7 +12,7 @@
 @endif
 
 @if(session('error'))
-    <div class="alert alert-danger alert-dismissible fade show border-0 shadow-sm mb-3 alert-danger" role="alert">
+    <div class="alert alert-danger alert-dismissible fade show border-0 shadow-sm mb-3 alert-danger d-none" role="alert" data-toast-message="{{ session('error') }}">
         <div class="d-flex align-items-center">
             <i class="bi bi-exclamation-triangle-fill me-2 fs-5"></i>
             <div class="flex-grow-1">
@@ -24,7 +24,7 @@
 @endif
 
 @if(session('warning'))
-    <div class="alert alert-warning alert-dismissible fade show border-0 shadow-sm mb-3 alert-warning" role="alert">
+    <div class="alert alert-warning alert-dismissible fade show border-0 shadow-sm mb-3 alert-warning d-none" role="alert" data-toast-message="{{ session('warning') }}">
         <div class="d-flex align-items-center">
             <i class="bi bi-exclamation-circle-fill me-2 fs-5"></i>
             <div class="flex-grow-1">
@@ -36,7 +36,7 @@
 @endif
 
 @if(session('info'))
-    <div class="alert alert-info alert-dismissible fade show border-0 shadow-sm mb-3 alert-info" role="alert">
+    <div class="alert alert-info alert-dismissible fade show border-0 shadow-sm mb-3 alert-info d-none" role="alert" data-toast-message="{{ session('info') }}">
         <div class="d-flex align-items-center">
             <i class="bi bi-info-circle-fill me-2 fs-5"></i>
             <div class="flex-grow-1">
@@ -48,7 +48,7 @@
 @endif
 
 @if($errors->any())
-    <div class="alert alert-danger alert-dismissible fade show border-0 shadow-sm mb-3" role="alert">
+    <div class="alert alert-danger alert-dismissible fade show border-0 shadow-sm mb-3 alert-danger d-none" role="alert" data-toast-message="{{ $errors->first() }}">
         <div class="d-flex align-items-start">
             <i class="bi bi-x-circle-fill me-2 fs-5 mt-1"></i>
             <div class="flex-grow-1">

@@ -159,9 +159,68 @@
             }
 
             if(loginForm && submitBtn){
-                loginForm.addEventListener('submit',function(){
+                let isSubmitting = false;
+                
+                loginForm.addEventListener('submit',function(e){
+                    // منع الإرسال المتعدد
+                    if(isSubmitting || submitBtn.disabled) {
+                        e.preventDefault();
+                        return false;
+                    }
+                    
+                    // التحقق من صحة البيانات قبل الإرسال
+                    const emailInput = document.getElementById('email');
+                    const passwordInput = document.getElementById('password');
+                    
+                    if(!emailInput || !emailInput.value || !emailInput.value.trim()) {
+                        e.preventDefault();
+                        emailInput?.focus();
+                        emailInput?.classList.add('is-invalid');
+                        return false;
+                    }
+                    
+                    if(!passwordInput || !passwordInput.value) {
+                        e.preventDefault();
+                        passwordInput?.focus();
+                        passwordInput?.classList.add('is-invalid');
+                        return false;
+                    }
+                    
+                    // تعطيل الإرسال المتعدد
+                    isSubmitting = true;
+                    
+                    // تعطيل الزر وإظهار حالة التحميل
                     submitBtn.classList.add('loading');
-                    submitBtn.disabled=true;
+                    submitBtn.disabled = true;
+                    submitBtn.setAttribute('aria-busy', 'true');
+                    
+                    // جعل الحقول readonly بدلاً من disabled (لإرسال القيم)
+                    if(emailInput) {
+                        emailInput.setAttribute('readonly', 'readonly');
+                        emailInput.style.cursor = 'not-allowed';
+                    }
+                    if(passwordInput) {
+                        passwordInput.setAttribute('readonly', 'readonly');
+                        passwordInput.style.cursor = 'not-allowed';
+                    }
+                    
+                    // إعادة تفعيل الزر في حالة فشل الإرسال (مثل خطأ في الشبكة)
+                    setTimeout(function() {
+                        if(isSubmitting) {
+                            isSubmitting = false;
+                            submitBtn.classList.remove('loading');
+                            submitBtn.disabled = false;
+                            submitBtn.removeAttribute('aria-busy');
+                            if(emailInput) {
+                                emailInput.removeAttribute('readonly');
+                                emailInput.style.cursor = '';
+                            }
+                            if(passwordInput) {
+                                passwordInput.removeAttribute('readonly');
+                                passwordInput.style.cursor = '';
+                            }
+                        }
+                    }, 30000); // 30 ثانية كحد أقصى
                 });
             }
 

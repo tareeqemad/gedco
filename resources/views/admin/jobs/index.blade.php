@@ -8,7 +8,6 @@
         @endcan
     </div>
 
-    @if(session('success')) <div class="alert alert-success">{{ session('success') }}</div> @endif
 
     <table class="table table-striped align-middle">
         <thead>

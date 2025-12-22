@@ -83,18 +83,26 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 });
                 if (res.ok) {
-                    btn.dataset.active = isActive ? '0' : '1';
-                    btn.innerHTML = `<i class="bi bi-power"></i> ${isActive ? 'تفعيل' : 'إيقاف'}`;
-                    btn.className = `toggle-btn btn btn-sm w-100 d-flex align-items-center justify-content-center gap-1 ${isActive ? 'btn-outline-secondary' : 'btn-teal'}`;
+                btn.dataset.active = isActive ? '0' : '1';
+                btn.innerHTML = `<i class="bi bi-power"></i><span class="d-none d-lg-inline"> ${isActive ? 'تفعيل' : 'إيقاف'}</span><span class="d-lg-none"> ${isActive ? 'تفعيل' : 'إيقاف'}</span>`;
+                btn.className = `toggle-btn btn btn-sm flex-fill d-flex align-items-center justify-content-center gap-1 rounded-3 shadow-sm ${isActive ? 'btn-outline-secondary' : 'btn-success'}`;
 
-                    const badge = document.querySelector(`.status-badge[data-id="${id}"]`);
-                    badge.className = `status-badge badge rounded-pill px-3 py-2 ${isActive ? 'bg-secondary' : 'bg-teal text-white'}`;
-                    badge.innerHTML = `<i class="bi bi-circle-fill small me-1"></i>${isActive ? 'معطل' : 'مفعل'}`;
+                const badge = document.querySelector(`.status-badge[data-id="${id}"]`);
+                badge.className = `status-badge badge rounded-pill px-3 py-1 ${isActive ? 'bg-secondary' : 'bg-success'}`;
+                badge.innerHTML = `<i class="bi bi-circle-fill small me-1"></i>${isActive ? 'معطل' : 'مفعل'}`;
 
-                    showToast(isActive ? 'تم الإيقاف' : 'تم التفعيل');
+                    if (window.adminNotifications) {
+                        window.adminNotifications.success(isActive ? 'تم الإيقاف' : 'تم التفعيل');
+                    } else {
+                        showToast(isActive ? 'تم الإيقاف' : 'تم التفعيل');
+                    }
                 }
             } catch (e) {
-                showToast('خطأ في الاتصال', 'error');
+                if (window.adminNotifications) {
+                    window.adminNotifications.error('خطأ في الاتصال');
+                } else {
+                    showToast('خطأ في الاتصال', 'error');
+                }
             } finally {
                 btn.classList.remove('loading');
                 btn.disabled = false;
@@ -126,13 +134,25 @@ document.addEventListener('DOMContentLoaded', () => {
                 addCard(data.item || data);
                 bootstrap.Modal.getInstance(document.getElementById('createModal')).hide();
                 e.target.reset();
-                showToast('تمت الإضافة بنجاح');
+                if (window.adminNotifications) {
+                    window.adminNotifications.success('تمت الإضافة بنجاح');
+                } else {
+                    showToast('تمت الإضافة بنجاح');
+                }
             } else {
                 const err = await res.json();
-                showToast(err.message || 'حدث خطأ', 'error');
+                if (window.adminNotifications) {
+                    window.adminNotifications.error(err.message || 'حدث خطأ');
+                } else {
+                    showToast(err.message || 'حدث خطأ', 'error');
+                }
             }
         } catch (e) {
-            showToast('فشل في الإضافة', 'error');
+            if (window.adminNotifications) {
+                window.adminNotifications.error('فشل في الإضافة');
+            } else {
+                showToast('فشل في الإضافة', 'error');
+            }
         } finally {
             btn.disabled = false;
             spinner.classList.add('d-none');
@@ -170,22 +190,34 @@ document.addEventListener('DOMContentLoaded', () => {
                 const toggleBtn = document.querySelector(`[data-id="${id}"] .toggle-btn`);
                 const isActive = item.is_active;
                 toggleBtn.dataset.active = isActive ? '1' : '0';
-                toggleBtn.innerHTML = `<i class="bi bi-power"></i> ${isActive ? 'إيقاف' : 'تفعيل'}`;
-                toggleBtn.className = `toggle-btn btn btn-sm w-100 d-flex align-items-center justify-content-center gap-1 ${isActive ? 'btn-teal' : 'btn-outline-secondary'}`;
+                toggleBtn.innerHTML = `<i class="bi bi-power"></i><span class="d-none d-lg-inline"> ${isActive ? 'إيقاف' : 'تفعيل'}</span><span class="d-lg-none"> ${isActive ? 'إيقاف' : 'تفعيل'}</span>`;
+                toggleBtn.className = `toggle-btn btn btn-sm flex-fill d-flex align-items-center justify-content-center gap-1 rounded-3 shadow-sm ${isActive ? 'btn-success' : 'btn-outline-secondary'}`;
 
                 const badge = document.querySelector(`.status-badge[data-id="${id}"]`);
-                badge.className = `status-badge badge rounded-pill px-3 py-2 ${isActive ? 'bg-teal text-white' : 'bg-secondary'}`;
+                badge.className = `status-badge badge rounded-pill px-3 py-1 ${isActive ? 'bg-success' : 'bg-secondary'}`;
                 badge.innerHTML = `<i class="bi bi-circle-fill small me-1"></i>${isActive ? 'مفعل' : 'معطل'}`;
 
                 bootstrap.Modal.getInstance(document.getElementById('editModal')).hide();
-                showToast('تم التحديث بنجاح');
+                if (window.adminNotifications) {
+                    window.adminNotifications.success('تم التحديث بنجاح');
+                } else {
+                    showToast('تم التحديث بنجاح');
+                }
             } else {
                 const err = await res.json();
-                showToast(err.message || 'حدث خطأ', 'error');
+                if (window.adminNotifications) {
+                    window.adminNotifications.error(err.message || 'حدث خطأ');
+                } else {
+                    showToast(err.message || 'حدث خطأ', 'error');
+                }
             }
         } catch (e) {
             console.error(e);
-            showToast('فشل في الاتصال', 'error');
+            if (window.adminNotifications) {
+                window.adminNotifications.error('فشل في الاتصال');
+            } else {
+                showToast('فشل في الاتصال', 'error');
+            }
         } finally {
             btn.disabled = false;
             spinner.classList.add('d-none');
@@ -222,13 +254,25 @@ document.addEventListener('DOMContentLoaded', () => {
                     document.querySelector(`[data-id="${id}"]`)?.remove();
                     updateBadges();
                     bootstrap.Modal.getInstance(document.getElementById('deleteModal')).hide();
-                    showToast(data.message || 'تم الحذف بنجاح');
+                    if (window.adminNotifications) {
+                        window.adminNotifications.success(data.message || 'تم الحذف بنجاح');
+                    } else {
+                        showToast(data.message || 'تم الحذف بنجاح');
+                    }
                 } else {
-                    showToast(data.message || 'حدث خطأ', 'error');
+                    if (window.adminNotifications) {
+                        window.adminNotifications.error(data.message || 'حدث خطأ');
+                    } else {
+                        showToast(data.message || 'حدث خطأ', 'error');
+                    }
                 }
             } catch (e) {
                 console.error(e);
-                showToast('فشل في الاتصال', 'error');
+                if (window.adminNotifications) {
+                    window.adminNotifications.error('فشل في الاتصال');
+                } else {
+                    showToast('فشل في الاتصال', 'error');
+                }
             } finally {
                 btn.disabled = false;
                 spinner.classList.add('d-none');
@@ -242,40 +286,47 @@ document.addEventListener('DOMContentLoaded', () => {
         col.className = 'col';
         col.dataset.id = item.id;
         col.dataset.order = item.sort_order;
+        const adminDir = document.documentElement.dir || 'rtl';
+        const displayTitle = (adminDir === 'rtl') ? (item.title_ar || '') : (item.title_en || item.title_ar || '');
         col.innerHTML = `
-            <div class="card h-100 border-0 shadow-sm rounded-3 hover-lift position-relative drag-handle">
-                <div class="card-body p-4">
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <span class="badge bg-light text-dark rounded-pill px-3 py-1 fw-semibold sort-badge">#${item.sort_order}</span>
-                        <span class="status-badge badge rounded-pill px-3 py-2 ${item.is_active ? 'bg-teal text-white' : 'bg-secondary'}" data-id="${item.id}">
+            <div class="card h-100 border-0 shadow-sm rounded-4 bg-white position-relative impact-stat-card" style="transition: all 0.3s ease;">
+                <div class="card-header bg-gradient-primary text-white border-0 py-3 px-4">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="badge bg-white text-primary rounded-pill px-3 py-1 fw-semibold sort-badge">#${item.sort_order}</span>
+                        <span class="status-badge badge rounded-pill px-3 py-1 ${item.is_active ? 'bg-success' : 'bg-secondary'}" data-id="${item.id}">
                             <i class="bi bi-circle-fill small me-1"></i>${item.is_active ? 'مفعل' : 'معطل'}
                         </span>
                     </div>
-                    <h5 class="card-title mb-2 fw-bold text-dark">${item.title_ar || ''}</h5>
-                    <p class="display-6 fw-bold text-danger mb-3">$${Number(item.amount_usd).toLocaleString('en-US', { minimumFractionDigits: 1 })}</p>
+                </div>
+                <div class="card-body p-4">
+                    <h5 class="card-title mb-3 fw-bold text-dark">${displayTitle}</h5>
+                    <p class="display-6 fw-bold text-danger mb-4">$${Number(item.amount_usd).toLocaleString('en-US', { minimumFractionDigits: 1 })}</p>
                     <div class="d-flex gap-2">
-                        <button class="toggle-btn btn btn-sm w-100 d-flex align-items-center justify-content-center gap-1 ${item.is_active ? 'btn-teal' : 'btn-outline-secondary'}"
+                        <button class="toggle-btn btn btn-sm flex-fill d-flex align-items-center justify-content-center gap-1 rounded-3 shadow-sm ${item.is_active ? 'btn-success' : 'btn-outline-secondary'}"
                                 data-id="${item.id}" data-active="${item.is_active ? '1' : '0'}">
-                            <i class="bi bi-power"></i> ${item.is_active ? 'إيقاف' : 'تفعيل'}
+                            <i class="bi bi-power"></i>
+                            <span class="d-none d-lg-inline">${item.is_active ? 'إيقاف' : 'تفعيل'}</span>
+                            <span class="d-lg-none">${item.is_active ? 'إيقاف' : 'تفعيل'}</span>
                         </button>
-                        <button type="button" class="btn btn-sm btn-warning flex-fill edit-btn d-flex align-items-center justify-content-center gap-1"
+                        <button type="button" class="btn btn-sm btn-outline-warning flex-fill edit-btn d-flex align-items-center justify-content-center gap-1 rounded-3 shadow-sm"
                                 data-id="${item.id}"
                                 data-title-ar="${item.title_ar || ''}"
                                 data-title-en="${item.title_en ? item.title_en : ''}"
                                 data-amount="${item.amount_usd}"
                                 data-active="${item.is_active ? '1' : '0'}">
-                            <i class="bi bi-pencil"></i> تعديل
+                            <i class="bi bi-pencil me-1"></i><span class="d-none d-lg-inline">تعديل</span><span class="d-lg-none">تعديل</span>
                         </button>
-                        <button type="button" class="btn btn-sm btn-danger delete-btn d-flex align-items-center justify-content-center"
+                        <button type="button" class="btn btn-sm btn-outline-danger delete-btn d-flex align-items-center justify-content-center rounded-3 shadow-sm"
                                 data-id="${item.id}"
                                 data-title-ar="${item.title_ar || ''}"
-                                data-bs-toggle="modal" data-bs-target="#deleteModal">
+                                data-bs-toggle="modal" data-bs-target="#deleteModal"
+                                title="حذف">
                             <i class="bi bi-trash"></i>
                         </button>
                     </div>
                 </div>
-                <div class="drag-handle-icon position-absolute top-0 end-0 p-3 text-muted opacity-50">
-                    <i class="bi bi-grip-vertical"></i>
+                <div class="drag-handle-icon position-absolute top-0 end-0 p-2 text-white opacity-75" style="cursor: move;">
+                    <i class="bi bi-grip-vertical fs-5"></i>
                 </div>
             </div>
         `;
@@ -308,11 +359,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const badge = card.querySelector('.status-badge');
         const btn = card.querySelector('.toggle-btn');
         const active = data.is_active;
-        badge.className = `status-badge badge rounded-pill px-3 py-2 ${active ? 'bg-teal text-white' : 'bg-secondary'}`;
+        badge.className = `status-badge badge rounded-pill px-3 py-1 ${active ? 'bg-success' : 'bg-secondary'}`;
         badge.innerHTML = `<i class="bi bi-circle-fill small me-1"></i>${active ? 'مفعل' : 'معطل'}`;
         btn.dataset.active = active ? '1' : '0';
-        btn.innerHTML = `<i class="bi bi-power"></i> ${active ? 'إيقاف' : 'تفعيل'}`;
-        btn.className = `toggle-btn btn btn-sm w-100 d-flex align-items-center justify-content-center gap-1 ${active ? 'btn-teal' : 'btn-outline-secondary'}`;
+        btn.innerHTML = `<i class="bi bi-power"></i><span class="d-none d-lg-inline"> ${active ? 'إيقاف' : 'تفعيل'}</span><span class="d-lg-none"> ${active ? 'إيقاف' : 'تفعيل'}</span>`;
+        btn.className = `toggle-btn btn btn-sm flex-fill d-flex align-items-center justify-content-center gap-1 rounded-3 shadow-sm ${active ? 'btn-success' : 'btn-outline-secondary'}`;
     };
 
     // === السحب والإفلات ===

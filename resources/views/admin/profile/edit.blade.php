@@ -1,103 +1,376 @@
-{{-- resources/views/admin/profile/edit.blade.php --}}
 @extends('layouts.admin')
 
-@section('title', 'ملفي الشخصي')
+@section('title', __('admin.profile.title'))
 
 @section('content')
-    <div class="page-content">
-        <div class="container-fluid">
+    @php
+        $breadcrumbTitle = __('admin.profile.title');
+        $user = auth()->user();
+    @endphp
 
-            <!-- رسائل النجاح -->
-            @if(session('success'))
-                <div class="alert alert-success alert-dismissible fade show">
-                    <i class="bi bi-check-circle me-2"></i> {{ session('success') }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                </div>
-            @endif
-
-            @if(session('success_password'))
-                <div class="alert alert-info alert-dismissible fade show">
-                    <i class="bi bi-key me-2"></i> {{ session('success_password') }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                </div>
-            @endif
-
-            <div class="row">
-
-                <!-- الصورة الثابتة (بدون أي تفاعل) -->
-                <div class="col-xl-4">
-                    <div class="card border-0 shadow">
-                        <div class="card-body text-center pt-0">
-                            <div class="mt-n5">
-                                <img src="{{ $user->avatar_url }}"
-                                     class="avatar-xl rounded-circle img-thumbnail border-4 border-white shadow"
-                                     alt="الصورة الشخصية"
-                                     style="pointer-events: none;"> <!-- ما يقدرش يضغط -->
-                            </div>
-                            <h4 class="mt-3">{{ $user->name }}</h4>
-                            <p class="text-muted">{{ $user->email }}</p>
-                            <span class="badge bg-success fs-6">مشرف</span>
+    <div class="container-fluid p-0">
+        <!-- Header Section -->
+        <div class="card border-0 shadow-sm rounded-4 bg-white mb-4">
+            <div class="card-header bg-gradient-primary text-white border-0 py-2 py-md-3 px-3 px-md-4">
+                <div class="d-flex justify-content-between align-items-center w-100" style="gap: 1rem;">
+                    <div class="d-flex align-items-center gap-2" style="flex: 0 0 auto;">
+                        <div>
+                            <h5 class="mb-0 fw-bold text-white" style="font-size: 1.25rem; line-height: 1.3;">
+                                <i class="bi bi-person-circle me-2"></i>{{ __('admin.profile.title') }}
+                            </h5>
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
 
-                <!-- الفورمات (بدون أي input للصورة) -->
-                <div class="col-xl-8">
-                    <div class="card border-0 shadow">
-                        <div class="card-body">
+        <!-- Flash Messages -->
 
-                            <form action="{{ route('admin.profile.update') }}" method="POST">
-                                @csrf @method('PUT')
-
-                                <div class="row g-4">
-                                    <div class="col-md-6">
-                                        <label class="form-label fw-bold">الاسم</label>
-                                        <input type="text" name="name" value="{{ old('name', $user->name) }}"
-                                               class="form-control form-control-lg" required>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label fw-bold">البريد الإلكتروني</label>
-                                        <input type="email" name="email" value="{{ old('email', $user->email) }}"
-                                               class="form-control form-control-lg" required>
-                                    </div>
+        <div class="row g-4">
+            <!-- Profile Picture Card -->
+            <div class="col-xl-4">
+                <div class="card border-0 shadow-sm rounded-4 bg-white">
+                    <div class="card-body text-center p-4">
+                        <div class="position-relative d-inline-block mb-3">
+                            <div class="avatar-wrapper">
+                                <img src="{{ $user->avatar_url }}" 
+                                     id="avatarPreview"
+                                     class="avatar-xl rounded-circle img-thumbnail border-4 border-white shadow-lg" 
+                                     alt="{{ __('admin.profile.avatar_alt') }}"
+                                     style="width: 150px; height: 150px; object-fit: cover;">
+                                <div class="avatar-overlay">
+                                    <label for="avatarInput" class="avatar-upload-btn">
+                                        <i class="bi bi-camera-fill fs-4"></i>
+                                        <span class="d-block small mt-1">{{ __('admin.profile.change_avatar') }}</span>
+                                    </label>
                                 </div>
-
-                                <div class="mt-4">
-                                    <button type="submit" class="btn btn-primary btn-lg px-5">
-                                        <i class="bi bi-save me-2"></i> حفظ التغييرات
-                                    </button>
-                                </div>
-                            </form>
-
-                            <hr class="my-5">
-
-                            <form action="{{ route('admin.profile.password') }}" method="POST">
-                                @csrf @method('PUT')
-                                <div class="row g-4">
-                                    <div class="col-md-4">
-                                        <input type="password" name="current_password" placeholder="كلمة المرور الحالية"
-                                               class="form-control form-control-lg" required>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <input type="password" name="password" placeholder="الجديدة"
-                                               class="form-control form-control-lg" required>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <input type="password" name="password_confirmation" placeholder="تأكيد"
-                                               class="form-control form-control-lg" required>
-                                    </div>
-                                </div>
-                                <div class="mt-4">
-                                    <button type="submit" class="btn btn-danger btn-lg px-5">
-                                        <i class="bi bi-key me-2"></i> تغيير كلمة المرور
-                                    </button>
-                                </div>
-                            </form>
-
+                            </div>
                         </div>
+                        <h4 class="fw-bold text-dark mb-1">{{ $user->name }}</h4>
+                        <p class="text-muted mb-2">{{ $user->email }}</p>
+                        <div class="d-flex justify-content-center gap-2 flex-wrap">
+                            @foreach($user->roles as $role)
+                                <span class="badge bg-primary rounded-pill px-3 py-2">
+                                    <i class="bi bi-shield-check me-1"></i>{{ $role->name }}
+                                </span>
+                            @endforeach
+                        </div>
+                        <div class="mt-3 pt-3 border-top">
+                            <small class="text-muted">
+                                <i class="bi bi-calendar3 me-1"></i>
+                                {{ __('admin.profile.member_since') }}: {{ $user->created_at->format('Y/m/d') }}
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Profile Information Form -->
+            <div class="col-xl-8">
+                <div class="card border-0 shadow-sm rounded-4 bg-white mb-4">
+                    <div class="card-header bg-gradient-primary text-white border-0 py-3 px-4">
+                        <h6 class="mb-0 fw-bold text-white d-flex align-items-center gap-2">
+                            <i class="bi bi-person-lines-fill"></i>
+                            {{ __('admin.profile.personal_info') }}
+                        </h6>
+                    </div>
+                    <div class="card-body p-5">
+                        <form id="profileForm" action="{{ route('admin.profile.update') }}" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            @method('PUT')
+
+                            <input type="file" name="avatar" id="avatarInput" accept="image/*" class="visually-hidden">
+
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold text-dark d-flex align-items-center gap-2 mb-2">
+                                        <i class="bi bi-person text-primary"></i>
+                                        {{ __('admin.profile.name') }}
+                                    </label>
+                                    <input type="text" 
+                                           name="name" 
+                                           id="nameInput"
+                                           value="{{ old('name', $user->name) }}"
+                                           class="form-control rounded-3 border-0 bg-light @error('name') is-invalid @enderror" 
+                                           placeholder="{{ __('admin.profile.name_placeholder') }}"
+                                           required
+                                           style="height: 45px; font-size: 1rem;">
+                                    @error('name')
+                                        <div class="invalid-feedback d-block mt-1">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold text-dark d-flex align-items-center gap-2 mb-2">
+                                        <i class="bi bi-envelope text-primary"></i>
+                                        {{ __('admin.profile.email') }}
+                                    </label>
+                                    <input type="email" 
+                                           name="email" 
+                                           id="emailInput"
+                                           value="{{ old('email', $user->email) }}"
+                                           class="form-control rounded-3 border-0 bg-light @error('email') is-invalid @enderror" 
+                                           placeholder="{{ __('admin.profile.email_placeholder') }}"
+                                           required
+                                           style="height: 45px; font-size: 1rem;">
+                                    @error('email')
+                                        <div class="invalid-feedback d-block mt-1">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="mt-4 pt-3 border-top d-flex gap-3">
+                                <button type="submit" class="btn btn-primary px-5 py-2 rounded-3 shadow-sm" style="min-width: 150px; font-weight: 600;">
+                                    <i class="bi bi-check-lg me-2"></i>{{ __('admin.profile.save_changes') }}
+                                </button>
+                                <button type="reset" class="btn btn-outline-secondary px-5 py-2 rounded-3" style="min-width: 150px; font-weight: 600;">
+                                    <i class="bi bi-arrow-counterclockwise me-2"></i>{{ __('admin.profile.reset') }}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Change Password Card -->
+                <div class="card border-0 shadow-sm rounded-4 bg-white">
+                    <div class="card-header bg-gradient-primary text-white border-0 py-3 px-4">
+                        <h6 class="mb-0 fw-bold text-white d-flex align-items-center gap-2">
+                            <i class="bi bi-shield-lock"></i>
+                            {{ __('admin.profile.change_password') }}
+                        </h6>
+                    </div>
+                    <div class="card-body p-5">
+                        <form id="passwordForm" action="{{ route('admin.profile.password') }}" method="POST">
+                            @csrf
+                            @method('PUT')
+
+                            <div class="row g-3">
+                                <div class="col-md-4">
+                                    <label class="form-label fw-semibold text-dark d-flex align-items-center gap-2 mb-2">
+                                        <i class="bi bi-key text-danger"></i>
+                                        {{ __('admin.profile.current_password') }}
+                                    </label>
+                                    <input type="password" 
+                                           name="current_password" 
+                                           id="currentPasswordInput"
+                                           class="form-control rounded-3 border-0 bg-light @error('current_password') is-invalid @enderror" 
+                                           placeholder="{{ __('admin.profile.current_password_placeholder') }}"
+                                           required
+                                           style="height: 45px; font-size: 1rem;">
+                                    @error('current_password')
+                                        <div class="invalid-feedback d-block mt-1">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label class="form-label fw-semibold text-dark d-flex align-items-center gap-2 mb-2">
+                                        <i class="bi bi-key-fill text-danger"></i>
+                                        {{ __('admin.profile.new_password') }}
+                                    </label>
+                                    <input type="password" 
+                                           name="password" 
+                                           id="passwordInput"
+                                           class="form-control rounded-3 border-0 bg-light @error('password') is-invalid @enderror" 
+                                           placeholder="{{ __('admin.profile.new_password_placeholder') }}"
+                                           required
+                                           style="height: 45px; font-size: 1rem;">
+                                    @error('password')
+                                        <div class="invalid-feedback d-block mt-1">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label class="form-label fw-semibold text-dark d-flex align-items-center gap-2 mb-2">
+                                        <i class="bi bi-key-fill text-danger"></i>
+                                        {{ __('admin.profile.confirm_password') }}
+                                    </label>
+                                    <input type="password" 
+                                           name="password_confirmation" 
+                                           id="passwordConfirmationInput"
+                                           class="form-control rounded-3 border-0 bg-light" 
+                                           placeholder="{{ __('admin.profile.confirm_password_placeholder') }}"
+                                           required
+                                           style="height: 45px; font-size: 1rem;">
+                                </div>
+                            </div>
+
+                            <div class="mt-4 pt-3 border-top">
+                                <button type="submit" class="btn btn-danger px-5 py-2 rounded-3 shadow-sm" style="min-width: 200px; font-weight: 600;">
+                                    <i class="bi bi-shield-lock me-2"></i>{{ __('admin.profile.update_password') }}
+                                </button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 @endsection
+
+@push('styles')
+    <link rel="stylesheet" href="{{ asset('assets/admin/libs/sweetalert2/sweetalert2.min.css') }}">
+    <style>
+        .avatar-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+
+        .avatar-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .avatar-wrapper:hover .avatar-overlay {
+            opacity: 1;
+        }
+
+        .avatar-upload-btn {
+            color: white;
+            text-align: center;
+            cursor: pointer;
+            padding: 1rem;
+        }
+
+        .avatar-upload-btn:hover {
+            color: #66b3ff;
+        }
+
+        #avatarPreview {
+            transition: transform 0.3s ease;
+        }
+
+        .avatar-wrapper:hover #avatarPreview {
+            transform: scale(1.05);
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            background: #ffffff !important;
+            border-color: #0066cc !important;
+            box-shadow: 0 0 0 0.2rem rgba(0, 102, 204, 0.15) !important;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%) !important;
+            border: none !important;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #0052a3 0%, #004080 100%) !important;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 102, 204, 0.3) !important;
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%) !important;
+            border: none !important;
+            transition: all 0.3s ease;
+        }
+
+        .btn-danger:hover {
+            background: linear-gradient(135deg, #c82333 0%, #bd2130 100%) !important;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(220, 53, 69, 0.3) !important;
+        }
+
+        @media (max-width: 768px) {
+            .avatar-xl {
+                width: 120px !important;
+                height: 120px !important;
+            }
+        }
+    </style>
+@endpush
+
+@push('scripts')
+    <script src="{{ asset('assets/admin/libs/sweetalert2/sweetalert2.min.js') }}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const avatarInput = document.getElementById('avatarInput');
+            const avatarPreview = document.getElementById('avatarPreview');
+            const profileForm = document.getElementById('profileForm');
+
+            // Handle avatar upload
+            if (avatarInput) {
+                avatarInput.addEventListener('change', function(e) {
+                    const file = e.target.files[0];
+                    if (file) {
+                        // Validate file size (2MB max)
+                        if (file.size > 2 * 1024 * 1024) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'خطأ',
+                                text: 'حجم الصورة يجب ألا يتجاوز 2 ميجابايت',
+                                confirmButtonText: 'حسناً'
+                            });
+                            return;
+                        }
+
+                        // Validate file type
+                        if (!file.type.startsWith('image/')) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'خطأ',
+                                text: 'الملف يجب أن يكون صورة',
+                                confirmButtonText: 'حسناً'
+                            });
+                            return;
+                        }
+
+                        // Preview image
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            avatarPreview.src = e.target.result;
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                });
+            }
+
+            // Handle form reset
+            const resetBtn = profileForm?.querySelector('button[type="reset"]');
+            if (resetBtn) {
+                resetBtn.addEventListener('click', function() {
+                    avatarPreview.src = '{{ $user->avatar_url }}';
+                    if (avatarInput) {
+                        avatarInput.value = '';
+                    }
+                });
+            }
+
+            // Handle form submission with loading state
+            if (profileForm) {
+                profileForm.addEventListener('submit', function(e) {
+                    const submitBtn = profileForm.querySelector('button[type="submit"]');
+                    if (submitBtn) {
+                        submitBtn.disabled = true;
+                        submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>جاري الحفظ...';
+                    }
+                });
+            }
+
+            const passwordForm = document.getElementById('passwordForm');
+            if (passwordForm) {
+                passwordForm.addEventListener('submit', function(e) {
+                    const submitBtn = passwordForm.querySelector('button[type="submit"]');
+                    if (submitBtn) {
+                        submitBtn.disabled = true;
+                        submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>جاري التحديث...';
+                    }
+                });
+            }
+        });
+    </script>
+@endpush

@@ -14,78 +14,76 @@
 
     <div class="container-fluid p-0">
         <!-- Header -->
-        <div class="card border-0 shadow-sm rounded-3 bg-white mb-4">
-            <div class="card-header bg-white border-bottom py-2 px-3 d-flex align-items-center justify-content-between">
-                <div class="d-flex align-items-center gap-2">
-                    <i class="bi bi-newspaper text-primary fs-5"></i>
-                    <h6 class="mb-0 fw-semibold text-dark-emphasis">{{ __('admin.news.show_title') }} #{{ $item->id }}</h6>
+        <div class="card border-0 shadow-sm rounded-4 bg-white mb-4">
+            <div class="card-header bg-gradient-primary text-white border-0 py-2 px-3 d-flex align-items-center justify-content-between w-100" style="gap: 1rem;">
+                <div class="d-flex align-items-center gap-2" style="flex: 0 0 auto;">
+                    <div>
+                        <h5 class="mb-0 fw-bold text-white" style="font-size: 1.25rem; line-height: 1.3;">{{ __('admin.news.show_title') }} #{{ $item->id }}</h5>
+                        <small class="text-white opacity-75 d-none d-md-block" style="font-size: 0.8rem; line-height: 1.2;">{{ \Illuminate\Support\Str::limit($item->title, 50) }}</small>
+                    </div>
                 </div>
-                <div class="d-flex align-items-center gap-2">
-                    <a href="{{ route('admin.news.index') }}" class="btn btn-light btn-sm">
-                        <i class="bi bi-arrow-left"></i> {{ __('admin.news.back') }}
+                <div class="d-flex align-items-center gap-1 gap-md-2 flex-wrap" style="flex: 0 0 auto; margin-inline-start: auto;">
+                    <a href="{{ route('admin.news.index') }}" class="btn btn-light btn-sm shadow-sm">
+                        <i class="bi bi-arrow-left me-1"></i> <span class="d-none d-sm-inline">{{ __('admin.news.back') }}</span>
                     </a>
                     @can('news.edit')
-                        <a href="{{ route('admin.news.edit', $item) }}" class="btn btn-warning btn-sm">
-                            <i class="bi bi-pencil-square"></i> {{ __('admin.news.edit_news') }}
+                        <a href="{{ route('admin.news.edit', $item) }}" class="btn btn-warning btn-sm shadow-sm">
+                            <i class="bi bi-pencil-square me-1"></i> <span class="d-none d-md-inline">{{ __('admin.news.edit_news') }}</span>
                         </a>
                     @endcan
                     @can('news.delete')
-                        <button type="button" id="btnDelete" class="btn btn-outline-danger btn-sm">
-                            <i class="bi bi-trash"></i> {{ __('admin.news.delete') }}
+                        <button type="button" id="btnDelete" class="btn btn-outline-light btn-sm">
+                            <i class="bi bi-trash me-1"></i> <span class="d-none d-sm-inline">{{ __('admin.news.delete') }}</span>
                         </button>
                     @endcan
                 </div>
             </div>
         </div>
 
-        <div class="row g-4">
+        <div class="row g-3 g-md-4">
             <!-- Main content -->
-            <div class="col-lg-8">
-                <div class="card border-0 shadow-sm rounded-3 bg-white">
-                    <div class="card-body p-4">
+            <div class="col-12 col-lg-8">
+                <div class="card border-0 shadow-sm rounded-4 bg-white">
+                    <div class="card-body p-3 p-md-4">
                         <!-- Title + meta -->
-                        <div class="mb-3">
-                            <h4 class="fw-bold mb-2">{{ $item->title }}</h4>
-                            <div class="d-flex flex-wrap align-items-center gap-2 small text-muted">
-                                <span class="d-inline-flex align-items-center gap-1">
-                                    <i class="bi bi-calendar"></i>
-                                    {{ $publishedAt !== '—' ? \Carbon\Carbon::parse($publishedAt)->locale('ar')->translatedFormat('d F Y') : '—' }}
-                                </span>
-                                <span>•</span>
-                                <span class="d-inline-flex align-items-center gap-1">
-                                    <i class="bi bi-eye"></i>
-                                    الحالة:
-                                    <span class="badge {{ $published ? 'bg-success-subtle text-success' : 'bg-secondary-subtle text-secondary' }}">
-                                        {{ $published ? 'منشور' : 'مسودة' }}
-                                    </span>
+                        <div class="mb-3 mb-md-4">
+                            <h3 class="fw-bold mb-2 mb-md-3 text-primary fs-4 fs-md-3">{{ $item->title }}</h3>
+                            <div class="d-flex flex-wrap align-items-center gap-3 mb-3">
+                                <span class="badge {{ $published ? 'bg-success' : 'bg-secondary' }} px-3 py-2">
+                                    <i class="bi bi-{{ $published ? 'check-circle' : 'clock' }} me-1"></i>
+                                    {{ $published ? 'منشور' : 'مسودة' }}
                                 </span>
                                 @if($item->featured)
-                                    <span>•</span>
-                                    <span class="d-inline-flex align-items-center gap-1">
-                                        <i class="bi bi-star-fill text-warning"></i> مميّز
+                                    <span class="badge bg-warning text-dark px-3 py-2">
+                                        <i class="bi bi-star-fill me-1"></i> مميّز
                                     </span>
                                 @endif
-                                <span class="ms-auto d-none d-md-inline text-xxs">
+                                <span class="text-muted d-flex align-items-center gap-1">
+                                    <i class="bi bi-calendar3"></i>
+                                    {{ $publishedAt !== '—' ? \Carbon\Carbon::parse($publishedAt)->locale('ar')->translatedFormat('d F Y') : '—' }}
+                                </span>
+                                <span class="text-muted d-flex align-items-center gap-1">
+                                    <i class="bi bi-clock-history"></i>
                                     آخر تحديث: {{ optional($item->updated_at)->format('Y-m-d H:i') ?? '—' }}
                                 </span>
                             </div>
                         </div>
 
                         <!-- Tabs -->
-                        <ul class="nav nav-tabs nav-tabs-sm border-0 mb-3" role="tablist">
+                        <ul class="nav nav-pills nav-pills-custom mb-3 mb-md-4 border-bottom pb-2 flex-column flex-sm-row" role="tablist">
                             <li class="nav-item" role="presentation">
-                                <button class="nav-link active px-3 py-1" data-bs-toggle="tab" data-bs-target="#tab-html">
-                                    <i class="bi bi-file-earmark-text me-1"></i> المحتوى (HTML)
+                                <button class="nav-link active px-3 px-md-4 py-2 rounded-pill w-100 w-sm-auto mb-2 mb-sm-0" data-bs-toggle="tab" data-bs-target="#tab-html">
+                                    <i class="bi bi-file-earmark-text me-1 me-md-2"></i> <span class="d-none d-md-inline">المحتوى (HTML)</span><span class="d-md-none">HTML</span>
                                 </button>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <button class="nav-link px-3 py-1" data-bs-toggle="tab" data-bs-target="#tab-text">
-                                    <i class="bi bi-file-text me-1"></i> نص مجرد
+                                <button class="nav-link px-3 px-md-4 py-2 rounded-pill w-100 w-sm-auto mb-2 mb-sm-0" data-bs-toggle="tab" data-bs-target="#tab-text">
+                                    <i class="bi bi-file-text me-1 me-md-2"></i> <span class="d-none d-md-inline">نص مجرد</span><span class="d-md-none">نص</span>
                                 </button>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <button class="nav-link px-3 py-1" data-bs-toggle="tab" data-bs-target="#tab-preview">
-                                    <i class="bi bi-eye me-1"></i> معاينة مقال
+                                <button class="nav-link px-3 px-md-4 py-2 rounded-pill w-100 w-sm-auto" data-bs-toggle="tab" data-bs-target="#tab-preview">
+                                    <i class="bi bi-eye me-1 me-md-2"></i> <span class="d-none d-md-inline">معاينة مقال</span><span class="d-md-none">معاينة</span>
                                 </button>
                             </li>
                         </ul>
@@ -121,61 +119,69 @@
             </div>
 
             <!-- Sidebar meta -->
-            <div class="col-lg-4">
-                <div class="card border-0 shadow-sm rounded-3 bg-white mb-3">
-                    <div class="card-body p-3">
-                        <div class="d-flex align-items-center gap-2 mb-2">
-                            <i class="bi bi-info-circle text-primary"></i>
+            <div class="col-12 col-lg-4">
+                <div class="card border-0 shadow-sm rounded-4 bg-white mb-3">
+                    <div class="card-header bg-light border-0 py-3 px-4">
+                        <div class="d-flex align-items-center gap-2">
+                            <div class="icon-wrapper bg-primary bg-opacity-10 rounded-circle p-2">
+                                <i class="bi bi-info-circle text-primary"></i>
+                            </div>
                             <h6 class="mb-0 fw-semibold">البيانات</h6>
                         </div>
-                        <div class="list-group list-group-flush small">
-                            <div class="list-group-item d-flex justify-content-between">
-                                <span class="text-muted">ID</span>
-                                <span>{{ $item->id }}</span>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="list-group list-group-flush">
+                            <div class="list-group-item border-0 px-4 py-3 d-flex justify-content-between align-items-center">
+                                <span class="text-muted small">ID</span>
+                                <span class="badge bg-primary">{{ $item->id }}</span>
                             </div>
-                            <div class="list-group-item d-flex justify-content-between">
-                                <span class="text-muted">الحالة</span>
-                                <span class="badge {{ $published ? 'bg-success-subtle text-success' : 'bg-secondary-subtle text-secondary' }}">
+                            <div class="list-group-item border-0 px-4 py-3 d-flex justify-content-between align-items-center">
+                                <span class="text-muted small">الحالة</span>
+                                <span class="badge {{ $published ? 'bg-success' : 'bg-secondary' }}">
                                     {{ $published ? 'منشور' : 'مسودة' }}
                                 </span>
                             </div>
-                            <div class="list-group-item d-flex justify-content-between">
-                                <span class="text-muted">تاريخ النشر</span>
-                                <span>{{ $publishedAt }}</span>
+                            <div class="list-group-item border-0 px-4 py-3 d-flex justify-content-between align-items-center">
+                                <span class="text-muted small">تاريخ النشر</span>
+                                <span class="fw-medium">{{ $publishedAt }}</span>
                             </div>
-                            <div class="list-group-item d-flex justify-content-between">
-                                <span class="text-muted">مميّز</span>
-                                <span>{!! $item->featured ? '<i class="bi bi-check text-success"></i>' : '<i class="bi bi-x text-danger"></i>' !!}</span>
+                            <div class="list-group-item border-0 px-4 py-3 d-flex justify-content-between align-items-center">
+                                <span class="text-muted small">مميّز</span>
+                                <span>{!! $item->featured ? '<i class="bi bi-check-circle-fill text-success fs-5"></i>' : '<i class="bi bi-x-circle text-muted fs-5"></i>' !!}</span>
                             </div>
-                            <div class="list-group-item d-flex justify-content-between">
-                                <span class="text-muted">أُنشئ</span>
-                                <span>{{ optional($item->created_at)->format('Y-m-d H:i') ?? '—' }}</span>
+                            <div class="list-group-item border-0 px-4 py-3 d-flex justify-content-between align-items-center">
+                                <span class="text-muted small">أُنشئ</span>
+                                <span class="fw-medium small">{{ optional($item->created_at)->format('Y-m-d H:i') ?? '—' }}</span>
                             </div>
-                            <div class="list-group-item d-flex justify-content-between">
-                                <span class="text-muted">آخر تحديث</span>
-                                <span>{{ optional($item->updated_at)->format('Y-m-d H:i') ?? '—' }}</span>
+                            <div class="list-group-item border-0 px-4 py-3 d-flex justify-content-between align-items-center">
+                                <span class="text-muted small">آخر تحديث</span>
+                                <span class="fw-medium small">{{ optional($item->updated_at)->format('Y-m-d H:i') ?? '—' }}</span>
                             </div>
-                            <div class="list-group-item d-flex justify-content-between">
-                                <span class="text-muted">أضاف</span>
-                                <span>{{ $item->creator?->name ?? 'غير معروف' }}</span>
+                            <div class="list-group-item border-0 px-4 py-3 d-flex justify-content-between align-items-center">
+                                <span class="text-muted small">أضاف</span>
+                                <span class="fw-medium">{{ $item->creator?->name ?? 'غير معروف' }}</span>
                             </div>
-                            <div class="list-group-item d-flex justify-content-between">
-                                <span class="text-muted">عدّل</span>
-                                <span>{{ $item->updater?->name ?? 'غير معروف' }}</span>
+                            <div class="list-group-item border-0 px-4 py-3 d-flex justify-content-between align-items-center">
+                                <span class="text-muted small">عدّل</span>
+                                <span class="fw-medium">{{ $item->updater?->name ?? 'غير معروف' }}</span>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 @if($pdfUrl)
-                    <div class="card border-0 shadow-sm rounded-3 bg-white">
-                        <div class="card-body p-3">
-                            <div class="d-flex align-items-center gap-2 mb-2">
-                                <i class="bi bi-file-pdf text-danger"></i>
+                    <div class="card border-0 shadow-sm rounded-4 bg-white">
+                        <div class="card-header bg-danger bg-opacity-10 border-0 py-3 px-4">
+                            <div class="d-flex align-items-center gap-2">
+                                <div class="icon-wrapper bg-danger bg-opacity-20 rounded-circle p-2">
+                                    <i class="bi bi-file-pdf text-danger"></i>
+                                </div>
                                 <h6 class="mb-0 fw-semibold">المرفق</h6>
                             </div>
-                            <a href="{{ $pdfUrl }}" class="btn btn-outline-primary w-100" target="_blank">
-                                <i class="bi bi-eye"></i> فتح PDF
+                        </div>
+                        <div class="card-body p-4">
+                            <a href="{{ $pdfUrl }}" class="btn btn-danger w-100 shadow-sm" target="_blank">
+                                <i class="bi bi-file-earmark-pdf me-2"></i> فتح PDF
                             </a>
                         </div>
                     </div>
@@ -186,6 +192,7 @@
 @endsection
 
 @push('styles')
+    <link rel="stylesheet" href="{{ asset('assets/admin/css/news.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/admin/libs/sweetalert2/sweetalert2.min.css') }}">
 @endpush
 

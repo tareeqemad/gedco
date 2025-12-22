@@ -25,6 +25,16 @@ class AdminNotifications {
         const warningMsg = this.getFlashMessage('warning');
         const infoMsg = this.getFlashMessage('info');
 
+        // Check for validation errors
+        const validationError = document.querySelector('.alert-danger[data-toast-message]');
+        if (validationError && !errorMsg) {
+            const validationMsg = validationError.getAttribute('data-toast-message');
+            if (validationMsg) {
+                this.showToast(validationMsg, 'danger');
+                validationError.style.display = 'none';
+            }
+        }
+
         if (successMsg) {
             this.showToast(successMsg, 'success');
         }
@@ -45,8 +55,19 @@ class AdminNotifications {
     getFlashMessage(type) {
         const alert = document.querySelector(`.alert-${type}`);
         if (alert) {
+            // First try to get from data attribute
+            const dataMessage = alert.getAttribute('data-toast-message');
+            if (dataMessage) {
+                // Hide the alert after getting the message
+                alert.style.display = 'none';
+                return dataMessage;
+            }
+            // Fallback to text content
             const text = alert.querySelector('.flex-grow-1')?.textContent.trim() || alert.textContent.trim();
-            return text.replace(new RegExp(`^${this.getTypeLabel(type)}:\\s*`, 'i'), '');
+            const message = text.replace(new RegExp(`^${this.getTypeLabel(type)}:\\s*`, 'i'), '');
+            // Hide the alert after getting the message
+            alert.style.display = 'none';
+            return message;
         }
         return null;
     }

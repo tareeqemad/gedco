@@ -15,17 +15,17 @@
     <input type="hidden" name="language" value="{{ old('language', $model->language ?? $defaultLang) }}">
 
     {{-- Tabs Navigation --}}
-    <ul class="nav nav-tabs nav-tabs-custom mb-4" id="aboutTabs" role="tablist">
+    <ul class="nav nav-tabs nav-tabs-sm border-0 mb-4 px-3 py-1 rounded-3" id="aboutTabs" role="tablist" style="background: rgba(0, 102, 204, 0.1);">
         <li class="nav-item" role="presentation">
-            <button class="nav-link active" id="arabic-tab" data-bs-toggle="tab" data-bs-target="#arabic-content" type="button" role="tab">
+            <button class="nav-link active px-3 py-2 rounded-3 text-primary fw-semibold" id="arabic-tab" data-bs-toggle="tab" data-bs-target="#arabic-content" type="button" role="tab" style="background: rgba(255, 255, 255, 0.2); border: 1px solid rgba(0, 102, 204, 0.3);">
                 <i class="bi bi-translate me-2"></i>
-                <span class="fw-semibold">{{ __('admin.labels.arabic') }}</span>
+                <span>{{ __('admin.labels.arabic') }}</span>
             </button>
         </li>
         <li class="nav-item" role="presentation">
-            <button class="nav-link" id="english-tab" data-bs-toggle="tab" data-bs-target="#english-content" type="button" role="tab">
+            <button class="nav-link px-3 py-2 rounded-3 text-primary fw-semibold" id="english-tab" data-bs-toggle="tab" data-bs-target="#english-content" type="button" role="tab" style="background: transparent; border: 1px solid rgba(0, 102, 204, 0.3);">
                 <i class="bi bi-globe me-2"></i>
-                <span class="fw-semibold">{{ __('admin.labels.english') }}</span>
+                <span>{{ __('admin.labels.english') }}</span>
             </button>
         </li>
     </ul>
@@ -35,82 +35,84 @@
         
         {{-- ========== Arabic Content Tab ========== --}}
         <div class="tab-pane fade show active" id="arabic-content" role="tabpanel">
-            <div class="card border-0 shadow-sm mb-4">
-                <div class="card-header bg-gradient-primary text-white">
-                    <h6 class="mb-0 fw-bold">
-                        <i class="bi bi-translate me-2"></i>
+            <div class="card border-0 shadow-sm rounded-4 mb-4">
+                <div class="card-header bg-gradient-primary text-white border-0 py-3 px-4 rounded-top-4">
+                    <h6 class="mb-0 fw-bold text-white d-flex align-items-center gap-2" style="font-size: 1.1rem;">
+                        <i class="bi bi-translate"></i>
                         {{ __('admin.labels.arabic') }} - {{ __('admin.about_us.content') }}
                     </h6>
                 </div>
-                <div class="card-body p-4">
+                <div class="card-body p-4 p-md-5">
                     {{-- العنوان --}}
                     <div class="mb-4">
-                        <label class="form-label fw-semibold d-flex align-items-center gap-2">
+                        <label class="form-label fw-semibold text-dark d-flex align-items-center gap-2 mb-2">
                             <i class="bi bi-heading text-primary"></i>
                             {{ __('admin.about_us.form_title') }} <span class="text-danger">*</span>
                         </label>
-                        <input type="text" name="title" class="form-control form-control-lg @error('title') is-invalid @enderror"
-                               value="{{ old('title', $model->title ?? '') }}" required>
-                        @error('title') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                        <input type="text" name="title" class="form-control rounded-3 border-0 bg-light @error('title') is-invalid @enderror"
+                               value="{{ old('title', $model->title ?? '') }}" required
+                               style="height: 45px; font-size: 1rem;">
+                        @error('title') <div class="invalid-feedback d-block mt-1">{{ $message }}</div> @enderror
                     </div>
 
                     {{-- العنوان الفرعي --}}
                     <div class="mb-4">
-                        <label class="form-label fw-semibold d-flex align-items-center gap-2">
-                            <i class="bi bi-text-paragraph text-info"></i>
+                        <label class="form-label fw-semibold text-dark d-flex align-items-center gap-2 mb-2">
+                            <i class="bi bi-text-paragraph text-primary"></i>
                             {{ __('admin.about_us.form_subtitle') }}
                         </label>
-                        <input type="text" name="subtitle" class="form-control @error('subtitle') is-invalid @enderror"
-                               value="{{ old('subtitle', $model->subtitle ?? '') }}">
-                        @error('subtitle') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                        <input type="text" name="subtitle" class="form-control rounded-3 border-0 bg-light @error('subtitle') is-invalid @enderror"
+                               value="{{ old('subtitle', $model->subtitle ?? '') }}"
+                               style="height: 45px; font-size: 1rem;">
+                        @error('subtitle') <div class="invalid-feedback d-block mt-1">{{ $message }}</div> @enderror
                     </div>
 
                     {{-- الفقرة الأولى --}}
                     <div class="mb-4">
-                        <label class="form-label fw-semibold d-flex align-items-center gap-2">
-                            <i class="bi bi-file-text text-success"></i>
+                        <label class="form-label fw-semibold text-dark d-flex align-items-center gap-2 mb-2">
+                            <i class="bi bi-file-text text-primary"></i>
                             {{ __('admin.about_us.form_paragraph1') }} <span class="text-danger">*</span>
                         </label>
-                        <textarea name="paragraph1" class="form-control @error('paragraph1') is-invalid @enderror" rows="5" required>{{ old('paragraph1', $model->paragraph1 ?? '') }}</textarea>
-                        @error('paragraph1') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                        <textarea name="paragraph1" class="form-control rounded-3 border-0 bg-light @error('paragraph1') is-invalid @enderror" rows="5" required style="font-size: 1rem;">{{ old('paragraph1', $model->paragraph1 ?? '') }}</textarea>
+                        @error('paragraph1') <div class="invalid-feedback d-block mt-1">{{ $message }}</div> @enderror
                     </div>
 
                     {{-- الفقرة الثانية --}}
                     <div class="mb-4">
-                        <label class="form-label fw-semibold d-flex align-items-center gap-2">
-                            <i class="bi bi-file-text text-secondary"></i>
+                        <label class="form-label fw-semibold text-dark d-flex align-items-center gap-2 mb-2">
+                            <i class="bi bi-file-text text-primary"></i>
                             {{ __('admin.about_us.form_paragraph2') }}
                         </label>
-                        <textarea name="paragraph2" class="form-control @error('paragraph2') is-invalid @enderror" rows="4">{{ old('paragraph2', $model->paragraph2 ?? '') }}</textarea>
-                        @error('paragraph2') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                        <textarea name="paragraph2" class="form-control rounded-3 border-0 bg-light @error('paragraph2') is-invalid @enderror" rows="4" style="font-size: 1rem;">{{ old('paragraph2', $model->paragraph2 ?? '') }}</textarea>
+                        @error('paragraph2') <div class="invalid-feedback d-block mt-1">{{ $message }}</div> @enderror
                     </div>
 
                     {{-- Features العربية --}}
                     <div class="mb-4">
-                        <label class="form-label fw-semibold d-flex align-items-center gap-2 mb-3">
-                            <i class="bi bi-list-check text-warning"></i>
+                        <label class="form-label fw-semibold text-dark d-flex align-items-center gap-2 mb-3">
+                            <i class="bi bi-list-check text-primary"></i>
                             {{ __('admin.about_us.form_features') }} - {{ __('admin.labels.arabic') }}
                         </label>
                         <div class="row g-3">
                             <div class="col-md-6">
-                                <label class="form-label small text-muted">{{ __('admin.about_us.form_features_col1') }}</label>
-                                <textarea name="features_col1" class="form-control @error('features_col1') is-invalid @enderror" rows="6" 
-                                          placeholder="{{ __('admin.about_us.form_features_placeholder') }}">{{ $featuresCol1 }}</textarea>
-                                @error('features_col1') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                                <label class="form-label small text-muted mb-2">{{ __('admin.about_us.form_features_col1') }}</label>
+                                <textarea name="features_col1" class="form-control rounded-3 border-0 bg-light @error('features_col1') is-invalid @enderror" rows="6" 
+                                          placeholder="{{ __('admin.about_us.form_features_placeholder') }}" style="font-size: 1rem;">{{ $featuresCol1 }}</textarea>
+                                @error('features_col1') <div class="invalid-feedback d-block mt-1">{{ $message }}</div> @enderror
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label small text-muted">{{ __('admin.about_us.form_features_col2') }}</label>
-                                <textarea name="features_col2" class="form-control @error('features_col2') is-invalid @enderror" rows="6"
-                                          placeholder="{{ __('admin.about_us.form_features_placeholder') }}">{{ $featuresCol2 }}</textarea>
-                                @error('features_col2') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                                <label class="form-label small text-muted mb-2">{{ __('admin.about_us.form_features_col2') }}</label>
+                                <textarea name="features_col2" class="form-control rounded-3 border-0 bg-light @error('features_col2') is-invalid @enderror" rows="6"
+                                          placeholder="{{ __('admin.about_us.form_features_placeholder') }}" style="font-size: 1rem;">{{ $featuresCol2 }}</textarea>
+                                @error('features_col2') <div class="invalid-feedback d-block mt-1">{{ $message }}</div> @enderror
                             </div>
                         </div>
                     </div>
 
                     {{-- الصورة العربية --}}
                     <div class="mb-0">
-                        <label class="form-label fw-semibold d-flex align-items-center gap-2 mb-3">
-                            <i class="bi bi-image text-danger"></i>
+                        <label class="form-label fw-semibold text-dark d-flex align-items-center gap-2 mb-3">
+                            <i class="bi bi-image text-primary"></i>
                             {{ __('admin.about_us.form_image') }} - {{ __('admin.labels.arabic') }}
                         </label>
                         @php
@@ -142,12 +144,13 @@
                             </div>
                             <div class="col-md-8">
                                 <input type="file" name="image" id="about-image-input" accept=".jpg,.jpeg,.png,.webp"
-                                       class="form-control @error('image') is-invalid @enderror">
+                                       class="form-control rounded-3 border-0 bg-light @error('image') is-invalid @enderror"
+                                       style="height: 45px; font-size: 1rem;">
                                 <small class="text-muted d-block mt-2">
                                     <i class="bi bi-info-circle me-1"></i>
                                     {{ __('admin.common.form_image_max_size') }}
                                 </small>
-                                @error('image') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
+                                @error('image') <div class="invalid-feedback d-block mt-1">{{ $message }}</div> @enderror
                             </div>
                         </div>
                     </div>
@@ -157,82 +160,84 @@
 
         {{-- ========== English Content Tab ========== --}}
         <div class="tab-pane fade" id="english-content" role="tabpanel">
-            <div class="card border-0 shadow-sm mb-4">
-                <div class="card-header bg-gradient-info text-white">
-                    <h6 class="mb-0 fw-bold">
-                        <i class="bi bi-globe me-2"></i>
+            <div class="card border-0 shadow-sm rounded-4 mb-4">
+                <div class="card-header bg-gradient-primary text-white border-0 py-3 px-4 rounded-top-4">
+                    <h6 class="mb-0 fw-bold text-white d-flex align-items-center gap-2" style="font-size: 1.1rem;">
+                        <i class="bi bi-globe"></i>
                         {{ __('admin.labels.english') }} - {{ __('admin.about_us.content') }}
                     </h6>
                 </div>
-                <div class="card-body p-4">
+                <div class="card-body p-4 p-md-5">
                     {{-- العنوان الإنجليزي --}}
                     <div class="mb-4">
-                        <label class="form-label fw-semibold d-flex align-items-center gap-2">
+                        <label class="form-label fw-semibold text-dark d-flex align-items-center gap-2 mb-2">
                             <i class="bi bi-heading text-primary"></i>
                             {{ __('admin.about_us.form_title') }} - {{ __('admin.labels.english') }}
                         </label>
-                        <input type="text" name="title_en" class="form-control form-control-lg @error('title_en') is-invalid @enderror"
-                               value="{{ old('title_en', $model->title_en ?? '') }}">
-                        @error('title_en') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                        <input type="text" name="title_en" class="form-control rounded-3 border-0 bg-light @error('title_en') is-invalid @enderror"
+                               value="{{ old('title_en', $model->title_en ?? '') }}"
+                               style="height: 45px; font-size: 1rem;">
+                        @error('title_en') <div class="invalid-feedback d-block mt-1">{{ $message }}</div> @enderror
                     </div>
 
                     {{-- العنوان الفرعي الإنجليزي --}}
                     <div class="mb-4">
-                        <label class="form-label fw-semibold d-flex align-items-center gap-2">
-                            <i class="bi bi-text-paragraph text-info"></i>
+                        <label class="form-label fw-semibold text-dark d-flex align-items-center gap-2 mb-2">
+                            <i class="bi bi-text-paragraph text-primary"></i>
                             {{ __('admin.about_us.form_subtitle') }} - {{ __('admin.labels.english') }}
                         </label>
-                        <input type="text" name="subtitle_en" class="form-control @error('subtitle_en') is-invalid @enderror"
-                               value="{{ old('subtitle_en', $model->subtitle_en ?? '') }}">
-                        @error('subtitle_en') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                        <input type="text" name="subtitle_en" class="form-control rounded-3 border-0 bg-light @error('subtitle_en') is-invalid @enderror"
+                               value="{{ old('subtitle_en', $model->subtitle_en ?? '') }}"
+                               style="height: 45px; font-size: 1rem;">
+                        @error('subtitle_en') <div class="invalid-feedback d-block mt-1">{{ $message }}</div> @enderror
                     </div>
 
                     {{-- الفقرة الأولى الإنجليزية --}}
                     <div class="mb-4">
-                        <label class="form-label fw-semibold d-flex align-items-center gap-2">
-                            <i class="bi bi-file-text text-success"></i>
+                        <label class="form-label fw-semibold text-dark d-flex align-items-center gap-2 mb-2">
+                            <i class="bi bi-file-text text-primary"></i>
                             {{ __('admin.about_us.form_paragraph1') }} - {{ __('admin.labels.english') }}
                         </label>
-                        <textarea name="paragraph1_en" class="form-control @error('paragraph1_en') is-invalid @enderror" rows="5">{{ old('paragraph1_en', $model->paragraph1_en ?? '') }}</textarea>
-                        @error('paragraph1_en') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                        <textarea name="paragraph1_en" class="form-control rounded-3 border-0 bg-light @error('paragraph1_en') is-invalid @enderror" rows="5" style="font-size: 1rem;">{{ old('paragraph1_en', $model->paragraph1_en ?? '') }}</textarea>
+                        @error('paragraph1_en') <div class="invalid-feedback d-block mt-1">{{ $message }}</div> @enderror
                     </div>
 
                     {{-- الفقرة الثانية الإنجليزية --}}
                     <div class="mb-4">
-                        <label class="form-label fw-semibold d-flex align-items-center gap-2">
-                            <i class="bi bi-file-text text-secondary"></i>
+                        <label class="form-label fw-semibold text-dark d-flex align-items-center gap-2 mb-2">
+                            <i class="bi bi-file-text text-primary"></i>
                             {{ __('admin.about_us.form_paragraph2') }} - {{ __('admin.labels.english') }}
                         </label>
-                        <textarea name="paragraph2_en" class="form-control @error('paragraph2_en') is-invalid @enderror" rows="4">{{ old('paragraph2_en', $model->paragraph2_en ?? '') }}</textarea>
-                        @error('paragraph2_en') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                        <textarea name="paragraph2_en" class="form-control rounded-3 border-0 bg-light @error('paragraph2_en') is-invalid @enderror" rows="4" style="font-size: 1rem;">{{ old('paragraph2_en', $model->paragraph2_en ?? '') }}</textarea>
+                        @error('paragraph2_en') <div class="invalid-feedback d-block mt-1">{{ $message }}</div> @enderror
                     </div>
 
                     {{-- Features الإنجليزية --}}
                     <div class="mb-4">
-                        <label class="form-label fw-semibold d-flex align-items-center gap-2 mb-3">
-                            <i class="bi bi-list-check text-warning"></i>
+                        <label class="form-label fw-semibold text-dark d-flex align-items-center gap-2 mb-3">
+                            <i class="bi bi-list-check text-primary"></i>
                             {{ __('admin.about_us.form_features') }} - {{ __('admin.labels.english') }}
                         </label>
                         <div class="row g-3">
                             <div class="col-md-6">
-                                <label class="form-label small text-muted">{{ __('admin.about_us.form_features_col1') }}</label>
-                                <textarea name="features_col1_en" class="form-control @error('features_col1_en') is-invalid @enderror" rows="6"
-                                          placeholder="{{ __('admin.about_us.form_features_placeholder') }}">{{ $featuresCol1En }}</textarea>
-                                @error('features_col1_en') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                                <label class="form-label small text-muted mb-2">{{ __('admin.about_us.form_features_col1') }}</label>
+                                <textarea name="features_col1_en" class="form-control rounded-3 border-0 bg-light @error('features_col1_en') is-invalid @enderror" rows="6"
+                                          placeholder="{{ __('admin.about_us.form_features_placeholder') }}" style="font-size: 1rem;">{{ $featuresCol1En }}</textarea>
+                                @error('features_col1_en') <div class="invalid-feedback d-block mt-1">{{ $message }}</div> @enderror
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label small text-muted">{{ __('admin.about_us.form_features_col2') }}</label>
-                                <textarea name="features_col2_en" class="form-control @error('features_col2_en') is-invalid @enderror" rows="6"
-                                          placeholder="{{ __('admin.about_us.form_features_placeholder') }}">{{ $featuresCol2En }}</textarea>
-                                @error('features_col2_en') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                                <label class="form-label small text-muted mb-2">{{ __('admin.about_us.form_features_col2') }}</label>
+                                <textarea name="features_col2_en" class="form-control rounded-3 border-0 bg-light @error('features_col2_en') is-invalid @enderror" rows="6"
+                                          placeholder="{{ __('admin.about_us.form_features_placeholder') }}" style="font-size: 1rem;">{{ $featuresCol2En }}</textarea>
+                                @error('features_col2_en') <div class="invalid-feedback d-block mt-1">{{ $message }}</div> @enderror
                             </div>
                         </div>
                     </div>
 
                     {{-- الصورة الإنجليزية --}}
                     <div class="mb-0">
-                        <label class="form-label fw-semibold d-flex align-items-center gap-2 mb-3">
-                            <i class="bi bi-image text-danger"></i>
+                        <label class="form-label fw-semibold text-dark d-flex align-items-center gap-2 mb-3">
+                            <i class="bi bi-image text-primary"></i>
                             {{ __('admin.about_us.form_image') }} - {{ __('admin.labels.english') }}
                         </label>
                         @php
@@ -253,12 +258,13 @@
                             </div>
                             <div class="col-md-8">
                                 <input type="file" name="image_en" id="about-image-input-en" accept=".jpg,.jpeg,.png,.webp"
-                                       class="form-control @error('image_en') is-invalid @enderror">
+                                       class="form-control rounded-3 border-0 bg-light @error('image_en') is-invalid @enderror"
+                                       style="height: 45px; font-size: 1rem;">
                                 <small class="text-muted d-block mt-2">
                                     <i class="bi bi-info-circle me-1"></i>
                                     {{ __('admin.common.form_image_max_size') }}
                                 </small>
-                                @error('image_en') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
+                                @error('image_en') <div class="invalid-feedback d-block mt-1">{{ $message }}</div> @enderror
                             </div>
                         </div>
                     </div>
@@ -269,12 +275,12 @@
     </div>
 
     {{-- Form Actions --}}
-    <div class="d-flex gap-2 justify-content-end mt-4 p-3 bg-light rounded-3">
-        <a href="{{ route('admin.about.index') }}" class="btn btn-light border">
-            <i class="bi bi-x-circle me-1"></i> {{ __('admin.actions.cancel') }}
+    <div class="d-flex gap-3 justify-content-end pt-3 border-top mt-4">
+        <a href="{{ route('admin.about.index') }}" class="btn btn-outline-secondary px-5 py-2 rounded-3" style="min-width: 150px; font-weight: 600;">
+            <i class="bi bi-x-circle me-2"></i>{{ __('admin.common.cancel') }}
         </a>
-        <button type="submit" class="btn btn-orange px-4">
-            <i class="bi bi-check-circle me-1"></i> {{ __('admin.common.form_save') }}
+        <button type="submit" class="btn btn-primary px-5 py-2 rounded-3 shadow-sm" style="min-width: 150px; font-weight: 600;">
+            <i class="bi bi-check-lg me-2"></i>{{ __('admin.common.form_save') }}
         </button>
     </div>
 </form>
@@ -298,13 +304,21 @@
 
                 const allowed = ['image/jpeg','image/jpg','image/png','image/webp'];
                 if(!allowed.includes(file.type)){
-                    alert('{{ __('admin.common.form_image_invalid') }}');
+                    if (window.adminNotifications) {
+                        window.adminNotifications.error('{{ __('admin.common.form_image_invalid') }}');
+                    } else {
+                        alert('{{ __('admin.common.form_image_invalid') }}');
+                    }
                     input.value = '';
                     return;
                 }
                 const maxSize = 5 * 1024 * 1024; // 5MB
                 if(file.size > maxSize){
-                    alert('{{ __('admin.common.form_image_too_large') }}');
+                    if (window.adminNotifications) {
+                        window.adminNotifications.error('{{ __('admin.common.form_image_too_large') }}');
+                    } else {
+                        alert('{{ __('admin.common.form_image_too_large') }}');
+                    }
                     input.value = '';
                     return;
                 }
@@ -324,13 +338,21 @@
 
                     const allowed = ['image/jpeg','image/jpg','image/png','image/webp'];
                     if(!allowed.includes(file.type)){
-                        alert('{{ __('admin.common.form_image_invalid') }}');
+                        if (window.adminNotifications) {
+                            window.adminNotifications.error('{{ __('admin.common.form_image_invalid') }}');
+                        } else {
+                            alert('{{ __('admin.common.form_image_invalid') }}');
+                        }
                         inputEn.value = '';
                         return;
                     }
                     const maxSize = 5 * 1024 * 1024; // 5MB
                     if(file.size > maxSize){
-                        alert('{{ __('admin.common.form_image_too_large') }}');
+                        if (window.adminNotifications) {
+                            window.adminNotifications.error('{{ __('admin.common.form_image_too_large') }}');
+                        } else {
+                            alert('{{ __('admin.common.form_image_too_large') }}');
+                        }
                         inputEn.value = '';
                         return;
                     }

@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\News\StoreNewsRequest;
+use App\Http\Requests\Admin\News\UpdateNewsRequest;
 use App\Models\News;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
 class NewsController extends Controller
@@ -55,32 +55,20 @@ class NewsController extends Controller
         return view('admin.site.news.create');
     }
 
-    public function store(Request $request)
+    public function store(StoreNewsRequest $request)
     {
-        $validated = $request->validate([
-            'title'        => ['required','string','max:255'],
-            'published_at' => ['nullable','date'],
-            'status'       => ['required','in:published,draft'],
-            'featured'     => ['nullable','boolean'],
-            'body'         => ['required','string'],
-            'language'     => ['nullable','in:ar,en'],
-            'cover'        => ['nullable','image','mimes:jpg,jpeg,png,webp','max:2048'],   // 2MB
-            'pdf'          => ['nullable','mimes:pdf','max:10240'], // 10MB
-        ]);
-
         // Determine language from current admin direction
         $adminDirection = session('direction', 'rtl');
         $defaultLanguage = $adminDirection === 'rtl' ? 'ar' : 'en';
 
         $data = [
-            'title'        => $validated['title'],
-            'slug'         => Str::slug($validated['title']).'-'.Str::random(5),
-            'published_at' => $validated['published_at'] ?? now(),
-            'status'       => $validated['status'],
-            'featured'     => (bool)($validated['featured'] ?? false),
-            'body'         => $validated['body'],
-            'language'     => $validated['language'] ?? $defaultLanguage, // Use admin direction as default
-
+            'title'        => $request->validated()['title'],
+            'slug'         => Str::slug($request->validated()['title']).'-'.Str::random(5),
+            'published_at' => $request->validated()['published_at'] ?? now(),
+            'status'       => $request->validated()['status'],
+            'featured'     => (bool)($request->validated()['featured'] ?? false),
+            'body'         => $request->validated()['body'],
+            'language'     => $request->validated()['language'] ?? $defaultLanguage,
             'created_by'   => auth()->id(),
         ];
 
@@ -117,32 +105,10 @@ class NewsController extends Controller
     }
 
     // ====== UPDATE ======
-    public function update(Request $request, News $news)
+    public function update(UpdateNewsRequest $request, News $news)
     {
-        // 1) Validation (no FormRequest, no Purifier)
-        $v = Validator::make($request->all(), [
-            'title'        => ['required','string','min:5','max:200'],
-            'published_at' => ['required','date'],
-            'status'       => ['required','in:draft,published'],
-            'featured'     => ['nullable','boolean'],
-            'body'         => ['required','string'], // نحفظه كما هو
-            'language'     => ['nullable','in:ar,en'],
-            'cover'        => ['nullable','image','mimes:jpg,jpeg,png,webp','max:2048','dimensions:min_width=300,min_height=200'],
-            'pdf'          => ['nullable','mimetypes:application/pdf','max:10240'],
-            'remove_cover' => ['nullable','boolean'],
-            'remove_pdf'   => ['nullable','boolean'],
-        ], [
-            'body.required' => 'محتوى الخبر مطلوب.',
-        ]);
-
-        if ($v->fails()) {
-            return $request->expectsJson()
-                ? response()->json(['errors' => $v->errors()], 422)
-                : back()->withErrors($v)->withInput();
-        }
-
-        // 2) قواعد بسيطة على الـ body (بدون أي parsing)
-        $raw = (string) $request->input('body', '');
+        // قواعد بسيطة على الـ body
+        $raw = (string) $request->validated()['body'];
 
         // ممنوع Base64 داخل الصور
         if (stripos($raw, 'src="data:') !== false || stripos($raw, "src='data:") !== false) {
@@ -155,7 +121,7 @@ class NewsController extends Controller
             return $this->validationError('body', 'عدد الصور في المحتوى يتجاوز الحد (8).');
         }
 
-
+        // ممنوع script tags
         if (preg_match('/<\s*script\b/i', $raw)) {
             return $this->validationError('body', 'وسم <script> غير مسموح.');
         }
@@ -179,13 +145,14 @@ class NewsController extends Controller
             $news->pdf_path = $request->file('pdf')->storePublicly('news/pdfs/'.date('Y/m'), 'public');
         }
 
-        // 4) حفظ البيانات
-        $news->title        = (string) $request->input('title');
+        // حفظ البيانات
+        $validated = $request->validated();
+        $news->title        = (string) $validated['title'];
         $news->published_at = $request->date('published_at');
-        $news->status       = (string) $request->input('status');
+        $news->status       = (string) $validated['status'];
         $news->featured     = $request->boolean('featured');
-        $news->body         = $raw; // ← زي ما هو
-        $news->language     = $request->input('language', 'ar'); // Default to Arabic
+        $news->body         = $raw;
+        $news->language     = $validated['language'] ?? 'ar';
 
         if ($request->user()) {
             $news->updated_by = $request->user()->id;

@@ -1,18 +1,29 @@
-{{-- resources/views/admin/site/tenders/create.blade.php --}}
+@php
+    $breadcrumbTitle     = __('admin.tenders.create_title');
+    $breadcrumbParent    = __('admin.tenders.title');
+    $breadcrumbParentUrl = route('admin.tenders.index');
+@endphp
 @extends('layouts.admin')
 @section('title', __('admin.tenders.create_title'))
 
 @section('content')
     <div class="container-fluid p-0">
-        <div class="card border-0 shadow-sm rounded-3 bg-white mb-4">
-            <div class="card-header bg-white border-bottom py-2 px-3 d-flex align-items-center justify-content-between">
-                <div class="d-flex align-items-center gap-1">
-                    <i class="bi bi-plus-circle text-primary fs-6"></i>
-                    <h6 class="mb-0 fw-semibold text-dark-emphasis">{{ __('admin.tenders.create_title') }}</h6>
+        <!-- Header Section -->
+        <div class="card border-0 shadow-sm rounded-4 bg-white mb-4">
+            <div class="card-header bg-gradient-primary text-white border-0 py-2 px-3">
+                <div class="d-flex justify-content-between align-items-center flex-wrap w-100" style="gap: 1rem;">
+                    <div class="d-flex align-items-center gap-2" style="flex: 0 0 auto;">
+                        <div>
+                            <h5 class="mb-0 fw-bold text-white d-flex align-items-center gap-2 flex-wrap" style="font-size: 1.25rem; line-height: 1.3;">
+                                <i class="bi bi-plus-circle"></i>
+                                <span>{{ __('admin.tenders.create_title') }}</span>
+                            </h5>
+                        </div>
+                    </div>
+                    <a href="{{ route('admin.tenders.index') }}" class="btn btn-light btn-sm shadow-sm">
+                        <i class="bi bi-arrow-left me-1"></i>{{ __('admin.tenders.back_to_list') }}
+                    </a>
                 </div>
-                <a href="{{ route('admin.tenders.index') }}" class="btn btn-outline-secondary btn-sm">
-                    <i class="bi bi-arrow-left me-1"></i> {{ __('admin.tenders.back_to_list') }}
-                </a>
             </div>
         </div>
 
@@ -21,64 +32,99 @@
 
             <div class="row g-4">
                 <div class="col-lg-5">
-                    <div class="card border-0 shadow-sm rounded-3 bg-white">
+                    <div class="card border-0 shadow-sm rounded-4 bg-white">
+                        <div class="card-header bg-gradient-primary text-white border-0 py-3 px-4">
+                            <h6 class="mb-0 fw-bold text-white d-flex align-items-center gap-2">
+                                <i class="bi bi-info-circle"></i>{{ __('admin.tenders.form_basic_info') }}
+                            </h6>
+                        </div>
                         <div class="card-body p-4 row g-3">
-
                             <div class="col-md-4">
-                                <label class="form-label">{{ __('admin.tenders.form_mnews_id') }}</label>
-                                <input type="number" name="mnews_id" class="form-control @error('mnews_id') is-invalid @enderror"
-                                       value="{{ old('mnews_id') }}" placeholder="{{ __('admin.tenders.form_example_number') }}">
+                                <label class="form-label fw-semibold text-dark d-flex align-items-center gap-1">
+                                    <i class="bi bi-hash text-primary"></i>{{ __('admin.tenders.form_mnews_id') }}
+                                </label>
+                                <input type="number" name="mnews_id" 
+                                       class="form-control rounded-3 border-0 bg-light @error('mnews_id') is-invalid @enderror"
+                                       style="height: 45px;"
+                                       value="{{ old('mnews_id') }}" 
+                                       placeholder="{{ __('admin.tenders.form_example_number') }}">
                                 @error('mnews_id')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
                             </div>
 
                             <div class="col-md-8">
-                                <label class="form-label">{{ __('admin.tenders.form_column_name_1') }}</label>
-                                <input type="text" name="column_name_1" class="form-control @error('column_name_1') is-invalid @enderror"
-                                       value="{{ old('column_name_1') }}" placeholder="{{ __('admin.tenders.form_column_placeholder') }}">
+                                <label class="form-label fw-semibold text-dark d-flex align-items-center gap-1">
+                                    <i class="bi bi-file-text text-primary"></i>{{ __('admin.tenders.form_column_name_1') }}
+                                </label>
+                                <input type="text" name="column_name_1" 
+                                       class="form-control rounded-3 border-0 bg-light @error('column_name_1') is-invalid @enderror"
+                                       style="height: 45px;"
+                                       value="{{ old('column_name_1') }}" 
+                                       placeholder="{{ __('admin.tenders.form_column_placeholder') }}">
                                 @error('column_name_1')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
                             </div>
 
                             <div class="col-md-6">
-                                <label class="form-label">{{ __('admin.tenders.form_the_date_1') }} <span class="text-muted">{{ __('admin.tenders.form_date_text') }}</span></label>
-                                <input type="text" name="the_date_1" class="form-control @error('the_date_1') is-invalid @enderror"
-                                       value="{{ old('the_date_1') }}" placeholder="{{ __('admin.tenders.form_example_date') }}">
+                                <label class="form-label fw-semibold text-dark d-flex align-items-center gap-1">
+                                    <i class="bi bi-calendar text-primary"></i>{{ __('admin.tenders.form_the_date_1') }} 
+                                    <span class="text-muted small">{{ __('admin.tenders.form_date_text') }}</span>
+                                </label>
+                                <input type="date" name="the_date_1" 
+                                       class="form-control rounded-3 border-0 bg-light @error('the_date_1') is-invalid @enderror"
+                                       style="height: 45px;"
+                                       value="{{ old('the_date_1') }}" 
+                                       placeholder="{{ __('admin.tenders.form_example_date') }}">
                                 @error('the_date_1')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
                             </div>
 
                             <div class="col-md-6">
-                                <label class="form-label">{{ __('admin.tenders.form_coulm_serial') }}</label>
-                                <input type="number" name="coulm_serial" class="form-control @error('coulm_serial') is-invalid @enderror"
-                                       value="{{ old('coulm_serial') }}" placeholder="{{ __('admin.tenders.form_example_number') }}">
+                                <label class="form-label fw-semibold text-dark d-flex align-items-center gap-1">
+                                    <i class="bi bi-123 text-primary"></i>{{ __('admin.tenders.form_coulm_serial') }}
+                                </label>
+                                <input type="number" name="coulm_serial" 
+                                       class="form-control rounded-3 border-0 bg-light @error('coulm_serial') is-invalid @enderror"
+                                       style="height: 45px;"
+                                       value="{{ old('coulm_serial') }}" 
+                                       placeholder="{{ __('admin.tenders.form_example_number') }}">
                                 @error('coulm_serial')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
                             </div>
 
                             <div class="col-md-6">
-                                <label class="form-label">{{ __('admin.tenders.form_event_1') }}</label>
-                                <input type="text" name="event_1" class="form-control @error('event_1') is-invalid @enderror"
-                                       value="{{ old('event_1') }}" placeholder="{{ __('admin.tenders.form_event_placeholder') }}">
+                                <label class="form-label fw-semibold text-dark d-flex align-items-center gap-1">
+                                    <i class="bi bi-calendar-event text-primary"></i>{{ __('admin.tenders.form_event_1') }}
+                                </label>
+                                <input type="text" name="event_1" 
+                                       class="form-control rounded-3 border-0 bg-light @error('event_1') is-invalid @enderror"
+                                       style="height: 45px;"
+                                       value="{{ old('event_1') }}" 
+                                       placeholder="{{ __('admin.tenders.form_event_placeholder') }}">
                                 @error('event_1')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
                             </div>
 
                             <div class="col-md-6">
-                                <label class="form-label">{{ __('admin.tenders.form_the_user_1') }}</label>
-                                <input type="text" name="the_user_1" class="form-control @error('the_user_1') is-invalid @enderror"
-                                       value="{{ old('the_user_1') }}" placeholder="{{ __('admin.tenders.form_example_user') }}">
+                                <label class="form-label fw-semibold text-dark d-flex align-items-center gap-1">
+                                    <i class="bi bi-person text-primary"></i>{{ __('admin.tenders.form_the_user_1') }}
+                                </label>
+                                <input type="text" name="the_user_1" 
+                                       class="form-control rounded-3 border-0 bg-light @error('the_user_1') is-invalid @enderror"
+                                       style="height: 45px;"
+                                       value="{{ old('the_user_1') }}" 
+                                       placeholder="{{ __('admin.tenders.form_example_user') }}">
                                 @error('the_user_1')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
                             </div>
-
                         </div>
                     </div>
                 </div>
 
                 <div class="col-lg-7">
                     {{-- OLD_VALUE_1 --}}
-                    <div class="card border-0 shadow-sm rounded-3 bg-white mb-4">
-                        <div class="card-header bg-white border-bottom py-2 px-3 d-flex align-items-center justify-content-between">
-                            <div class="d-flex align-items-center gap-1">
-                                <i class="bi bi-file-text text-secondary"></i>
-                                <span class="fw-semibold">{{ __('admin.tenders.form_old_value') }}</span>
+                    <div class="card border-0 shadow-sm rounded-4 bg-white mb-4">
+                        <div class="card-header bg-gradient-primary text-white border-0 py-3 px-4">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h6 class="mb-0 fw-bold text-white d-flex align-items-center gap-2">
+                                    <i class="bi bi-file-text"></i>{{ __('admin.tenders.form_old_value') }}
+                                </h6>
+                                <small class="text-white-50">{{ __('admin.tenders.form_html_supported') }}</small>
                             </div>
-                            <small class="text-muted">{{ __('admin.tenders.form_html_supported') }}</small>
                         </div>
                         <div class="card-body p-3">
                             <div class="quill-shell border rounded-3 shadow-sm">
@@ -105,13 +151,14 @@
                     </div>
 
                     {{-- NEW_VALUE_1 --}}
-                    <div class="card border-0 shadow-sm rounded-3 bg-white">
-                        <div class="card-header bg-white border-bottom py-2 px-3 d-flex align-items-center justify-content-between">
-                            <div class="d-flex align-items-center gap-1">
-                                <i class="bi bi-file-text text-success"></i>
-                                <span class="fw-semibold">{{ __('admin.tenders.form_new_value') }}</span>
+                    <div class="card border-0 shadow-sm rounded-4 bg-white">
+                        <div class="card-header bg-gradient-primary text-white border-0 py-3 px-4">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h6 class="mb-0 fw-bold text-white d-flex align-items-center gap-2">
+                                    <i class="bi bi-file-text"></i>{{ __('admin.tenders.form_new_value') }}
+                                </h6>
+                                <small class="text-white-50">{{ __('admin.tenders.form_html_supported') }}</small>
                             </div>
-                            <small class="text-muted">{{ __('admin.tenders.form_html_supported') }}</small>
                         </div>
                         <div class="card-body p-3">
                             <div class="quill-shell border rounded-3 shadow-sm">
@@ -140,17 +187,18 @@
             </div>
 
             <div class="d-flex gap-2 justify-content-end mt-4">
-                <button type="submit" class="btn btn-primary px-4">
-                    <i class="bi bi-check me-1"></i> {{ __('admin.tenders.form_save') }}
+                <button type="submit" class="btn btn-primary px-4 shadow-sm rounded-3 d-flex align-items-center gap-2">
+                    <i class="bi bi-check-lg"></i>{{ __('admin.tenders.form_save') }}
                 </button>
-                <a href="{{ route('admin.tenders.index') }}" class="btn btn-light px-4">{{ __('admin.tenders.form_cancel') }}</a>
+                <a href="{{ route('admin.tenders.index') }}" class="btn btn-outline-secondary px-4 rounded-3">
+                    {{ __('admin.tenders.form_cancel') }}
+                </a>
             </div>
         </form>
     </div>
 @endsection
 
 @push('styles')
-    {{-- نفس أسلوب الاستدعاء المستخدم عندك --}}
     <link rel="stylesheet" href="{{ asset('assets/admin/libs/quill/quill.snow.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/admin/libs/quill/quill.bubble.css') }}">
 @endpush
