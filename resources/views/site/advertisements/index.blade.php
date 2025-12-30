@@ -1,7 +1,11 @@
 @extends('layouts.site')
 
-@section('title', 'الإعلانات والوظائف | كهرباء غزة')
-@section('meta_description', 'أحدث الإعلانات والوظائف في شركة توزيع كهرباء غزة')
+@php
+    $direction = session('direction', 'rtl');
+    $isRtl = $direction === 'rtl';
+@endphp
+@section('title', __('common.ads_page_title_full'))
+@section('meta_description', __('common.ads_page_description'))
 
 @push('styles')
     <style>
@@ -108,122 +112,242 @@
             }
 
             /* تحسين الإعلانات على الموبايل */
-            .ad-thumb {
-                height: 160px !important;
+            .ad-thumb-wrapper {
+                height: 200px !important;
             }
 
-            .ad-card {
-                margin-bottom: 0.8rem;
+            .ad-card-body {
+                padding: 1rem 1.25rem;
             }
 
-            #ads-grid h4 {
-                font-size: 0.85rem !important;
-                margin-top: 0.6rem !important;
-                line-height: 1.4 !important;
-                padding: 0 0.5rem;
+            .ad-title {
+                font-size: 0.95rem !important;
+                min-height: 2.85rem;
+                margin-bottom: 0.5rem !important;
             }
 
-            #ads-grid .text-muted {
-                font-size: 0.7rem !important;
-                margin-bottom: 0.4rem !important;
+            .ad-date {
+                font-size: 0.8rem !important;
+                margin-bottom: 0.75rem !important;
             }
 
-            #ads-grid .btn-sm {
-                font-size: 0.7rem !important;
-                padding: 0.3rem 0.6rem !important;
-            }
-
-            .col-lg-4.col-md-6.col-sm-6.col-12 {
-                padding-left: 0.4rem !important;
-                padding-right: 0.4rem !important;
-                margin-bottom: 0.8rem !important;
+            .ad-pdf-btn {
+                font-size: 0.75rem !important;
+                padding: 0.4rem 0.85rem !important;
             }
 
             #ads-grid {
-                row-gap: 0.5rem !important;
+                row-gap: 1rem !important;
             }
         }
 
-        /* تصميم الكارد */
+        /* تصميم الكارد المحسّن */
+        .ad-card-wrapper {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .ad-card-link {
+            display: block;
+            height: 100%;
+            text-decoration: none;
+            color: inherit;
+        }
+
         .ad-card {
-            transition: all .3s ease;
-            box-shadow: 0 2px 8px rgba(0,0,0,.1);
-            border-radius: .75rem;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            border-radius: 1rem;
             overflow: hidden;
             background: #fff;
-            border: 1px solid #f0f0f0;
+            border: 1px solid rgba(0, 0, 0, 0.06);
             font-family: 'Cairo', 'Tajawal', 'Segoe UI', sans-serif;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            position: relative;
         }
+
+        .ad-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #ff6b35, #1a5490, #ff6b35);
+            background-size: 200% 100%;
+            animation: gradientMove 3s linear infinite;
+            z-index: 1;
+        }
+
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 200% 50%; }
+        }
+
         .ad-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 8px 20px rgba(220, 53, 69, 0.2);
-            border-color: #dc3545;
+            transform: translateY(-12px);
+            box-shadow: 0 20px 40px rgba(255, 107, 53, 0.25);
+            border-color: rgba(255, 107, 53, 0.3);
         }
-        .ad-thumb {
+
+        .ad-thumb-wrapper {
+            position: relative;
             width: 100%;
             height: 280px;
-            object-fit: cover;
-            transition: transform .4s ease;
-            display: block;
-            transform: scale(1.08);
+            overflow: hidden;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
         }
+
+        .ad-thumb {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: block;
+        }
+
         .ad-card:hover .ad-thumb {
-            transform: scale(1.13);
+            transform: scale(1.15);
+        }
+
+        .ad-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to top, rgba(26, 84, 144, 0.85) 0%, transparent 100%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            padding: 1.5rem;
+        }
+
+        .ad-card:hover .ad-overlay {
+            opacity: 1;
+        }
+
+        .ad-overlay-content {
+            color: white;
+            text-align: center;
+            font-weight: 600;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transform: translateY(10px);
+            transition: transform 0.4s ease;
+        }
+
+        .ad-card:hover .ad-overlay-content {
+            transform: translateY(0);
+        }
+
+        .ad-overlay-content i {
+            font-size: 1.2rem;
+        }
+
+        .ad-card-body {
+            padding: 1.25rem 1.5rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .ad-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #1a202c;
+            margin: 0 0 0.75rem 0;
+            line-height: 1.5;
+            text-align: center;
+            overflow-wrap: break-word;
+            word-wrap: break-word;
+            min-height: 3.3rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .ad-date {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            color: #6c757d;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+
+        .ad-date i {
+            color: #ff6b35;
+            font-size: 1.1rem;
+        }
+
+        .ad-pdf-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: linear-gradient(135deg, #ff6b35 0%, #ff8c00 100%);
+            color: white;
+            border-radius: 0.5rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            margin: 0 auto;
+            box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
+        }
+
+        .ad-pdf-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 107, 53, 0.4);
+            color: white;
+        }
+
+        .ad-pdf-btn i {
+            font-size: 1.1rem;
+        }
+
+        .empty-state {
+            padding: 3rem 1rem;
+        }
+
+        .empty-state i {
+            font-size: 5rem;
+            color: #dee2e6;
+            display: block;
         }
 
         /* تكبير الكاردات على الديسكتوب */
         @media (min-width: 992px) {
-            .ad-thumb {
+            .ad-thumb-wrapper {
                 height: 320px !important;
             }
-            #ads-grid h4 {
-                font-size: 1.15rem !important;
-                margin-top: 1.2rem !important;
-                margin-bottom: 0.8rem !important;
-                line-height: 1.5 !important;
+            .ad-title {
+                font-size: 1.2rem !important;
+                min-height: 3.6rem;
             }
-            #ads-grid .text-muted {
+            .ad-date {
                 font-size: 0.95rem !important;
-                margin-bottom: 0.8rem !important;
             }
-            #ads-grid .btn-sm {
-                font-size: 0.85rem !important;
-                padding: 0.5rem 1rem !important;
-            }
-            .ad-card {
-                margin-bottom: 2rem;
-            }
-            .col-lg-4 {
-                padding-left: 0.75rem !important;
-                padding-right: 0.75rem !important;
+            .ad-card-body {
+                padding: 1.5rem 1.75rem;
             }
             #ads-grid {
-                row-gap: 1.5rem !important;
+                row-gap: 2rem !important;
             }
         }
 
-        /* نصوص موحدة */
-        #ads-grid h4 {
-            text-align: center !important;
-            font-weight: 600 !important;
-            overflow-wrap: break-word !important;
-            word-wrap: break-word !important;
-            font-family: 'Cairo', 'Tajawal', 'Segoe UI', sans-serif !important;
-            color: #1a202c !important;
-        }
-
-        #ads-grid .text-muted {
-            text-align: center !important;
-            font-family: 'Cairo', 'Tajawal', 'Segoe UI', sans-serif !important;
-        }
-
-
-        /* تنسيق المحتوى النصي */
-        #ads-grid > div {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
 
         .ads-loading {
             position: absolute; inset: 0; background: rgba(255,255,255,.8);
@@ -242,11 +366,10 @@
 
         #ads-wrapper {
             position: relative;
-            min-height: 1400px !important; /* ارتفاع ثابت كافي لـ 6 إعلانات */
         }
 
         #ads-grid {
-            min-height: 1350px !important; /* ارتفاع ثابت للـ grid */
+            min-height: 600px;
         }
 
         #pagination-wrapper {
@@ -332,20 +455,8 @@
                 border-width: 1.5px;
             }
             #pagination-wrapper {
-                margin-top: 1.5rem !important;
+                margin-top: 2rem !important;
                 margin-bottom: 3rem !important;
-            }
-            /* تثبيت ارتفاع ثابت على الموبايل */
-            #ads-wrapper {
-                min-height: 2000px !important;
-            }
-            #ads-grid {
-                min-height: 1950px !important;
-            }
-
-            /* تثبيت الـ pagination */
-            #pagination-wrapper {
-                position: relative !important;
             }
         }
     </style>
@@ -358,11 +469,11 @@
         <div class="container relative z-2">
             <div class="row justify-content-center text-center">
                 <div class="col-12">
-                    <h1 class="split mb-3 fw-bold d-block w-100">الإعلانات والوظائف</h1>
+                    <h1 class="split mb-3 fw-bold d-block w-100">{{ __('common.ads_page_title') }}</h1>
                     <div class="w-100 mt-2">
                         <ul class="crumb">
-                            <li><a href="{{ url('/') }}">الرئيسية</a></li>
-                            <li class="active">الإعلانات والوظائف</li>
+                            <li><a href="{{ url('/') }}">{{ __('common.home') }}</a></li>
+                            <li class="active">{{ __('common.ads_page_title') }}</li>
                         </ul>
                     </div>
                 </div>

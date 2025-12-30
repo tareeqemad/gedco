@@ -2104,6 +2104,11 @@ footer .col-lg-3 h2 {
     line-height: 1.75;
     font-size: .95rem;
     margin: 0;
+    text-align: justify !important;
+    text-justify: inter-word !important;
+    text-align-last: right !important;
+    word-spacing: normal !important;
+    letter-spacing: normal !important;
 }
 
 #section-why-choose-us .icon-wrapper {
@@ -2206,7 +2211,7 @@ footer .col-lg-3 h2 {
 #who-us .col-lg-6.text-end {
     display: flex !important;
     flex-direction: column !important;
-    justify-content: space-between !important;
+    justify-content: flex-start !important;
 }
 
 @media (max-width: 767px) {

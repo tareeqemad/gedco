@@ -1,7 +1,13 @@
 @extends('layouts.site')
 
-@section('title', $ad->TITLE)
-@section('meta_description', \Illuminate\Support\Str::limit(strip_tags($ad->BODY), 150))
+@php
+    $direction = session('direction', 'rtl');
+    $isRtl = $direction === 'rtl';
+    $title = $isRtl ? ($ad->TITLE ?: $ad->TITLE_E) : ($ad->TITLE_E ?: $ad->TITLE);
+    $body = $isRtl ? ($ad->BODY ?: $ad->BODY_E) : ($ad->BODY_E ?: $ad->BODY);
+@endphp
+@section('title', $title . ' | ' . __('common.ads_page_title'))
+@section('meta_description', \Illuminate\Support\Str::limit(strip_tags($body), 150))
 
 @push('styles')
     <style>
@@ -42,13 +48,34 @@
         .content-preview p {
             margin-bottom: 1.5rem !important;
             text-align: justify !important;
+            text-justify: inter-word !important;
             font-size: 1.15rem !important;
             line-height: 2.1 !important;
+            word-spacing: normal !important;
+            letter-spacing: normal !important;
         }
         .content-preview span,
         .content-preview div {
             font-size: 1.15rem !important;
             line-height: 2.1 !important;
+            text-align: justify !important;
+            text-justify: inter-word !important;
+        }
+        
+        /* دعم أفضل للتبرير في RTL */
+        [dir="rtl"] .content-preview p,
+        [dir="rtl"] .content-preview span,
+        [dir="rtl"] .content-preview div {
+            text-align: justify !important;
+            text-align-last: right !important;
+        }
+        
+        /* دعم أفضل للتبرير في LTR */
+        [dir="ltr"] .content-preview p,
+        [dir="ltr"] .content-preview span,
+        [dir="ltr"] .content-preview div {
+            text-align: justify !important;
+            text-align-last: left !important;
         }
         .content-preview ul, .content-preview ol {
             list-style: none;
@@ -266,9 +293,20 @@
             h1 { font-size: 1.6rem !important; }
             .content-preview { font-size: 1.05rem !important; line-height: 2 !important; }
             .content-preview * { font-size: 1.05rem !important; }
-            .content-preview p { margin-bottom: 1.2rem !important; font-size: 1.05rem !important; line-height: 2 !important; }
+            .content-preview p { 
+                margin-bottom: 1.2rem !important; 
+                font-size: 1.05rem !important; 
+                line-height: 2 !important;
+                text-align: justify !important;
+                text-justify: inter-word !important;
+            }
             .content-preview span,
-            .content-preview div { font-size: 1.05rem !important; line-height: 2 !important; }
+            .content-preview div { 
+                font-size: 1.05rem !important; 
+                line-height: 2 !important;
+                text-align: justify !important;
+                text-justify: inter-word !important;
+            }
             .content-preview li {
                 padding: 0.7rem 1rem;
                 padding-right: 2.5rem;
@@ -292,12 +330,12 @@
         <div class="container relative z-2">
             <div class="row justify-content-center text-center">
                 <div class="col-12">
-                    <h1 class="split mb-3 fw-bold d-block w-100">الإعلانات والوظائف</h1>
+                    <h1 class="split mb-3 fw-bold d-block w-100">{{ __('common.ads_page_title') }}</h1>
                     <div class="w-100 mt-2">
                         <ul class="crumb">
-                            <li><a href="{{ url('/') }}">الرئيسية</a></li>
-                            <li><a href="{{ route('site.advertisements.index') }}">الإعلانات والوظائف</a></li>
-                            <li class="active">التفاصيل</li>
+                            <li><a href="{{ url('/') }}">{{ __('common.home') }}</a></li>
+                            <li><a href="{{ route('site.advertisements.index') }}">{{ __('common.ads_page_title') }}</a></li>
+                            <li class="active">{{ __('common.ads_details') }}</li>
                         </ul>
                     </div>
                 </div>
@@ -319,7 +357,7 @@
                         <!-- العنوان الخرافي -->
                         <div class="mb-4 text-center" style="position:relative;">
                             <!-- نص إعلان رسمي -->
-                            <div class="official-label">إعلان رسمي</div>
+                            <div class="official-label">{{ __('common.ads_official_announcement') }}</div>
 
                             <h1 class="fw-bold mb-3" style="
                                 color: #1a5490;
@@ -335,7 +373,7 @@
                                 animation: titleFade 1s ease-out;
                                 letter-spacing: -0.5px;
                             ">
-                                {{ $ad->TITLE }}
+                                {{ $isRtl ? ($ad->TITLE ?: $ad->TITLE_E) : ($ad->TITLE_E ?: $ad->TITLE) }}
                             </h1>
 
                             <div class="d-inline-flex align-items-center gap-2 px-4 py-2 rounded-pill" style="
@@ -347,7 +385,13 @@
                                 box-shadow: 0 4px 15px rgba(255,107,53,.15);
                             ">
                                 <i class="ri-calendar-event-fill" style="color:#ff6b35; font-size:1rem;"></i>
-                                <span>{{ $ad->DATE_NEWS?->timezone('Asia/Hebron')->format('d') }} {{ $ad->DATE_NEWS?->timezone('Asia/Hebron')->locale('ar')->translatedFormat('F') }} {{ $ad->DATE_NEWS?->timezone('Asia/Hebron')->format('Y') }}</span>
+                                <span>
+                                    @php
+                                        $locale = $isRtl ? 'ar' : 'en';
+                                        $dateFormat = $isRtl ? 'd F Y' : 'F d, Y';
+                                    @endphp
+                                    {{ $ad->DATE_NEWS?->timezone('Asia/Hebron')->locale($locale)->translatedFormat($dateFormat) }}
+                                </span>
                             </div>
                         </div>
 
@@ -367,12 +411,15 @@
                             }
                         </style>
 
-                        @if($ad->BODY)
+                        @php
+                            $content = $isRtl ? ($ad->BODY ?: $ad->BODY_E) : ($ad->BODY_E ?: $ad->BODY);
+                        @endphp
+                        @if($content)
                             <div class="content-preview">
-                                {!! $ad->BODY !!}
+                                {!! $content !!}
                             </div>
                         @else
-                            <p class="text-center text-muted py-4 fst-italic">لا يوجد محتوى نصي</p>
+                            <p class="text-center text-muted py-4 fst-italic">{{ __('common.ads_no_content') }}</p>
                         @endif
                     </div>
                 </div>
@@ -382,7 +429,7 @@
             <div class="col-lg-4">
                 <div class="pdf-card">
                     <div class="pdf-header">
-                        <span><i class="ri-file-pdf-line me-2"></i> الملف الرسمي</span>
+                        <span><i class="ri-file-pdf-line me-2"></i> {{ __('common.ads_official_file') }}</span>
                         @if($ad->PDF)
                             <a href="{{ Storage::url($ad->PDF) }}" download class="text-white">
                                 <i class="ri-download-line"></i>
@@ -404,7 +451,7 @@
                         @else
                             <div class="text-center py-5 text-muted">
                                 <i class="ri-file-close-line" style="font-size: 3rem;"></i>
-                                <p class="mt-3 mb-0">لا يوجد ملف PDF</p>
+                                <p class="mt-3 mb-0">{{ __('common.ads_no_pdf') }}</p>
                             </div>
                         @endif
                     </div>
@@ -413,10 +460,10 @@
                 @if($ad->PDF)
                     <div class="text-center mt-3">
                         <a href="{{ Storage::url($ad->PDF) }}" target="_blank" class="btn btn-outline-primary btn-sm me-2">
-                            <i class="ri-eye-line"></i> عرض
+                            <i class="ri-eye-line"></i> {{ __('common.ads_view') }}
                         </a>
                         <a href="{{ Storage::url($ad->PDF) }}" download class="btn btn-success btn-sm">
-                            <i class="ri-download-line"></i> تحميل
+                            <i class="ri-download-line"></i> {{ __('common.ads_download') }}
                         </a>
                     </div>
                 @endif

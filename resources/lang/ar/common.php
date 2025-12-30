@@ -61,6 +61,21 @@ return [
     'news_official_news' => 'خبر رسمي',
     'news_no_news' => 'لا توجد أخبار منشورة حالياً.',
     'news_date_not_specified' => 'غير محدد',
+    
+    // Advertisements Page
+    'ads_page_title' => 'الإعلانات والوظائف',
+    'ads_page_title_full' => 'الإعلانات والوظائف | كهرباء غزة',
+    'ads_page_description' => 'أحدث الإعلانات والوظائف في شركة توزيع كهرباء غزة',
+    'ads_view_details' => 'عرض التفاصيل',
+    'ads_download_pdf' => 'تحميل PDF',
+    'ads_no_ads' => 'لا توجد إعلانات حاليًا',
+    'ads_official_announcement' => 'إعلان رسمي',
+    'ads_no_content' => 'لا يوجد محتوى نصي',
+    'ads_no_pdf' => 'لا يوجد ملف PDF',
+    'ads_view' => 'عرض',
+    'ads_download' => 'تحميل',
+    'ads_details' => 'التفاصيل',
+    'ads_official_file' => 'الملف الرسمي',
 ];
 
 

@@ -61,6 +61,21 @@ return [
     'news_official_news' => 'Official News',
     'news_no_news' => 'No news published currently.',
     'news_date_not_specified' => 'Not specified',
+    
+    // Advertisements Page
+    'ads_page_title' => 'Advertisements & Jobs',
+    'ads_page_title_full' => 'Advertisements & Jobs | Gaza Electricity',
+    'ads_page_description' => 'Latest advertisements and jobs at Gaza Electricity Distribution Company',
+    'ads_view_details' => 'View Details',
+    'ads_download_pdf' => 'Download PDF',
+    'ads_no_ads' => 'No advertisements available',
+    'ads_official_announcement' => 'Official Announcement',
+    'ads_no_content' => 'No content available',
+    'ads_no_pdf' => 'No PDF file available',
+    'ads_view' => 'View',
+    'ads_download' => 'Download',
+    'ads_details' => 'Details',
+    'ads_official_file' => 'Official File',
 ];
 
 

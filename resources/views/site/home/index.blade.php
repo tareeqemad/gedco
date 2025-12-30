@@ -85,10 +85,44 @@
 
         /* About section text alignment */
         .about-text {
-            text-align: justify;      /* تمطيط السطر ليلمس الجانبين */
-            text-indent: 0;          /* بدون إزاحة لأول سطر */
-            line-height: 1.9;        /* ارتفاع سطر مريح */
-            text-align-last: start;  /* آخر سطر طبيعي (يمين في العربي، يسار في الإنجليزي) */
+            text-align: justify !important;      /* تمطيط السطر ليلمس الجانبين */
+            text-justify: inter-word;            /* تبرير النص بين الكلمات */
+            text-indent: 0;                     /* بدون إزاحة لأول سطر */
+            line-height: 1.9;                   /* ارتفاع سطر مريح */
+            word-spacing: normal;                /* مسافات طبيعية بين الكلمات */
+            letter-spacing: normal;              /* مسافات طبيعية بين الأحرف */
+        }
+        
+        /* دعم أفضل للتبرير في RTL */
+        [dir="rtl"] .about-text {
+            text-align: justify !important;
+            text-align-last: right;              /* آخر سطر يمين في العربي */
+        }
+        
+        /* دعم أفضل للتبرير في LTR */
+        [dir="ltr"] .about-text {
+            text-align: justify !important;
+            text-align-last: left;               /* آخر سطر يسار في الإنجليزي */
+        }
+        
+        /* تبرير النص في feature boxes - Why Choose Us */
+        #section-why-choose-us .feature-box p {
+            text-align: justify !important;
+            text-justify: inter-word !important;
+            word-spacing: normal !important;
+            letter-spacing: normal !important;
+        }
+        
+        /* دعم أفضل للتبرير في RTL */
+        [dir="rtl"] #section-why-choose-us .feature-box p {
+            text-align: justify !important;
+            text-align-last: right !important;
+        }
+        
+        /* دعم أفضل للتبرير في LTR */
+        [dir="ltr"] #section-why-choose-us .feature-box p {
+            text-align: justify !important;
+            text-align-last: left !important;
         }
 
         @media (max-width: 575.98px) {
@@ -198,17 +232,17 @@
 
 
         {{-- ========= About ========= --}}
-        <section class="relative py-5" id="who-us" dir="{{ session('direction', 'rtl') }}">
+        <section class="relative py-4" id="who-us" dir="{{ session('direction', 'rtl') }}">
             <div class="container">
                 @php
                     $currentDir = session('direction', 'rtl');
                     $isRtl = $currentDir === 'rtl';
                 @endphp
-                <div class="row align-items-start g-4">
+                <div class="row align-items-start g-3">
 
                     <!-- العمود الأول: النص -->
                     <div class="col-lg-6 {{ $isRtl ? 'text-end' : 'text-start' }}">
-                        <div class="d-flex align-items-center {{ $isRtl ? 'justify-content-end' : 'justify-content-start' }} mb-3">
+                        <div class="d-flex align-items-center {{ $isRtl ? 'justify-content-end' : 'justify-content-start' }} mb-2">
                             <span class="badge bg-orange text-white px-3 py-2 fs-5 shadow-sm">{{ __('common.about_us') }}</span>
                         </div>
 
@@ -230,24 +264,24 @@
                             }
                         @endphp
 
-                        <h2 class="mb-1 fw-bold text-orange">
+                        <h2 class="mb-2 fw-bold text-orange">
                             {{ $displayTitle }}
                         </h2>
 
                         @if(!empty($displaySubtitle))
-                            <h3 class="mb-2 text-orange fw-semibold fs-5">
+                            <h3 class="mb-3 text-orange fw-semibold fs-5">
                                 {{ $displaySubtitle }}
                             </h3>
                         @endif
 
                         @if(!empty($displayParagraph1))
-                            <p class="text-muted about-text mb-2">
+                            <p class="text-muted about-text mb-3">
                                 {{ $displayParagraph1 }}
                             </p>
                         @endif
 
                         @if(!empty($displayParagraph2))
-                            <p class="text-muted about-text mb-0">
+                            <p class="text-muted about-text mb-3">
                                 {{ $displayParagraph2 }}
                             </p>
                         @endif
@@ -267,7 +301,7 @@
                         @endphp
 
                         @if(!empty($features) && (count($features[0] ?? []) || count($features[1] ?? [])))
-                            <div class="row g-3">
+                            <div class="row g-3 mt-2">
                                 <div class="col-md-6">
                                     <ul class="ul-check m-0">
                                         @foreach($features[0] ?? [] as $item)
