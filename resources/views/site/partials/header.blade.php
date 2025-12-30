@@ -53,7 +53,7 @@
                             <li>
                                 <a class="menu-item" href="#services">{{ __('common.services') }}</a>
                                 <ul>
-                                    <li><a href="https://eservices.gedco.ps/" target="_blank">{{ __('common.e_services') }}</a></li>
+                                    <li><a href="#" class="text-muted" style="cursor: default;">{{ __('common.e_services') }}</a></li>
                                     <li><a href="#">{{ __('common.specs') }}</a></li>
                                 </ul>
                             </li>
@@ -62,20 +62,19 @@
                             <li>
                                 <a class="menu-item" href="#">{{ __('common.company') }}</a>
                                 <ul>
-                                    <li><a href="#who-us">{{ __('common.about_us') }}</a></li>
-                                    <li><a href="#section-why-choose-us">{{ __('common.why_choose') }}</a></li>
+                                    <li><a href="{{ route('site.home') }}#who-us">{{ __('common.about_us') }}</a></li>
+                                    <li><a href="{{ route('site.home') }}#section-why-choose-us">{{ __('common.why_choose') }}</a></li>
                                     <li><a href="{{route('company.general-manager-message')}}">{{ __('common.gm_message') }}</a></li>
                                     <li><a href="https://www.gedcoboard.com/" target="_blank" rel="noopener">{{ __('common.board') }}</a></li>
 
                                 </ul>
                             </li>
                             <li><a class="menu-item" href="{{ route('site.news') }}">{{ __('common.news') }}</a></li>
+                            {{-- إعلانات الشركة كبند واحد بدون قائمة فرعية --}}
                             <li>
-                                <a class="menu-item" href="#">{{ __('common.advertisements') }}</a>
-                                <ul>
-                                    <li><a href="{{ route('site.advertisements.index') }}">{{ __('common.jobs') }}</a></li>
-                                    <li><a href="{{ route('site.tenders') }}">{{ __('common.tenders') }}</a></li>
-                                </ul>
+                                <a class="menu-item" href="{{ route('site.advertisements.index') }}">
+                                    {{ __('common.jobs') }}
+                                </a>
                             </li>
 
                             <li>
@@ -138,7 +137,7 @@
                                 </div>
                             </div>
                             
-                            {{-- Language Dropdown - في أقصى اليمين --}}
+                            {{-- Language Toggle - في أقصى اليمين --}}
                             <div class="language-dropdown-wrapper d-none d-lg-inline-block">
                                 <div class="language-dropdown">
                                     <button 
@@ -146,14 +145,15 @@
                                         class="language-dropdown-toggle" 
                                         id="language-dropdown-toggle"
                                     >
-                                        <img src="{{ $isRtl ? $palestineFlag : $usFlag }}" alt="{{ $isRtl ? 'العربية' : 'English' }}" class="language-flag-icon">
-                                        <span>{{ $isRtl ? __('common.arabic') : __('common.english') }}</span>
+                                        {{-- عكس الأعلام: في العربي يظهر العلم الأمريكي، في الإنجليزي يظهر علم فلسطين --}}
+                                        <img src="{{ $isRtl ? $usFlag : $palestineFlag }}" alt="{{ $isRtl ? 'English' : 'العربية' }}" class="language-flag-icon">
+                                        <span>{{ $isRtl ? __('common.english') : __('common.arabic') }}</span>
                                         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                                             <polyline points="6 9 12 15 18 9"></polyline>
                                         </svg>
                                     </button>
                                     <div class="language-dropdown-menu" id="language-dropdown-menu">
-                                        <form action="{{ route('direction.set', 'rtl') }}" method="POST">
+                                        <form id="lang-form-rtl" action="{{ route('direction.set', 'rtl') }}" method="POST">
                                             @csrf
                                             <button 
                                                 type="submit"
@@ -168,7 +168,7 @@
                                                 @endif
                                             </button>
                                         </form>
-                                        <form action="{{ route('direction.set', 'ltr') }}" method="POST">
+                                        <form id="lang-form-ltr" action="{{ route('direction.set', 'ltr') }}" method="POST">
                                             @csrf
                                             <button 
                                                 type="submit"
@@ -190,18 +190,18 @@
                             <script>
                                 document.addEventListener('DOMContentLoaded', function() {
                                     const toggle = document.getElementById('language-dropdown-toggle');
-                                    const menu = document.getElementById('language-dropdown-menu');
-                                    const dropdown = document.querySelector('.language-dropdown');
-                                    
-                                    if (toggle && menu) {
+                                    const formRtl = document.getElementById('lang-form-rtl');
+                                    const formLtr = document.getElementById('lang-form-ltr');
+
+                                    if (toggle && formRtl && formLtr) {
                                         toggle.addEventListener('click', function(e) {
-                                            e.stopPropagation();
-                                            dropdown.classList.toggle('open');
-                                        });
-                                        
-                                        document.addEventListener('click', function(e) {
-                                            if (!dropdown.contains(e.target)) {
-                                                dropdown.classList.remove('open');
+                                            e.preventDefault();
+                                            // اعتمد على اتجاه الصفحة الحالي لتحديد الوجهة
+                                            const dir = document.documentElement.getAttribute('dir') || '{{ $currentDir }}';
+                                            if (dir === 'rtl') {
+                                                formLtr.submit();
+                                            } else {
+                                                formRtl.submit();
                                             }
                                         });
                                     }

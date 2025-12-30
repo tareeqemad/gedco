@@ -9,16 +9,16 @@ return [
     // Menu Items
     'home' => 'Home',
     'services' => 'Services',
-    'e_services' => 'E-Services',
+    'e_services' => 'E-Services (Coming Soon)',
     'specs' => 'Specifications',
     'company' => 'Company',
     'about_us' => 'About Us',
     'why_choose' => 'Why Choose Us',
-    'gm_message' => 'General Manager Message',
+    'gm_message' => 'Management Message',
     'board' => 'Board of Directors',
     'news' => 'News',
     'advertisements' => 'Advertisements',
-    'jobs' => 'Jobs & Announcements',
+    'jobs' => 'Company Announcements',
     'tenders' => 'Tenders',
     'contact' => 'Contact Us',
     
@@ -29,7 +29,7 @@ return [
     'search' => 'Search',
     
     // Services
-    'e_services_full' => 'E-Services',
+    'e_services_full' => 'E-Services (Coming Soon)',
     'specs_full' => 'Specifications & Standards',
     'donate' => 'Donate',
     'job_announcements' => 'Job Announcements',

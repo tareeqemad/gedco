@@ -38,7 +38,64 @@
             }
         }
 
+        /* === Slider Pin Button === */
+        .slider-pin-toggle {
+            position: absolute;
+            bottom: 24px;
+            inset-inline-start: 24px; /* supports RTL/LTR */
+            z-index: 30;
+            width: 38px;
+            height: 38px;
+            border-radius: 999px;
+            background: rgba(0, 0, 0, 0.45);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            backdrop-filter: blur(6px);
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+        }
+
+        .slider-pin-toggle i {
+            font-size: 1rem;
+            color: #fff;
+        }
+
+        .slider-pin-toggle:hover {
+            background: rgba(0, 0, 0, 0.75);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+        }
+
+        .slider-pin-toggle.is-pinned {
+            background: #ffc107;
+            border-color: #ffe58f;
+            box-shadow: 0 8px 22px rgba(255, 193, 7, 0.45);
+        }
+
+        .slider-pin-toggle.is-pinned i {
+            color: #212529;
+        }
+
+        .slider-pin-toggle span {
+            display: none;
+        }
+
+        /* About section text alignment */
+        .about-text {
+            text-align: justify;      /* تمطيط السطر ليلمس الجانبين */
+            text-indent: 0;          /* بدون إزاحة لأول سطر */
+            line-height: 1.9;        /* ارتفاع سطر مريح */
+            text-align-last: start;  /* آخر سطر طبيعي (يمين في العربي، يسار في الإنجليزي) */
+        }
+
         @media (max-width: 575.98px) {
+            .slider-pin-toggle {
+                bottom: 16px;
+                inset-inline-start: 16px;
+            }
             .sw-text-wrapper {
                 padding: 0 1rem;
             }
@@ -60,8 +117,18 @@
                 <div class="swiper">
                     <div class="swiper-wrapper">
                         @foreach($sliders as $s)
-                            <div class="swiper-slide">
+                            <div class="swiper-slide" data-slider-id="{{ $s->id }}">
                                 <div class="swiper-inner" data-bgimage="url('{{ $s->bg_image_url }}')">
+                                    <button
+                                        type="button"
+                                        class="slider-pin-toggle"
+                                        data-slider-id="{{ $s->id }}"
+                                        aria-pressed="false"
+                                        aria-label="Pin this slide"
+                                        title="Pin this slide"
+                                    >
+                                        <i class="bi bi-pin-angle"></i>
+                                    </button>
                                     <div class="sw-caption">
                                         <div class="container">
                                             <div class="row gx-5 align-items-center justify-content-center text-center">
@@ -174,13 +241,13 @@
                         @endif
 
                         @if(!empty($displayParagraph1))
-                            <p class="text-muted mb-1">
+                            <p class="text-muted about-text mb-2">
                                 {{ $displayParagraph1 }}
                             </p>
                         @endif
 
                         @if(!empty($displayParagraph2))
-                            <p class="text-muted mb-2">
+                            <p class="text-muted about-text mb-0">
                                 {{ $displayParagraph2 }}
                             </p>
                         @endif
@@ -399,19 +466,18 @@
                 <div style="display: flex; flex-wrap: wrap; gap: 1.5rem;">
                     <!-- خدمة 1 -->
                     <div style="flex: 1 1 250px; max-width: 300px;">
-                        <a href="http://213.244.76.228/bill" target="_blank" style="text-decoration: none; color: inherit; display: block;">
-                            <div class="service-card" style="text-align: center; padding: 1.5rem; border-radius: 1rem; height: 100%; display: flex; flex-direction: column; justify-content: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1); background: white; border: 1px solid #eee; transition: all 0.35s ease;"
-                                 data-aos="fade-up" data-aos-delay="100">
+                        {{-- الخدمات الإلكترونية (قريباً) - بدون رابط حالياً --}}
+                        <div class="service-card" style="text-align: center; padding: 1.5rem; border-radius: 1rem; height: 100%; display: flex; flex-direction: column; justify-content: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1); background: white; border: 1px solid #eee; transition: all 0.35s ease;"
+                             data-aos="fade-up" data-aos-delay="100">
 
-                                @php
-                                    $currentDir = session('direction', 'rtl');
-                                    $isRtl = $currentDir === 'rtl';
-                                @endphp
-                                <img src="{{ asset('assets/site/images/services/s1.png') }}"
-                                     style="width: 70px; height: 70px; margin: 0 auto 1rem; object-fit: contain;" alt="{{ __('common.e_services_full') }}">
-                                <h4 style="margin: 0; font-weight: 700; color: #212529;" class="text-center">{{ __('common.e_services_full') }}</h4>
-                            </div>
-                        </a>
+                            @php
+                                $currentDir = session('direction', 'rtl');
+                                $isRtl = $currentDir === 'rtl';
+                            @endphp
+                            <img src="{{ asset('assets/site/images/services/s1.png') }}"
+                                 style="width: 70px; height: 70px; margin: 0 auto 1rem; object-fit: contain;" alt="{{ __('common.e_services_full') }}">
+                            <h4 style="margin: 0; font-weight: 700; color: #212529;" class="text-center">{{ __('common.e_services_full') }}</h4>
+                        </div>
                     </div>
 
                     <!-- خدمة 2 -->
@@ -577,6 +643,25 @@
 @push('scripts')
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // Smooth scroll to hash anchor when coming from another page
+            const hash = window.location.hash;
+            if (hash) {
+                const targetElement = document.querySelector(hash);
+                if (targetElement) {
+                    // Wait for page to fully load, then scroll
+                    setTimeout(() => {
+                        const headerOffset = 80; // Offset for fixed header if exists
+                        const elementPosition = targetElement.getBoundingClientRect().top;
+                        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+                        window.scrollTo({
+                            top: offsetPosition,
+                            behavior: 'smooth'
+                        });
+                    }, 100);
+                }
+            }
+
             const trigger = document.querySelector('.video-trigger');
             const popup = document.getElementById('video-popup');
             const iframe = document.getElementById('youtube-player');
