@@ -62,38 +62,63 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'name'       => 'required|string|max:255',
-            'email'      => 'required|email|unique:users',
-            'password'   => 'required|min:8',
-            'role_id'    => 'nullable|exists:roles,id',
-            'permissions'=> 'nullable|array',
-            'permissions.*' => 'integer|exists:permissions,id',
-        ]);
+        try {
+            $request->validate([
+                'name'       => 'required|string|max:255',
+                'email'      => 'required|email|unique:users',
+                'password'   => 'required|min:8',
+                'role_id'    => 'nullable|exists:roles,id',
+                'permissions'=> 'nullable|array',
+                'permissions.*' => 'integer|exists:permissions,id',
+            ]);
 
-        $user = User::create([
-            'name'     => $request->name,
-            'email'    => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
+            $user = User::create([
+                'name'     => $request->name,
+                'email'    => $request->email,
+                'password' => Hash::make($request->password),
+                'is_admin' => true, // جميع المستخدمين المنشأين من لوحة التحكم هم أدمن
+            ]);
 
-        // حفظ كلمة المرور مؤقتاً (مشفرة) للـ super-admin فقط
-        if (auth()->user()->hasRole('super-admin')) {
-            UserTemporaryPassword::storeForUser($user->id, $request->password, 24); // صالحة لمدة 24 ساعة
+            // التحقق من أن المستخدم تم إنشاؤه بنجاح
+            if (!$user || !$user->id) {
+                return back()
+                    ->withInput()
+                    ->withErrors(['error' => 'فشل إنشاء المستخدم. يرجى المحاولة مرة أخرى.']);
+            }
+
+            // حفظ كلمة المرور مؤقتاً (مشفرة) للـ super-admin فقط
+            if (auth()->user()->hasRole('super-admin')) {
+                UserTemporaryPassword::storeForUser($user->id, $request->password, 24); // صالحة لمدة 24 ساعة
+            }
+
+            // === تعيين الدور ===
+            if ($request->filled('role_id')) {
+                $role = Role::find($request->role_id);
+                if ($role) {
+                    $user->syncRoles([$role->name]);
+                }
+            }
+
+            // === تعيين الصلاحيات (آمن) ===
+            $this->syncUserPermissions($user, $request->input('permissions', []));
+
+            return redirect()->route('admin.users.index')
+                ->with('success', 'تم إضافة المستخدم بنجاح')
+                ->with('new_user_id', $user->id); // لإظهار كلمة المرور
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return back()
+                ->withInput()
+                ->withErrors($e->errors());
+        } catch (\Exception $e) {
+            \Log::error('Error creating user: ' . $e->getMessage(), [
+                'email' => $request->email,
+                'trace' => $e->getTraceAsString()
+            ]);
+
+            return back()
+                ->withInput()
+                ->withErrors(['error' => 'حدث خطأ أثناء إنشاء المستخدم: ' . $e->getMessage()]);
         }
-
-        // === تعيين الدور ===
-        if ($request->filled('role_id')) {
-            $role = Role::find($request->role_id);
-            $user->syncRoles([$role->name]);
-        }
-
-        // === تعيين الصلاحيات (آمن) ===
-        $this->syncUserPermissions($user, $request->input('permissions', []));
-
-        return redirect()->route('admin.users.index')
-            ->with('success', 'تم إضافة المستخدم بنجاح')
-            ->with('new_user_id', $user->id); // لإظهار كلمة المرور
     }
 
     public function edit(User $user)

@@ -32,6 +32,20 @@ class AuthController extends Controller
             'password.required' => __('admin.auth.password_required'),
         ]);
 
+        // التحقق من وجود المستخدم أولاً
+        $user = \App\Models\User::where('email', $cred['email'])->first();
+        
+        if ($user) {
+            \Log::info('User found for login attempt', [
+                'email' => $cred['email'],
+                'user_id' => $user->id,
+                'is_admin' => $user->is_admin,
+                'password_check' => \Illuminate\Support\Facades\Hash::check($cred['password'], $user->password)
+            ]);
+        } else {
+            \Log::warning('User not found for login attempt', ['email' => $cred['email']]);
+        }
+
         if (Auth::attempt($cred, $request->boolean('remember'))) {
             // حذف المحاولات الخاطئة عند نجاح تسجيل الدخول
             $throttleKey = Str::transliterate(Str::lower($request->input('email')).'|'.$request->ip());
@@ -54,6 +68,11 @@ class AuthController extends Controller
             }
 
             // لو مش إدمن، طلّعه برسالة عامة
+            \Log::warning('User logged in but is not admin', [
+                'user_id' => auth()->id(),
+                'email' => auth()->user()->email
+            ]);
+            
             Auth::logout();
             $request->session()->invalidate();
             $request->session()->regenerateToken();
