@@ -642,7 +642,6 @@
     @endphp
     <section id="subheader"
              class="text-light relative rounded-1 overflow-hidden m-3 d-flex align-items-center justify-content-center text-center"
-             data-bgimage="url({{ asset('assets/site/images/backgrounds/site3.webp') }}) center center / cover"
              dir="{{ $currentDir }}">
         <div class="container relative z-2">
             <div class="row justify-content-center text-center">
@@ -673,17 +672,20 @@
             </div>
 
             <div class="news-filters" id="news-filters" aria-label="مرشحات الأخبار">
-                <form class="news-filters__search" action="{{ url()->current() }}" method="get">
+                <form class="news-filters__search" id="news-search-form" action="{{ route('site.news') }}" method="post">
+                    @csrf
                     <input
                         type="text"
                         name="search"
-                        value="{{ request('search') }}"
+                        id="news-search-input"
+                        value="{{ $searchTerm }}"
                         placeholder="{{ __('common.news_search_placeholder') }}"
                         aria-label="{{ __('common.news_search_placeholder') }}"
                         dir="auto"
+                        autocomplete="off"
                     >
                     <input type="hidden" name="filter" value="{{ $activeFilter }}">
-                    <button type="submit">
+                    <button type="submit" id="news-search-btn">
                         <i class="ri-search-line"></i>
                         {{ __('common.search') }}
                     </button>
@@ -710,11 +712,11 @@
                 @include('site.news.partials.grid', ['newsItems' => $newsItems])
             </div>
 
-            @if($newsItems->hasPages())
-                <div class="news-pagination" id="pagination-wrapper">
+            <div class="news-pagination" id="pagination-wrapper">
+                @if($newsItems->hasPages())
                     {{ $newsItems->onEachSide(1)->links() }}
-                </div>
-            @endif
+                @endif
+            </div>
         </div>
     </section>
 @endsection
@@ -722,23 +724,114 @@
 @push('scripts')
     <script>
         (function () {
-            const filterButtons = Array.from(document.querySelectorAll('.news-filters__button'));
+            const searchForm = document.getElementById('news-search-form');
+            const searchInput = document.getElementById('news-search-input');
+            const searchBtn = document.getElementById('news-search-btn');
+            const newsGrid = document.getElementById('news-grid');
+            const paginationWrapper = document.getElementById('pagination-wrapper');
+            let searchTimeout;
 
-            filterButtons.forEach(button => {
-                button.addEventListener('click', () => {
-                    const filter = button.dataset.filter;
-                    if (!filter) return;
+            // AJAX Search - فقط عند الضغط على زر البحث
+            if (searchForm && searchInput) {
+                // البحث فقط عند الضغط على Submit (زر البحث أو Enter)
+                searchForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    const activeFilter = document.querySelector('.news-filters__button.is-active')?.dataset.filter || 'all';
+                    performSearch(searchInput.value.trim(), 1, activeFilter);
+                });
+            }
 
-                    const url = new URL(window.location.href);
-                    if (filter === 'all') {
-                        url.searchParams.delete('filter');
-                    } else {
-                        url.searchParams.set('filter', filter);
+            function performSearch(searchTerm, page = 1, filter = null) {
+                // استخدام الفلتر المحدد أو الفلتر النشط الحالي
+                const activeFilter = filter || document.querySelector('.news-filters__button.is-active')?.dataset.filter || 'all';
+                
+                // إظهار loading
+                newsGrid.style.opacity = '0.5';
+                if (searchBtn) {
+                    searchBtn.disabled = true;
+                    searchBtn.innerHTML = '<i class="ri-loader-4-line"></i>';
+                }
+
+                // AJAX Request
+                fetch('{{ route("site.news") }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        search: searchTerm,
+                        filter: activeFilter,
+                        page: page
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    // تحديث الـgrid
+                    newsGrid.innerHTML = data.html;
+                    
+                    // تحديث الـpagination
+                    paginationWrapper.innerHTML = data.pagination || '';
+                    
+                    // إعادة ربط event listeners للـpagination
+                    attachPaginationListeners();
+                    
+                    // Scroll to top
+                    window.scrollTo({ top: newsGrid.offsetTop - 100, behavior: 'smooth' });
+                })
+                .catch(error => {
+                    console.error('Search error:', error);
+                    alert('حدث خطأ أثناء البحث. يرجى المحاولة مرة أخرى.');
+                })
+                .finally(() => {
+                    newsGrid.style.opacity = '1';
+                    if (searchBtn) {
+                        searchBtn.disabled = false;
+                        searchBtn.innerHTML = '<i class="ri-search-line"></i> {{ __('common.search') }}';
                     }
+                });
+            }
 
-                    window.location.href = url.toString();
+            // AJAX Pagination
+            function attachPaginationListeners() {
+                const paginationLinks = paginationWrapper.querySelectorAll('a.page-link, a[href*="page="]');
+                paginationLinks.forEach(link => {
+                    link.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        
+                        // استخراج رقم الصفحة من الرابط
+                        const url = new URL(this.href);
+                        const page = url.searchParams.get('page') || 1;
+                        const currentSearch = searchInput ? searchInput.value.trim() : '';
+                        const activeFilter = document.querySelector('.news-filters__button.is-active')?.dataset.filter || 'all';
+                        
+                        // جلب الصفحة المطلوبة
+                        performSearch(currentSearch, page, activeFilter);
+                    });
+                });
+            }
+
+            // AJAX Filter Buttons
+            const filterButtons = document.querySelectorAll('.news-filters__button[data-filter]');
+            filterButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // إزالة active من كل الأزرار
+                    filterButtons.forEach(btn => btn.classList.remove('is-active'));
+                    
+                    // إضافة active للزر المضغوط
+                    this.classList.add('is-active');
+                    
+                    // جلب النتائج مع الفلتر الجديد
+                    const filter = this.dataset.filter;
+                    const currentSearch = searchInput ? searchInput.value.trim() : '';
+                    performSearch(currentSearch, 1, filter);
                 });
             });
+
+            // ربط event listeners عند تحميل الصفحة
+            attachPaginationListeners();
         })();
     </script>
 @endpush

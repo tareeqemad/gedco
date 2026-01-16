@@ -25,7 +25,7 @@ Route::prefix('/')->name('site.')->group(function () {
 
     Route::get('/jobs', [JobsController::class, 'index'])->name('jobs');
     Route::get('/tenders', [TendersController::class, 'index'])->name('tenders');
-    Route::get('/news', [NewsController::class, 'index'])->name('news');
+    Route::match(['get', 'post'], '/news', [NewsController::class, 'index'])->name('news');
     Route::get('/news/{news}', [NewsController::class, 'show'])->name('news.show');
 
 });

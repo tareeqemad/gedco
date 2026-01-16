@@ -1,7 +1,12 @@
 @extends('layouts.site')
 
-@section('title', 'كلمة مدير عام الشركة')
-@section('meta_description', 'كلمة مدير عام شركة توزيع كهرباء محافظات غزة د. محمد طه الأسطل')
+@php
+    $direction = session('direction', 'rtl');
+    $isRtl = $direction === 'rtl';
+@endphp
+
+@section('title', $isRtl ? 'كلمة مدير عام الشركة' : 'General Manager Message')
+@section('meta_description', $isRtl ? 'كلمة مدير عام شركة توزيع كهرباء محافظات غزة د. محمد طه الأسطل' : 'General Manager Message of Gaza Electricity Distribution Company Dr. Mohammed Taha Al-Astal')
 
 @push('styles')
     <style>
@@ -11,7 +16,6 @@
             min-height: 100vh;
             padding: clamp(120px, 18vw, 168px) 0;
             overflow: hidden;
-            background: url('{{ asset('assets/site/images/backgrounds/site3.webp') }}') center center / cover no-repeat;
         }
 
         .gm-suite::before {
@@ -237,10 +241,10 @@
         .gm-suite__text {
             display: grid;
             gap: clamp(16px, 2.4vw, 22px);
-            text-align: justify;
+            text-align: justify !important;
             text-justify: inter-word;
             text-wrap: balance;
-            text-align-last: right;
+            text-align-last: justify !important;
         }
 
         .gm-suite__text p {
@@ -248,8 +252,15 @@
             font-size: 18px;
             line-height: 2;
             color: rgba(31, 43, 55, 0.9);
-            text-align: inherit;
+            text-align: justify !important;
+            text-justify: inter-word;
+            text-align-last: justify !important;
             hyphens: auto;
+        }
+        
+        .gm-suite__text * {
+            text-align: justify !important;
+            text-align-last: justify !important;
         }
 
         .gm-suite__signature {
@@ -379,27 +390,37 @@
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-6-6h12" />
                         </svg>
-                        كلمة مدير عام الشركة
+                        {{ $isRtl ? 'كلمة مدير عام الشركة' : 'General Manager Message' }}
                     </div>
                     <div class="gm-suite__divider"><span>بسم الله الرحمن الرحيم</span></div>
                     <div class="gm-suite__text">
-                        <p>تُعد شركة توزيع كهرباء محافظات غزة إحدى الركائز الأساسية للبنية التحتية في قطاع غزة ، وحلقة الوصل الحيوية بين مصادر الطاقة واحتياجات المواطنين والمؤسسات.</p>
-                        <p>وانطلاقًا من رسالتها الوطنية والإنسانية، تواصل كهرباء غزة أداء دورها بكل التزام ومسؤولية، رغم ما تمر به من ظروف استثنائية وتحديات متلاحقة.</p>
-                        <p>لقد كان عام 2023 عامًا صعبًا واستثنائيًا بكل المقاييس، حيث واجهت الشركة خلال العدوان على قطاع غزة دمارًا واسعًا طال شبكاتها ومرافقها ومقراتها، وخسرت عددًا من خيرة أبنائها وكوادرها الذين ارتقوا شهداء أثناء أداء واجبهم المهني والوطني؛ وبرغم ذلك، لم تتوقف الجهود، وسعت الشركة لتوسيع مساحة مساهماتها المجتمعية، واستمرت طواقم الشركة في العمل في أصعب الظروف لضمان استمرارية الخدمات الأساسية ودعم المرافق الحيوية وفق الإمكانات المتاحة.</p>
-                        <p>ومع انطلاق موقع الشركة الإلكتروني بحُلّته الجديدة، فإننا نجدد التزامنا بمواصلة طريقنا ومساعينا الجادة في إعادة بناء وتأهيل قطاع توزيع الكهرباء وصولا لتوفير الخدمات الكهربائية لكافة المناطق والمرافق، كما نجدد إلتزامنا باستكمال خططنا المتعلقة بالتحول الرقمي المتكامل، وتعزيز كفاءة منظومة التوزيع، وتوسيع استخدام أنظمة التحكم الذكية (SCADA)، بما يواكب متطلبات المرحلة المقبلة ويعزز من جودة الخدمة وعدالتها واستدامتها.</p>
-                        <p>إن رؤيتنا للمستقبل تقوم على أسس الاستدامة، والشفافية، والكفاءة التشغيلية، في سبيل خدمة أبناء شعبنا وتعزيز صمود مؤسساته الحيوية.</p>
-                        <p>كما نتطلع، بعون الله، إلى أن تكون المرحلة القادمة مرحلة تعافٍ وبناء، تواكبها منظومة كهرباء أكثر تطورًا وقدرةً على تلبية احتياجات المجتمع بكفاءة ومسؤولية.</p>
-                        <p>رحم الله شهداء الوطن وشهداء الشركة، ونسأل الله أن يوفقنا جميعًا لخدمة شعبنا وأهلنا في كل مواقعهم.</p>
+                        @if($isRtl)
+                            <p>تُعد شركة توزيع كهرباء محافظات غزة إحدى الركائز الأساسية للبنية التحتية في قطاع غزة ، وحلقة الوصل الحيوية بين مصادر الطاقة واحتياجات المواطنين والمؤسسات.</p>
+                            <p>وانطلاقًا من رسالتها الوطنية والإنسانية، تواصل كهرباء غزة أداء دورها بكل التزام ومسؤولية، رغم ما تمر به من ظروف استثنائية وتحديات متلاحقة.</p>
+                            <p>لقد كان عام 2023 عامًا صعبًا واستثنائيًا بكل المقاييس، حيث واجهت الشركة خلال العدوان على قطاع غزة دمارًا واسعًا طال شبكاتها ومرافقها ومقراتها، وخسرت عددًا من خيرة أبنائها وكوادرها الذين ارتقوا شهداء أثناء أداء واجبهم المهني والوطني؛ وبرغم ذلك، لم تتوقف الجهود، وسعت الشركة لتوسيع مساحة مساهماتها المجتمعية، واستمرت طواقم الشركة في العمل في أصعب الظروف لضمان استمرارية الخدمات الأساسية ودعم المرافق الحيوية وفق الإمكانات المتاحة.</p>
+                            <p>ومع انطلاق موقع الشركة الإلكتروني بحُلّته الجديدة، فإننا نجدد التزامنا بمواصلة طريقنا ومساعينا الجادة في إعادة بناء وتأهيل قطاع توزيع الكهرباء وصولا لتوفير الخدمات الكهربائية لكافة المناطق والمرافق، كما نجدد إلتزامنا باستكمال خططنا المتعلقة بالتحول الرقمي المتكامل، وتعزيز كفاءة منظومة التوزيع، وتوسيع استخدام أنظمة التحكم الذكية (SCADA)، بما يواكب متطلبات المرحلة المقبلة ويعزز من جودة الخدمة وعدالتها واستدامتها.</p>
+                            <p>إن رؤيتنا للمستقبل تقوم على أسس الاستدامة، والشفافية، والكفاءة التشغيلية، في سبيل خدمة أبناء شعبنا وتعزيز صمود مؤسساته الحيوية.</p>
+                            <p>كما نتطلع، بعون الله، إلى أن تكون المرحلة القادمة مرحلة تعافٍ وبناء، تواكبها منظومة كهرباء أكثر تطورًا وقدرةً على تلبية احتياجات المجتمع بكفاءة ومسؤولية.</p>
+                            <p>رحم الله شهداء الوطن وشهداء الشركة، ونسأل الله أن يوفقنا جميعًا لخدمة شعبنا وأهلنا في كل مواقعهم.</p>
+                        @else
+                            <p>Gaza Electricity Distribution Company is one of the fundamental pillars of infrastructure in the Gaza Strip, serving as a vital link between energy sources and the needs of citizens and institutions.</p>
+                            <p>Driven by its national and humanitarian mission, Gaza Electricity continues to fulfill its role with full commitment and responsibility, despite the exceptional circumstances and ongoing challenges it faces.</p>
+                            <p>The year 2023 was a difficult and exceptional year by all measures. During the aggression on the Gaza Strip, the company faced widespread destruction that affected its networks, facilities, and headquarters, and lost a number of its finest sons and cadres who were martyred while performing their professional and national duty. Despite this, efforts did not stop, and the company sought to expand its community contributions, with company teams continuing to work under the most difficult circumstances to ensure the continuity of essential services and support vital facilities according to available capabilities.</p>
+                            <p>With the launch of the company's website in its new form, we renew our commitment to continue our path and serious efforts to rebuild and rehabilitate the electricity distribution sector, leading to the provision of electrical services to all areas and facilities. We also renew our commitment to complete our plans related to integrated digital transformation, enhance the efficiency of the distribution system, and expand the use of smart control systems (SCADA), in line with the requirements of the next phase and enhancing the quality, fairness, and sustainability of service.</p>
+                            <p>Our vision for the future is based on the foundations of sustainability, transparency, and operational efficiency, in order to serve our people and strengthen the resilience of their vital institutions.</p>
+                            <p>We also look forward, with God's help, to the next phase being a phase of recovery and construction, accompanied by a more advanced and capable electricity system to meet the needs of society efficiently and responsibly.</p>
+                            <p>May God have mercy on the martyrs of the homeland and the martyrs of the company, and we ask God to grant us all success in serving our people and our families in all their locations.</p>
+                        @endif
                     </div>
 
                 </div>
 
                 <aside class="gm-suite__profile">
-                    <img src="{{ asset('assets/site/images/content/dr.mohammed.webp') }}" alt="د. محمد طه الأسطل" class="gm-suite__photo">
+                    <img src="{{ asset('assets/site/images/content/dr.mohammed.webp') }}" alt="{{ $isRtl ? 'د. محمد طه الأسطل' : 'Dr. Mohammed Taha Al-Astal' }}" class="gm-suite__photo">
                     <div class="gm-suite__nameplate">
-                        <strong>د. محمد طه الأسطل</strong>
-                        <span>مدير عام شركة توزيع كهرباء محافظات غزة</span>
-                        <img src="{{ asset('assets/site/images/logos/logo-dark.webp') }}" alt="شركة توزيع كهرباء محافظات غزة">
+                        <strong>{{ $isRtl ? 'د. محمد طه الأسطل' : 'Dr. Mohammed Taha Al-Astal' }}</strong>
+                        <span>{{ $isRtl ? 'مدير عام شركة توزيع كهرباء محافظات غزة' : 'General Manager of Gaza Electricity Distribution Company' }}</span>
+                        <img src="{{ asset('assets/site/images/logos/logo-dark.webp') }}" alt="{{ $isRtl ? 'شركة توزيع كهرباء محافظات غزة' : 'Gaza Electricity Distribution Company' }}">
                     </div>
                 </aside>
             </div>
