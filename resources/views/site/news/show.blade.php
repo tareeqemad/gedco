@@ -18,7 +18,6 @@
 
         section#subheader h1 {
             font-size: clamp(1.6rem, 4.2vw, 2.6rem);
-            letter-spacing: .8px;
             margin-bottom: 0;
             line-height: 1.35;
             padding: 0 1.25rem;
@@ -27,6 +26,21 @@
             max-width: 90%;
             margin-left: auto;
             margin-right: auto;
+            direction: inherit;
+            unicode-bidi: isolate;
+            text-align: center;
+        }
+        
+        section#subheader[dir="rtl"] h1 {
+            letter-spacing: 0;
+            direction: rtl;
+            unicode-bidi: embed;
+        }
+        
+        section#subheader[dir="ltr"] h1 {
+            letter-spacing: .8px;
+            direction: ltr;
+            unicode-bidi: embed;
         }
 
         #news-article {
@@ -169,6 +183,31 @@
                 font-size: 1.65rem;
                 line-height: 1.4;
                 padding: 0 .75rem;
+                text-align: center;
+            }
+            
+            section#subheader[dir="rtl"] h1 {
+                direction: rtl;
+                unicode-bidi: embed;
+                letter-spacing: 0;
+            }
+            
+            section#subheader[dir="ltr"] h1 {
+                direction: ltr;
+                unicode-bidi: embed;
+                letter-spacing: .8px;
+            }
+            
+            /* إلغاء تأثير split على الجوال - عرض النص بشكل عادي */
+            section#subheader h1.split,
+            section#subheader h1.split * {
+                animation: none !important;
+                opacity: 1 !important;
+                transform: none !important;
+            }
+            
+            section#subheader h1.split .char {
+                display: inline !important;
             }
 
             #news-article .article-meta {
@@ -200,14 +239,44 @@
                 line-height: 1.35;
                 padding: 0 .5rem;
                 max-width: 95%;
+                text-align: center;
+            }
+            
+            section#subheader[dir="rtl"] h1 {
+                direction: rtl;
+                unicode-bidi: embed;
+                letter-spacing: 0;
+            }
+            
+            section#subheader[dir="ltr"] h1 {
+                direction: ltr;
+                unicode-bidi: embed;
+                letter-spacing: .8px;
+            }
+            
+            /* إلغاء تأثير split على الجوال - عرض النص بشكل عادي */
+            section#subheader h1.split,
+            section#subheader h1.split * {
+                animation: none !important;
+                opacity: 1 !important;
+                transform: none !important;
+            }
+            
+            section#subheader h1.split .char {
+                display: inline !important;
             }
         }
     </style>
 @endpush
 
 @section('content')
+    @php
+        $currentDir = session('direction', 'rtl');
+        $isRtl = $currentDir === 'rtl';
+    @endphp
     <section id="subheader"
-             class="text-light relative rounded-1 overflow-hidden m-3 d-flex align-items-center justify-content-center text-center">
+             class="text-light relative rounded-1 overflow-hidden m-3 d-flex align-items-center justify-content-center text-center"
+             dir="{{ $currentDir }}">
         <div class="container relative z-2">
             <div class="row justify-content-center text-center">
                 <div class="col-12">
@@ -276,3 +345,21 @@
     </section>
 @endsection
 
+@push('scripts')
+<script>
+    // منع تقسيم النص على الجوال - عرض النص بشكل عادي
+    if (window.innerWidth <= 991) {
+        document.addEventListener('DOMContentLoaded', function() {
+            const h1Element = document.querySelector('section#subheader h1.split');
+            if (h1Element) {
+                // استرجاع النص الأصلي قبل التقسيم
+                const originalText = h1Element.textContent || h1Element.innerText;
+                // إزالة جميع الـ spans الداخلية واستبدالها بالنص الأصلي
+                h1Element.innerHTML = originalText;
+                // إزالة class split لمنع أي تأثيرات
+                h1Element.classList.remove('split');
+            }
+        });
+    }
+</script>
+@endpush
