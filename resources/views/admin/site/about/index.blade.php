@@ -13,33 +13,6 @@
     @endphp
 
     <div class="container-fluid p-0">
-        <!-- Header Section -->
-        <div class="card border-0 shadow-sm rounded-4 bg-white mb-4">
-            <div class="card-header bg-gradient-primary text-white border-0 py-2 px-3">
-                <div class="d-flex justify-content-between align-items-center flex-wrap w-100" style="gap: 1rem;">
-                    <div class="d-flex align-items-center gap-2" style="flex: 0 0 auto;">
-                        <div>
-                            <h5 class="mb-0 fw-bold text-white d-flex align-items-center gap-2 flex-wrap" style="font-size: 1.25rem; line-height: 1.3;">
-                                <i class="bi bi-info-circle-fill"></i>
-                                <span class="d-none d-sm-inline">{{ __('admin.about_us.title') }}</span>
-                                <span class="d-sm-none">{{ __('admin.menu.about_us') }}</span>
-                            </h5>
-                        </div>
-                    </div>
-                    @if($about)
-                        <div class="d-flex gap-2 flex-wrap">
-                            <a href="{{ route('admin.about.edit', $about) }}" class="btn btn-light btn-sm shadow-sm">
-                                <i class="bi bi-pencil-square me-2"></i><span class="d-none d-md-inline">{{ __('admin.about_us.edit') }}</span><span class="d-md-none">{{ __('admin.actions.edit') }}</span>
-                            </a>
-                            <a href="{{ $publicPreviewUrl }}" class="btn btn-light btn-sm shadow-sm" target="_blank">
-                                <i class="bi bi-box-arrow-up-right me-2"></i><span class="d-none d-md-inline">{{ __('admin.common.preview_on_site') }}</span><span class="d-md-none">{{ __('admin.common.preview') }}</span>
-                            </a>
-                        </div>
-                    @endif
-                </div>
-            </div>
-        </div>
-
         @if($about)
             @php
                 // تحديد الصورة والـ features حسب اللغة
@@ -60,6 +33,28 @@
             @endphp
 
             <div class="card border-0 shadow-sm rounded-4 bg-white">
+                <!-- Header Section -->
+                <div class="card-header bg-gradient-primary text-white border-0 py-2 px-3">
+                    <div class="d-flex justify-content-between align-items-center flex-wrap w-100" style="gap: 1rem;">
+                        <div class="d-flex align-items-center gap-2" style="flex: 0 0 auto;">
+                            <div>
+                                <h5 class="mb-0 fw-bold text-white d-flex align-items-center gap-2 flex-wrap" style="font-size: 1.25rem; line-height: 1.3;">
+                                    <i class="bi bi-info-circle-fill"></i>
+                                    <span class="d-none d-sm-inline">{{ __('admin.about_us.title') }}</span>
+                                    <span class="d-sm-none">{{ __('admin.menu.about_us') }}</span>
+                                </h5>
+                            </div>
+                        </div>
+                        <div class="d-flex gap-2 flex-wrap">
+                            <a href="{{ route('admin.about.edit', $about) }}" class="btn btn-light btn-sm shadow-sm">
+                                <i class="bi bi-pencil-square me-2"></i><span class="d-none d-md-inline">{{ __('admin.about_us.edit') }}</span><span class="d-md-none">{{ __('admin.actions.edit') }}</span>
+                            </a>
+                            <a href="{{ $publicPreviewUrl }}" class="btn btn-light btn-sm shadow-sm" target="_blank">
+                                <i class="bi bi-box-arrow-up-right me-2"></i><span class="d-none d-md-inline">{{ __('admin.common.preview_on_site') }}</span><span class="d-md-none">{{ __('admin.common.preview') }}</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
                 <div class="card-body p-4 p-md-5">
                     <div class="row g-4 align-items-start flex-lg-row-reverse">
 

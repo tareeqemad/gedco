@@ -8,8 +8,9 @@
 
 @section('content')
     <div class="container-fluid p-0">
-        <!-- Header Section -->
-        <div class="card border-0 shadow-sm rounded-4 bg-white mb-4">
+        <!-- Main Card -->
+        <div class="card border-0 shadow-sm rounded-4 bg-white users-card">
+            <!-- Header Section -->
             <div class="card-header bg-gradient-primary text-white border-0 py-2 py-md-3 px-3 px-md-4">
                 <div class="d-flex justify-content-between align-items-center w-100" style="gap: 1rem;">
                     <div class="d-flex align-items-center gap-2" style="flex: 0 0 auto;">
@@ -24,11 +25,6 @@
                     </a>
                 </div>
             </div>
-        </div>
-
-
-        <!-- Main Card -->
-        <div class="card border-0 shadow-sm rounded-4 bg-white users-card">
             <div class="card-body p-4 p-md-5">
                 <form action="{{ route('admin.users.store') }}" method="POST" id="createUserForm">
                     @csrf

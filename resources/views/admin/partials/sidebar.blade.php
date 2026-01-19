@@ -203,6 +203,17 @@
                     </li>
                 @endcan
 
+                <!-- Contact Messages -->
+                <li class="slide {{ $isActive('admin.contact-messages.*') }}">
+                    <a href="{{ route('admin.contact-messages.index') }}" class="side-menu__item">
+                        <i class="bi bi-envelope-fill side-menu__icon"></i>
+                        <span class="side-menu__label">رسائل الاتصال</span>
+                        @if(($unreadMessagesCount ?? 0) > 0)
+                            <span class="badge bg-danger rounded-pill ms-auto">{{ $unreadMessagesCount }}</span>
+                        @endif
+                    </a>
+                </li>
+
                 <!-- 4) Site Settings -->
                 <li class="slide__category mt-3">
                     <span class="side-menu__label text-muted text-xs opacity-70">{{ __('admin.menu.site_settings') }}</span>

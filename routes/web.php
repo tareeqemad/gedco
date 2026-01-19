@@ -10,6 +10,7 @@ use App\Http\Controllers\Site\TendersController;
 use App\Http\Controllers\Site\NewsController;
 use App\Http\Controllers\Site\AdvertisementController;
 use App\Http\Controllers\Site\SearchController;
+use App\Http\Controllers\Site\ContactController;
 use App\Http\Controllers\DirectionController;
 
 // Direction toggle route
@@ -27,6 +28,9 @@ Route::prefix('/')->name('site.')->group(function () {
     Route::get('/tenders', [TendersController::class, 'index'])->name('tenders');
     Route::match(['get', 'post'], '/news', [NewsController::class, 'index'])->name('news');
     Route::get('/news/{news}', [NewsController::class, 'show'])->name('news.show');
+    
+    Route::get('/contact', [ContactController::class, 'index'])->name('contact');
+    Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
 
 });
 

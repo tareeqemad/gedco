@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Session;
 use App\Models\SiteSetting;
 use App\Models\FooterLink;
 use App\Models\SocialLink;
+use App\Models\ContactMessage;
 
 /**
  * Service provider for sharing common view data across all application views.
@@ -39,6 +40,14 @@ class ViewServiceProvider extends ServiceProvider
                 ];
             });
             $view->with('footerData', $footerData);
+            
+            // Share unread contact messages count (only for admin views)
+            if (str_starts_with($view->getName(), 'admin.')) {
+                $unreadMessagesCount = Cache::remember('unread_messages_count', 60, function () {
+                    return ContactMessage::where('is_read', false)->count();
+                });
+                $view->with('unreadMessagesCount', $unreadMessagesCount);
+            }
         });
     }
 }

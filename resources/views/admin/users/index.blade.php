@@ -8,17 +8,23 @@
 
 @section('content')
     <div class="container-fluid">
-        <!-- Header Section -->
-        <div class="card border-0 shadow-sm rounded-4 bg-white mb-4">
+        <!-- Main Card -->
+        <div class="card border-0 shadow-sm rounded-4 bg-white users-card">
+            <!-- Header Section -->
             <div class="card-header bg-gradient-primary text-white border-0 py-2 py-md-3 px-3 px-md-4">
                 <div class="d-flex justify-content-between align-items-center flex-wrap w-100" style="gap: 1rem;">
-                    <div class="d-flex align-items-center gap-2" style="flex: 0 0 auto;">
-                        <div>
+                    <div class="d-flex align-items-center gap-3 flex-wrap" style="flex: 1;">
+                        <div class="d-flex align-items-center gap-2">
                             <h5 class="mb-0 fw-bold text-white d-flex align-items-center gap-2 flex-wrap" style="font-size: 1.25rem; line-height: 1.3;">
                                 <i class="bi bi-people-fill"></i>
                                 <span class="d-none d-sm-inline">{{ __('admin.users.users_list') }}</span>
                                 <span class="d-sm-none">{{ __('admin.menu.users') }}</span>
                             </h5>
+                        </div>
+                        <div class="d-flex align-items-center gap-2 text-white-50" style="font-size: 0.9rem;">
+                            <i class="bi bi-people-fill"></i>
+                            <span>{{ __('admin.users.total_users_text') }}:</span>
+                            <strong class="text-white" id="totalUsers">{{ $users->total() }}</strong>
                         </div>
                     </div>
                     @can('users.create')
@@ -30,22 +36,6 @@
                     @endcan
                 </div>
             </div>
-        </div>
-
-
-        <!-- Stats Card -->
-        <div class="card border-0 shadow-sm rounded-4 bg-white mb-4 users-stats-card">
-            <div class="card-body py-2 px-3">
-                <div class="d-flex align-items-center gap-2">
-                    <i class="bi bi-people-fill text-primary"></i>
-                    <span class="text-muted small">{{ __('admin.users.total_users_text') }}:</span>
-                    <strong class="text-primary" id="totalUsers">{{ $users->total() }}</strong>
-                </div>
-            </div>
-        </div>
-
-        <!-- Main Card -->
-        <div class="card border-0 shadow-sm rounded-4 bg-white users-card">
             <!-- Filter Section -->
             <div class="card-body p-3">
                 <div class="users-filters">
@@ -111,7 +101,7 @@
             </div>
 
             <!-- Table Container -->
-            <div class="card-body p-0">
+            <div class="p-0">
                 <div id="usersTableContainer">
                     @include('admin.users.partials.table', ['users' => $users])
                 </div>

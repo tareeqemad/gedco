@@ -22,6 +22,7 @@ use App\Http\Controllers\Admin\HomeVideoController;
 use App\Http\Controllers\Admin\UploadController;
 use App\Http\Controllers\Admin\Staff\StaffProfileController;
 use App\Http\Controllers\Admin\ActivityLogController;
+use App\Http\Controllers\Admin\ContactMessageController;
 
 
 Route::prefix('admin')->name('admin.')->group(function () {
@@ -146,6 +147,13 @@ Route::prefix('admin')->name('admin.')->group(function () {
             ->parameters(['news' => 'news'])
             ->names('news')
             ->middleware('permission:news.view|news.create|news.edit|news.delete');
+
+        // === رسائل الاتصال ===
+        Route::get('/contact-messages', [ContactMessageController::class, 'index'])->name('contact-messages.index');
+        Route::get('/contact-messages/{contactMessage}', [ContactMessageController::class, 'show'])->name('contact-messages.show');
+        Route::patch('/contact-messages/{contactMessage}/mark-read', [ContactMessageController::class, 'markAsRead'])->name('contact-messages.mark-read');
+        Route::patch('/contact-messages/{contactMessage}/mark-unread', [ContactMessageController::class, 'markAsUnread'])->name('contact-messages.mark-unread');
+        Route::delete('/contact-messages/{contactMessage}', [ContactMessageController::class, 'destroy'])->name('contact-messages.destroy');
 
 
         Route::get('/home-video',  [HomeVideoController::class,'edit'])->name('homeVideo.edit');
