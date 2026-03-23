@@ -1135,6 +1135,26 @@ html {
     color: #0F67C6;
 }
 
+/* Search input with icon inside */
+.search-input-wrap {
+    position: relative;
+}
+
+.search-input-wrap i {
+    position: absolute;
+    inset-inline-start: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #9AA8B6;
+    font-size: 0.88rem;
+    z-index: 2;
+    pointer-events: none;
+}
+
+.search-input-wrap input {
+    padding-inline-start: 2.2rem !important;
+}
+
 /* Date field inline label */
 .date-field-label {
     position: absolute;

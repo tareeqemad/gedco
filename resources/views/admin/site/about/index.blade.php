@@ -46,22 +46,19 @@
                         </a>
                     </x-slot:actions>
                 </x-admin.card-header-index>
-                <div class="card-body p-4 p-md-5">
+                <div class="card-body p-3 p-md-4">
                     <div class="row g-4 align-items-start flex-lg-row-reverse">
 
                         {{-- الصورة --}}
                         <div class="col-lg-5">
-                            <div class="rounded-3 overflow-hidden shadow-sm border bg-white">
-                                <img src="{{ $img }}" alt="{{ $about->title }}" class="img-fluid w-100 d-block">
+                            <div class="rounded-3 overflow-hidden border" style="border-color: #E6ECF2 !important;">
+                                <img src="{{ $img }}" alt="{{ $about->title }}" class="img-fluid w-100 d-block" style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#aboutImageModal">
                             </div>
 
-                            <div class="d-flex gap-2 mt-3">
-                                <button type="button" class="btn btn-outline-primary btn-sm shadow-sm" data-bs-toggle="modal" data-bs-target="#aboutImageModal">
+                            <div class="d-flex gap-2 mt-2">
+                                <button type="button" class="btn btn-sm" data-bs-toggle="modal" data-bs-target="#aboutImageModal" style="font-size: 0.72rem; color: #7A8CA2;">
                                     <i class="bi bi-arrows-fullscreen me-1"></i>{{ __('admin.about_us.zoom_image') }}
                                 </button>
-                                <a href="{{ $img }}" class="btn btn-outline-secondary btn-sm shadow-sm" target="_blank">
-                                    <i class="bi bi-download me-1"></i>{{ __('admin.about_us.open_original') }}
-                                </a>
                             </div>
                         </div>
 
@@ -91,10 +88,10 @@
                                 $long = (mb_strlen($p1.$p2) > 450);
                             @endphp
 
-                            <h3 class="fw-bold mb-1 text-primary">{{ $displayTitle }}</h3>
+                            <h4 class="fw-bold mb-1" style="color: #24364A;">{{ $displayTitle }}</h4>
 
                             @if(filled($displaySubtitle))
-                                <div class="fw-semibold text-primary mb-3">{{ $displaySubtitle }}</div>
+                                <div class="fw-semibold mb-3" style="color: #5B7088; font-size: 0.9rem;">{{ $displaySubtitle }}</div>
                             @endif
 
                             <div id="about-text-wrapper" class="{{ $long ? 'collapsed-text' : '' }}">
@@ -114,7 +111,7 @@
 
                             @if(count($colA) || count($colB))
                                 <div class="mt-4">
-                                    <h6 class="fw-bold text-primary mb-3 d-flex align-items-center gap-2">
+                                    <h6 class="fw-bold d-flex align-items-center gap-2 section-title">
                                         <i class="bi bi-stars"></i>{{ __('admin.about_us.our_features') }}
                                     </h6>
                                     <div class="row g-3">
@@ -123,7 +120,7 @@
                                                 @foreach($colA as $item)
                                                     @if(filled($item))
                                                         <li class="mb-2 d-flex align-items-start">
-                                                            <i class="bi bi-check-circle-fill me-2 mt-1 text-primary"></i>
+                                                            <i class="bi bi-check-circle-fill me-2 mt-1" style="color: #1ABC9C; font-size: 0.85rem;"></i>
                                                             <span class="text-dark">{{ $item }}</span>
                                                         </li>
                                                     @endif
@@ -135,7 +132,7 @@
                                                 @foreach($colB as $item)
                                                     @if(filled($item))
                                                         <li class="mb-2 d-flex align-items-start">
-                                                            <i class="bi bi-check-circle-fill me-2 mt-1 text-primary"></i>
+                                                            <i class="bi bi-check-circle-fill me-2 mt-1" style="color: #1ABC9C; font-size: 0.85rem;"></i>
                                                             <span class="text-dark">{{ $item }}</span>
                                                         </li>
                                                     @endif
@@ -155,11 +152,11 @@
             <div class="modal fade" id="aboutImageModal" tabindex="-1">
                 <div class="modal-dialog modal-xl modal-dialog-centered">
                     <div class="modal-content border-0 shadow-lg rounded-4">
-                        <div class="modal-header bg-gradient-primary text-white border-0 rounded-top-4">
-                            <h6 class="modal-title fw-bold text-white">
-                                <i class="bi bi-image me-2"></i>{{ __('admin.about_us.full_image_preview') }}
+                        <div class="modal-header border-0 py-2 px-3">
+                            <h6 class="modal-title fw-bold" style="color: #24364A; font-size: 0.88rem;">
+                                <i class="bi bi-image me-2" style="color: #5B7088;"></i>{{ __('admin.about_us.full_image_preview') }}
                             </h6>
-                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                         </div>
                         <div class="modal-body p-0">
                             <img src="{{ $img }}" class="img-fluid w-100">

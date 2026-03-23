@@ -66,7 +66,7 @@
                             <i class="bi bi-file-text text-primary"></i>
                             {{ __('admin.about_us.form_paragraph1') }} <span class="text-danger">*</span>
                         </label>
-                        <textarea name="paragraph1" class="form-control rounded-3 border-0 bg-light @error('paragraph1') is-invalid @enderror" rows="8" required style="font-size: 0.95rem; line-height: 1.8;">{{ old('paragraph1', $model->paragraph1 ?? '') }}</textarea>
+                        <textarea name="paragraph1" class="form-control rounded-3 @error('paragraph1') is-invalid @enderror" rows="10" required style="font-size: 0.92rem; line-height: 2; min-height: 200px; border: 1.5px solid #CDD9E3;">{{ old('paragraph1', $model->paragraph1 ?? '') }}</textarea>
                         @error('paragraph1') <div class="invalid-feedback d-block mt-1">{{ $message }}</div> @enderror
                     </div>
 
@@ -76,7 +76,7 @@
                             <i class="bi bi-file-text text-primary"></i>
                             {{ __('admin.about_us.form_paragraph2') }}
                         </label>
-                        <textarea name="paragraph2" class="form-control rounded-3 border-0 bg-light @error('paragraph2') is-invalid @enderror" rows="6" style="font-size: 0.95rem; line-height: 1.8;">{{ old('paragraph2', $model->paragraph2 ?? '') }}</textarea>
+                        <textarea name="paragraph2" class="form-control rounded-3 @error('paragraph2') is-invalid @enderror" rows="8" style="font-size: 0.92rem; line-height: 2; min-height: 160px; border: 1.5px solid #CDD9E3;">{{ old('paragraph2', $model->paragraph2 ?? '') }}</textarea>
                         @error('paragraph2') <div class="invalid-feedback d-block mt-1">{{ $message }}</div> @enderror
                     </div>
 
@@ -89,14 +89,14 @@
                         <div class="row g-3">
                             <div class="col-md-6">
                                 <label class="form-label small text-muted mb-2">{{ __('admin.about_us.form_features_col1') }}</label>
-                                <textarea name="features_col1" class="form-control rounded-3 border-0 bg-light @error('features_col1') is-invalid @enderror" rows="8"
-                                          placeholder="{{ __('admin.about_us.form_features_placeholder') }}" style="font-size: 1rem;">{{ $featuresCol1 }}</textarea>
+                                <textarea name="features_col1" class="form-control rounded-3 @error('features_col1') is-invalid @enderror" rows="10"
+                                          placeholder="{{ __('admin.about_us.form_features_placeholder') }}" style="font-size: 0.92rem; line-height: 2; min-height: 180px; border: 1.5px solid #CDD9E3;">{{ $featuresCol1 }}</textarea>
                                 @error('features_col1') <div class="invalid-feedback d-block mt-1">{{ $message }}</div> @enderror
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label small text-muted mb-2">{{ __('admin.about_us.form_features_col2') }}</label>
-                                <textarea name="features_col2" class="form-control rounded-3 border-0 bg-light @error('features_col2') is-invalid @enderror" rows="6"
-                                          placeholder="{{ __('admin.about_us.form_features_placeholder') }}" style="font-size: 1rem;">{{ $featuresCol2 }}</textarea>
+                                <textarea name="features_col2" class="form-control rounded-3 @error('features_col2') is-invalid @enderror" rows="10"
+                                          placeholder="{{ __('admin.about_us.form_features_placeholder') }}" style="font-size: 0.92rem; line-height: 2; min-height: 180px; border: 1.5px solid #CDD9E3;">{{ $featuresCol2 }}</textarea>
                                 @error('features_col2') <div class="invalid-feedback d-block mt-1">{{ $message }}</div> @enderror
                             </div>
                         </div>
@@ -188,7 +188,7 @@
                             <i class="bi bi-file-text text-primary"></i>
                             {{ __('admin.about_us.form_paragraph1') }} - {{ __('admin.labels.english') }}
                         </label>
-                        <textarea name="paragraph1_en" class="form-control rounded-3 border-0 bg-light @error('paragraph1_en') is-invalid @enderror" rows="5" style="font-size: 1rem;">{{ old('paragraph1_en', $model->paragraph1_en ?? '') }}</textarea>
+                        <textarea name="paragraph1_en" class="form-control rounded-3 @error('paragraph1_en') is-invalid @enderror" rows="10" style="font-size: 0.92rem; line-height: 2; min-height: 200px; border: 1.5px solid #CDD9E3;">{{ old('paragraph1_en', $model->paragraph1_en ?? '') }}</textarea>
                         @error('paragraph1_en') <div class="invalid-feedback d-block mt-1">{{ $message }}</div> @enderror
                     </div>
 
@@ -198,7 +198,7 @@
                             <i class="bi bi-file-text text-primary"></i>
                             {{ __('admin.about_us.form_paragraph2') }} - {{ __('admin.labels.english') }}
                         </label>
-                        <textarea name="paragraph2_en" class="form-control rounded-3 border-0 bg-light @error('paragraph2_en') is-invalid @enderror" rows="6" style="font-size: 0.95rem; line-height: 1.8;">{{ old('paragraph2_en', $model->paragraph2_en ?? '') }}</textarea>
+                        <textarea name="paragraph2_en" class="form-control rounded-3 @error('paragraph2_en') is-invalid @enderror" rows="8" style="font-size: 0.92rem; line-height: 2; min-height: 160px; border: 1.5px solid #CDD9E3;">{{ old('paragraph2_en', $model->paragraph2_en ?? '') }}</textarea>
                         @error('paragraph2_en') <div class="invalid-feedback d-block mt-1">{{ $message }}</div> @enderror
                     </div>
 
@@ -211,14 +211,14 @@
                         <div class="row g-3">
                             <div class="col-md-6">
                                 <label class="form-label small text-muted mb-2">{{ __('admin.about_us.form_features_col1') }}</label>
-                                <textarea name="features_col1_en" class="form-control rounded-3 border-0 bg-light @error('features_col1_en') is-invalid @enderror" rows="6"
-                                          placeholder="{{ __('admin.about_us.form_features_placeholder') }}" style="font-size: 1rem;">{{ $featuresCol1En }}</textarea>
+                                <textarea name="features_col1_en" class="form-control rounded-3 @error('features_col1_en') is-invalid @enderror" rows="10"
+                                          placeholder="{{ __('admin.about_us.form_features_placeholder') }}" style="font-size: 0.92rem; line-height: 2; min-height: 180px; border: 1.5px solid #CDD9E3;">{{ $featuresCol1En }}</textarea>
                                 @error('features_col1_en') <div class="invalid-feedback d-block mt-1">{{ $message }}</div> @enderror
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label small text-muted mb-2">{{ __('admin.about_us.form_features_col2') }}</label>
-                                <textarea name="features_col2_en" class="form-control rounded-3 border-0 bg-light @error('features_col2_en') is-invalid @enderror" rows="6"
-                                          placeholder="{{ __('admin.about_us.form_features_placeholder') }}" style="font-size: 1rem;">{{ $featuresCol2En }}</textarea>
+                                <textarea name="features_col2_en" class="form-control rounded-3 @error('features_col2_en') is-invalid @enderror" rows="10"
+                                          placeholder="{{ __('admin.about_us.form_features_placeholder') }}" style="font-size: 0.92rem; line-height: 2; min-height: 180px; border: 1.5px solid #CDD9E3;">{{ $featuresCol2En }}</textarea>
                                 @error('features_col2_en') <div class="invalid-feedback d-block mt-1">{{ $message }}</div> @enderror
                             </div>
                         </div>

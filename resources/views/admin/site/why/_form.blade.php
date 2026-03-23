@@ -59,7 +59,7 @@
                         <i class="bi bi-translate text-primary"></i>
                         {{ __('admin.why_choose_us.form_description') }} - {{ __('admin.labels.arabic') }}
                     </label>
-                    <textarea name="description" class="form-control rounded-3 border-0 bg-light @error('description') is-invalid @enderror" rows="4" placeholder="الوصف بالعربية" style="font-size: 1rem;">{{ old('description', $model->description ?? '') }}</textarea>
+                    <textarea name="description" class="form-control rounded-3 @error('description') is-invalid @enderror" rows="8" placeholder="الوصف بالعربية" style="font-size: 0.92rem; line-height: 2; min-height: 160px; border: 1.5px solid #CDD9E3;">{{ old('description', $model->description ?? '') }}</textarea>
                     @error('description') <div class="invalid-feedback d-block mt-1">{{ $message }}</div> @enderror
                 </div>
                 <div class="col-md-6">
@@ -67,7 +67,7 @@
                         <i class="bi bi-globe text-primary"></i>
                         {{ __('admin.why_choose_us.form_description') }} - {{ __('admin.labels.english') }}
                     </label>
-                    <textarea name="description_en" class="form-control rounded-3 border-0 bg-light @error('description_en') is-invalid @enderror" rows="4" placeholder="English Description" style="font-size: 1rem;">{{ old('description_en', $model->description_en ?? '') }}</textarea>
+                    <textarea name="description_en" class="form-control rounded-3 @error('description_en') is-invalid @enderror" rows="8" placeholder="English Description" style="font-size: 0.92rem; line-height: 2; min-height: 160px; border: 1.5px solid #CDD9E3;">{{ old('description_en', $model->description_en ?? '') }}</textarea>
                     @error('description_en') <div class="invalid-feedback d-block mt-1">{{ $message }}</div> @enderror
                 </div>
             </div>
@@ -98,20 +98,20 @@
                 @php $iconClass = $f['icon'] ?? 'bi bi-lightning-charge-fill'; @endphp
 
                 <div class="feature-card mb-4 @if($i > 0) border-top pt-4 mt-4 @endif">
-                    <div class="d-flex align-items-center gap-2 mb-3">
-                        <i class="{{ $iconClass }} text-primary" style="font-size:1.5rem;"></i>
-                        <span class="fw-bold text-primary" style="font-size: 1rem;">{{ __('admin.why_choose_us.form_item_number') }} {{ $i+1 }}</span>
-                    </div>
+                    <h6 class="fw-bold d-flex align-items-center gap-2 section-title">
+                        <i class="{{ $iconClass }}" style="color: #5B7088;"></i>
+                        {{ __('admin.why_choose_us.form_item_number') }} {{ $i+1 }}
+                    </h6>
 
                     <input type="hidden" name="feature_icon[]" value="{{ $iconClass }}">
 
                     <div class="row g-3">
                         {{-- Arabic Column --}}
                         <div class="col-md-6">
-                            <div class="border-0 rounded-3 p-4 bg-light shadow-sm">
-                                <div class="d-flex align-items-center gap-2 mb-3 pb-2 border-bottom">
-                                    <i class="bi bi-translate text-primary"></i>
-                                    <span class="fw-bold text-primary">{{ __('admin.labels.arabic') }}</span>
+                            <div class="rounded-3 p-3" style="background: #F8FBFD; border: 1px solid #E6ECF2;">
+                                <div class="d-flex align-items-center gap-2 mb-3 pb-2" style="border-bottom: 1px solid #E6ECF2;">
+                                    <i class="bi bi-translate" style="color: #5B7088;"></i>
+                                    <span class="fw-bold" style="color: #24364A; font-size: 0.85rem;">{{ __('admin.labels.arabic') }}</span>
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label fw-semibold text-dark mb-2">{{ __('admin.why_choose_us.form_item_title') }}</label>
@@ -119,17 +119,17 @@
                                 </div>
                                 <div>
                                     <label class="form-label fw-semibold text-dark mb-2">{{ __('admin.why_choose_us.form_item_text') }}</label>
-                                    <textarea name="feature_text[]" class="form-control rounded-3 border-0 bg-white" rows="3" placeholder="النص بالعربية" style="font-size: 1rem;">{{ $f['text'] ?? '' }}</textarea>
+                                    <textarea name="feature_text[]" class="form-control rounded-3" rows="6" placeholder="النص بالعربية" style="font-size: 0.92rem; line-height: 1.9; min-height: 120px; border: 1.5px solid #CDD9E3;">{{ $f['text'] ?? '' }}</textarea>
                                 </div>
                             </div>
                         </div>
 
                         {{-- English Column --}}
                         <div class="col-md-6">
-                            <div class="border-0 rounded-3 p-4 bg-light shadow-sm">
-                                <div class="d-flex align-items-center gap-2 mb-3 pb-2 border-bottom">
-                                    <i class="bi bi-globe text-primary"></i>
-                                    <span class="fw-bold text-primary">{{ __('admin.labels.english') }}</span>
+                            <div class="rounded-3 p-3" style="background: #F8FBFD; border: 1px solid #E6ECF2;">
+                                <div class="d-flex align-items-center gap-2 mb-3 pb-2" style="border-bottom: 1px solid #E6ECF2;">
+                                    <i class="bi bi-globe" style="color: #5B7088;"></i>
+                                    <span class="fw-bold" style="color: #24364A; font-size: 0.85rem;">{{ __('admin.labels.english') }}</span>
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label fw-semibold text-dark mb-2">{{ __('admin.why_choose_us.form_item_title') }}</label>
@@ -137,7 +137,7 @@
                                 </div>
                                 <div>
                                     <label class="form-label fw-semibold text-dark mb-2">{{ __('admin.why_choose_us.form_item_text') }}</label>
-                                    <textarea name="feature_text_en[]" class="form-control rounded-3 border-0 bg-white" rows="3" placeholder="English Text" style="font-size: 1rem;">{{ $f['text_en'] ?? '' }}</textarea>
+                                    <textarea name="feature_text_en[]" class="form-control rounded-3" rows="6" placeholder="English Text" style="font-size: 0.92rem; line-height: 1.9; min-height: 120px; border: 1.5px solid #CDD9E3;">{{ $f['text_en'] ?? '' }}</textarea>
                                 </div>
                             </div>
                         </div>

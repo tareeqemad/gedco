@@ -32,7 +32,7 @@
                         </td>
                         <td>
                             <a href="mailto:{{ $user->email }}" class="text-decoration-none">
-                                <i class="bi bi-envelope me-1 text-muted"></i>{{ $user->email }}
+{{ $user->email }}
                             </a>
                         </td>
                         <td>

@@ -28,40 +28,32 @@
             <!-- Filter Section -->
             <div class="card-body p-3">
                 <div class="users-filters">
-                <form id="usersFilterForm" method="GET" action="{{ route('admin.users.index') }}" class="row g-3 align-items-end">
-                    <div class="col-md-7">
-                        <label class="form-label small text-muted mb-1 fw-semibold">
-                            <i class="bi bi-search me-1"></i>{{ __('admin.users.search_placeholder') }}
-                        </label>
-                        <div class="input-group">
-                            <span class="input-group-text bg-white">
-                                <i class="bi bi-search text-muted"></i>
-                            </span>
-                            <input type="text" 
-                                   name="search" 
+                <form id="usersFilterForm" method="GET" action="{{ route('admin.users.index') }}">
+                    <div class="d-flex gap-2 align-items-center flex-wrap">
+                        <div class="search-input-wrap" style="flex: 1 1 45%;">
+                            <i class="bi bi-search"></i>
+                            <input type="text"
+                                   name="search"
                                    id="searchInput"
-                                   class="form-control" 
+                                   class="form-control rounded-3"
                                    placeholder="{{ __('admin.users.search_placeholder') }}"
                                    value="{{ request('search') }}">
                         </div>
-                    </div>
-                    <div class="col-md-3">
-                        <label class="form-label small text-muted mb-1 fw-semibold">
-                            <i class="bi bi-funnel me-1"></i>{{ __('admin.users.roles') }}
-                        </label>
-                        <select name="role" id="roleSelect" class="form-select">
-                            <option value="">{{ __('admin.users.all_roles') }}</option>
-                            @foreach($roles as $role)
-                                <option value="{{ $role->name }}" {{ request('role') == $role->name ? 'selected' : '' }}>
-                                    {{ ucfirst(str_replace('-', ' ', $role->name)) }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="col-md-2">
-                        <button type="submit" class="btn btn-primary w-100" id="searchBtn">
-                            <i class="bi bi-funnel me-2"></i>{{ __('admin.users.filter') }}
-                        </button>
+                        <div style="flex: 0 1 25%;">
+                            <select name="role" id="roleSelect" class="form-select rounded-3">
+                                <option value="">{{ __('admin.users.all_roles') }}</option>
+                                @foreach($roles as $role)
+                                    <option value="{{ $role->name }}" {{ request('role') == $role->name ? 'selected' : '' }}>
+                                        {{ ucfirst(str_replace('-', ' ', $role->name)) }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div style="flex: 0 0 auto;">
+                            <button type="submit" class="btn btn-primary rounded-3" id="searchBtn">
+                                <i class="bi bi-funnel me-1"></i> {{ __('admin.users.filter') }}
+                            </button>
+                        </div>
                     </div>
                 </form>
                 @if(request()->hasAny(['search', 'role']))
