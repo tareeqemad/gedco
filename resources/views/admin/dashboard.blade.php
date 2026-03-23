@@ -6,261 +6,179 @@
 @extends('layouts.admin')
 
 @section('title', __('admin.menu.dashboard'))
-@section('page-title', __('admin.menu.dashboard'))
-
 
 @section('content')
-    <!-- Welcome Card -->
-    <div class="row mb-4">
-        <div class="col-12">
-            <div class="welcome-card">
-                <div class="d-flex align-items-center justify-content-between flex-wrap">
-                    <div>
-                        <h2 class="mb-2 fw-bold">{{ __('admin.dashboard.welcome', ['name' => auth()->user()->name]) }} 👋</h2>
-                        <p class="mb-0 opacity-90">{{ __('admin.dashboard.welcome_subtitle') }} - {{ now()->translatedFormat('l، d F Y') }}</p>
+
+    {{-- ===== Hero: compact welcome + smart alerts ===== --}}
+    <div class="dash-hero mb-4">
+        <div class="d-flex align-items-start justify-content-between flex-wrap gap-3">
+            <div>
+                <h4 class="mb-1 fw-bold" style="color: #FFFFFF;">{{ __('admin.dashboard.welcome', ['name' => auth()->user()->name]) }}</h4>
+                <p class="mb-0" style="color: rgba(255,255,255,0.6); font-size: 0.82rem;">{{ now()->translatedFormat('l، d F Y') }} &middot; {{ now()->format('h:i A') }}</p>
+            </div>
+            @if($pendingItems->count() > 0)
+                <div class="d-flex flex-column gap-1">
+                    @foreach($pendingItems as $item)
+                        <a href="{{ $item['route'] }}" class="dash-hero-alert">
+                            <i class="bi {{ $item['icon'] }}" style="color: {{ $item['color'] }};"></i>
+                            <span>{{ $item['text'] }}</span>
+                            <i class="bi bi-chevron-left" style="font-size: 0.65rem; opacity: 0.5;"></i>
+                        </a>
+                    @endforeach
+                </div>
+            @endif
+        </div>
+    </div>
+
+    {{-- ===== Row 1: Core KPIs (4 cards) ===== --}}
+    <div class="row mb-3">
+        <div class="col-6 col-lg-3 mb-3">
+            <div class="dash-kpi">
+                <div class="dash-kpi-icon" style="background: rgba(15, 103, 198, 0.08); color: #0F67C6;">
+                    <i class="bi bi-people-fill"></i>
+                </div>
+                <div>
+                    <div class="dash-kpi-value">{{ number_format($stats['users']['total']) }}</div>
+                    <div class="dash-kpi-label">{{ __('admin.dashboard.users') }}</div>
+                    @if($stats['users']['today'] > 0)
+                        <span class="stat-chip" style="font-size: 0.6rem; color: #16A34A;">+{{ $stats['users']['today'] }} اليوم</span>
+                    @endif
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-lg-3 mb-3">
+            <div class="dash-kpi">
+                <div class="dash-kpi-icon" style="background: rgba(22, 163, 74, 0.08); color: #16A34A;">
+                    <i class="bi bi-newspaper"></i>
+                </div>
+                <div>
+                    <div class="dash-kpi-value">{{ number_format($stats['news']['total']) }}</div>
+                    <div class="dash-kpi-label">{{ __('admin.dashboard.news') }}</div>
+                    <div class="d-flex gap-1 mt-1">
+                        <span class="stat-chip" style="font-size: 0.6rem; color: #16A34A;">{{ $stats['news']['published'] }} منشور</span>
+                        @if($stats['news']['draft'] > 0)
+                            <span class="stat-chip" style="font-size: 0.6rem; color: #D97706;">{{ $stats['news']['draft'] }} مسودة</span>
+                        @endif
                     </div>
-                    <div class="text-end">
-                        <div class="fs-4 fw-bold">{{ now()->format('H:i') }}</div>
-                        <small class="opacity-75">{{ now()->format('A') }}</small>
-                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-lg-3 mb-3">
+            <div class="dash-kpi">
+                <div class="dash-kpi-icon" style="background: rgba(2, 132, 199, 0.08); color: #0284C7;">
+                    <i class="bi bi-images"></i>
+                </div>
+                <div>
+                    <div class="dash-kpi-value">{{ number_format($stats['sliders']['total']) }}</div>
+                    <div class="dash-kpi-label">{{ __('admin.dashboard.sliders') }}</div>
+                    <span class="stat-chip" style="font-size: 0.6rem;">{{ $stats['sliders']['active'] }} نشط</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-lg-3 mb-3">
+            <div class="dash-kpi">
+                <div class="dash-kpi-icon" style="background: rgba(217, 119, 6, 0.08); color: #D97706;">
+                    <i class="bi bi-megaphone-fill"></i>
+                </div>
+                <div>
+                    <div class="dash-kpi-value">{{ number_format($stats['advertisements']['total']) }}</div>
+                    <div class="dash-kpi-label">{{ __('admin.dashboard.advertisements') }}</div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Statistics Cards -->
+    {{-- ===== Row 2: Secondary KPIs (4 cards) ===== --}}
     <div class="row mb-4">
-        <!-- Users -->
-        <div class="col-12 col-sm-6 col-lg-3 mb-3">
-            <div class="card stat-card primary">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-start">
-                        <div class="flex-grow-1">
-                            <div class="stat-label">{{ __('admin.dashboard.users') }}</div>
-                            <div class="stat-value">{{ number_format($stats['users']['total']) }}</div>
-                            @if($stats['users']['today'] > 0)
-                                <div class="stat-change text-success">
-                                    <i class="bi bi-arrow-up"></i> +{{ $stats['users']['today'] }} {{ __('admin.dashboard.new_today') }}
-                                </div>
-                            @endif
-                        </div>
-                        <div class="stat-icon stat-icon-primary">
-                            <i class="bi bi-people-fill"></i>
-                        </div>
-                    </div>
+        <div class="col-6 col-lg-3 mb-3">
+            <div class="dash-kpi">
+                <div class="dash-kpi-icon" style="background: rgba(220, 38, 38, 0.08); color: #DC2626;">
+                    <i class="bi bi-file-earmark-text-fill"></i>
+                </div>
+                <div>
+                    <div class="dash-kpi-value">{{ number_format($stats['tenders']['total']) }}</div>
+                    <div class="dash-kpi-label">{{ __('admin.dashboard.tenders') }}</div>
                 </div>
             </div>
         </div>
-
-        <!-- News -->
-        <div class="col-12 col-sm-6 col-lg-3 mb-3">
-            <div class="card stat-card success">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-start">
-                        <div class="flex-grow-1">
-                            <div class="stat-label">{{ __('admin.dashboard.news') }}</div>
-                            <div class="stat-value">{{ number_format($stats['news']['total']) }}</div>
-                            <div class="stat-change">
-                                <span class="badge bg-success badge-custom">{{ $stats['news']['published'] }} {{ __('admin.dashboard.published') }}</span>
-                                @if($stats['news']['draft'] > 0)
-                                    <span class="badge bg-warning badge-custom ms-1">{{ $stats['news']['draft'] }} {{ __('admin.dashboard.draft') }}</span>
-                                @endif
-                            </div>
-                        </div>
-                        <div class="stat-icon stat-icon-success">
-                            <i class="bi bi-newspaper"></i>
-                        </div>
-                    </div>
+        <div class="col-6 col-lg-3 mb-3">
+            <div class="dash-kpi">
+                <div class="dash-kpi-icon" style="background: rgba(124, 58, 237, 0.08); color: #7C3AED;">
+                    <i class="bi bi-graph-up-arrow"></i>
+                </div>
+                <div>
+                    <div class="dash-kpi-value">{{ number_format($stats['impact_stats']['total']) }}</div>
+                    <div class="dash-kpi-label">{{ __('admin.dashboard.impact_stats') }}</div>
+                    <span class="stat-chip" style="font-size: 0.6rem;">{{ $stats['impact_stats']['active'] }} نشط</span>
                 </div>
             </div>
         </div>
-
-        <!-- Sliders -->
-        <div class="col-12 col-sm-6 col-lg-3 mb-3">
-            <div class="card stat-card info">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-start">
-                        <div class="flex-grow-1">
-                            <div class="stat-label">{{ __('admin.dashboard.sliders') }}</div>
-                            <div class="stat-value">{{ number_format($stats['sliders']['total']) }}</div>
-                            <div class="stat-change">
-                                <span class="text-info">
-                                    <i class="bi bi-check-circle"></i> {{ $stats['sliders']['active'] }} {{ __('admin.dashboard.active') }}
-                                </span>
-                            </div>
-                        </div>
-                        <div class="stat-icon stat-icon-info">
-                            <i class="bi bi-images"></i>
-                        </div>
-                    </div>
+        <div class="col-6 col-lg-3 mb-3">
+            <div class="dash-kpi">
+                <div class="dash-kpi-icon" style="background: rgba(13, 148, 136, 0.08); color: #0D9488;">
+                    <i class="bi bi-person-badge-fill"></i>
+                </div>
+                <div>
+                    <div class="dash-kpi-value">{{ number_format($stats['staff_profiles']['total']) }}</div>
+                    <div class="dash-kpi-label">{{ __('admin.dashboard.staff_profiles') }}</div>
                 </div>
             </div>
         </div>
-
-        <!-- Advertisements -->
-        <div class="col-12 col-sm-6 col-lg-3 mb-3">
-            <div class="card stat-card warning">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-start">
-                        <div class="flex-grow-1">
-                            <div class="stat-label">{{ __('admin.dashboard.advertisements') }}</div>
-                            <div class="stat-value">{{ number_format($stats['advertisements']['total']) }}</div>
-                            @if($stats['advertisements']['today'] > 0)
-                                <div class="stat-change text-warning">
-                                    <i class="bi bi-arrow-up"></i> +{{ $stats['advertisements']['today'] }} {{ __('admin.dashboard.new_today') }}
-                                </div>
-                            @endif
-                        </div>
-                        <div class="stat-icon stat-icon-warning">
-                            <i class="bi bi-megaphone-fill"></i>
-                        </div>
-                    </div>
+        <div class="col-6 col-lg-3 mb-3">
+            <div class="dash-kpi">
+                <div class="dash-kpi-icon" style="background: rgba(234, 88, 12, 0.08); color: #EA580C;">
+                    <i class="bi bi-activity"></i>
+                </div>
+                <div>
+                    <div class="dash-kpi-value">{{ number_format($stats['activities']['today']) }}</div>
+                    <div class="dash-kpi-label">نشاط اليوم</div>
+                    <span class="stat-chip" style="font-size: 0.6rem;">{{ $stats['activities']['active_users_today'] }} {{ __('admin.dashboard.active_users') }}</span>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Second Row Statistics -->
+    {{-- ===== Row 3: Chart + Quick Actions ===== --}}
     <div class="row mb-4">
-        <!-- Tenders -->
-        <div class="col-12 col-sm-6 col-lg-3 mb-3">
-            <div class="card stat-card danger">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-start">
-                        <div class="flex-grow-1">
-                            <div class="stat-label">{{ __('admin.dashboard.tenders') }}</div>
-                            <div class="stat-value">{{ number_format($stats['tenders']['total']) }}</div>
-                            @if($stats['tenders']['today'] > 0)
-                                <div class="stat-change text-danger">
-                                    <i class="bi bi-arrow-up"></i> +{{ $stats['tenders']['today'] }} {{ __('admin.dashboard.new_today') }}
-                                </div>
-                            @endif
-                        </div>
-                        <div class="stat-icon stat-icon-danger">
-                            <i class="bi bi-file-earmark-text-fill"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Impact Stats -->
-        <div class="col-12 col-sm-6 col-lg-3 mb-3">
-            <div class="card stat-card purple">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-start">
-                        <div class="flex-grow-1">
-                            <div class="stat-label">{{ __('admin.dashboard.impact_stats') }}</div>
-                            <div class="stat-value">{{ number_format($stats['impact_stats']['total']) }}</div>
-                            <div class="stat-change">
-                                <span class="text-purple-dashboard">
-                                    <i class="bi bi-check-circle"></i> {{ $stats['impact_stats']['active'] }} {{ __('admin.dashboard.active') }}
-                                </span>
-                            </div>
-                        </div>
-                        <div class="stat-icon stat-icon-purple">
-                            <i class="bi bi-graph-up-arrow"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Staff Profiles -->
-        <div class="col-12 col-sm-6 col-lg-3 mb-3">
-            <div class="card stat-card teal">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-start">
-                        <div class="flex-grow-1">
-                            <div class="stat-label">{{ __('admin.dashboard.staff_profiles') }}</div>
-                            <div class="stat-value">{{ number_format($stats['staff_profiles']['total']) }}</div>
-                            <div class="stat-change">
-                                <small class="text-teal-dashboard">{{ $stats['staff_profiles']['working'] }} {{ __('admin.dashboard.working') }}</small>
-                            </div>
-                        </div>
-                        <div class="stat-icon stat-icon-teal">
-                            <i class="bi bi-person-badge-fill"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Activities -->
-        <div class="col-12 col-sm-6 col-lg-3 mb-3">
-            <div class="card stat-card orange">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-start">
-                        <div class="flex-grow-1">
-                            <div class="stat-label">{{ __('admin.dashboard.activities') }}</div>
-                            <div class="stat-value">{{ number_format($stats['activities']['today']) }}</div>
-                            <div class="stat-change">
-                                <small class="text-orange-dashboard">{{ $stats['activities']['active_users_today'] }} {{ __('admin.dashboard.active_users') }}</small>
-                            </div>
-                        </div>
-                        <div class="stat-icon stat-icon-orange">
-                            <i class="bi bi-activity"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Charts and Recent Items -->
-    <div class="row">
-        <!-- Chart -->
-        @if(auth()->user()->hasRole('super-admin') && $activitiesChart->count() > 0)
-        <div class="col-12 col-lg-8 mb-4">
-            <div class="card chart-card">
-                <div class="card-header bg-white border-bottom">
-                    <h5 class="mb-0 fw-bold">
-                        <i class="bi bi-bar-chart-fill me-2 text-primary"></i>
+        @can('activity-logs.view')
+        @if($activitiesChart->count() > 0)
+        <div class="col-12 col-lg-8 mb-3">
+            <div class="card border-0 shadow-sm rounded-4">
+                <div class="card-body p-3">
+                    <h6 class="fw-bold mb-3 d-flex align-items-center gap-2" style="color: #24364A; font-size: 0.88rem;">
+                        <i class="bi bi-bar-chart-fill" style="color: #5B7088;"></i>
                         {{ __('admin.dashboard.activities_chart') }}
-                    </h5>
-                </div>
-                <div class="card-body">
-                    <canvas id="activitiesChart" height="80"></canvas>
+                    </h6>
+                    <canvas id="activitiesChart" height="70"></canvas>
                 </div>
             </div>
         </div>
         @endif
+        @endcan
 
-        <!-- Quick Links -->
-        <div class="col-12 col-lg-{{ auth()->user()->hasRole('super-admin') && $activitiesChart->count() > 0 ? '4' : '12' }} mb-4">
-            <div class="card chart-card">
-                <div class="card-header bg-white border-bottom">
-                    <h5 class="mb-0 fw-bold">
-                        <i class="bi bi-link-45deg me-2 text-primary"></i>
-                        {{ __('admin.dashboard.quick_links') }}
-                    </h5>
-                </div>
-                <div class="card-body">
-                    <div class="d-grid gap-2">
+        <div class="col-12 col-lg-{{ (auth()->user()->can('activity-logs.view') && $activitiesChart->count() > 0) ? '4' : '12' }} mb-3">
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+                <div class="card-body p-3">
+                    <h6 class="fw-bold mb-3 d-flex align-items-center gap-2" style="color: #24364A; font-size: 0.88rem;">
+                        <i class="bi bi-lightning-charge-fill" style="color: #5B7088;"></i>
+                        إجراءات سريعة
+                    </h6>
+                    <div class="row g-2">
                         @can('news.create')
-                            <a href="{{ route('admin.news.create') }}" class="btn btn-outline-primary">
-                                <i class="bi bi-plus-circle me-2"></i> {{ __('admin.dashboard.add_new_news') }}
-                            </a>
+                            <div class="col-6"><a href="{{ route('admin.news.create') }}" class="dash-quick-tile"><i class="bi bi-newspaper"></i><span>خبر جديد</span></a></div>
                         @endcan
                         @can('sliders.create')
-                            <a href="{{ route('admin.sliders.create') }}" class="btn btn-outline-info">
-                                <i class="bi bi-plus-circle me-2"></i> {{ __('admin.dashboard.add_new_slider') }}
-                            </a>
+                            <div class="col-6"><a href="{{ route('admin.sliders.create') }}" class="dash-quick-tile"><i class="bi bi-images"></i><span>شريحة جديدة</span></a></div>
+                        @endcan
+                        @can('users.create')
+                            <div class="col-6"><a href="{{ route('admin.users.create') }}" class="dash-quick-tile"><i class="bi bi-person-plus"></i><span>مستخدم جديد</span></a></div>
                         @endcan
                         @can('advertisements.create')
-                            <a href="{{ route('admin.advertisements.create') }}" class="btn btn-outline-warning">
-                                <i class="bi bi-plus-circle me-2"></i> {{ __('admin.dashboard.add_new_advertisement') }}
-                            </a>
+                            <div class="col-6"><a href="{{ route('admin.advertisements.create') }}" class="dash-quick-tile"><i class="bi bi-megaphone"></i><span>إعلان جديد</span></a></div>
                         @endcan
-                        @can('tenders.create')
-                            <a href="{{ route('admin.tenders.create') }}" class="btn btn-outline-danger">
-                                <i class="bi bi-plus-circle me-2"></i> {{ __('admin.dashboard.add_new_tender') }}
-                            </a>
-                        @endcan
-                        @can('activity-logs.view')
-                            <a href="{{ route('admin.activity-logs.index') }}" class="btn btn-outline-secondary">
-                                <i class="bi bi-activity me-2"></i> {{ __('admin.dashboard.activity_logs') }}
-                            </a>
+                        <div class="col-6"><a href="{{ route('admin.site-settings.edit', 1) }}" class="dash-quick-tile"><i class="bi bi-gear"></i><span>الإعدادات</span></a></div>
+                        @can('contact-messages.view')
+                            <div class="col-6"><a href="{{ route('admin.contact-messages.index') }}" class="dash-quick-tile"><i class="bi bi-envelope"></i><span>الرسائل</span></a></div>
                         @endcan
                     </div>
                 </div>
@@ -268,134 +186,91 @@
         </div>
     </div>
 
-    <!-- Recent News & Activities -->
+    {{-- ===== Row 4: Recent News + Recent Activities ===== --}}
     <div class="row">
-        <!-- Recent News -->
         <div class="col-12 col-lg-6 mb-4">
-            <div class="card chart-card">
-                <div class="card-header bg-white border-bottom d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0 fw-bold">
-                        <i class="bi bi-newspaper me-2 text-success"></i>
-                        {{ __('admin.dashboard.recent_news') }}
-                    </h5>
-                    @can('news.view')
-                        <a href="{{ route('admin.news.index') }}" class="btn btn-sm btn-outline-success">
-                            {{ __('admin.dashboard.view_all') }}
-                        </a>
-                    @endcan
-                </div>
+            <div class="card border-0 shadow-sm rounded-4 h-100">
                 <div class="card-body p-0">
+                    <div class="d-flex justify-content-between align-items-center p-3 pb-2">
+                        <h6 class="fw-bold d-flex align-items-center gap-2 mb-0" style="color: #24364A; font-size: 0.88rem;">
+                            <i class="bi bi-newspaper" style="color: #5B7088;"></i>
+                            {{ __('admin.dashboard.recent_news') }}
+                        </h6>
+                        @can('news.view')
+                            <a href="{{ route('admin.news.index') }}" class="dash-view-all">{{ __('admin.dashboard.view_all') }} →</a>
+                        @endcan
+                    </div>
                     @forelse($recentNews as $news)
-                        <div class="recent-item">
-                            <div class="d-flex justify-content-between align-items-start">
-                                <div class="flex-grow-1">
-                                    <h6 class="mb-1 fw-semibold">{{ \Illuminate\Support\Str::limit($news->title, 50) }}</h6>
-                                    <div class="d-flex align-items-center gap-2 mt-1">
-                                        <span class="badge bg-{{ $news->status === 'published' ? 'success' : 'warning' }} badge-custom">
-                                            {{ $news->status === 'published' ? __('admin.dashboard.published') : __('admin.dashboard.draft') }}
-                                        </span>
-                                        <small class="text-muted">
-                                            <i class="bi bi-clock"></i> {{ $news->created_at->diffForHumans() }}
-                                        </small>
-                                    </div>
+                        <div class="dash-list-item">
+                            <div class="flex-grow-1">
+                                <div class="fw-semibold" style="font-size: 0.83rem; color: #24364A;">{{ \Illuminate\Support\Str::limit($news->title, 55) }}</div>
+                                <div class="d-flex align-items-center gap-2 mt-1">
+                                    <span class="stat-chip" style="font-size: 0.6rem; {{ $news->status === 'published' ? 'color: #16A34A;' : 'color: #D97706;' }}">
+                                        {{ $news->status === 'published' ? __('admin.dashboard.published') : __('admin.dashboard.draft') }}
+                                    </span>
+                                    <small class="text-muted" style="font-size: 0.7rem;">{{ $news->created_at->diffForHumans() }}</small>
                                 </div>
-                                @can('news.edit')
-                                    <a href="{{ route('admin.news.edit', $news->id) }}" class="btn btn-sm btn-outline-primary">
-                                        <i class="bi bi-pencil"></i>
-                                    </a>
-                                @endcan
                             </div>
+                            @can('news.edit')
+                                <a href="{{ route('admin.news.edit', $news->id) }}" class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil"></i></a>
+                            @endcan
                         </div>
                     @empty
-                        <div class="text-center py-5 text-muted">
-                            <i class="bi bi-inbox fs-1 d-block mb-2"></i>
-                            {{ __('admin.dashboard.no_recent_news') }}
+                        <div class="text-center py-4 text-muted">
+                            <i class="bi bi-folder2-open fs-3 d-block mb-2" style="color: #CDD9E3;"></i>
+                            <small>{{ __('admin.dashboard.no_recent_news') }}</small>
                         </div>
                     @endforelse
                 </div>
             </div>
         </div>
 
-        <!-- Recent Activities (Permission Based) -->
         @can('activity-logs.view')
         <div class="col-12 col-lg-6 mb-4">
-            <div class="card chart-card border-0 shadow-sm activity-card-wrapper">
-                <div class="card-header bg-gradient-primary text-white d-flex justify-content-between align-items-center activity-card-header">
-                    <h5 class="mb-0 fw-bold d-flex align-items-center">
-                        <i class="bi bi-activity me-2 fs-5"></i>
-                        <span>{{ __('admin.dashboard.recent_activities') }}</span>
-                    </h5>
-                    <a href="{{ route('admin.activity-logs.index') }}" class="btn btn-sm btn-light btn-hover-scale">
-                        <i class="bi bi-arrow-left me-1"></i>
-                        {{ __('admin.dashboard.view_all') }}
-                    </a>
-                </div>
-                <div class="card-body p-0 activity-card-body">
-                    @forelse($recentActivities as $activity)
-                        <div class="activity-item">
-                            <div class="activity-item-content">
-                                <div class="d-flex align-items-start gap-3">
-                                    <!-- Avatar -->
-                                    <div class="activity-avatar flex-shrink-0">
-                                        {{ strtoupper(substr($activity->user->name ?? 'U', 0, 1)) }}
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+                <div class="card-body p-0">
+                    <div class="d-flex justify-content-between align-items-center p-3 pb-2">
+                        <h6 class="fw-bold d-flex align-items-center gap-2 mb-0" style="color: #24364A; font-size: 0.88rem;">
+                            <i class="bi bi-activity" style="color: #5B7088;"></i>
+                            {{ __('admin.dashboard.recent_activities') }}
+                        </h6>
+                        <a href="{{ route('admin.activity-logs.index') }}" class="dash-view-all">{{ __('admin.dashboard.view_all') }} →</a>
+                    </div>
+                    <div style="max-height: 380px; overflow-y: auto;">
+                        @forelse($recentActivities as $activity)
+                            <div class="dash-list-item">
+                                <div class="activity-avatar flex-shrink-0">
+                                    {{ strtoupper(substr($activity->user->name ?? 'U', 0, 1)) }}
+                                </div>
+                                <div class="flex-grow-1 min-width-0">
+                                    <div class="d-flex align-items-center gap-2 flex-wrap">
+                                        <span class="fw-semibold" style="font-size: 0.8rem; color: #24364A;">{{ $activity->user->name ?? 'محذوف' }}</span>
+                                        @php
+                                            $actionIcon = match($activity->action) {
+                                                'login' => 'bi-box-arrow-in-right',
+                                                'logout' => 'bi-box-arrow-right',
+                                                'create' => 'bi-plus-circle',
+                                                'update' => 'bi-pencil',
+                                                'delete' => 'bi-trash',
+                                                'view' => 'bi-eye',
+                                                default => 'bi-circle',
+                                            };
+                                        @endphp
+                                        <span class="stat-chip activity-badge-{{ $activity->action }}" style="font-size: 0.6rem;">
+                                            <i class="bi {{ $actionIcon }}"></i> {{ $activity->action }}
+                                        </span>
                                     </div>
-                                    
-                                    <!-- Content -->
-                                    <div class="flex-grow-1 activity-content-wrapper">
-                                        <div class="d-flex align-items-center gap-2 mb-2 flex-wrap">
-                                            <span class="fw-semibold text-dark activity-user-name">{{ $activity->user->name ?? 'مستخدم محذوف' }}</span>
-                                            @php
-                                                $actionIcon = match($activity->action) {
-                                                    'login' => 'bi-box-arrow-in-right',
-                                                    'logout' => 'bi-box-arrow-right',
-                                                    'create' => 'bi-plus-circle',
-                                                    'update' => 'bi-pencil',
-                                                    'delete' => 'bi-trash',
-                                                    'view' => 'bi-eye',
-                                                    default => 'bi-circle',
-                                                };
-                                                $badgeClass = 'activity-badge-' . $activity->action;
-                                            @endphp
-                                            <span class="badge d-flex align-items-center gap-1 activity-badge {{ $badgeClass }}">
-                                                <i class="bi {{ $actionIcon }}"></i>
-                                                <span>{{ $activity->action }}</span>
-                                            </span>
-                                        </div>
-                                        
-                                        <p class="mb-2 text-muted activity-description">
-                                            {{ $activity->description }}
-                                        </p>
-                                        
-                                        <div class="d-flex align-items-center gap-3 flex-wrap activity-meta">
-                                            <span class="text-muted d-flex align-items-center gap-1">
-                                                <i class="bi bi-clock activity-meta-icon"></i>
-                                                <span>{{ $activity->created_at->diffForHumans() }}</span>
-                                            </span>
-                                            @if($activity->route_name)
-                                                <span class="text-muted d-flex align-items-center gap-1">
-                                                    <i class="bi bi-link-45deg activity-meta-icon"></i>
-                                                    <span class="activity-code">{{ Str::limit($activity->route_name, 30) }}</span>
-                                                </span>
-                                            @endif
-                                            @if($activity->ip_address)
-                                                <span class="text-muted d-flex align-items-center gap-1">
-                                                    <i class="bi bi-geo-alt activity-meta-icon"></i>
-                                                    <span class="activity-code">{{ $activity->ip_address }}</span>
-                                                </span>
-                                            @endif
-                                        </div>
-                                    </div>
+                                    <p class="mb-0 text-muted text-truncate" style="font-size: 0.75rem;">{{ $activity->description }}</p>
+                                    <small class="text-muted" style="font-size: 0.68rem;">{{ $activity->created_at->diffForHumans() }}</small>
                                 </div>
                             </div>
-                        </div>
-                    @empty
-                        <div class="text-center py-5">
-                            <div class="mb-3">
-                                <i class="bi bi-inbox empty-state-icon"></i>
+                        @empty
+                            <div class="text-center py-4 text-muted">
+                                <i class="bi bi-folder2-open fs-3 d-block mb-2" style="color: #CDD9E3;"></i>
+                                <small>{{ __('admin.dashboard.no_recent_activities') }}</small>
                             </div>
-                            <p class="text-muted mb-0">{{ __('admin.dashboard.no_recent_activities') }}</p>
-                        </div>
-                    @endforelse
+                        @endforelse
+                    </div>
                 </div>
             </div>
         </div>
@@ -404,7 +279,8 @@
 @endsection
 
 @push('scripts')
-@if(auth()->user()->hasRole('super-admin') && $activitiesChart->count() > 0)
+@can('activity-logs.view')
+@if($activitiesChart->count() > 0)
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -414,53 +290,37 @@
         const chartData = @json($activitiesChart);
         const labels = Object.keys(chartData).map(date => {
             const d = new Date(date);
-            return d.toLocaleDateString('ar-EG', { weekday: 'short', day: 'numeric', month: 'short' });
+            return d.toLocaleDateString('ar-EG', { weekday: 'short', day: 'numeric' });
         });
-        const data = Object.values(chartData);
 
         new Chart(ctx, {
-            type: 'line',
+            type: 'bar',
             data: {
                 labels: labels,
                 datasets: [{
-                            label: '{{ __('admin.dashboard.activities') }}',
-                    data: data,
-                    borderColor: '#35516F',
-                    backgroundColor: 'rgba(53, 81, 111, 0.1)',
-                    tension: 0.4,
-                    fill: true,
-                    borderWidth: 2,
-                    pointRadius: 4,
-                    pointBackgroundColor: '#35516F',
-                    pointBorderColor: '#fff',
-                    pointBorderWidth: 2,
+                    data: Object.values(chartData),
+                    backgroundColor: 'rgba(15, 103, 198, 0.12)',
+                    borderColor: '#0F67C6',
+                    borderWidth: 1.5,
+                    borderRadius: 6,
+                    borderSkipped: false,
                 }]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: true,
                 plugins: {
-                    legend: {
-                        display: false
-                    },
-                    tooltip: {
-                        backgroundColor: 'rgba(0,0,0,0.8)',
-                        padding: 12,
-                        titleFont: { size: 14 },
-                        bodyFont: { size: 13 },
-                    }
+                    legend: { display: false },
+                    tooltip: { backgroundColor: '#24364A', padding: 10, cornerRadius: 8 }
                 },
                 scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: {
-                            stepSize: 1
-                        }
-                    }
+                    y: { beginAtZero: true, ticks: { stepSize: 1, font: { size: 11 } }, grid: { color: 'rgba(0,0,0,0.04)' } },
+                    x: { ticks: { font: { size: 11 } }, grid: { display: false } }
                 }
             }
         });
     });
 </script>
 @endif
+@endcan
 @endpush

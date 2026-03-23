@@ -4,90 +4,74 @@
         <table class="table table-hover align-middle mb-0">
             <thead class="table-light">
                 <tr>
-                    <th class="text-center" style="width: 60px">#</th>
+                    <th class="text-center" style="width: 50px">#</th>
                     <th>المرسل</th>
                     <th>الموضوع</th>
-                    <th>البريد الإلكتروني</th>
                     <th>التاريخ</th>
-                    <th class="text-center" style="width: 120px">الحالة</th>
-                    <th class="text-center" style="width: 150px">الإجراءات</th>
+                    <th class="text-center" style="width: 100px">الحالة</th>
+                    <th class="text-center" style="width: 130px">الإجراءات</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach($messages as $index => $message)
-                    <tr class="{{ !$message->is_read ? 'table-warning' : '' }}">
+                    <tr class="{{ !$message->is_read ? 'msg-unread' : '' }}">
                         <td class="text-center text-muted small">
                             {{ $messages->firstItem() + $index }}
                         </td>
                         <td>
-                            <div class="fw-semibold">{{ $message->name }}</div>
-                            @if($message->phone)
-                                <small class="text-muted">
-                                    <i class="bi bi-telephone me-1"></i>{{ $message->phone }}
-                                </small>
-                            @endif
+                            <div class="fw-semibold" style="font-size: 0.85rem; color: #24364A;">{{ $message->name }}</div>
+                            <small class="text-muted" style="font-size: 0.75rem;">{{ $message->email }}</small>
                         </td>
                         <td>
-                            <div class="fw-semibold">{{ \Illuminate\Support\Str::limit($message->subject, 40) }}</div>
-                            <small class="text-muted">{{ \Illuminate\Support\Str::limit($message->message, 50) }}</small>
-                        </td>
-                        <td>
-                            <a href="mailto:{{ $message->email }}" class="text-decoration-none">
-                                <i class="bi bi-envelope me-1 text-muted"></i>{{ $message->email }}
-                            </a>
-                        </td>
-                        <td>
-                            <div class="small">
-                                {{ $message->created_at->format('Y-m-d') }}
+                            <div class="{{ !$message->is_read ? 'fw-bold' : 'fw-semibold' }}" style="font-size: 0.85rem; color: #24364A;">
+                                {{ \Illuminate\Support\Str::limit($message->subject, 45) }}
                             </div>
-                            <div class="text-muted" style="font-size: 0.75rem;">
-                                {{ $message->created_at->format('H:i') }}
+                            <small class="text-muted d-block" style="font-size: 0.72rem; line-height: 1.3;">
+                                {{ \Illuminate\Support\Str::limit($message->message, 60) }}
+                            </small>
+                        </td>
+                        <td>
+                            <div style="font-size: 0.8rem; color: #24364A;">
+                                {{ $message->created_at->translatedFormat('d M Y') }}
                             </div>
+                            <small class="text-muted" style="font-size: 0.7rem;">
+                                {{ $message->created_at->translatedFormat('h:i A') }}
+                            </small>
                         </td>
                         <td class="text-center">
                             @if($message->is_read)
-                                <span class="badge bg-success">
-                                    <i class="bi bi-check-circle me-1"></i>مقروءة
+                                <span class="stat-chip" style="font-size: 0.65rem; color: #16A34A;">
+                                    <i class="bi bi-check-circle"></i> مقروءة
                                 </span>
                             @else
-                                <span class="badge bg-warning text-dark">
-                                    <i class="bi bi-envelope-exclamation me-1"></i>غير مقروءة
+                                <span class="stat-chip" style="font-size: 0.65rem; color: #D97706; background: rgba(217,119,6,0.08); border-color: rgba(217,119,6,0.15);">
+                                    <i class="bi bi-circle-fill" style="font-size: 0.4rem;"></i> جديدة
                                 </span>
                             @endif
                         </td>
                         <td class="text-center">
-                            <div class="btn-group btn-group-sm" role="group">
-                                <a href="{{ route('admin.contact-messages.show', $message) }}" 
-                                   class="btn btn-primary" 
-                                   title="عرض">
+                            <div class="d-flex gap-1 justify-content-center">
+                                <a href="{{ route('admin.contact-messages.show', $message) }}"
+                                   class="btn btn-sm btn-outline-primary" title="عرض">
                                     <i class="bi bi-eye"></i>
                                 </a>
                                 @if($message->is_read)
-                                    <form action="{{ route('admin.contact-messages.mark-unread', $message) }}" 
-                                          method="POST" 
-                                          class="d-inline">
-                                        @csrf
-                                        @method('PATCH')
-                                        <button type="submit" class="btn btn-warning" title="تحديد كغير مقروءة">
+                                    <form action="{{ route('admin.contact-messages.mark-unread', $message) }}" method="POST" class="d-inline">
+                                        @csrf @method('PATCH')
+                                        <button type="submit" class="btn btn-sm btn-outline-warning" title="تحديد كغير مقروءة">
                                             <i class="bi bi-envelope"></i>
                                         </button>
                                     </form>
                                 @else
-                                    <form action="{{ route('admin.contact-messages.mark-read', $message) }}" 
-                                          method="POST" 
-                                          class="d-inline">
-                                        @csrf
-                                        @method('PATCH')
-                                        <button type="submit" class="btn btn-success" title="تحديد كمقروءة">
+                                    <form action="{{ route('admin.contact-messages.mark-read', $message) }}" method="POST" class="d-inline">
+                                        @csrf @method('PATCH')
+                                        <button type="submit" class="btn btn-sm btn-outline-success" title="تحديد كمقروءة">
                                             <i class="bi bi-check"></i>
                                         </button>
                                     </form>
                                 @endif
-                                <button type="button" 
-                                        class="btn btn-danger" 
-                                        data-bs-toggle="modal" 
-                                        data-bs-target="#deleteModal-{{ $message->id }}"
-                                        title="حذف">
+                                <button type="button" class="btn btn-sm btn-outline-danger"
+                                        data-bs-toggle="modal" data-bs-target="#deleteModal-{{ $message->id }}" title="حذف">
                                     <i class="bi bi-trash"></i>
                                 </button>
                             </div>
@@ -99,75 +83,47 @@
     </div>
 
     <!-- Mobile Card View -->
-    <div class="d-md-none">
+    <div class="d-md-none p-3">
         @foreach($messages as $index => $message)
-            <div class="card mb-3 {{ !$message->is_read ? 'border-warning' : '' }}">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-start mb-2">
-                        <div>
-                            <h6 class="mb-1 fw-bold">{{ $message->name }}</h6>
-                            <small class="text-muted">
-                                <i class="bi bi-envelope me-1"></i>{{ $message->email }}
-                            </small>
-                        </div>
-                        @if($message->is_read)
-                            <span class="badge bg-success">مقروءة</span>
-                        @else
-                            <span class="badge bg-warning text-dark">غير مقروءة</span>
+            <div class="dash-list-item rounded-3 mb-2 {{ !$message->is_read ? 'msg-unread' : '' }}" style="border: 1px solid #E6ECF2;">
+                <div class="flex-grow-1">
+                    <div class="d-flex align-items-center gap-2 mb-1">
+                        <span class="fw-bold" style="font-size: 0.85rem; color: #24364A;">{{ $message->name }}</span>
+                        @if(!$message->is_read)
+                            <span class="stat-chip" style="font-size: 0.55rem; color: #D97706; background: rgba(217,119,6,0.08);">جديدة</span>
                         @endif
                     </div>
-                    <h6 class="mb-2">{{ $message->subject }}</h6>
-                    <p class="text-muted small mb-2">{{ \Illuminate\Support\Str::limit($message->message, 100) }}</p>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <small class="text-muted">
-                            <i class="bi bi-clock me-1"></i>{{ $message->created_at->format('Y-m-d H:i') }}
-                        </small>
-                        <div class="btn-group btn-group-sm">
-                            <a href="{{ route('admin.contact-messages.show', $message) }}" class="btn btn-primary">
-                                <i class="bi bi-eye"></i>
-                            </a>
-                            <button type="button" 
-                                    class="btn btn-danger" 
-                                    data-bs-toggle="modal" 
-                                    data-bs-target="#deleteModal-{{ $message->id }}">
-                                <i class="bi bi-trash"></i>
-                            </button>
-                        </div>
-                    </div>
+                    <div class="{{ !$message->is_read ? 'fw-semibold' : '' }}" style="font-size: 0.82rem;">{{ $message->subject }}</div>
+                    <small class="text-muted" style="font-size: 0.7rem;">{{ $message->created_at->diffForHumans() }}</small>
                 </div>
+                <a href="{{ route('admin.contact-messages.show', $message) }}" class="btn btn-sm btn-outline-primary">
+                    <i class="bi bi-eye"></i>
+                </a>
             </div>
         @endforeach
     </div>
 @else
     <div class="text-center py-5">
-        <i class="bi bi-inbox" style="font-size: 3rem; color: #ccc;"></i>
-        <p class="text-muted mt-3">لا توجد رسائل</p>
+        <i class="bi bi-envelope-open" style="font-size: 2.5rem; color: #CDD9E3;"></i>
+        <p class="text-muted mt-3" style="font-size: 0.85rem;">لا توجد رسائل</p>
     </div>
 @endif
 
 <!-- Delete Modals -->
 @foreach($messages as $message)
     <div class="modal fade" id="deleteModal-{{ $message->id }}" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-dialog modal-dialog-centered modal-sm">
             <form action="{{ route('admin.contact-messages.destroy', $message) }}" method="POST">
-                @csrf
-                @method('DELETE')
-                <div class="modal-content">
-                    <div class="modal-header border-0">
-                        <h5 class="modal-title text-danger">
-                            <i class="bi bi-exclamation-triangle-fill me-2"></i>تأكيد الحذف
-                        </h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                    </div>
+                @csrf @method('DELETE')
+                <div class="modal-content border-0 rounded-4">
                     <div class="modal-body text-center py-4">
-                        <i class="bi bi-exclamation-triangle-fill text-danger" style="font-size: 3rem;"></i>
-                        <p class="mt-3 mb-2">هل أنت متأكد من حذف هذه الرسالة؟</p>
-                        <p class="fw-bold text-dark">{{ $message->subject }}</p>
-                        <small class="text-danger">هذا الإجراء لا يمكن التراجع عنه</small>
+                        <i class="bi bi-exclamation-triangle-fill text-danger" style="font-size: 2.5rem;"></i>
+                        <p class="mt-3 mb-1 fw-semibold">حذف هذه الرسالة؟</p>
+                        <small class="text-muted">{{ \Illuminate\Support\Str::limit($message->subject, 40) }}</small>
                     </div>
-                    <div class="modal-footer border-0">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
-                        <button type="submit" class="btn btn-danger">
+                    <div class="modal-footer border-0 justify-content-center gap-2 pt-0 pb-3">
+                        <button type="button" class="btn btn-secondary btn-sm px-4" data-bs-dismiss="modal">إلغاء</button>
+                        <button type="submit" class="btn btn-danger btn-sm px-4">
                             <i class="bi bi-trash me-1"></i>حذف
                         </button>
                     </div>

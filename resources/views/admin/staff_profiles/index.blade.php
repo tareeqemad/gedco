@@ -27,97 +27,46 @@
                 </x-slot:badge>
             </x-admin.card-header-index>
 
-            {{-- الإحصائيات التفاعلية --}}
-            <div class="card-body p-3 pb-0">
-                {{-- الفلاتر النشطة --}}
-                <div id="active-filters" class="mb-3" style="min-height: 40px;"></div>
+            {{-- الإحصائيات التفاعلية - compact --}}
+            <div class="card-body p-3">
+                <div id="active-filters" class="mb-2"></div>
 
-                <div class="row g-3 g-md-4 mb-3">
-                    <div class="col-6 col-md-3 col-lg-2">
-                        <div class="stat-card bg-white rounded-4 shadow-sm p-3 text-center border border-3 border-danger cursor-pointer"
-                             data-filter="status" data-value="displaced" data-label="{{ __('admin.staff_profiles.status_displaced') }}"
-                             style="border-color: #dc2626 !important; transition: all 0.3s ease;"
-                             onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 8px 20px rgba(220, 38, 38, 0.2)'"
-                             onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
-                            <i class="bi bi-truck fs-4 text-danger mb-1"></i>
-                            <div class="fs-4 fw-bold text-danger">{{ $stats['displaced'] }}</div>
-                            <small class="text-dark fw-semibold">{{ __('admin.staff_profiles.status_displaced') }}</small>
+                <div class="d-flex gap-2 flex-wrap mb-3">
+                    @php
+                        $filterCards = [
+                            ['filter' => 'status', 'value' => 'displaced', 'label' => __('admin.staff_profiles.status_displaced'), 'icon' => 'bi-truck', 'count' => $stats['displaced'], 'color' => '#DC2626'],
+                            ['filter' => 'status', 'value' => 'resident', 'label' => __('admin.staff_profiles.status_resident'), 'icon' => 'bi-house-door-fill', 'count' => $stats['resident'], 'color' => '#16A34A'],
+                            ['filter' => 'readiness', 'value' => 'not_ready', 'label' => __('admin.staff_profiles.readiness_not_ready'), 'icon' => 'bi-person-x', 'count' => $stats['not_ready'], 'color' => '#D97706'],
+                            ['filter' => 'readiness', 'value' => 'ready', 'label' => __('admin.staff_profiles.readiness_ready'), 'icon' => 'bi-hand-thumbs-up-fill', 'count' => $stats['ready'], 'color' => '#0284C7'],
+                            ['filter' => 'readiness', 'value' => 'working', 'label' => __('admin.staff_profiles.readiness_working'), 'icon' => 'bi-person-check-fill', 'count' => $stats['working'], 'color' => '#0D9488'],
+                        ];
+                    @endphp
+                    @foreach($filterCards as $fc)
+                        <div class="staff-filter-chip cursor-pointer {{ request($fc['filter']) === $fc['value'] ? 'active' : '' }}"
+                             data-filter="{{ $fc['filter'] }}" data-value="{{ $fc['value'] }}" data-label="{{ $fc['label'] }}"
+                             style="--chip-color: {{ $fc['color'] }};">
+                            <i class="bi {{ $fc['icon'] }}"></i>
+                            <strong>{{ $fc['count'] }}</strong>
+                            <span>{{ $fc['label'] }}</span>
                         </div>
-                    </div>
-
-                    <div class="col-6 col-md-3 col-lg-2">
-                        <div class="stat-card bg-white rounded-4 shadow-sm p-3 text-center border border-3 border-success cursor-pointer"
-                             data-filter="status" data-value="resident" data-label="{{ __('admin.staff_profiles.status_resident') }}"
-                             style="border-color: #22c55e !important; transition: all 0.3s ease;"
-                             onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 8px 20px rgba(34, 197, 94, 0.2)'"
-                             onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
-                            <i class="bi bi-house-door-fill fs-4 text-success mb-1"></i>
-                            <div class="fs-4 fw-bold text-success">{{ $stats['resident'] }}</div>
-                            <small class="text-dark fw-semibold">{{ __('admin.staff_profiles.status_resident') }}</small>
-                        </div>
-                    </div>
-
-                    <div class="col-6 col-md-3 col-lg-2">
-                        <div class="stat-card bg-white rounded-4 shadow-sm p-3 text-center border border-3 border-warning cursor-pointer"
-                             data-filter="readiness" data-value="not_ready" data-label="{{ __('admin.staff_profiles.readiness_not_ready') }}"
-                             style="border-color: #f59e0b !important; transition: all 0.3s ease;"
-                             onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 8px 20px rgba(245, 158, 11, 0.2)'"
-                             onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
-                            <i class="bi bi-person-x fs-4 text-warning mb-1"></i>
-                            <div class="fs-4 fw-bold text-warning">{{ $stats['not_ready'] }}</div>
-                            <small class="text-dark fw-semibold">{{ __('admin.staff_profiles.readiness_not_ready') }}</small>
-                        </div>
-                    </div>
-
-                    <div class="col-6 col-md-3 col-lg-2">
-                        <div class="stat-card bg-white rounded-4 shadow-sm p-3 text-center border border-3 border-info cursor-pointer"
-                             data-filter="readiness" data-value="ready" data-label="{{ __('admin.staff_profiles.readiness_ready') }}"
-                             style="border-color: #3b82f6 !important; transition: all 0.3s ease;"
-                             onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 8px 20px rgba(59, 130, 246, 0.2)'"
-                             onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
-                            <i class="bi bi-hand-thumbs-up-fill fs-4 text-info mb-1"></i>
-                            <div class="fs-4 fw-bold text-info">{{ $stats['ready'] }}</div>
-                            <small class="text-dark fw-semibold">{{ __('admin.staff_profiles.readiness_ready') }}</small>
-                        </div>
-                    </div>
-
-                    <div class="col-6 col-md-3 col-lg-2">
-                        <div class="stat-card bg-white rounded-4 shadow-sm p-3 text-center border border-3 border-success cursor-pointer"
-                             data-filter="readiness" data-value="working" data-label="{{ __('admin.staff_profiles.readiness_working') }}"
-                             style="border-color: #22c55e !important; transition: all 0.3s ease;"
-                             onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 8px 20px rgba(34, 197, 94, 0.2)'"
-                             onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
-                            <i class="bi bi-person-check-fill fs-4 text-success mb-1"></i>
-                            <div class="fs-4 fw-bold text-success">{{ $stats['working'] }}</div>
-                            <small class="text-dark fw-semibold">{{ __('admin.staff_profiles.readiness_working') }}</small>
-                        </div>
-                    </div>
+                    @endforeach
                 </div>
-            </div>
 
-            {{-- شريط البحث --}}
-            <div class="card-body p-3" style="border-top: 1px solid #E6ECF2;">
-                <form method="GET" class="row g-3 align-items-end">
-                    <div class="col-lg-8">
-                        <label class="form-label fw-semibold text-dark d-flex align-items-center gap-1 mb-1">
-                            <i class="bi bi-search text-primary"></i>{{ __('admin.staff_profiles.search_in_employees') }}
-                        </label>
-                        <div class="input-group">
-                            <span class="input-group-text bg-light border-0 rounded-start-3"><i class="bi bi-search text-muted"></i></span>
-                            <input type="text" name="q" value="{{ request('q') }}" class="form-control rounded-end-3 border-0 bg-light" style="height: 45px;" placeholder="{{ __('admin.staff_profiles.search_placeholder') }}">
-                        </div>
+                {{-- بحث --}}
+                <form method="GET" class="d-flex gap-2 align-items-center">
+                    @if(request('status'))<input type="hidden" name="status" value="{{ request('status') }}">@endif
+                    @if(request('readiness'))<input type="hidden" name="readiness" value="{{ request('readiness') }}">@endif
+                    <div style="flex: 1;">
+                        <input type="text" name="q" value="{{ request('q') }}" class="form-control rounded-3"
+                               placeholder="{{ __('admin.staff_profiles.search_placeholder') }}">
                     </div>
-                    <div class="col-lg-2">
-                        <button type="submit" class="btn btn-primary w-100 rounded-3 shadow-sm d-flex align-items-center justify-content-center gap-2" style="height: 45px;">
-                            <i class="bi bi-search"></i><span class="d-none d-md-inline">{{ __('admin.staff_profiles.search') }}</span>
-                        </button>
-                    </div>
-                    @if(request()->filled('q'))
-                        <div class="col-lg-2">
-                            <a href="{{ route('admin.staff-profiles.index') }}" class="btn btn-outline-secondary w-100 rounded-3 d-flex align-items-center justify-content-center gap-2" style="height: 45px;">
-                                <i class="bi bi-x-circle"></i><span class="d-none d-md-inline">{{ __('admin.staff_profiles.clear') }}</span>
-                            </a>
-                        </div>
+                    <button type="submit" class="btn btn-primary rounded-3">
+                        <i class="bi bi-search me-1"></i> {{ __('admin.staff_profiles.search') }}
+                    </button>
+                    @if(request()->hasAny(['q', 'status', 'readiness']))
+                        <a href="{{ route('admin.staff-profiles.index') }}" class="btn btn-outline-secondary rounded-3">
+                            <i class="bi bi-x-circle"></i>
+                        </a>
                     @endif
                 </form>
             </div>
@@ -176,7 +125,7 @@
                         @empty
                             <tr>
                                 <td colspan="8" class="text-center py-5 text-muted">
-                                    <i class="bi bi-inbox display-5 opacity-25 d-block mb-3"></i>
+                                    <i class="bi bi-folder2-open display-5 opacity-25 d-block mb-3"></i>
                                     {{ __('admin.staff_profiles.no_data') }}
                                 </td>
                             </tr>
@@ -200,80 +149,22 @@
 
     @push('styles')
         <style>
-            .cursor-pointer {
-                cursor: pointer;
-            }
-            
-            .stat-card.active {
-                transform: translateY(-4px) !important;
-                box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15) !important;
-            }
-            
-            #active-filters {
-                display: flex;
-                flex-wrap: wrap;
-                gap: 0.5rem;
-            }
-            
+            .cursor-pointer { cursor: pointer; }
+            #active-filters { display: flex; flex-wrap: wrap; gap: 0.5rem; }
             .filter-badge {
-                display: inline-flex;
-                align-items: center;
-                gap: 0.5rem;
-                padding: 0.5rem 1rem;
-                background: #e3f2fd;
-                color: #1976d2;
-                border-radius: 1.5rem;
-                font-size: 0.875rem;
-                font-weight: 500;
+                display: inline-flex; align-items: center; gap: 0.4rem;
+                padding: 0.3rem 0.75rem; background: #F0F4F8; color: #24364A;
+                border-radius: 20px; font-size: 0.78rem; font-weight: 500;
             }
-            
-            .filter-badge .close-btn {
-                cursor: pointer;
-                font-size: 1.25rem;
-                line-height: 1;
-                opacity: 0.7;
-                transition: opacity 0.2s;
-            }
-            
-            .filter-badge .close-btn:hover {
-                opacity: 1;
-            }
-            
-            @media (max-width: 768px) {
-                .table thead {
-                    display: none;
-                }
-                
-                .table tbody tr {
-                    display: block;
-                    margin-bottom: 1rem;
-                    border: 1px solid #dee2e6;
-                    border-radius: 0.5rem;
-                    padding: 1rem;
-                }
-                
-                .table tbody td {
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
-                    padding: 0.5rem;
-                    border: none;
-                }
-                
-                .table tbody td::before {
-                    content: attr(data-label);
-                    font-weight: 600;
-                    color: #6c757d;
-                    margin-inline-end: 1rem;
-                }
-            }
+            .filter-badge .close-btn { cursor: pointer; font-size: 1.1rem; opacity: 0.5; }
+            .filter-badge .close-btn:hover { opacity: 1; }
         </style>
     @endpush
 
     @push('scripts')
     <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const statCards = document.querySelectorAll('.stat-card');
+        const statCards = document.querySelectorAll('.staff-filter-chip');
         const activeFiltersContainer = document.getElementById('active-filters');
         
         // قراءة الفلاتر من URL
