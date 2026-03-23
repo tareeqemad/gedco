@@ -204,6 +204,7 @@
                 @endcan
 
                 <!-- Contact Messages -->
+                @can('contact-messages.view')
                 <li class="slide {{ $isActive('admin.contact-messages.*') }}">
                     <a href="{{ route('admin.contact-messages.index') }}" class="side-menu__item">
                         <i class="bi bi-envelope-fill side-menu__icon"></i>
@@ -213,6 +214,7 @@
                         @endif
                     </a>
                 </li>
+                @endcan
 
                 <!-- 4) Site Settings -->
                 <li class="slide__category mt-3">
@@ -235,12 +237,13 @@
                     </li>
                 @endcan
 
-                <!-- 5) System Management (Super Admin Only) -->
-                @role('super-admin')
+                <!-- 5) System Management -->
+                @canany(['roles.view', 'permissions.view', 'footer-links.view', 'social-links.view', 'activity-logs.view'])
                 <li class="slide__category mt-3">
                     <span class="side-menu__label text-muted text-xs opacity-70">{{ __('admin.menu.system_management') }}</span>
                 </li>
 
+                @can('social-links.view')
                 <li class="slide has-sub {{ $isOpen('admin.social-links.*') }}">
                     <a href="javascript:void(0);" class="side-menu__item {{ $isActive('admin.social-links.*') }}">
                         <i class="bi bi-share side-menu__icon"></i>
@@ -253,21 +256,27 @@
                                 {{ __('admin.menu.social_links_list') }}
                             </a>
                         </li>
+                        @can('social-links.create')
                         <li class="slide">
                             <a href="{{ route('admin.social-links.create') }}" class="side-menu__item {{ $isActive('admin.social-links.create') }}">
                                 {{ __('admin.menu.add_social_link') }}
                             </a>
                         </li>
+                        @endcan
                     </ul>
                 </li>
+                @endcan
 
+                @can('permissions.view')
                 <li class="slide {{ $isActive('admin.permissions.*') }}">
                     <a href="{{ route('admin.permissions.index') }}" class="side-menu__item">
                         <i class="bi bi-shield-lock side-menu__icon"></i>
                         <span class="side-menu__label">{{ __('admin.menu.permissions') }}</span>
                     </a>
                 </li>
+                @endcan
 
+                @can('roles.view')
                 <li class="slide has-sub {{ $isOpen('admin.roles.*') }}">
                     <a href="javascript:void(0);" class="side-menu__item {{ $isActive('admin.roles.*') }}">
                         <i class="bi bi-person-badge side-menu__icon"></i>
@@ -280,15 +289,18 @@
                                 {{ __('admin.menu.roles_list') }}
                             </a>
                         </li>
+                        @can('roles.create')
                         <li class="slide">
                             <a href="{{ route('admin.roles.create') }}" class="side-menu__item {{ $isActive('admin.roles.create') }}">
                                 {{ __('admin.menu.add_role') }}
                             </a>
                         </li>
+                        @endcan
                     </ul>
                 </li>
+                @endcan
 
-                <!-- Activity Logs (سجل الأنشطة) -->
+                @can('activity-logs.view')
                 <li class="slide has-sub {{ $isOpen('admin.activity-logs.*') }}">
                     <a href="javascript:void(0);" class="side-menu__item {{ $isActive('admin.activity-logs.*') }}">
                         <i class="bi bi-activity side-menu__icon"></i>
@@ -308,8 +320,9 @@
                         </li>
                     </ul>
                 </li>
+                @endcan
 
-                @endrole
+                @endcanany
 
             </ul>
 

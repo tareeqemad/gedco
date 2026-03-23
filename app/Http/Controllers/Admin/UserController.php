@@ -75,7 +75,6 @@ class UserController extends Controller
             'name'     => $request->name,
             'email'    => $request->email,
             'password' => Hash::make($request->password),
-            'is_admin' => true, // جميع المستخدمين المنشأين من لوحة التحكم هم أدمن
         ]);
 
         // حفظ كلمة المرور مؤقتاً (مشفرة) للـ super-admin فقط
@@ -186,16 +185,7 @@ class UserController extends Controller
      */
     public function showTemporaryPassword(Request $request, User $user)
     {
-        // التأكد من أن المستخدم الحالي super-admin
-        if (!auth()->user()->hasRole('super-admin')) {
-            if ($request->expectsJson()) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'غير مصرح لك بهذا الإجراء'
-                ], 403);
-            }
-            abort(403, 'غير مصرح لك بهذا الإجراء');
-        }
+        // الحماية عبر route middleware: role:super-admin
 
         $tempPassword = $user->getLatestTemporaryPassword();
 
@@ -224,16 +214,7 @@ class UserController extends Controller
      */
     public function updatePassword(Request $request, User $user)
     {
-        // التأكد من أن المستخدم الحالي super-admin
-        if (!auth()->user()->hasRole('super-admin')) {
-            if ($request->expectsJson()) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'غير مصرح لك بهذا الإجراء'
-                ], 403);
-            }
-            abort(403, 'غير مصرح لك بهذا الإجراء');
-        }
+        // الحماية عبر route middleware: role:super-admin
 
         $validated = $request->validate([
             'password' => 'required|min:8|confirmed',
@@ -273,6 +254,7 @@ class UserController extends Controller
                 'permissions.view', 'permissions.create', 'permissions.edit', 'permissions.delete',
                 'footer-links.view', 'footer-links.create', 'footer-links.edit', 'footer-links.delete',
                 'social-links.view', 'social-links.create', 'social-links.edit', 'social-links.delete',
+                'activity-logs.view', 'activity-logs.create', 'activity-logs.edit', 'activity-logs.delete',
             ];
 
             $query->whereNotIn('name', $superOnly);
@@ -287,16 +269,7 @@ class UserController extends Controller
      */
     public function impersonate(Request $request, User $user)
     {
-        // التأكد من أن المستخدم الحالي super-admin
-        if (!auth()->user()->hasRole('super-admin')) {
-            if ($request->expectsJson()) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'غير مصرح لك بهذا الإجراء'
-                ], 403);
-            }
-            abort(403, 'غير مصرح لك بهذا الإجراء');
-        }
+        // الحماية عبر route middleware: role:super-admin
 
         // منع الدخول كـ super-admin آخر
         if ($user->hasRole('super-admin') && $user->id !== auth()->id()) {

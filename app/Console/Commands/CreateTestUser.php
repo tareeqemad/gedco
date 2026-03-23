@@ -34,14 +34,16 @@ class CreateTestUser extends Command
                 'name' => $name,
                 'email' => $email,
                 'password' => Hash::make($password),
-                'is_admin' => true,
             ]);
+
+            // تعيين دور admin تلقائياً
+            $user->assignRole('admin');
 
             $this->info("تم إنشاء المستخدم بنجاح!");
             $this->info("ID: {$user->id}");
             $this->info("Email: {$user->email}");
             $this->info("Name: {$user->name}");
-            $this->info("is_admin: " . ($user->is_admin ? 'true' : 'false'));
+            $this->info("Role: admin");
             $this->info("Password: {$password}");
 
             // اختبار الباسورد

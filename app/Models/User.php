@@ -13,7 +13,7 @@ class User extends Authenticatable
     use HasFactory, Notifiable, HasRoles;
 
     protected $fillable = [
-        'name', 'email', 'password', 'avatar', 'is_admin',
+        'name', 'email', 'password', 'avatar',
     ];
 
     protected $hidden = [
@@ -24,7 +24,6 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
-            'is_admin' => 'boolean',
         ];
     }
 

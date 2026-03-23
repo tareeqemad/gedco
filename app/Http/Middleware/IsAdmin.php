@@ -12,7 +12,7 @@ class IsAdmin
         $u = $request->user();
         if (!$u) abort(403);
 
-        if ($u->hasAnyRole(['super-admin','admin']) || $u->is_admin) {
+        if ($u->hasAnyRole(['super-admin','admin','editor','viewer'])) {
             return $next($request);
         }
         abort(403);

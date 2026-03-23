@@ -47,7 +47,7 @@ class AuthController extends Controller
             session()->put('last_activity', now());
 
             // تحقق من كونه إدمن
-            if (auth()->user() && auth()->user()->is_admin) {
+            if (auth()->user() && auth()->user()->hasAnyRole(['super-admin', 'admin', 'editor', 'viewer'])) {
                 // استخدم intended للعودة للصفحة المطلوبة
                 return redirect()->intended(route('admin.dashboard'))
                     ->with('success', __('admin.auth.login_success'));

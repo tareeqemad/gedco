@@ -24,7 +24,8 @@ class RolesAndPermissionsSeeder extends Seeder
             'advertisements',
             'tenders',
             'news',
-            'staff-profiles'
+            'staff-profiles',
+            'contact-messages',
         ];
 
         // === الأقسام الخاصة بالسوبر أدمن فقط (CRUD) ===
@@ -33,6 +34,7 @@ class RolesAndPermissionsSeeder extends Seeder
             'permissions',
             'footer-links',
             'social-links',
+            'activity-logs',
         ];
 
         $permissions = [];
@@ -76,35 +78,32 @@ class RolesAndPermissionsSeeder extends Seeder
         // super admin
         $super->syncPermissions(Permission::all());
 
-        // admin
-        $adminPermissions = Permission::whereNotIn('name', [
-            'roles.view','roles.create','roles.edit','roles.delete',
-            'permissions.view','permissions.create','permissions.edit','permissions.delete',
-            'footer-links.view','footer-links.create','footer-links.edit','footer-links.delete',
-            'social-links.view','social-links.create','social-links.edit','social-links.delete',
-        ])->get();
+        // admin - كل شي ماعدا أقسام السوبر أدمن
+        $superOnlyPermissionNames = [];
+        foreach ($superOnlySections as $section) {
+            $superOnlyPermissionNames[] = "{$section}.view";
+            $superOnlyPermissionNames[] = "{$section}.create";
+            $superOnlyPermissionNames[] = "{$section}.edit";
+            $superOnlyPermissionNames[] = "{$section}.delete";
+        }
+
+        $adminPermissions = Permission::whereNotIn('name', $superOnlyPermissionNames)->get();
         $admin->syncPermissions($adminPermissions);
 
-        // editor
-        $editorPermissions = Permission::whereNotIn('name', [
-            'roles.view','roles.create','roles.edit','roles.delete',
-            'permissions.view','permissions.create','permissions.edit','permissions.delete',
-            'footer-links.view','footer-links.create','footer-links.edit','footer-links.delete',
-            'social-links.view','social-links.create','social-links.edit','social-links.delete',
-        ])->where(function($q){
-            $q->where('name','like','%.view')
-                ->orWhere('name','like','%.create')
-                ->orWhere('name','like','%.edit')
-                ->orWhere('name','like','%.toggle')
-                ->orWhere('name','like','%.reorder');
-        })->get();
+        // editor - view + create + edit فقط (بدون delete) ماعدا أقسام السوبر أدمن
+        $editorPermissions = Permission::whereNotIn('name', $superOnlyPermissionNames)
+            ->where(function($q){
+                $q->where('name','like','%.view')
+                    ->orWhere('name','like','%.create')
+                    ->orWhere('name','like','%.edit')
+                    ->orWhere('name','like','%.toggle')
+                    ->orWhere('name','like','%.reorder');
+            })->get();
         $editor->syncPermissions($editorPermissions);
 
-        // viewer
-        $viewerPermissions = Permission::whereNotIn('name', [
-            'roles.view','permissions.view',
-            'footer-links.view','social-links.view',
-        ])->where('name','like','%.view')->get();
+        // viewer - view فقط ماعدا أقسام السوبر أدمن
+        $viewerPermissions = Permission::whereNotIn('name', $superOnlyPermissionNames)
+            ->where('name','like','%.view')->get();
         $viewer->syncPermissions($viewerPermissions);
 
         // assign to first user

@@ -257,11 +257,11 @@
                                 <i class="bi bi-plus-circle me-2"></i> {{ __('admin.dashboard.add_new_tender') }}
                             </a>
                         @endcan
-                        @role('super-admin')
+                        @can('activity-logs.view')
                             <a href="{{ route('admin.activity-logs.index') }}" class="btn btn-outline-secondary">
                                 <i class="bi bi-activity me-2"></i> {{ __('admin.dashboard.activity_logs') }}
                             </a>
-                        @endrole
+                        @endcan
                     </div>
                 </div>
             </div>

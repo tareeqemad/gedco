@@ -32,7 +32,6 @@ class SuperAdminSeeder extends Seeder
                 [
                     'name'     => $data['name'],
                     'password' => $data['password'],
-                    'is_admin' => true,
                 ]
             );
 
