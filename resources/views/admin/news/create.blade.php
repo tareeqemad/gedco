@@ -20,11 +20,11 @@
                 :back-route="route('admin.news.index')"
                 back-label="الأخبار">
                 <x-slot:actions>
-                    <div class="news-tabs" id="newsTabs">
-                        <button class="news-tab active" data-bs-toggle="tab" data-bs-target="#form-content">
+                    <div class="news-tabs" id="newsTabs" role="tablist">
+                        <button class="news-tab active" type="button" role="tab" data-bs-toggle="tab" data-bs-target="#form-content" aria-selected="true">
                             <i class="bi bi-pencil-square"></i> إدخال
                         </button>
-                        <button class="news-tab" data-bs-toggle="tab" data-bs-target="#preview-content">
+                        <button class="news-tab" type="button" role="tab" data-bs-toggle="tab" data-bs-target="#preview-content" aria-selected="false">
                             <i class="bi bi-eye"></i> معاينة
                         </button>
                     </div>
@@ -32,7 +32,7 @@
             </x-admin.card-header-form>
 
             <div class="tab-content" id="newsTabContent">
-                <div class="tab-pane fade show active" id="form-content">
+                <div class="tab-pane fade show active" id="form-content" role="tabpanel">
                     <div class="card-body p-3 p-md-4">
                         <form id="newsForm" method="POST" enctype="multipart/form-data" action="{{ route('admin.news.store') }}">
                             @csrf
@@ -226,7 +226,7 @@
                 </div>
 
                 {{-- تبويب المعاينة --}}
-                <div class="tab-pane fade" id="preview-content">
+                <div class="tab-pane fade" id="preview-content" role="tabpanel">
                     <div class="card-body p-4" id="fullPreview">
                         <div class="text-center text-muted py-5">
                             <i class="bi bi-file-search fs-4 d-block mb-2"></i>

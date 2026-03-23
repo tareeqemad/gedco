@@ -19,12 +19,12 @@
                 </div>
                 <ul class="nav nav-tabs nav-tabs-sm border-0" id="newsTabs" role="tablist">
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link active px-3 py-1 rounded-3" data-bs-toggle="tab" data-bs-target="#form-content">
+                        <button class="nav-link active px-3 py-1 rounded-3" type="button" role="tab" data-bs-toggle="tab" data-bs-target="#form-content" aria-selected="true">
                             <i class="ri-edit-line me-1"></i> إدخال
                         </button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link px-3 py-1 rounded-3" data-bs-toggle="tab" data-bs-target="#preview-content">
+                        <button class="nav-link px-3 py-1 rounded-3" type="button" role="tab" data-bs-toggle="tab" data-bs-target="#preview-content" aria-selected="false">
                             <i class="ri-eye-line me-1"></i> معاينة
                         </button>
                     </li>
@@ -34,7 +34,7 @@
 
         <div class="tab-content" id="newsTabContent">
             {{-- تبويب الإدخال --}}
-            <div class="tab-pane fade show active" id="form-content">
+            <div class="tab-pane fade show active" id="form-content" role="tabpanel">
                 <div class="row g-4">
                     <div class="col-12">
                         <div class="card border-0 shadow-sm rounded-3 bg-white">
@@ -248,7 +248,7 @@
             </div>
 
             {{-- تبويب المعاينة (أخ للتبويب الأول، ليس بداخله) --}}
-            <div class="tab-pane fade" id="preview-content">
+            <div class="tab-pane fade" id="preview-content" role="tabpanel">
                 <div class="card border-0 shadow-sm rounded-3 bg-white">
                     <div class="card-header bg-light py-2 px-3">
                         <h6 class="mb-0 fw-semibold text-primary"><i class="ri-file-search-line me-1"></i> معاينة كاملة</h6>

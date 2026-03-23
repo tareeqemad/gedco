@@ -39,14 +39,14 @@
                             </div>
                             <h5 class="mb-0 fw-bold" style="font-size: 1.05rem; color: #24364A;">{{ __('admin.settings.title') }}</h5>
                         </div>
-                        <div class="news-tabs" id="settingsTabs">
-                            <button class="news-tab active" id="footer-tab" data-bs-toggle="tab" data-bs-target="#footer-content" type="button">
+                        <div class="news-tabs" id="settingsTabs" role="tablist">
+                            <button class="news-tab active" id="footer-tab" data-bs-toggle="tab" data-bs-target="#footer-content" type="button" role="tab" aria-selected="true">
                                 <i class="bi bi-info-circle"></i> معلومات الفوتر
                             </button>
-                            <button class="news-tab" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact-content" type="button">
+                            <button class="news-tab" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact-content" type="button" role="tab" aria-selected="false">
                                 <i class="bi bi-envelope"></i> تواصل معنا
                             </button>
-                            <button class="news-tab" id="channels-tab" data-bs-toggle="tab" data-bs-target="#channels-content" type="button">
+                            <button class="news-tab" id="channels-tab" data-bs-toggle="tab" data-bs-target="#channels-content" type="button" role="tab" aria-selected="false">
                                 <i class="bi bi-telephone"></i> قنوات التواصل
                             </button>
                         </div>

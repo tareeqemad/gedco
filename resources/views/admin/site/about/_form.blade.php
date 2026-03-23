@@ -16,11 +16,11 @@
 
     {{-- Tabs Navigation --}}
     <div class="d-flex align-items-center justify-content-center mb-4">
-        <div class="news-tabs" id="aboutTabs">
-            <button class="news-tab active" id="arabic-tab" data-bs-toggle="tab" data-bs-target="#arabic-content" type="button" role="tab">
+        <div class="news-tabs" id="aboutTabs" role="tablist">
+            <button class="news-tab active" id="arabic-tab" data-bs-toggle="tab" data-bs-target="#arabic-content" type="button" role="tab" aria-selected="true">
                 <i class="bi bi-translate"></i> {{ __('admin.labels.arabic') }}
             </button>
-            <button class="news-tab" id="english-tab" data-bs-toggle="tab" data-bs-target="#english-content" type="button" role="tab">
+            <button class="news-tab" id="english-tab" data-bs-toggle="tab" data-bs-target="#english-content" type="button" role="tab" aria-selected="false">
                 <i class="bi bi-globe"></i> {{ __('admin.labels.english') }}
             </button>
         </div>

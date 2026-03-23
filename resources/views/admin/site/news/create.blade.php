@@ -24,12 +24,12 @@
                     </div>
                     <ul class="nav nav-tabs nav-tabs-sm border-0" id="newsTabs" role="tablist" style="margin-inline-start: auto;">
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link active px-3 py-2 rounded-3 text-white" data-bs-toggle="tab" data-bs-target="#form-content" style="background: rgba(255, 255, 255, 0.2); border: 1px solid rgba(255, 255, 255, 0.3);">
+                            <button class="nav-link active px-3 py-2 rounded-3 text-white" data-bs-toggle="tab" data-bs-target="#form-content" type="button" role="tab" aria-selected="true" style="background: rgba(255, 255, 255, 0.2); border: 1px solid rgba(255, 255, 255, 0.3);">
                                 <i class="bi bi-pencil me-1"></i> {{ __('admin.news.form_tab_input') }}
                             </button>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link px-3 py-2 rounded-3 text-white" data-bs-toggle="tab" data-bs-target="#preview-content" style="background: transparent; border: 1px solid rgba(255, 255, 255, 0.3);">
+                            <button class="nav-link px-3 py-2 rounded-3 text-white" data-bs-toggle="tab" data-bs-target="#preview-content" type="button" role="tab" aria-selected="false" style="background: transparent; border: 1px solid rgba(255, 255, 255, 0.3);">
                                 <i class="bi bi-eye me-1"></i> {{ __('admin.news.form_tab_preview') }}
                             </button>
                         </li>
@@ -39,7 +39,7 @@
         </div>
 
         <div class="tab-content" id="newsTabContent">
-            <div class="tab-pane fade show active" id="form-content">
+            <div class="tab-pane fade show active" id="form-content" role="tabpanel">
                 <div class="row g-4">
                     <div class="col-12">
                         <div class="card border-0 shadow-sm rounded-4 bg-white">
@@ -250,7 +250,7 @@
             </div>
 
             <!-- Preview Tab -->
-            <div class="tab-pane fade" id="preview-content">
+            <div class="tab-pane fade" id="preview-content" role="tabpanel">
                 <div class="card border-0 shadow-sm rounded-4 bg-white">
                     <div class="card-header card-header-form py-2 py-md-3 px-3 px-md-4">
                         <h5 class="mb-0 fw-bold text-white d-flex align-items-center gap-2" style="font-size: 1.1rem;">

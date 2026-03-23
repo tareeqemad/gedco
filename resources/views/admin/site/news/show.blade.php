@@ -70,33 +70,33 @@
                         <!-- Tabs -->
                         <ul class="nav nav-pills nav-pills-custom mb-3 mb-md-4 border-bottom pb-2 flex-column flex-sm-row" role="tablist">
                             <li class="nav-item" role="presentation">
-                                <button class="nav-link active px-3 px-md-4 py-2 rounded-pill w-100 w-sm-auto mb-2 mb-sm-0" data-bs-toggle="tab" data-bs-target="#tab-html">
+                                <button class="nav-link active px-3 px-md-4 py-2 rounded-pill w-100 w-sm-auto mb-2 mb-sm-0" data-bs-toggle="tab" data-bs-target="#tab-html" type="button" role="tab" aria-selected="true">
                                     <i class="bi bi-file-earmark-text me-1 me-md-2"></i> <span class="d-none d-md-inline">المحتوى (HTML)</span><span class="d-md-none">HTML</span>
                                 </button>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <button class="nav-link px-3 px-md-4 py-2 rounded-pill w-100 w-sm-auto mb-2 mb-sm-0" data-bs-toggle="tab" data-bs-target="#tab-text">
+                                <button class="nav-link px-3 px-md-4 py-2 rounded-pill w-100 w-sm-auto mb-2 mb-sm-0" data-bs-toggle="tab" data-bs-target="#tab-text" type="button" role="tab" aria-selected="false">
                                     <i class="bi bi-file-text me-1 me-md-2"></i> <span class="d-none d-md-inline">نص مجرد</span><span class="d-md-none">نص</span>
                                 </button>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <button class="nav-link px-3 px-md-4 py-2 rounded-pill w-100 w-sm-auto" data-bs-toggle="tab" data-bs-target="#tab-preview">
+                                <button class="nav-link px-3 px-md-4 py-2 rounded-pill w-100 w-sm-auto" data-bs-toggle="tab" data-bs-target="#tab-preview" type="button" role="tab" aria-selected="false">
                                     <i class="bi bi-eye me-1 me-md-2"></i> <span class="d-none d-md-inline">معاينة مقال</span><span class="d-md-none">معاينة</span>
                                 </button>
                             </li>
                         </ul>
 
                         <div class="tab-content">
-                            <div class="tab-pane fade show active" id="tab-html">
+                            <div class="tab-pane fade show active" id="tab-html" role="tabpanel">
                                 <div class="article-html border rounded-3 p-3" style="direction: rtl; text-align: right; line-height:1.9; font-size: 0.98rem;">
                                     {!! $item->body !!}
                                 </div>
                             </div>
-                            <div class="tab-pane fade" id="tab-text">
+                            <div class="tab-pane fade" id="tab-text" role="tabpanel">
                                 <pre class="border rounded-3 p-3" style="white-space: pre-wrap; word-break: break-word; min-height: 220px;">
 {{ strip_tags($item->body ?? '') }}</pre>
                             </div>
-                            <div class="tab-pane fade" id="tab-preview">
+                            <div class="tab-pane fade" id="tab-preview" role="tabpanel">
                                 <article class="rounded-3 border p-3">
                                     @if($coverUrl)
                                         <img src="{{ $coverUrl }}" class="rounded-3 w-100 mb-3" style="max-height:360px; object-fit:cover;" alt="cover">

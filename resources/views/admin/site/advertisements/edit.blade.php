@@ -24,12 +24,12 @@
                 <x-slot:actions>
                     <ul class="nav nav-tabs nav-tabs-sm border-0" id="adTabs" role="tablist" style="background: rgba(255, 255, 255, 0.15); border-radius: 0.5rem; padding: 0.2rem;">
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link active px-2 py-1 rounded-3 text-white" data-bs-toggle="tab" data-bs-target="#form-content" style="background: rgba(255, 255, 255, 0.25); border: 1px solid rgba(255, 255, 255, 0.4); font-weight: 600; font-size: 0.85rem;">
+                            <button class="nav-link active px-2 py-1 rounded-3 text-white" data-bs-toggle="tab" data-bs-target="#form-content" type="button" role="tab" aria-selected="true" style="background: rgba(255, 255, 255, 0.25); border: 1px solid rgba(255, 255, 255, 0.4); font-weight: 600; font-size: 0.85rem;">
                                 <i class="bi bi-pencil me-1"></i> {{ __('admin.advertisements.form_tab_input') }}
                             </button>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link px-2 py-1 rounded-3 text-white" data-bs-toggle="tab" data-bs-target="#preview-content" style="background: transparent; border: 1px solid rgba(255, 255, 255, 0.3); font-size: 0.85rem;">
+                            <button class="nav-link px-2 py-1 rounded-3 text-white" data-bs-toggle="tab" data-bs-target="#preview-content" type="button" role="tab" aria-selected="false" style="background: transparent; border: 1px solid rgba(255, 255, 255, 0.3); font-size: 0.85rem;">
                                 <i class="bi bi-eye me-1"></i> {{ __('admin.advertisements.form_tab_preview') }}
                             </button>
                         </li>
@@ -40,7 +40,7 @@
 
         <div class="tab-content" id="adTabContent">
             <!-- تبويب الإدخال -->
-            <div class="tab-pane fade show active" id="form-content">
+            <div class="tab-pane fade show active" id="form-content" role="tabpanel">
                 <div class="row g-4">
                     <div class="col-12">
                         <div class="card border-0 shadow-sm rounded-3 bg-white">
@@ -212,7 +212,7 @@
             </div> <!-- /form tab -->
 
             <!-- Preview Tab -->
-            <div class="tab-pane fade" id="preview-content">
+            <div class="tab-pane fade" id="preview-content" role="tabpanel">
                 <x-admin.card>
                     <x-admin.card-header-form
                         icon="bi-eye"

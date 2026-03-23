@@ -19,11 +19,11 @@
                 :title="__('admin.advertisements.create_title')"
                 :back-route="route('admin.advertisements.index')">
                 <x-slot:actions>
-                    <div class="news-tabs" id="adTabs">
-                        <button class="news-tab active" data-bs-toggle="tab" data-bs-target="#form-content">
+                    <div class="news-tabs" id="adTabs" role="tablist">
+                        <button class="news-tab active" data-bs-toggle="tab" data-bs-target="#form-content" type="button" role="tab" aria-selected="true">
                             <i class="bi bi-pencil-square"></i> {{ __('admin.advertisements.form_tab_input') }}
                         </button>
-                        <button class="news-tab" data-bs-toggle="tab" data-bs-target="#preview-content">
+                        <button class="news-tab" data-bs-toggle="tab" data-bs-target="#preview-content" type="button" role="tab" aria-selected="false">
                             <i class="bi bi-eye"></i> {{ __('admin.advertisements.form_tab_preview') }}
                         </button>
                     </div>
@@ -31,7 +31,7 @@
             </x-admin.card-header-form>
 
             <div class="tab-content" id="adTabContent">
-                <div class="tab-pane fade show active" id="form-content">
+                <div class="tab-pane fade show active" id="form-content" role="tabpanel">
                     <div class="card-body p-3 p-md-4">
                                 <form id="adForm" action="{{ route('admin.advertisements.store') }}" method="POST" enctype="multipart/form-data">
                                     @csrf
@@ -186,7 +186,7 @@
                 </div>
 
                 {{-- Preview Tab --}}
-                <div class="tab-pane fade" id="preview-content">
+                <div class="tab-pane fade" id="preview-content" role="tabpanel">
                     <div class="card-body p-4" id="fullPreview">
                         <div class="text-center text-muted py-5">
                             <i class="bi bi-eye fs-4 d-block mb-2"></i>

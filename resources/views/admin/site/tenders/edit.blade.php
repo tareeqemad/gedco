@@ -16,12 +16,12 @@
                 <x-slot:actions>
                     <ul class="nav nav-tabs nav-tabs-sm border-0" id="tenderTabs" role="tablist" style="background: rgba(255, 255, 255, 0.15); border-radius: 0.5rem; padding: 0.25rem;">
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link active px-3 py-1 text-white" id="form-tab" data-bs-toggle="tab" data-bs-target="#form-content" type="button">
+                            <button class="nav-link active px-3 py-1 text-white" id="form-tab" data-bs-toggle="tab" data-bs-target="#form-content" type="button" role="tab" aria-selected="true">
                                 <i class="bi bi-pencil me-1"></i> {{ __('admin.tenders.tab_edit') }}
                             </button>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link px-3 py-1 text-white" id="preview-tab" data-bs-toggle="tab" data-bs-target="#preview-content" type="button">
+                            <button class="nav-link px-3 py-1 text-white" id="preview-tab" data-bs-toggle="tab" data-bs-target="#preview-content" type="button" role="tab" aria-selected="false">
                                 <i class="bi bi-eye me-1"></i> {{ __('admin.tenders.tab_preview') }}
                             </button>
                         </li>

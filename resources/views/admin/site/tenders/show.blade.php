@@ -110,22 +110,22 @@
             <div class="card-body p-4">
                 <ul class="nav nav-tabs border-0 mb-3" id="valueTabs" role="tablist">
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link active rounded-3 me-2" id="old-html-tab" data-bs-toggle="tab" data-bs-target="#old-html" type="button" role="tab">
+                        <button class="nav-link active rounded-3 me-2" id="old-html-tab" data-bs-toggle="tab" data-bs-target="#old-html" type="button" role="tab" aria-selected="true">
                             <i class="bi bi-file-text me-1"></i>{{ __('admin.tenders.show_old_value_html') ?? 'OLD_VALUE_1 (HTML)' }}
                         </button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link rounded-3 me-2" id="new-html-tab" data-bs-toggle="tab" data-bs-target="#new-html" type="button" role="tab">
+                        <button class="nav-link rounded-3 me-2" id="new-html-tab" data-bs-toggle="tab" data-bs-target="#new-html" type="button" role="tab" aria-selected="false">
                             <i class="bi bi-file-text me-1"></i>{{ __('admin.tenders.show_new_value_html') ?? 'NEW_VALUE_1 (HTML)' }}
                         </button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link rounded-3 me-2" id="old-text-tab" data-bs-toggle="tab" data-bs-target="#old-text" type="button" role="tab">
+                        <button class="nav-link rounded-3 me-2" id="old-text-tab" data-bs-toggle="tab" data-bs-target="#old-text" type="button" role="tab" aria-selected="false">
                             <i class="bi bi-file-text me-1"></i>{{ __('admin.tenders.show_old_value_text') ?? 'OLD_VALUE_1 (Text)' }}
                         </button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link rounded-3" id="new-text-tab" data-bs-toggle="tab" data-bs-target="#new-text" type="button" role="tab">
+                        <button class="nav-link rounded-3" id="new-text-tab" data-bs-toggle="tab" data-bs-target="#new-text" type="button" role="tab" aria-selected="false">
                             <i class="bi bi-file-text me-1"></i>{{ __('admin.tenders.show_new_value_text') ?? 'NEW_VALUE_1 (Text)' }}
                         </button>
                     </li>
