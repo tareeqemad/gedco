@@ -13,46 +13,38 @@
     @endphp
 
     <div class="container-fluid p-0" id="ad-create-page">
-        <!-- هيدر + تبويبات -->
-        <x-admin.card class="mb-4">
+        <x-admin.card>
             <x-admin.card-header-form
-                icon="bi-plus-circle"
-                :title="__('admin.advertisements.create_title')">
+                icon="bi-megaphone"
+                :title="__('admin.advertisements.create_title')"
+                :back-route="route('admin.advertisements.index')">
                 <x-slot:actions>
-                    <ul class="nav nav-tabs nav-tabs-sm border-0" id="adTabs" role="tablist" style="background: rgba(255, 255, 255, 0.15); border-radius: 0.5rem; padding: 0.2rem;">
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link active px-2 py-1 rounded-3 text-white" data-bs-toggle="tab" data-bs-target="#form-content" style="background: rgba(255, 255, 255, 0.25); border: 1px solid rgba(255, 255, 255, 0.4); font-weight: 600; font-size: 0.85rem;">
-                                <i class="bi bi-pencil me-1"></i> {{ __('admin.advertisements.form_tab_input') }}
-                            </button>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link px-2 py-1 rounded-3 text-white" data-bs-toggle="tab" data-bs-target="#preview-content" style="background: transparent; border: 1px solid rgba(255, 255, 255, 0.3); font-size: 0.85rem;">
-                                <i class="bi bi-eye me-1"></i> {{ __('admin.advertisements.form_tab_preview') }}
-                            </button>
-                        </li>
-                    </ul>
+                    <div class="news-tabs" id="adTabs">
+                        <button class="news-tab active" data-bs-toggle="tab" data-bs-target="#form-content">
+                            <i class="bi bi-pencil-square"></i> {{ __('admin.advertisements.form_tab_input') }}
+                        </button>
+                        <button class="news-tab" data-bs-toggle="tab" data-bs-target="#preview-content">
+                            <i class="bi bi-eye"></i> {{ __('admin.advertisements.form_tab_preview') }}
+                        </button>
+                    </div>
                 </x-slot:actions>
             </x-admin.card-header-form>
-        </x-admin.card>
 
-        <div class="tab-content" id="adTabContent">
-            <!-- تبويب الإدخال -->
-            <div class="tab-pane fade show active" id="form-content">
-                <div class="row g-4">
-                    <div class="col-12">
-                        <div class="card border-0 shadow-sm rounded-3 bg-white">
-                            <div class="card-body p-4">
+            <div class="tab-content" id="adTabContent">
+                <div class="tab-pane fade show active" id="form-content">
+                    <div class="card-body p-3 p-md-4">
                                 <form id="adForm" action="{{ route('admin.advertisements.store') }}" method="POST" enctype="multipart/form-data">
                                     @csrf
 
                                     <!-- input مخفي لرفع صور Quill -->
                                     <input type="file" id="quillImageInput" accept="image/*" multiple class="visually-hidden">
 
-                                    <!-- Title -->
-                                    <div class="mb-4">
-                                        <label class="form-label fw-semibold text-dark d-flex align-items-center gap-1">
-                                            <i class="bi bi-type-h1 text-primary"></i> {{ __('admin.advertisements.form_title') }}
-                                        </label>
+                                    <h6 class="fw-bold d-flex align-items-center gap-2 section-title">
+                                        <i class="bi bi-info-circle"></i> المعلومات الأساسية
+                                    </h6>
+
+                                    <div class="mb-3">
+                                        <label class="form-label">{{ __('admin.advertisements.form_title') }} <span class="text-danger">*</span></label>
                                         <input type="text" name="TITLE" id="titleInput"
                                                class="form-control rounded-3 border-0 bg-light @error('TITLE') is-invalid @enderror"
                                                style="height: 45px;"
@@ -61,11 +53,8 @@
                                         <div class="form-text text-muted small"><span id="titleCount">{{ old('TITLE') ? strlen(old('TITLE')) : 0 }}</span>/255</div>
                                     </div>
 
-                                    <!-- News Date -->
-                                    <div class="mb-4">
-                                        <label class="form-label fw-semibold text-dark d-flex align-items-center gap-1">
-                                            <i class="bi bi-calendar text-primary"></i> {{ __('admin.advertisements.form_date_news') }}
-                                        </label>
+                                    <div class="mb-3">
+                                        <label class="form-label">{{ __('admin.advertisements.form_date_news') }}</label>
                                         <input type="date" name="DATE_NEWS" id="dateInput"
                                                class="form-control rounded-3 border-0 bg-light @error('DATE_NEWS') is-invalid @enderror"
                                                style="height: 45px;"
@@ -73,16 +62,19 @@
                                         @error('DATE_NEWS') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
                                     </div>
 
-                                    <!-- Content (Quill) + Counters -->
-                                    <div class="mb-4">
-                                        <label class="form-label fw-medium text-secondary d-flex align-items-center gap-2 flex-wrap">
-                                        <span class="d-inline-flex align-items-center gap-1">
-                                            <i class="bi bi-file-text fs-6 text-success"></i> {{ __('admin.advertisements.form_content') }}
-                                        </span>
-                                            <small class="text-muted">{{ __('admin.advertisements.form_content_info') }} {{ $MAX_IMAGES }} {{ __('admin.advertisements.form_content_info_end') }}</small>
-                                            <span id="imgCounter" class="badge img-counter bg-primary">0 / {{ $MAX_IMAGES }}</span>
-                                            <span id="textCounter" class="badge text-counter bg-secondary ms-1">{{ __('admin.advertisements.characters') }} 0 | {{ __('admin.advertisements.words') }} 0</span>
-                                        </label>
+                                    <h6 class="fw-bold d-flex align-items-center gap-2 section-title mt-3">
+                                        <i class="bi bi-file-text"></i> {{ __('admin.advertisements.form_content') }}
+                                    </h6>
+
+                                    <div class="d-flex align-items-center justify-content-between mb-2 flex-wrap gap-2">
+                                        <small class="text-muted" style="font-size: 0.72rem;">حتى {{ $MAX_IMAGES }} صور × 2MB</small>
+                                        <div class="d-flex gap-2">
+                                            <span id="imgCounter" class="stat-chip" style="font-size: 0.65rem;">0 / {{ $MAX_IMAGES }} صور</span>
+                                            <span id="textCounter" class="stat-chip" style="font-size: 0.65rem;">الحروف: 0 | الكلمات: 0</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-3">
 
                                         <div class="quill-wrapper border rounded-3 shadow-sm overflow-hidden">
                                             <div id="quill-toolbar" class="px-2 py-1">
@@ -191,24 +183,19 @@
                             </div>
                         </div>
                     </div>
-                </div> <!-- /row -->
-            </div> <!-- /tab-pane form -->
+                </div>
 
-            <!-- Preview Tab -->
-            <div class="tab-pane fade" id="preview-content">
-                <x-admin.card>
-                    <x-admin.card-header-form
-                        icon="bi-eye"
-                        :title="__('admin.advertisements.form_preview_title')" />
+                {{-- Preview Tab --}}
+                <div class="tab-pane fade" id="preview-content">
                     <div class="card-body p-4" id="fullPreview">
                         <div class="text-center text-muted py-5">
                             <i class="bi bi-eye fs-4 d-block mb-2"></i>
                             <small>{{ __('admin.advertisements.form_preview_start_writing') }}</small>
                         </div>
                     </div>
-                </x-admin.card>
+                </div>
             </div>
-        </div> <!-- /tab-content -->
+        </x-admin.card>
     </div>
 @endsection
 

@@ -114,7 +114,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('createForm')?.addEventListener('submit', async (e) => {
         e.preventDefault();
         const btn = e.target.querySelector('.save-btn');
-        const spinner = btn.querySelector('.spinner');
+        const spinner = btn.querySelector('.spinner-border');
         btn.disabled = true;
         spinner.classList.remove('d-none');
 
@@ -164,7 +164,7 @@ document.addEventListener('DOMContentLoaded', () => {
         e.preventDefault();
         const id = document.getElementById('editId').value;
         const btn = e.target.querySelector('.save-btn');
-        const spinner = btn.querySelector('.spinner');
+        const spinner = btn.querySelector('.spinner-border');
         btn.disabled = true;
         spinner.classList.remove('d-none');
 
@@ -230,7 +230,7 @@ document.addEventListener('DOMContentLoaded', () => {
             e.preventDefault();
             const form = btn.closest('form');
             const id = form.action.split('/').pop();
-            const spinner = btn.querySelector('.spinner');
+            const spinner = btn.querySelector('.spinner-border');
             btn.disabled = true;
             spinner.classList.remove('d-none');
 

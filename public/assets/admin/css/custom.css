@@ -1135,6 +1135,51 @@ html {
     color: #0F67C6;
 }
 
+/* Date field inline label */
+.date-field-label {
+    position: absolute;
+    top: -8px;
+    inset-inline-start: 10px;
+    background: #FFFFFF;
+    padding: 0 4px;
+    font-size: 0.65rem;
+    color: #7A8CA2;
+    font-weight: 600;
+    z-index: 1;
+    line-height: 1;
+}
+
+/* Language dropdown */
+.language-selector .dropdown-menu {
+    min-width: 160px !important;
+    border: 1px solid #E6ECF2 !important;
+    border-radius: 10px !important;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08) !important;
+    padding: 0.4rem !important;
+}
+
+.language-selector .dropdown-item {
+    border-radius: 8px !important;
+    padding: 0.5rem 0.75rem !important;
+    font-size: 0.85rem !important;
+    color: #24364A !important;
+    transition: all 0.15s ease !important;
+}
+
+.language-selector .dropdown-item:hover {
+    background: #F0F4F8 !important;
+}
+
+.language-selector .dropdown-item.active {
+    background: rgba(15, 103, 198, 0.08) !important;
+    color: #0F67C6 !important;
+    font-weight: 600 !important;
+}
+
+.language-selector .dropdown-item.active .bi-check {
+    color: #0F67C6 !important;
+}
+
 /* Unread message row */
 .msg-unread {
     background: #FAFCFE !important;

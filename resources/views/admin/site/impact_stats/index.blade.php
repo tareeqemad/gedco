@@ -32,58 +32,57 @@
             <!-- الكروت -->
             @if($items->count() > 0)
             <div class="card-body p-3">
-            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4" id="stats-cards">
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3" id="stats-cards">
                 @foreach($items as $it)
                     <div class="col" data-id="{{ $it->id }}" data-order="{{ $it->sort_order }}">
-                        <div class="card h-100 border-0 shadow-sm rounded-4 bg-white position-relative impact-stat-card" style="transition: all 0.3s ease;">
-                            <div class="card-header bg-gradient-primary text-white border-0 py-3 px-4">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <span class="badge bg-white text-primary rounded-pill px-3 py-1 fw-semibold sort-badge">#{{ $it->sort_order }}</span>
-                                    <span class="status-badge badge rounded-pill px-3 py-1 {{ $it->is_active ? 'bg-success' : 'bg-secondary' }}" data-id="{{ $it->id }}">
-                                        <i class="bi bi-circle-fill small me-1"></i>
-                                        {{ $it->is_active ? __('admin.impact_stats.status_active') : __('admin.impact_stats.status_inactive') }}
-                                    </span>
-                                </div>
+                        <div class="impact-stat-card position-relative" style="cursor: move;">
+                            {{-- Top strip --}}
+                            <div class="impact-strip {{ $it->is_active ? '' : 'inactive' }}"></div>
+
+                            {{-- Meta row --}}
+                            <div class="d-flex justify-content-between align-items-center px-3 pt-2">
+                                <span class="stat-chip sort-badge" style="font-size: 0.65rem;">#{{ $it->sort_order }}</span>
+                                <span class="status-badge stat-chip {{ $it->is_active ? 'impact-active' : 'impact-inactive' }}" data-id="{{ $it->id }}" style="font-size: 0.65rem;">
+                                    {{ $it->is_active ? __('admin.impact_stats.status_active') : __('admin.impact_stats.status_inactive') }}
+                                </span>
                             </div>
-                            <div class="card-body p-4">
+
+                            {{-- Content --}}
+                            <div class="px-3 py-2">
                                 @php
                                     $adminDirection = session('direction', 'rtl');
                                     $displayTitle = ($adminDirection === 'rtl') ? $it->title_ar : ($it->title_en ?? $it->title_ar);
                                 @endphp
-                                <h5 class="card-title mb-3 fw-bold text-dark">{{ $displayTitle }}</h5>
-                                <p class="display-6 fw-bold text-danger mb-4">
-                                    ${{ number_format($it->amount_usd, 1) }}
-                                </p>
-                                <div class="d-flex gap-2">
-                                    <button class="toggle-btn btn btn-sm flex-fill d-flex align-items-center justify-content-center gap-1 rounded-3 shadow-sm {{ $it->is_active ? 'btn-success' : 'btn-outline-secondary' }}"
-                                            data-id="{{ $it->id }}" data-active="{{ $it->is_active ? '1' : '0' }}">
-                                        <i class="bi bi-power"></i>
-                                        <span class="d-none d-lg-inline">{{ $it->is_active ? __('admin.impact_stats.deactivate') : __('admin.impact_stats.activate') }}</span>
-                                        <span class="d-lg-none">{{ $it->is_active ? __('admin.impact_stats.deactivate') : __('admin.impact_stats.activate') }}</span>
-                                    </button>
-
-                                    <!-- Edit -->
-                                    <button type="button" class="btn btn-sm btn-outline-warning flex-fill edit-btn d-flex align-items-center justify-content-center gap-1 rounded-3 shadow-sm"
-                                            data-id="{{ $it->id }}"
-                                            data-title-ar="{{ $it->title_ar }}"
-                                            data-title-en="{{ $it->title_en ?: '' }}"
-                                            data-amount="{{ $it->amount_usd }}"
-                                            data-active="{{ $it->is_active ? '1' : '0' }}">
-                                        <i class="bi bi-pencil me-1"></i><span class="d-none d-lg-inline">{{ __('admin.impact_stats.edit') }}</span><span class="d-lg-none">{{ __('admin.impact_stats.edit') }}</span>
-                                    </button>
-
-                                    <!-- Delete -->
-                                    <button class="btn btn-sm btn-outline-danger delete-btn d-flex align-items-center justify-content-center rounded-3 shadow-sm"
-                                            data-id="{{ $it->id }}"
-                                            data-title-ar="{{ $it->title_ar }}"
-                                            data-bs-toggle="modal" data-bs-target="#deleteModal"
-                                            title="{{ __('admin.impact_stats.delete') }}">
-                                        <i class="bi bi-trash"></i>
-                                    </button>
-                                </div>
+                                <h6 class="fw-bold mb-2" style="color: #24364A; font-size: 0.92rem;">{{ $displayTitle }}</h6>
+                                <div class="impact-amount">${{ number_format($it->amount_usd, 0) }}</div>
                             </div>
-                            <div class="drag-handle-icon position-absolute top-0 end-0 p-2 text-white opacity-75" style="cursor: move;">
-                                <i class="bi bi-grip-vertical fs-5"></i>
+
+                            {{-- Actions --}}
+                            <div class="d-flex align-items-center gap-1 px-3 pb-3">
+                                <button class="toggle-btn btn btn-sm btn-outline-secondary flex-fill"
+                                        data-id="{{ $it->id }}" data-active="{{ $it->is_active ? '1' : '0' }}">
+                                    <i class="bi bi-power me-1"></i>{{ $it->is_active ? __('admin.impact_stats.deactivate') : __('admin.impact_stats.activate') }}
+                                </button>
+                                <button type="button" class="btn btn-sm btn-outline-primary edit-btn"
+                                        data-id="{{ $it->id }}"
+                                        data-title-ar="{{ $it->title_ar }}"
+                                        data-title-en="{{ $it->title_en ?: '' }}"
+                                        data-amount="{{ $it->amount_usd }}"
+                                        data-active="{{ $it->is_active ? '1' : '0' }}"
+                                        title="{{ __('admin.impact_stats.edit') }}">
+                                    <i class="bi bi-pencil"></i>
+                                </button>
+                                <button class="btn btn-sm btn-outline-danger delete-btn"
+                                        data-id="{{ $it->id }}"
+                                        data-title-ar="{{ $it->title_ar }}"
+                                        data-bs-toggle="modal" data-bs-target="#deleteModal"
+                                        title="{{ __('admin.impact_stats.delete') }}">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </div>
+
+                            <div class="drag-handle-icon position-absolute top-0 end-0 p-2 opacity-25" style="cursor: move;">
+                                <i class="bi bi-grip-vertical"></i>
                             </div>
                         </div>
                     </div>
@@ -243,20 +242,59 @@
     @push('styles')
         <style>
             .impact-stat-card {
-                transition: all 0.3s ease;
+                background: #FFFFFF;
+                border: 1px solid #E6ECF2;
+                border-radius: 12px;
+                overflow: hidden;
+                transition: all 0.2s ease;
             }
-            
             .impact-stat-card:hover {
-                transform: translateY(-4px);
-                box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12) !important;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.06);
             }
-            
-            .drag-handle-icon {
-                transition: opacity 0.2s ease;
-            }
-            
             .impact-stat-card:hover .drag-handle-icon {
-                opacity: 1 !important;
+                opacity: 0.5 !important;
+            }
+
+            /* Top color strip */
+            .impact-strip {
+                height: 4px;
+                background: #0F67C6;
+            }
+            .impact-strip.inactive {
+                background: #CDD9E3;
+            }
+
+            /* Amount */
+            .impact-amount {
+                font-size: 1.5rem;
+                font-weight: 800;
+                color: #D94A38;
+                letter-spacing: -0.5px;
+                line-height: 1.2;
+            }
+
+            /* Status chips */
+            .impact-active {
+                color: #16A34A !important;
+                background: rgba(22,163,74,0.08) !important;
+                border-color: rgba(22,163,74,0.15) !important;
+            }
+            .impact-inactive {
+                color: #7A8CA2 !important;
+                background: #F0F4F8 !important;
+                border-color: #E6ECF2 !important;
+            }
+
+            /* Action buttons inside cards */
+            .impact-stat-card .btn-sm {
+                width: auto !important;
+                height: 30px !important;
+                font-size: 0.72rem !important;
+                padding: 0 0.6rem !important;
+            }
+            .impact-stat-card .btn-outline-secondary {
+                border-color: #CDD9E3 !important;
+                color: #5B7088 !important;
             }
         </style>
     @endpush

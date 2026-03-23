@@ -159,6 +159,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
         // === ملفات الموظفين ===
         Route::middleware('permission:staff-profiles.view')->get('/staff-profiles', [StaffProfileController::class, 'index'])->name('staff-profiles.index');
+        Route::middleware('permission:staff-profiles.view')->get('/staff-profiles/export', [StaffProfileController::class, 'export'])->name('staff-profiles.export');
         Route::middleware('permission:staff-profiles.view')->get('/staff-profiles/{profile}', [StaffProfileController::class, 'show'])->name('staff-profiles.show');
         Route::middleware('permission:staff-profiles.edit')->get('/staff-profiles/{profile}/edit', [StaffProfileController::class, 'edit'])->name('staff-profiles.edit');
         Route::middleware('permission:staff-profiles.edit')->put('/staff-profiles/{profile}', [StaffProfileController::class, 'update'])->name('staff-profiles.update');

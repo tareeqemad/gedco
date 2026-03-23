@@ -58,6 +58,83 @@ class StaffProfileController extends Controller
     }
 
 
+    public function export(Request $request)
+    {
+        $query = StaffProfile::query();
+
+        if ($search = $request->input('q')) {
+            $query->where(function ($q) use ($search) {
+                $q->where('full_name', 'like', "%{$search}%")
+                    ->orWhere('national_id', 'like', "%{$search}%")
+                    ->orWhere('employee_number', 'like', "%{$search}%");
+            });
+        }
+
+        if ($status = $request->input('status')) {
+            if (in_array($status, ['resident', 'displaced'])) {
+                $query->where('status', $status);
+            }
+        }
+
+        if ($readiness = $request->input('readiness')) {
+            if (in_array($readiness, ['working', 'ready', 'not_ready'])) {
+                $query->where('readiness', $readiness);
+            }
+        }
+
+        $profiles = $query->latest()->get();
+
+        $statusMap = ['resident' => 'مقيم', 'displaced' => 'نازح'];
+        $readinessMap = ['working' => 'باشر العمل', 'ready' => 'جاهز', 'not_ready' => 'غير جاهز'];
+        $locations = ['1'=>'المقر الرئيسي','2'=>'مقر غزة','3'=>'مقر الشمال','4'=>'مقر الوسطى','6'=>'مقر خانيونس','7'=>'مقر رفح','8'=>'مقر الصيانة - غزة'];
+
+        $filename = 'staff-profiles-' . now()->format('Y-m-d') . '.csv';
+
+        $headers = [
+            'Content-Type' => 'text/csv; charset=UTF-8',
+            'Content-Disposition' => "attachment; filename=\"{$filename}\"",
+        ];
+
+        $callback = function () use ($profiles, $statusMap, $readinessMap, $locations) {
+            $file = fopen('php://output', 'w');
+            // BOM for Excel UTF-8
+            fprintf($file, chr(0xEF).chr(0xBB).chr(0xBF));
+
+            fputcsv($file, [
+                '#', 'الاسم الكامل', 'رقم الهوية', 'الرقم الوظيفي', 'المسمى الوظيفي',
+                'المقر', 'الإدارة', 'القسم', 'الحالة', 'الجاهزية',
+                'الجوال', 'جوال بديل', 'واتساب', 'البريد',
+                'العنوان الأصلي', 'العنوان الحالي', 'تاريخ التسجيل'
+            ]);
+
+            foreach ($profiles as $i => $p) {
+                fputcsv($file, [
+                    $i + 1,
+                    $p->full_name,
+                    $p->national_id,
+                    $p->employee_number,
+                    $p->job_title,
+                    $locations[$p->location] ?? $p->location,
+                    $p->department,
+                    $p->section,
+                    $statusMap[$p->status] ?? $p->status,
+                    $readinessMap[$p->readiness] ?? $p->readiness,
+                    $p->mobile,
+                    $p->mobile_alt,
+                    $p->whatsapp,
+                    $p->gmail,
+                    $p->original_address,
+                    $p->current_address,
+                    $p->created_at?->format('Y-m-d'),
+                ]);
+            }
+
+            fclose($file);
+        };
+
+        return response()->stream($callback, 200, $headers);
+    }
+
     public function show(StaffProfile $profile)
     {
         return view('admin.staff_profiles.show', compact('profile'));

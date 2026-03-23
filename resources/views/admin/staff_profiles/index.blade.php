@@ -18,13 +18,14 @@
                 icon="bi-person-lines-fill"
                 :title="__('admin.staff_profiles.title')">
                 <x-slot:badge>
-                    <span class="badge bg-white text-primary rounded-pill" style="font-size: 0.65rem; padding: 0.15rem 0.4rem;">
-                        {{ $stats['total'] }}
-                    </span>
-                    <span class="text-white-50 small d-none d-md-inline" style="font-size: 0.75rem; opacity: 0.9;">
-                        {{ __('admin.staff_profiles.subtitle') }}
-                    </span>
+                    <span class="stat-chip stat-chip-header">{{ $stats['total'] }} موظف</span>
                 </x-slot:badge>
+                <x-slot:actions>
+                    <a href="{{ route('admin.staff-profiles.export', request()->query()) }}" class="btn btn-light btn-sm shadow-sm">
+                        <i class="bi bi-file-earmark-spreadsheet me-1"></i>
+                        <span class="d-none d-md-inline">تصدير Excel</span>
+                    </a>
+                </x-slot:actions>
             </x-admin.card-header-index>
 
             {{-- الإحصائيات التفاعلية - compact --}}
