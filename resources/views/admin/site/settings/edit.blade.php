@@ -296,13 +296,12 @@
                 </div>
 
                 {{-- Submit --}}
-                <div class="d-flex gap-2 justify-content-end p-3" style="border-top: 1px solid #E6ECF2;">
-                    <a href="{{ route('admin.dashboard') }}" class="form-btn-back" style="text-decoration: none;">
+                <div class="d-flex gap-3 justify-content-end p-3" style="border-top: 1px solid #E6ECF2;">
+                    <a href="{{ route('admin.dashboard') }}" class="btn btn-outline-secondary px-4 py-2 rounded-3">
                         <i class="bi bi-x-circle me-1"></i> إلغاء
                     </a>
-                    <button type="submit" class="btn btn-primary rounded-3 px-4 fw-bold d-flex align-items-center gap-2" style="font-size: 0.85rem;">
-                        <i class="bi bi-check-circle"></i>
-                        {{ __('admin.settings.save') }}
+                    <button type="submit" class="btn btn-primary px-4 py-2 rounded-3 shadow-sm">
+                        <i class="bi bi-check-circle me-1"></i>{{ __('admin.settings.save') }}
                     </button>
                 </div>
             </x-admin.card>
