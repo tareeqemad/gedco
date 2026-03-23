@@ -62,13 +62,11 @@
                                placeholder="{{ __('admin.staff_profiles.search_placeholder') }}">
                     </div>
                     <button type="submit" class="btn btn-primary rounded-3">
-                        <i class="bi bi-search me-1"></i> {{ __('admin.staff_profiles.search') }}
+                        <i class="bi bi-search me-1"></i> استعلام
                     </button>
-                    @if(request()->hasAny(['q', 'status', 'readiness']))
-                        <a href="{{ route('admin.staff-profiles.index') }}" class="btn btn-outline-secondary rounded-3">
-                            <i class="bi bi-x-circle"></i>
-                        </a>
-                    @endif
+                    <a href="{{ route('admin.staff-profiles.index') }}" class="btn btn-outline-danger rounded-3">
+                        <i class="bi bi-x-circle me-1"></i> تفريغ
+                    </a>
                 </form>
             </div>
 

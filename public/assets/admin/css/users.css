@@ -73,18 +73,17 @@
 
 .users-filters .form-control,
 .users-filters .form-select {
-    height: 45px;
     border-radius: 0.5rem;
-    border: 1px solid #dee2e6;
-    background: white;
+    border: 1px solid #CDD9E3;
+    background-color: white;
     transition: all 0.2s ease;
 }
 
 .users-filters .form-control:focus,
 .users-filters .form-select:focus {
-    border-color: #0066cc;
-    box-shadow: 0 0 0 0.2rem rgba(0, 102, 204, 0.15);
-    background: white;
+    border-color: #1ABC9C;
+    box-shadow: 0 0 0 3px rgba(26, 188, 156, 0.1);
+    background-color: white;
 }
 
 /* Role Select Styling - Make selected value more visible */

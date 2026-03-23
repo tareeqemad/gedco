@@ -1,183 +1,142 @@
+@php
+    $breadcrumbTitle = 'عرض الرسالة';
+    $breadcrumbParent = 'رسائل الاتصال';
+    $breadcrumbParentUrl = route('admin.contact-messages.index');
+@endphp
 @extends('layouts.admin')
 @section('title', 'عرض الرسالة #' . $contactMessage->id)
 
 @section('content')
-    @php
-        $breadcrumbTitle = 'عرض الرسالة #' . $contactMessage->id;
-        $breadcrumbParent = 'رسائل الاتصال';
-        $breadcrumbParentUrl = route('admin.contact-messages.index');
-    @endphp
-
     <div class="container-fluid p-0">
-        <!-- Header -->
-        <x-admin.card class="mb-4">
-            <x-admin.card-header-form
-                icon="bi-envelope-open"
-                :title="'رسالة #' . $contactMessage->id"
-                :back-route="route('admin.contact-messages.index')"
-                back-label="رجوع">
-                <x-slot:subtitle>
-                    <small class="text-white opacity-75 d-none d-md-block" style="font-size: 0.8rem; line-height: 1.2;">
-                        {{ \Illuminate\Support\Str::limit($contactMessage->subject, 50) }}
-                    </small>
-                </x-slot:subtitle>
-                <x-slot:actions>
-                    @if($contactMessage->is_read)
-                        <form action="{{ route('admin.contact-messages.mark-unread', $contactMessage) }}" method="POST" class="d-inline">
-                            @csrf
-                            @method('PATCH')
-                            <button type="submit" class="btn btn-warning btn-sm shadow-sm">
-                                <i class="bi bi-envelope me-1"></i> <span class="d-none d-md-inline">تحديد كغير مقروءة</span>
-                            </button>
-                        </form>
-                    @else
-                        <form action="{{ route('admin.contact-messages.mark-read', $contactMessage) }}" method="POST" class="d-inline">
-                            @csrf
-                            @method('PATCH')
-                            <button type="submit" class="btn btn-success btn-sm shadow-sm">
-                                <i class="bi bi-check me-1"></i> <span class="d-none d-md-inline">تحديد كمقروءة</span>
-                            </button>
-                        </form>
-                    @endif
-                    <button type="button" id="btnDelete" class="btn btn-outline-light btn-sm">
-                        <i class="bi bi-trash me-1"></i> <span class="d-none d-sm-inline">حذف</span>
-                    </button>
-                </x-slot:actions>
-            </x-admin.card-header-form>
-        </x-admin.card>
-
-        <div class="row g-3 g-md-4">
-            <!-- Main content -->
+        <div class="row g-4">
+            {{-- المحتوى الرئيسي --}}
             <div class="col-12 col-lg-8">
-                <div class="card border-0 shadow-sm rounded-4 bg-white">
-                    <div class="card-body p-3 p-md-4">
-                        <!-- Subject -->
-                        <div class="mb-3 mb-md-4">
-                            <h3 class="fw-bold mb-2 mb-md-3 text-primary fs-4 fs-md-3">{{ $contactMessage->subject }}</h3>
-                            <div class="d-flex align-items-center gap-3 flex-wrap">
-                                <span class="badge {{ $contactMessage->is_read ? 'bg-success' : 'bg-warning text-dark' }}">
-                                    <i class="bi bi-{{ $contactMessage->is_read ? 'check-circle' : 'envelope-exclamation' }} me-1"></i>
-                                    {{ $contactMessage->is_read ? 'مقروءة' : 'غير مقروءة' }}
-                                </span>
+                <x-admin.card>
+                    <x-admin.card-header-form
+                        icon="bi-envelope-open"
+                        title="تفاصيل الرسالة"
+                        :back-route="route('admin.contact-messages.index')"
+                        back-label="رسائل الاتصال" />
+
+                    <div class="card-body p-4">
+                        {{-- الموضوع والحالة --}}
+                        <div class="mb-4 pb-3 border-bottom">
+                            <h5 class="fw-bold mb-2" style="color: #24364A;">{{ $contactMessage->subject }}</h5>
+                            <div class="d-flex align-items-center gap-2 flex-wrap">
+                                @if($contactMessage->is_read)
+                                    <span class="badge bg-success-subtle text-success rounded-pill px-3 py-1">
+                                        <i class="bi bi-check-circle me-1"></i>مقروءة
+                                    </span>
+                                @else
+                                    <span class="badge rounded-pill px-3 py-1" style="background: rgba(217,119,6,0.1); color: #D97706;">
+                                        <i class="bi bi-circle-fill me-1" style="font-size: 0.4rem;"></i>غير مقروءة
+                                    </span>
+                                @endif
                                 <small class="text-muted">
-                                    <i class="bi bi-clock me-1"></i>
-                                    {{ $contactMessage->created_at->format('Y-m-d H:i') }}
+                                    <i class="bi bi-clock me-1"></i>{{ $contactMessage->created_at->translatedFormat('d M Y - h:i A') }}
                                 </small>
                                 @if($contactMessage->read_at)
                                     <small class="text-muted">
-                                        <i class="bi bi-check-circle me-1"></i>
-                                        قرئت في: {{ $contactMessage->read_at->format('Y-m-d H:i') }}
+                                        <i class="bi bi-check-circle me-1"></i>قرئت: {{ $contactMessage->read_at->translatedFormat('d M Y - h:i A') }}
                                     </small>
                                 @endif
                             </div>
                         </div>
 
-                        <!-- Message -->
-                        <div class="mb-3 mb-md-4">
-                            <h6 class="fw-semibold mb-2 text-muted">الرسالة:</h6>
-                            <div class="p-3 bg-light rounded border" style="min-height: 200px; white-space: pre-wrap; line-height: 1.8;">
-                                {{ $contactMessage->message }}
-                            </div>
+                        {{-- نص الرسالة --}}
+                        <div class="p-3 rounded-3 border" style="min-height: 180px; white-space: pre-wrap; line-height: 1.8; background: #FAFBFC;">
+                            {{ $contactMessage->message }}
                         </div>
                     </div>
-                </div>
+                </x-admin.card>
             </div>
 
-            <!-- Sidebar -->
+            {{-- الشريط الجانبي --}}
             <div class="col-12 col-lg-4">
-                <!-- Sender Info -->
-                <div class="card border-0 shadow-sm rounded-4 bg-white mb-3">
-                    <div class="card-header bg-light border-0 py-2 px-3">
-                        <h6 class="mb-0 fw-bold">
-                            <i class="bi bi-person-fill me-2"></i>معلومات المرسل
+                {{-- معلومات المرسل --}}
+                <x-admin.card class="mb-3">
+                    <div class="card-body p-4">
+                        <h6 class="section-title mb-3">
+                            <i class="bi bi-person"></i>
+                            معلومات المرسل
                         </h6>
-                    </div>
-                    <div class="card-body p-3">
                         <div class="mb-3">
-                            <label class="text-muted small d-block mb-1">الاسم:</label>
-                            <div class="fw-semibold">{{ $contactMessage->name }}</div>
+                            <small class="text-muted d-block mb-1">الاسم</small>
+                            <div class="fw-semibold" style="color: #24364A;">{{ $contactMessage->name }}</div>
                         </div>
                         <div class="mb-3">
-                            <label class="text-muted small d-block mb-1">البريد الإلكتروني:</label>
-                            <a href="mailto:{{ $contactMessage->email }}" class="text-decoration-none">
-                                <i class="bi bi-envelope me-1"></i>{{ $contactMessage->email }}
+                            <small class="text-muted d-block mb-1">البريد الإلكتروني</small>
+                            <a href="mailto:{{ $contactMessage->email }}" class="text-decoration-none" style="color: #1ABC9C;">
+                                {{ $contactMessage->email }}
                             </a>
                         </div>
                         @if($contactMessage->phone)
-                            <div class="mb-3">
-                                <label class="text-muted small d-block mb-1">الهاتف:</label>
-                                <a href="tel:{{ $contactMessage->phone }}" class="text-decoration-none">
-                                    <i class="bi bi-telephone me-1"></i>{{ $contactMessage->phone }}
+                            <div>
+                                <small class="text-muted d-block mb-1">الهاتف</small>
+                                <a href="tel:{{ $contactMessage->phone }}" class="text-decoration-none" style="color: #1ABC9C;">
+                                    {{ $contactMessage->phone }}
                                 </a>
                             </div>
                         @endif
                     </div>
-                </div>
+                </x-admin.card>
 
-                <!-- Quick Actions -->
-                <div class="card border-0 shadow-sm rounded-4 bg-white">
-                    <div class="card-header bg-light border-0 py-2 px-3">
-                        <h6 class="mb-0 fw-bold">
-                            <i class="bi bi-lightning-fill me-2"></i>إجراءات سريعة
+                {{-- إجراءات سريعة --}}
+                <x-admin.card>
+                    <div class="card-body p-4">
+                        <h6 class="section-title mb-3">
+                            <i class="bi bi-lightning"></i>
+                            إجراءات سريعة
                         </h6>
-                    </div>
-                    <div class="card-body p-3">
                         <div class="d-grid gap-2">
-                            <a href="mailto:{{ $contactMessage->email }}?subject=Re: {{ $contactMessage->subject }}" 
-                               class="btn btn-primary btn-sm">
+                            <a href="mailto:{{ $contactMessage->email }}?subject=Re: {{ $contactMessage->subject }}"
+                               class="btn btn-save btn-sm">
                                 <i class="bi bi-reply me-1"></i>الرد على الرسالة
                             </a>
                             @if($contactMessage->phone)
-                                <a href="tel:{{ $contactMessage->phone }}" class="btn btn-success btn-sm">
+                                <a href="tel:{{ $contactMessage->phone }}" class="btn btn-cancel btn-sm">
                                     <i class="bi bi-telephone me-1"></i>اتصال
                                 </a>
                             @endif
                             @if($contactMessage->is_read)
                                 <form action="{{ route('admin.contact-messages.mark-unread', $contactMessage) }}" method="POST">
-                                    @csrf
-                                    @method('PATCH')
-                                    <button type="submit" class="btn btn-warning btn-sm w-100">
+                                    @csrf @method('PATCH')
+                                    <button type="submit" class="btn btn-cancel btn-sm w-100">
                                         <i class="bi bi-envelope me-1"></i>تحديد كغير مقروءة
                                     </button>
                                 </form>
                             @else
                                 <form action="{{ route('admin.contact-messages.mark-read', $contactMessage) }}" method="POST">
-                                    @csrf
-                                    @method('PATCH')
-                                    <button type="submit" class="btn btn-success btn-sm w-100">
-                                        <i class="bi bi-check me-1"></i>تحديد كمقروءة
+                                    @csrf @method('PATCH')
+                                    <button type="submit" class="btn btn-cancel btn-sm w-100">
+                                        <i class="bi bi-check-circle me-1"></i>تحديد كمقروءة
                                     </button>
                                 </form>
                             @endif
+                            <button type="button" id="btnDelete" class="btn btn-delete-confirm btn-sm">
+                                <i class="bi bi-trash me-1"></i>حذف الرسالة
+                            </button>
                         </div>
                     </div>
-                </div>
+                </x-admin.card>
             </div>
         </div>
     </div>
 
-    <!-- Delete Modal -->
+    {{-- Delete Modal --}}
     <div class="modal fade" id="deleteModal" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-dialog modal-dialog-centered modal-sm">
             <form action="{{ route('admin.contact-messages.destroy', $contactMessage) }}" method="POST">
-                @csrf
-                @method('DELETE')
-                <div class="modal-content">
-                    <div class="modal-header border-0">
-                        <h5 class="modal-title text-danger">
-                            <i class="bi bi-exclamation-triangle-fill me-2"></i>تأكيد الحذف
-                        </h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                    </div>
+                @csrf @method('DELETE')
+                <div class="modal-content border-0 rounded-4">
                     <div class="modal-body text-center py-4">
-                        <i class="bi bi-exclamation-triangle-fill text-danger" style="font-size: 3rem;"></i>
-                        <p class="mt-3 mb-2">هل أنت متأكد من حذف هذه الرسالة؟</p>
-                        <p class="fw-bold text-dark">{{ $contactMessage->subject }}</p>
-                        <small class="text-danger">هذا الإجراء لا يمكن التراجع عنه</small>
+                        <i class="bi bi-exclamation-triangle-fill text-danger" style="font-size: 2.5rem;"></i>
+                        <p class="mt-3 mb-1 fw-semibold">حذف هذه الرسالة؟</p>
+                        <small class="text-muted">{{ \Illuminate\Support\Str::limit($contactMessage->subject, 40) }}</small>
                     </div>
-                    <div class="modal-footer border-0">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
-                        <button type="submit" class="btn btn-danger">
+                    <div class="modal-footer border-0 justify-content-center gap-2 pt-0 pb-3">
+                        <button type="button" class="btn btn-cancel btn-sm" data-bs-dismiss="modal">إلغاء</button>
+                        <button type="submit" class="btn btn-delete-confirm btn-sm">
                             <i class="bi bi-trash me-1"></i>حذف
                         </button>
                     </div>
@@ -190,8 +149,7 @@
 @push('scripts')
 <script>
     document.getElementById('btnDelete')?.addEventListener('click', function() {
-        const modal = new bootstrap.Modal(document.getElementById('deleteModal'));
-        modal.show();
+        new bootstrap.Modal(document.getElementById('deleteModal')).show();
     });
 </script>
 @endpush

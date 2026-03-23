@@ -29,11 +29,11 @@
                         <div class="card-body p-4 row g-3">
                             <div class="col-md-4">
                                 <label class="form-label fw-semibold text-dark d-flex align-items-center gap-1">
-                                    <i class="bi bi-hash text-primary"></i>{{ __('admin.tenders.form_mnews_id') }}
+                                    <i class="bi bi-hash"></i>{{ __('admin.tenders.form_mnews_id') }}
                                 </label>
                                 <input type="number" name="mnews_id" 
                                        class="form-control rounded-3  @error('mnews_id') is-invalid @enderror"
-                                       style="height: 45px;"
+
                                        value="{{ old('mnews_id') }}" 
                                        placeholder="{{ __('admin.tenders.form_example_number') }}">
                                 @error('mnews_id')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
@@ -41,11 +41,11 @@
 
                             <div class="col-md-8">
                                 <label class="form-label fw-semibold text-dark d-flex align-items-center gap-1">
-                                    <i class="bi bi-file-text text-primary"></i>{{ __('admin.tenders.form_column_name_1') }}
+                                    <i class="bi bi-file-text"></i>{{ __('admin.tenders.form_column_name_1') }}
                                 </label>
                                 <input type="text" name="column_name_1" 
                                        class="form-control rounded-3  @error('column_name_1') is-invalid @enderror"
-                                       style="height: 45px;"
+
                                        value="{{ old('column_name_1') }}" 
                                        placeholder="{{ __('admin.tenders.form_column_placeholder') }}">
                                 @error('column_name_1')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
@@ -53,12 +53,12 @@
 
                             <div class="col-md-6">
                                 <label class="form-label fw-semibold text-dark d-flex align-items-center gap-1">
-                                    <i class="bi bi-calendar text-primary"></i>{{ __('admin.tenders.form_the_date_1') }} 
+                                    <i class="bi bi-calendar"></i>{{ __('admin.tenders.form_the_date_1') }} 
                                     <span class="text-muted small">{{ __('admin.tenders.form_date_text') }}</span>
                                 </label>
                                 <input type="date" name="the_date_1" 
                                        class="form-control rounded-3  @error('the_date_1') is-invalid @enderror"
-                                       style="height: 45px;"
+
                                        value="{{ old('the_date_1') }}" 
                                        placeholder="{{ __('admin.tenders.form_example_date') }}">
                                 @error('the_date_1')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
@@ -66,11 +66,11 @@
 
                             <div class="col-md-6">
                                 <label class="form-label fw-semibold text-dark d-flex align-items-center gap-1">
-                                    <i class="bi bi-123 text-primary"></i>{{ __('admin.tenders.form_coulm_serial') }}
+                                    <i class="bi bi-123"></i>{{ __('admin.tenders.form_coulm_serial') }}
                                 </label>
                                 <input type="number" name="coulm_serial" 
                                        class="form-control rounded-3  @error('coulm_serial') is-invalid @enderror"
-                                       style="height: 45px;"
+
                                        value="{{ old('coulm_serial') }}" 
                                        placeholder="{{ __('admin.tenders.form_example_number') }}">
                                 @error('coulm_serial')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
@@ -78,11 +78,11 @@
 
                             <div class="col-md-6">
                                 <label class="form-label fw-semibold text-dark d-flex align-items-center gap-1">
-                                    <i class="bi bi-calendar-event text-primary"></i>{{ __('admin.tenders.form_event_1') }}
+                                    <i class="bi bi-calendar-event"></i>{{ __('admin.tenders.form_event_1') }}
                                 </label>
                                 <input type="text" name="event_1" 
                                        class="form-control rounded-3  @error('event_1') is-invalid @enderror"
-                                       style="height: 45px;"
+
                                        value="{{ old('event_1') }}" 
                                        placeholder="{{ __('admin.tenders.form_event_placeholder') }}">
                                 @error('event_1')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
@@ -90,11 +90,11 @@
 
                             <div class="col-md-6">
                                 <label class="form-label fw-semibold text-dark d-flex align-items-center gap-1">
-                                    <i class="bi bi-person text-primary"></i>{{ __('admin.tenders.form_the_user_1') }}
+                                    <i class="bi bi-person"></i>{{ __('admin.tenders.form_the_user_1') }}
                                 </label>
                                 <input type="text" name="the_user_1" 
                                        class="form-control rounded-3  @error('the_user_1') is-invalid @enderror"
-                                       style="height: 45px;"
+
                                        value="{{ old('the_user_1') }}" 
                                        placeholder="{{ __('admin.tenders.form_example_user') }}">
                                 @error('the_user_1')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
@@ -173,10 +173,10 @@
             </div>
 
             <div class="d-flex gap-2 justify-content-end mt-4">
-                <button type="submit" class="btn btn-primary px-4 shadow-sm rounded-3 d-flex align-items-center gap-2">
+                <button type="submit" class="btn btn-save d-flex align-items-center gap-2">
                     <i class="bi bi-check-lg"></i>{{ __('admin.tenders.form_save') }}
                 </button>
-                <a href="{{ route('admin.tenders.index') }}" class="btn btn-outline-secondary px-4 rounded-3">
+                <a href="{{ route('admin.tenders.index') }}" class="btn btn-cancel">
                     {{ __('admin.tenders.form_cancel') }}
                 </a>
             </div>

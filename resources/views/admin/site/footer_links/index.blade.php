@@ -28,7 +28,10 @@
                         <input name="q" class="form-control" placeholder="ابحث بالعنوان/المسار/الرابط..." value="{{ request('q') }}">
                     </div>
                     <div class="col-md-3 text-end">
-                        <button class="btn btn-outline-secondary">بحث</button>
+                        <button class="btn btn-outline-secondary"><i class="bi bi-search me-1"></i> استعلام</button>
+                        <a href="{{ route('admin.footer-links.index') }}" class="btn btn-outline-danger rounded-3">
+                            <i class="bi bi-x-circle me-1"></i> تفريغ
+                        </a>
                     </div>
                 </form>
 

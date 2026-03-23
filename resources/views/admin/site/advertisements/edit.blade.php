@@ -55,11 +55,11 @@
                                     <!-- Title -->
                                     <div class="mb-4">
                                         <label class="form-label fw-semibold text-dark d-flex align-items-center gap-1">
-                                            <i class="bi bi-type-h1 text-primary"></i> {{ __('admin.advertisements.form_title') }}
+                                            <i class="bi bi-type-h1"></i> {{ __('admin.advertisements.form_title') }}
                                         </label>
                                         <input type="text" name="TITLE" id="titleInput"
                                                class="form-control rounded-3 border-0 bg-light @error('TITLE') is-invalid @enderror"
-                                               style="height: 45px;"
+
                                                placeholder="{{ __('admin.advertisements.form_title_placeholder') }}" value="{{ old('TITLE', $ad->TITLE) }}">
                                         @error('TITLE') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
                                         <div class="form-text text-muted small"><span id="titleCount">{{ strlen(old('TITLE', $ad->TITLE ?? '')) }}</span>/255</div>
@@ -68,11 +68,11 @@
                                     <!-- News Date -->
                                     <div class="mb-4">
                                         <label class="form-label fw-semibold text-dark d-flex align-items-center gap-1">
-                                            <i class="bi bi-calendar text-primary"></i> {{ __('admin.advertisements.form_date_news') }}
+                                            <i class="bi bi-calendar"></i> {{ __('admin.advertisements.form_date_news') }}
                                         </label>
                                         <input type="date" name="DATE_NEWS" id="dateInput"
                                                class="form-control rounded-3 border-0 bg-light @error('DATE_NEWS') is-invalid @enderror"
-                                               style="height: 45px;"
+
                                                value="{{ old('DATE_NEWS', optional(\Carbon\Carbon::parse($ad->DATE_NEWS))->format('Y-m-d')) }}">
                                         @error('DATE_NEWS') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
                                     </div>
@@ -197,12 +197,12 @@
 
                                     <!-- Buttons -->
                                     <div class="d-flex flex-wrap gap-2 mt-5">
-                                        <button type="button" id="submitBtn" class="btn btn-primary px-4 d-flex align-items-center gap-2 shadow-sm">
+                                        <button type="button" id="submitBtn" class="btn btn-save d-flex align-items-center gap-2">
                                             <i class="bi bi-save"></i>
                                             <span id="submitText">{{ __('admin.advertisements.form_update') }}</span>
                                             <span id="submitSpinner" class="spinner-border spinner-border-sm d-none" role="status"></span>
                                         </button>
-                                        <a href="{{ route('admin.advertisements.index') }}" class="btn btn-link text-muted">{{ __('admin.advertisements.form_cancel') }}</a>
+                                        <a href="{{ route('admin.advertisements.index') }}" class="btn btn-cancel">{{ __('admin.advertisements.form_cancel') }}</a>
                                     </div>
                                 </form>
                             </div>

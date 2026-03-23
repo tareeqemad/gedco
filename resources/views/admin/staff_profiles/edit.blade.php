@@ -64,27 +64,27 @@
                             <div class="row g-4">
                                 <div class="col-md-6 col-lg-4">
                                     <label class="form-label fw-semibold text-dark d-flex align-items-center gap-1">{{ __('admin.staff_profiles.edit_national_id') }} <span class="text-danger">*</span></label>
-                                    <input type="text" name="national_id" class="form-control rounded-3 " style="height: 45px;" value="{{ old('national_id', $profile->national_id) }}" required maxlength="9" pattern="\d{9}">
+                                    <input type="text" name="national_id" class="form-control rounded-3 " value="{{ old('national_id', $profile->national_id) }}" required maxlength="9" pattern="\d{9}">
                                 </div>
                                 <div class="col-md-6 col-lg-4">
                                     <label class="form-label fw-semibold text-dark d-flex align-items-center gap-1">{{ __('admin.staff_profiles.edit_full_name') }} <span class="text-danger">*</span></label>
-                                    <input type="text" name="full_name" class="form-control rounded-3 " style="height: 45px;" value="{{ old('full_name', $profile->full_name) }}" required>
+                                    <input type="text" name="full_name" class="form-control rounded-3 " value="{{ old('full_name', $profile->full_name) }}" required>
                                 </div>
                                 <div class="col-md-6 col-lg-4">
                                     <label class="form-label fw-semibold text-dark d-flex align-items-center gap-1">{{ __('admin.staff_profiles.edit_birth_date') }}</label>
-                                    <input type="date" name="birth_date" class="form-control rounded-3 " style="height: 45px;" value="{{ old('birth_date', $profile->birth_date?->format('Y-m-d')) }}">
+                                    <input type="date" name="birth_date" class="form-control rounded-3 " value="{{ old('birth_date', $profile->birth_date?->format('Y-m-d')) }}">
                                 </div>
                                 <div class="col-md-6 col-lg-4">
                                     <label class="form-label fw-semibold text-dark d-flex align-items-center gap-1">{{ __('admin.staff_profiles.edit_employee_number') }} <span class="text-danger">*</span></label>
-                                    <input type="text" name="employee_number" class="form-control rounded-3 " style="height: 45px;" value="{{ old('employee_number', $profile->employee_number) }}" required>
+                                    <input type="text" name="employee_number" class="form-control rounded-3 " value="{{ old('employee_number', $profile->employee_number) }}" required>
                                 </div>
                                 <div class="col-md-6 col-lg-4">
                                     <label class="form-label fw-semibold text-dark d-flex align-items-center gap-1">{{ __('admin.staff_profiles.edit_job_title') }}</label>
-                                    <input type="text" name="job_title" class="form-control rounded-3 " style="height: 45px;" value="{{ old('job_title', $profile->job_title) }}">
+                                    <input type="text" name="job_title" class="form-control rounded-3 " value="{{ old('job_title', $profile->job_title) }}">
                                 </div>
                                 <div class="col-md-6 col-lg-4">
                                     <label class="form-label fw-semibold text-dark d-flex align-items-center gap-1">{{ __('admin.staff_profiles.edit_location') }} <span class="text-danger">*</span></label>
-                                    <select name="location" class="form-select rounded-3 " style="height: 45px;" required>
+                                    <select name="location" class="form-select rounded-3 " required>
                                         <option value="">{{ __('admin.staff_profiles.edit_select_location') }}</option>
                                         @foreach($locations as $k => $v)
                                             <option value="{{ $k }}" {{ old('location', $profile->location) == $k ? 'selected' : '' }}>{{ $v }}</option>
@@ -93,19 +93,19 @@
                                 </div>
                                 <div class="col-md-6 col-lg-4">
                                     <label class="form-label fw-semibold text-dark d-flex align-items-center gap-1">{{ __('admin.staff_profiles.edit_department') }}</label>
-                                    <input type="text" name="department" class="form-control rounded-3 " style="height: 45px;" value="{{ old('department', $profile->department) }}">
+                                    <input type="text" name="department" class="form-control rounded-3 " value="{{ old('department', $profile->department) }}">
                                 </div>
                                 <div class="col-md-6 col-lg-4">
                                     <label class="form-label fw-semibold text-dark d-flex align-items-center gap-1">{{ __('admin.staff_profiles.edit_directorate') }}</label>
-                                    <input type="text" name="directorate" class="form-control rounded-3 " style="height: 45px;" value="{{ old('directorate', $profile->directorate) }}">
+                                    <input type="text" name="directorate" class="form-control rounded-3 " value="{{ old('directorate', $profile->directorate) }}">
                                 </div>
                                 <div class="col-md-6 col-lg-4">
                                     <label class="form-label fw-semibold text-dark d-flex align-items-center gap-1">{{ __('admin.staff_profiles.edit_section') }}</label>
-                                    <input type="text" name="section" class="form-control rounded-3 " style="height: 45px;" value="{{ old('section', $profile->section) }}">
+                                    <input type="text" name="section" class="form-control rounded-3 " value="{{ old('section', $profile->section) }}">
                                 </div>
                                 <div class="col-md-6 col-lg-4">
                                     <label class="form-label fw-semibold text-dark d-flex align-items-center gap-1">{{ __('admin.staff_profiles.edit_marital_status') }}</label>
-                                    <select name="marital_status" class="form-select rounded-3 " style="height: 45px;">
+                                    <select name="marital_status" class="form-select rounded-3 ">
                                         <option value="">{{ __('admin.staff_profiles.not_specified') }}</option>
                                         @foreach($maritalStatus as $k => $v)
                                             <option value="{{ $k }}" {{ old('marital_status', $profile->marital_status) == $k ? 'selected' : '' }}>{{ $v }}</option>
@@ -114,7 +114,7 @@
                                 </div>
                                 <div class="col-md-6 col-lg-4">
                                     <label class="form-label fw-semibold text-dark d-flex align-items-center gap-1">{{ __('admin.staff_profiles.edit_family_members_count') }}</label>
-                                    <input type="number" min="0" max="20" id="family-count-input" name="family_members_count" class="form-control rounded-3 " style="height: 45px;" value="{{ old('family_members_count', $profile->family_members_count ?? 1) }}">
+                                    <input type="number" min="0" max="20" id="family-count-input" name="family_members_count" class="form-control rounded-3 " value="{{ old('family_members_count', $profile->family_members_count ?? 1) }}">
                                 </div>
                             </div>
 
@@ -147,11 +147,11 @@
                             <div class="row g-4">
                                 <div class="col-12">
                                     <label class="form-label fw-semibold text-dark d-flex align-items-center gap-1">{{ __('admin.staff_profiles.edit_original_address') }}</label>
-                                    <input type="text" name="original_address" class="form-control rounded-3 " style="height: 45px;" value="{{ old('original_address', $profile->original_address) }}">
+                                    <input type="text" name="original_address" class="form-control rounded-3 " value="{{ old('original_address', $profile->original_address) }}">
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label fw-semibold text-dark d-flex align-items-center gap-1">{{ __('admin.staff_profiles.edit_house_status') }}</label>
-                                    <select name="house_status" class="form-select rounded-3 " style="height: 45px;">
+                                    <select name="house_status" class="form-select rounded-3 ">
                                         <option value="">{{ __('admin.staff_profiles.not_specified') }}</option>
                                         @foreach($houseStatus as $k => $v)
                                             <option value="{{ $k }}" {{ old('house_status', $profile->house_status) == $k ? 'selected' : '' }}>{{ $v }}</option>
@@ -160,7 +160,7 @@
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label fw-semibold text-dark d-flex align-items-center gap-1">{{ __('admin.staff_profiles.edit_resident_status') }}</label>
-                                    <select name="status" id="status-select" class="form-select rounded-3 " style="height: 45px;">
+                                    <select name="status" id="status-select" class="form-select rounded-3 ">
                                         <option value="">{{ __('admin.staff_profiles.not_specified') }}</option>
                                         @foreach($residentStatus as $k => $v)
                                             <option value="{{ $k }}" {{ old('status', $profile->status) == $k ? 'selected' : '' }}>{{ $v }}</option>
@@ -169,11 +169,11 @@
                                 </div>
                                 <div class="col-12 {{ old('status', $profile->status) == 'displaced' ? 'show' : 'hidden' }}" id="current-address-field">
                                     <label class="form-label fw-semibold text-dark d-flex align-items-center gap-1">{{ __('admin.staff_profiles.edit_current_address') }}</label>
-                                    <input type="text" name="current_address" class="form-control rounded-3 " style="height: 45px;" value="{{ old('current_address', $profile->current_address) }}">
+                                    <input type="text" name="current_address" class="form-control rounded-3 " value="{{ old('current_address', $profile->current_address) }}">
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label fw-semibold text-dark d-flex align-items-center gap-1">{{ __('admin.staff_profiles.edit_housing_type') }}</label>
-                                    <select name="housing_type" class="form-select rounded-3 " style="height: 45px;">
+                                    <select name="housing_type" class="form-select rounded-3 ">
                                         <option value="">{{ __('admin.staff_profiles.not_specified') }}</option>
                                         @foreach($housingTypes as $k => $v)
                                             <option value="{{ $k }}" {{ old('housing_type', $profile->housing_type) == $k ? 'selected' : '' }}>{{ $v }}</option>
@@ -187,11 +187,11 @@
                             <div class="row g-4">
                                 <div class="col-md-6">
                                     <label class="form-label fw-semibold text-dark d-flex align-items-center gap-1">{{ __('admin.staff_profiles.edit_mobile') }}</label>
-                                    <input type="text" name="mobile" class="form-control rounded-3 " style="height: 45px;" value="{{ old('mobile', $profile->mobile) }}">
+                                    <input type="text" name="mobile" class="form-control rounded-3 " value="{{ old('mobile', $profile->mobile) }}">
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label fw-semibold text-dark d-flex align-items-center gap-1">{{ __('admin.staff_profiles.edit_mobile_alt') }}</label>
-                                    <input type="text" name="mobile_alt" class="form-control rounded-3 " style="height: 45px;" value="{{ old('mobile_alt', $profile->mobile_alt) }}">
+                                    <input type="text" name="mobile_alt" class="form-control rounded-3 " value="{{ old('mobile_alt', $profile->mobile_alt) }}">
                                 </div>
                                 
                                 @php
@@ -214,7 +214,7 @@
                                 
                                 <div class="col-md-6">
                                     <label class="form-label fw-semibold text-dark d-flex align-items-center gap-1">{{ __('admin.staff_profiles.edit_whatsapp') }}</label>
-                                    <div class="wa-wrapper d-flex align-items-center rounded-3 " style="height: 45px; padding: 0 0.75rem;">
+                                    <div class="wa-wrapper d-flex align-items-center rounded-3 " style="padding: 0 0.75rem;">
                                         <span class="wa-plus me-1">+</span>
                                         <select name="whatsapp_prefix" class="wa-prefix border-0 bg-transparent" style="height: 100%;">
                                             <option value="970" @selected(old('whatsapp_prefix', $waPref)=='970')>970</option>
@@ -226,11 +226,11 @@
                                 
                                 <div class="col-md-6">
                                     <label class="form-label fw-semibold text-dark d-flex align-items-center gap-1">{{ __('admin.staff_profiles.edit_telegram') }}</label>
-                                    <input type="text" name="telegram" class="form-control rounded-3 " style="height: 45px;" value="{{ old('telegram', $profile->telegram) }}">
+                                    <input type="text" name="telegram" class="form-control rounded-3 " value="{{ old('telegram', $profile->telegram) }}">
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label fw-semibold text-dark d-flex align-items-center gap-1">{{ __('admin.staff_profiles.edit_email') }}</label>
-                                    <input type="email" name="gmail" class="form-control rounded-3 " style="height: 45px;" value="{{ old('gmail', $profile->gmail) }}">
+                                    <input type="email" name="gmail" class="form-control rounded-3 " value="{{ old('gmail', $profile->gmail) }}">
                                 </div>
                             </div>
 
@@ -239,7 +239,7 @@
                             <div class="row g-4">
                                 <div class="col-md-6">
                                     <label class="form-label fw-semibold text-dark d-flex align-items-center gap-1">{{ __('admin.staff_profiles.edit_has_incidents') }}</label>
-                                    <select name="has_family_incidents" class="form-select rounded-3 " style="height: 45px;">
+                                    <select name="has_family_incidents" class="form-select rounded-3 ">
                                         <option value="no" {{ old('has_family_incidents', $profile->has_family_incidents ?? 'no') == 'no' ? 'selected' : '' }}>{{ __('admin.staff_profiles.edit_no') }}</option>
                                         <option value="yes" {{ old('has_family_incidents', $profile->has_family_incidents ?? 'no') == 'yes' ? 'selected' : '' }}>{{ __('admin.staff_profiles.edit_yes') }}</option>
                                     </select>
@@ -255,7 +255,7 @@
                             <div class="row g-4">
                                 <div class="col-md-6">
                                     <label class="form-label fw-semibold text-dark d-flex align-items-center gap-1">{{ __('admin.staff_profiles.edit_readiness_level') }}</label>
-                                    <select name="readiness" id="readiness-select" class="form-select rounded-3 " style="height: 45px;">
+                                    <select name="readiness" id="readiness-select" class="form-select rounded-3 ">
                                         <option value="">{{ __('admin.staff_profiles.not_specified') }}</option>
                                         @foreach($readinessList as $k => $v)
                                             <option value="{{ $k }}" {{ old('readiness', $profile->readiness) == $k ? 'selected' : '' }}>{{ $v['label'] ?? $v }}</option>
@@ -273,11 +273,11 @@
                             <div class="row g-4">
                                 <div class="col-md-6">
                                     <label class="form-label fw-semibold text-dark d-flex align-items-center gap-1">{{ __('admin.staff_profiles.edit_total_edits_allowed') }}</label>
-                                    <input type="number" min="0" name="edits_allowed" class="form-control rounded-3 " style="height: 45px;" value="{{ old('edits_allowed', $profile->edits_allowed) }}">
+                                    <input type="number" min="0" name="edits_allowed" class="form-control rounded-3 " value="{{ old('edits_allowed', $profile->edits_allowed) }}">
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label fw-semibold text-dark d-flex align-items-center gap-1">{{ __('admin.staff_profiles.edit_remaining_for_employee') }}</label>
-                                    <input type="number" min="0" name="edits_remaining" class="form-control rounded-3 " style="height: 45px;" value="{{ old('edits_remaining', $profile->edits_remaining) }}">
+                                    <input type="number" min="0" name="edits_remaining" class="form-control rounded-3 " value="{{ old('edits_remaining', $profile->edits_remaining) }}">
                                 </div>
                             </div>
                             <div class="alert alert-info mt-3 small">
@@ -286,7 +286,7 @@
 
                             <!-- Save Button -->
                             <div class="text-center mt-5">
-                                <button type="submit" class="btn btn-primary rounded-3 shadow-sm px-5 py-2 d-flex align-items-center gap-2 mx-auto">
+                                <button type="submit" class="btn btn-save d-flex align-items-center gap-2 mx-auto">
                                     <i class="bi bi-check2-all"></i> {{ __('admin.staff_profiles.edit_save_all') }}
                                 </button>
                             </div>

@@ -5,7 +5,7 @@
 <div class="row">
     <div class="col-md-4 mb-3">
         <label class="form-label fw-semibold text-dark">Platform</label>
-        <select name="platform" class="form-select rounded-3" style="height: 45px;">
+        <select name="platform" class="form-select rounded-3">
             @foreach(['facebook','x','instagram','youtube','whatsapp'] as $p)
                 <option value="{{ $p }}" @selected(old('platform',$link->platform ?? '')==$p)>{{ $p }}</option>
             @endforeach
@@ -15,21 +15,21 @@
 
     <div class="col-md-4 mb-3">
         <label class="form-label fw-semibold text-dark">Icon Class</label>
-        <input name="icon_class" class="form-control rounded-3" style="height: 45px;" value="{{ old('icon_class',$link->icon_class ?? '') }}" placeholder="fa-brands fa-facebook-f">
+        <input name="icon_class" class="form-control rounded-3" value="{{ old('icon_class',$link->icon_class ?? '') }}" placeholder="fa-brands fa-facebook-f">
         @error('icon_class')<div class="text-danger">{{ $message }}</div>@enderror
         <small class="text-muted">مثال: fa-brands fa-instagram</small>
     </div>
 
     <div class="col-md-4 mb-3">
         <label class="form-label fw-semibold text-dark">Sort Order</label>
-        <input name="sort_order" type="number" class="form-control rounded-3" style="height: 45px;" value="{{ old('sort_order',$link->sort_order ?? 0) }}">
+        <input name="sort_order" type="number" class="form-control rounded-3" value="{{ old('sort_order',$link->sort_order ?? 0) }}">
         @error('sort_order')<div class="text-danger">{{ $message }}</div>@enderror
     </div>
 </div>
 
 <div class="mb-3">
     <label class="form-label fw-semibold text-dark">URL</label>
-    <input name="url" class="form-control rounded-3" style="height: 45px;" value="{{ old('url',$link->url ?? '') }}" placeholder="https://...">
+    <input name="url" class="form-control rounded-3" value="{{ old('url',$link->url ?? '') }}" placeholder="https://...">
     @error('url')<div class="text-danger">{{ $message }}</div>@enderror
 </div>
 
@@ -38,7 +38,7 @@
     <label class="form-check-label">Active</label>
 </div>
 
-<button class="btn btn-primary rounded-3 shadow-sm d-flex align-items-center justify-content-center gap-2 py-2">
+<button class="btn btn-save d-flex align-items-center justify-content-center gap-2">
     <i class="bi bi-check-circle"></i>
     حفظ
 </button>

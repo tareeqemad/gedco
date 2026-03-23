@@ -12,51 +12,51 @@
                 {{-- Badge --}}
                 <div class="col-md-6">
                     <label class="form-label fw-semibold text-dark d-flex align-items-center gap-2 mb-2">
-                        <i class="bi bi-translate text-primary"></i>
+                        <i class="bi bi-translate " style="color: #5B7088;"></i>
                         {{ __('admin.why_choose_us.form_badge') }} - {{ __('admin.labels.arabic') }} <span class="text-danger">*</span>
                     </label>
                     <input type="text" name="badge" class="form-control rounded-3 border-0 bg-light @error('badge') is-invalid @enderror"
                            value="{{ old('badge', $model->badge ?? '') }}" required placeholder="مثال: لماذا تختارنا"
-                           style="height: 45px; font-size: 1rem;">
+                           >
                     @error('badge') <div class="invalid-feedback d-block mt-1">{{ $message }}</div> @enderror
                 </div>
                 <div class="col-md-6">
                     <label class="form-label fw-semibold text-dark d-flex align-items-center gap-2 mb-2">
-                        <i class="bi bi-globe text-primary"></i>
+                        <i class="bi bi-globe " style="color: #5B7088;"></i>
                         {{ __('admin.why_choose_us.form_badge') }} - {{ __('admin.labels.english') }}
                     </label>
                     <input type="text" name="badge_en" class="form-control rounded-3 border-0 bg-light @error('badge_en') is-invalid @enderror"
                            value="{{ old('badge_en', $model->badge_en ?? '') }}" placeholder="e.g: Why Choose Us"
-                           style="height: 45px; font-size: 1rem;">
+                           >
                     @error('badge_en') <div class="invalid-feedback d-block mt-1">{{ $message }}</div> @enderror
                 </div>
 
                 {{-- Tagline --}}
                 <div class="col-md-6">
                     <label class="form-label fw-semibold text-dark d-flex align-items-center gap-2 mb-2">
-                        <i class="bi bi-translate text-primary"></i>
+                        <i class="bi bi-translate " style="color: #5B7088;"></i>
                         {{ __('admin.why_choose_us.form_tagline') }} - {{ __('admin.labels.arabic') }} <span class="text-danger">*</span>
                     </label>
                     <input type="text" name="tagline" class="form-control rounded-3 border-0 bg-light @error('tagline') is-invalid @enderror"
                            value="{{ old('tagline', $model->tagline ?? '') }}" required placeholder="مثال: شريكك الموثوق في الخدمة الكهربائية"
-                           style="height: 45px; font-size: 1rem;">
+                           >
                     @error('tagline') <div class="invalid-feedback d-block mt-1">{{ $message }}</div> @enderror
                 </div>
                 <div class="col-md-6">
                     <label class="form-label fw-semibold text-dark d-flex align-items-center gap-2 mb-2">
-                        <i class="bi bi-globe text-primary"></i>
+                        <i class="bi bi-globe " style="color: #5B7088;"></i>
                         {{ __('admin.why_choose_us.form_tagline') }} - {{ __('admin.labels.english') }}
                     </label>
                     <input type="text" name="tagline_en" class="form-control rounded-3 border-0 bg-light @error('tagline_en') is-invalid @enderror"
                            value="{{ old('tagline_en', $model->tagline_en ?? '') }}" placeholder="e.g: Your Trusted Partner in Electrical Services"
-                           style="height: 45px; font-size: 1rem;">
+                           >
                     @error('tagline_en') <div class="invalid-feedback d-block mt-1">{{ $message }}</div> @enderror
                 </div>
 
                 {{-- Description --}}
                 <div class="col-md-6">
                     <label class="form-label fw-semibold text-dark d-flex align-items-center gap-2 mb-2">
-                        <i class="bi bi-translate text-primary"></i>
+                        <i class="bi bi-translate " style="color: #5B7088;"></i>
                         {{ __('admin.why_choose_us.form_description') }} - {{ __('admin.labels.arabic') }}
                     </label>
                     <textarea name="description" class="form-control rounded-3 @error('description') is-invalid @enderror" rows="8" placeholder="الوصف بالعربية" style="font-size: 0.92rem; line-height: 2; min-height: 160px; border: 1.5px solid #CDD9E3;">{{ old('description', $model->description ?? '') }}</textarea>
@@ -64,7 +64,7 @@
                 </div>
                 <div class="col-md-6">
                     <label class="form-label fw-semibold text-dark d-flex align-items-center gap-2 mb-2">
-                        <i class="bi bi-globe text-primary"></i>
+                        <i class="bi bi-globe " style="color: #5B7088;"></i>
                         {{ __('admin.why_choose_us.form_description') }} - {{ __('admin.labels.english') }}
                     </label>
                     <textarea name="description_en" class="form-control rounded-3 @error('description_en') is-invalid @enderror" rows="8" placeholder="English Description" style="font-size: 0.92rem; line-height: 2; min-height: 160px; border: 1.5px solid #CDD9E3;">{{ old('description_en', $model->description_en ?? '') }}</textarea>
@@ -115,7 +115,7 @@
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label fw-semibold text-dark mb-2">{{ __('admin.why_choose_us.form_item_title') }}</label>
-                                    <input type="text" name="feature_title[]" class="form-control rounded-3 border-0 bg-white" value="{{ $f['title'] ?? '' }}" placeholder="العنوان بالعربية" style="height: 45px; font-size: 1rem;">
+                                    <input type="text" name="feature_title[]" class="form-control rounded-3 border-0 bg-white" value="{{ $f['title'] ?? '' }}" placeholder="العنوان بالعربية" >
                                 </div>
                                 <div>
                                     <label class="form-label fw-semibold text-dark mb-2">{{ __('admin.why_choose_us.form_item_text') }}</label>
@@ -133,7 +133,7 @@
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label fw-semibold text-dark mb-2">{{ __('admin.why_choose_us.form_item_title') }}</label>
-                                    <input type="text" name="feature_title_en[]" class="form-control rounded-3 border-0 bg-white" value="{{ $f['title_en'] ?? '' }}" placeholder="English Title" style="height: 45px; font-size: 1rem;">
+                                    <input type="text" name="feature_title_en[]" class="form-control rounded-3 border-0 bg-white" value="{{ $f['title_en'] ?? '' }}" placeholder="English Title" >
                                 </div>
                                 <div>
                                     <label class="form-label fw-semibold text-dark mb-2">{{ __('admin.why_choose_us.form_item_text') }}</label>
@@ -149,10 +149,10 @@
 
     {{-- Form Actions --}}
     <div class="d-flex gap-3 justify-content-end pt-3 border-top mt-4">
-        <a href="{{ route('admin.why.index') }}" class="btn btn-outline-secondary px-5 py-2 rounded-3" style="min-width: 150px; font-weight: 600;">
+        <a href="{{ route('admin.why.index') }}" class="btn btn-cancel">
             <i class="bi bi-x-circle me-2"></i>{{ __('admin.common.cancel') }}
         </a>
-        <button type="submit" class="btn btn-primary px-5 py-2 rounded-3 shadow-sm" style="min-width: 150px; font-weight: 600;">
+        <button type="submit" class="btn btn-save">
             <i class="bi bi-check-lg me-2"></i>{{ __('admin.common.form_save') }}
         </button>
     </div>

@@ -95,10 +95,10 @@
                         </div>
                         <div class="d-flex gap-2 justify-content-center w-100 w-sm-auto">
                             <button class="btn btn-outline-secondary shadow-sm" type="submit" style="min-width: 120px;">
-                                <i class="bi bi-funnel me-1"></i> {{ __('admin.news.apply') }}
+                                <i class="bi bi-search me-1"></i> استعلام
                             </button>
-                            <a href="{{ route('admin.news.index') }}" class="btn btn-outline-secondary shadow-sm" style="min-width: 120px;">
-                                <i class="bi bi-x-circle me-1"></i> {{ __('admin.news.clear') }}
+                            <a href="{{ route('admin.news.index') }}" class="btn btn-outline-danger rounded-3 shadow-sm" style="min-width: 120px;">
+                                <i class="bi bi-x-circle me-1"></i> تفريغ
                             </a>
                         </div>
                     </div>

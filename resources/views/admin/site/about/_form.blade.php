@@ -39,31 +39,31 @@
                     {{-- العنوان --}}
                     <div class="mb-4">
                         <label class="form-label fw-semibold text-dark d-flex align-items-center gap-2 mb-2">
-                            <i class="bi bi-heading text-primary"></i>
+                            <i class="bi bi-heading" style="color: #5B7088;"></i>
                             {{ __('admin.about_us.form_title') }} <span class="text-danger">*</span>
                         </label>
                         <input type="text" name="title" class="form-control rounded-3 border-0 bg-light @error('title') is-invalid @enderror"
                                value="{{ old('title', $model->title ?? '') }}" required
-                               style="height: 45px; font-size: 1rem;">
+                               >
                         @error('title') <div class="invalid-feedback d-block mt-1">{{ $message }}</div> @enderror
                     </div>
 
                     {{-- العنوان الفرعي --}}
                     <div class="mb-4">
                         <label class="form-label fw-semibold text-dark d-flex align-items-center gap-2 mb-2">
-                            <i class="bi bi-text-paragraph text-primary"></i>
+                            <i class="bi bi-text-paragraph" style="color: #5B7088;"></i>
                             {{ __('admin.about_us.form_subtitle') }}
                         </label>
                         <input type="text" name="subtitle" class="form-control rounded-3 border-0 bg-light @error('subtitle') is-invalid @enderror"
                                value="{{ old('subtitle', $model->subtitle ?? '') }}"
-                               style="height: 45px; font-size: 1rem;">
+                               >
                         @error('subtitle') <div class="invalid-feedback d-block mt-1">{{ $message }}</div> @enderror
                     </div>
 
                     {{-- الفقرة الأولى --}}
                     <div class="mb-4">
                         <label class="form-label fw-semibold text-dark d-flex align-items-center gap-2 mb-2">
-                            <i class="bi bi-file-text text-primary"></i>
+                            <i class="bi bi-file-text" style="color: #5B7088;"></i>
                             {{ __('admin.about_us.form_paragraph1') }} <span class="text-danger">*</span>
                         </label>
                         <textarea name="paragraph1" class="form-control rounded-3 @error('paragraph1') is-invalid @enderror" rows="10" required style="font-size: 0.92rem; line-height: 2; min-height: 200px; border: 1.5px solid #CDD9E3;">{{ old('paragraph1', $model->paragraph1 ?? '') }}</textarea>
@@ -73,7 +73,7 @@
                     {{-- الفقرة الثانية --}}
                     <div class="mb-4">
                         <label class="form-label fw-semibold text-dark d-flex align-items-center gap-2 mb-2">
-                            <i class="bi bi-file-text text-primary"></i>
+                            <i class="bi bi-file-text" style="color: #5B7088;"></i>
                             {{ __('admin.about_us.form_paragraph2') }}
                         </label>
                         <textarea name="paragraph2" class="form-control rounded-3 @error('paragraph2') is-invalid @enderror" rows="8" style="font-size: 0.92rem; line-height: 2; min-height: 160px; border: 1.5px solid #CDD9E3;">{{ old('paragraph2', $model->paragraph2 ?? '') }}</textarea>
@@ -83,7 +83,7 @@
                     {{-- Features العربية --}}
                     <div class="mb-4">
                         <label class="form-label fw-semibold text-dark d-flex align-items-center gap-2 mb-3">
-                            <i class="bi bi-list-check text-primary"></i>
+                            <i class="bi bi-list-check" style="color: #5B7088;"></i>
                             {{ __('admin.about_us.form_features') }} - {{ __('admin.labels.arabic') }}
                         </label>
                         <div class="row g-3">
@@ -105,7 +105,7 @@
                     {{-- الصورة العربية --}}
                     <div class="mb-0">
                         <label class="form-label fw-semibold text-dark d-flex align-items-center gap-2 mb-3">
-                            <i class="bi bi-image text-primary"></i>
+                            <i class="bi bi-image" style="color: #5B7088;"></i>
                             {{ __('admin.about_us.form_image') }} - {{ __('admin.labels.arabic') }}
                         </label>
                         @php
@@ -138,7 +138,7 @@
                             <div class="col-md-8">
                                 <input type="file" name="image" id="about-image-input" accept=".jpg,.jpeg,.png,.webp"
                                        class="form-control rounded-3 border-0 bg-light @error('image') is-invalid @enderror"
-                                       style="height: 45px; font-size: 1rem;">
+                                       >
                                 <small class="text-muted d-block mt-2">
                                     <i class="bi bi-info-circle me-1"></i>
                                     {{ __('admin.common.form_image_max_size') }}
@@ -161,31 +161,31 @@
                     {{-- العنوان الإنجليزي --}}
                     <div class="mb-4">
                         <label class="form-label fw-semibold text-dark d-flex align-items-center gap-2 mb-2">
-                            <i class="bi bi-heading text-primary"></i>
+                            <i class="bi bi-heading" style="color: #5B7088;"></i>
                             {{ __('admin.about_us.form_title') }} - {{ __('admin.labels.english') }}
                         </label>
                         <input type="text" name="title_en" class="form-control rounded-3 border-0 bg-light @error('title_en') is-invalid @enderror"
                                value="{{ old('title_en', $model->title_en ?? '') }}"
-                               style="height: 45px; font-size: 1rem;">
+                               >
                         @error('title_en') <div class="invalid-feedback d-block mt-1">{{ $message }}</div> @enderror
                     </div>
 
                     {{-- العنوان الفرعي الإنجليزي --}}
                     <div class="mb-4">
                         <label class="form-label fw-semibold text-dark d-flex align-items-center gap-2 mb-2">
-                            <i class="bi bi-text-paragraph text-primary"></i>
+                            <i class="bi bi-text-paragraph" style="color: #5B7088;"></i>
                             {{ __('admin.about_us.form_subtitle') }} - {{ __('admin.labels.english') }}
                         </label>
                         <input type="text" name="subtitle_en" class="form-control rounded-3 border-0 bg-light @error('subtitle_en') is-invalid @enderror"
                                value="{{ old('subtitle_en', $model->subtitle_en ?? '') }}"
-                               style="height: 45px; font-size: 1rem;">
+                               >
                         @error('subtitle_en') <div class="invalid-feedback d-block mt-1">{{ $message }}</div> @enderror
                     </div>
 
                     {{-- الفقرة الأولى الإنجليزية --}}
                     <div class="mb-4">
                         <label class="form-label fw-semibold text-dark d-flex align-items-center gap-2 mb-2">
-                            <i class="bi bi-file-text text-primary"></i>
+                            <i class="bi bi-file-text" style="color: #5B7088;"></i>
                             {{ __('admin.about_us.form_paragraph1') }} - {{ __('admin.labels.english') }}
                         </label>
                         <textarea name="paragraph1_en" class="form-control rounded-3 @error('paragraph1_en') is-invalid @enderror" rows="10" style="font-size: 0.92rem; line-height: 2; min-height: 200px; border: 1.5px solid #CDD9E3;">{{ old('paragraph1_en', $model->paragraph1_en ?? '') }}</textarea>
@@ -195,7 +195,7 @@
                     {{-- الفقرة الثانية الإنجليزية --}}
                     <div class="mb-4">
                         <label class="form-label fw-semibold text-dark d-flex align-items-center gap-2 mb-2">
-                            <i class="bi bi-file-text text-primary"></i>
+                            <i class="bi bi-file-text" style="color: #5B7088;"></i>
                             {{ __('admin.about_us.form_paragraph2') }} - {{ __('admin.labels.english') }}
                         </label>
                         <textarea name="paragraph2_en" class="form-control rounded-3 @error('paragraph2_en') is-invalid @enderror" rows="8" style="font-size: 0.92rem; line-height: 2; min-height: 160px; border: 1.5px solid #CDD9E3;">{{ old('paragraph2_en', $model->paragraph2_en ?? '') }}</textarea>
@@ -205,7 +205,7 @@
                     {{-- Features الإنجليزية --}}
                     <div class="mb-4">
                         <label class="form-label fw-semibold text-dark d-flex align-items-center gap-2 mb-3">
-                            <i class="bi bi-list-check text-primary"></i>
+                            <i class="bi bi-list-check" style="color: #5B7088;"></i>
                             {{ __('admin.about_us.form_features') }} - {{ __('admin.labels.english') }}
                         </label>
                         <div class="row g-3">
@@ -227,7 +227,7 @@
                     {{-- الصورة الإنجليزية --}}
                     <div class="mb-0">
                         <label class="form-label fw-semibold text-dark d-flex align-items-center gap-2 mb-3">
-                            <i class="bi bi-image text-primary"></i>
+                            <i class="bi bi-image" style="color: #5B7088;"></i>
                             {{ __('admin.about_us.form_image') }} - {{ __('admin.labels.english') }}
                         </label>
                         @php
@@ -249,7 +249,7 @@
                             <div class="col-md-8">
                                 <input type="file" name="image_en" id="about-image-input-en" accept=".jpg,.jpeg,.png,.webp"
                                        class="form-control rounded-3 border-0 bg-light @error('image_en') is-invalid @enderror"
-                                       style="height: 45px; font-size: 1rem;">
+                                       >
                                 <small class="text-muted d-block mt-2">
                                     <i class="bi bi-info-circle me-1"></i>
                                     {{ __('admin.common.form_image_max_size') }}
@@ -266,10 +266,10 @@
 
     {{-- Form Actions --}}
     <div class="d-flex gap-3 justify-content-end pt-3 border-top mt-4">
-        <a href="{{ route('admin.about.index') }}" class="btn btn-outline-secondary px-5 py-2 rounded-3" style="min-width: 150px; font-weight: 600;">
+        <a href="{{ route('admin.about.index') }}" class="btn btn-cancel">
             <i class="bi bi-x-circle me-2"></i>{{ __('admin.common.cancel') }}
         </a>
-        <button type="submit" class="btn btn-primary px-5 py-2 rounded-3 shadow-sm" style="min-width: 150px; font-weight: 600;">
+        <button type="submit" class="btn btn-save">
             <i class="bi bi-check-lg me-2"></i>{{ __('admin.common.form_save') }}
         </button>
     </div>

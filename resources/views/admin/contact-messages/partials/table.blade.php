@@ -52,28 +52,42 @@
                         <td class="text-center">
                             <div class="d-flex gap-1 justify-content-center">
                                 <a href="{{ route('admin.contact-messages.show', $message) }}"
-                                   class="btn btn-sm btn-outline-primary" title="عرض">
+                                   class="btn btn-sm btn-outline-primary rounded-3" title="عرض">
                                     <i class="bi bi-eye"></i>
                                 </a>
-                                @if($message->is_read)
-                                    <form action="{{ route('admin.contact-messages.mark-unread', $message) }}" method="POST" class="d-inline">
-                                        @csrf @method('PATCH')
-                                        <button type="submit" class="btn btn-sm btn-outline-warning" title="تحديد كغير مقروءة">
-                                            <i class="bi bi-envelope"></i>
-                                        </button>
-                                    </form>
-                                @else
-                                    <form action="{{ route('admin.contact-messages.mark-read', $message) }}" method="POST" class="d-inline">
-                                        @csrf @method('PATCH')
-                                        <button type="submit" class="btn btn-sm btn-outline-success" title="تحديد كمقروءة">
-                                            <i class="bi bi-check"></i>
-                                        </button>
-                                    </form>
-                                @endif
-                                <button type="button" class="btn btn-sm btn-outline-danger"
-                                        data-bs-toggle="modal" data-bs-target="#deleteModal-{{ $message->id }}" title="حذف">
-                                    <i class="bi bi-trash"></i>
-                                </button>
+                                <div class="dropdown">
+                                    <button class="btn btn-sm btn-outline-secondary rounded-3" data-bs-toggle="dropdown">
+                                        <i class="bi bi-three-dots-vertical"></i>
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+                                        @if($message->is_read)
+                                            <li>
+                                                <form action="{{ route('admin.contact-messages.mark-unread', $message) }}" method="POST">
+                                                    @csrf @method('PATCH')
+                                                    <button type="submit" class="dropdown-item">
+                                                        <i class="bi bi-envelope me-2 text-muted"></i>تحديد كغير مقروءة
+                                                    </button>
+                                                </form>
+                                            </li>
+                                        @else
+                                            <li>
+                                                <form action="{{ route('admin.contact-messages.mark-read', $message) }}" method="POST">
+                                                    @csrf @method('PATCH')
+                                                    <button type="submit" class="dropdown-item">
+                                                        <i class="bi bi-check-circle me-2 text-muted"></i>تحديد كمقروءة
+                                                    </button>
+                                                </form>
+                                            </li>
+                                        @endif
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li>
+                                            <button type="button" class="dropdown-item text-danger"
+                                                    data-bs-toggle="modal" data-bs-target="#deleteModal-{{ $message->id }}">
+                                                <i class="bi bi-trash me-2"></i>حذف
+                                            </button>
+                                        </li>
+                                    </ul>
+                                </div>
                             </div>
                         </td>
                     </tr>
@@ -122,8 +136,8 @@
                         <small class="text-muted">{{ \Illuminate\Support\Str::limit($message->subject, 40) }}</small>
                     </div>
                     <div class="modal-footer border-0 justify-content-center gap-2 pt-0 pb-3">
-                        <button type="button" class="btn btn-secondary btn-sm px-4" data-bs-dismiss="modal">إلغاء</button>
-                        <button type="submit" class="btn btn-danger btn-sm px-4">
+                        <button type="button" class="btn btn-cancel btn-sm" data-bs-dismiss="modal">إلغاء</button>
+                        <button type="submit" class="btn btn-delete-confirm btn-sm">
                             <i class="bi bi-trash me-1"></i>حذف
                         </button>
                     </div>

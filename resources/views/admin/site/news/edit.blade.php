@@ -252,12 +252,12 @@
 
                                     {{-- الأزرار --}}
                                     <div class="d-flex flex-wrap gap-2 mt-4 form-actions">
-                                        <button type="button" id="submitBtn" class="btn btn-primary px-4 d-flex align-items-center gap-2 shadow-sm">
+                                        <button type="button" id="submitBtn" class="btn btn-save d-flex align-items-center gap-2">
                                             <i class="bi bi-check"></i>
                                             <span id="submitText">تحديث الخبر</span>
                                             <span id="submitSpinner" class="spinner-border spinner-border-sm d-none" role="status"></span>
                                         </button>
-                                        <a href="{{ route('admin.news.index') }}" class="btn btn-link text-muted">إلغاء</a>
+                                        <a href="{{ route('admin.news.index') }}" class="btn btn-cancel">إلغاء</a>
                                     </div>
                                 </form>
                             </div>

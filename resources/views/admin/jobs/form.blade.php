@@ -42,7 +42,7 @@
     </div>
 
     <div class="col-12">
-        <button class="btn btn-action-save">حفظ</button>
-        <a href="{{ route('admin.jobs.index') }}" class="btn btn-action-cancel">رجوع</a>
+        <button class="btn btn-save">حفظ</button>
+        <a href="{{ route('admin.jobs.index') }}" class="btn btn-cancel">رجوع</a>
     </div>
 </div>

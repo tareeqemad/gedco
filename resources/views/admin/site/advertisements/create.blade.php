@@ -47,7 +47,7 @@
                                         <label class="form-label">{{ __('admin.advertisements.form_title') }} <span class="text-danger">*</span></label>
                                         <input type="text" name="TITLE" id="titleInput"
                                                class="form-control rounded-3 border-0 bg-light @error('TITLE') is-invalid @enderror"
-                                               style="height: 45px;"
+
                                                placeholder="{{ __('admin.advertisements.form_title_placeholder') }}" value="{{ old('TITLE') }}">
                                         @error('TITLE') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
                                         <div class="form-text text-muted small"><span id="titleCount">{{ old('TITLE') ? strlen(old('TITLE')) : 0 }}</span>/255</div>
@@ -57,7 +57,7 @@
                                         <label class="form-label">{{ __('admin.advertisements.form_date_news') }}</label>
                                         <input type="date" name="DATE_NEWS" id="dateInput"
                                                class="form-control rounded-3 border-0 bg-light @error('DATE_NEWS') is-invalid @enderror"
-                                               style="height: 45px;"
+
                                                value="{{ old('DATE_NEWS', now()->format('Y-m-d')) }}">
                                         @error('DATE_NEWS') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
                                     </div>
@@ -169,7 +169,7 @@
 
                                     <!-- Buttons -->
                                     <div class="d-flex flex-wrap gap-2 mt-5">
-                                        <button type="button" id="submitBtn" class="btn btn-primary px-4 d-flex align-items-center gap-2 shadow-sm">
+                                        <button type="button" id="submitBtn" class="btn btn-save d-flex align-items-center gap-2">
                                             <i class="bi bi-check"></i>
                                             <span id="submitText">{{ __('admin.advertisements.form_publish') }}</span>
                                             <span id="submitSpinner" class="spinner-border spinner-border-sm d-none" role="status"></span>
@@ -177,7 +177,7 @@
                                         <button type="button" id="saveDraft" class="btn btn-outline-secondary px-4 d-flex align-items-center gap-2">
                                             <i class="bi bi-file-earmark"></i> {{ __('admin.advertisements.form_save_draft') }}
                                         </button>
-                                        <a href="{{ route('admin.advertisements.index') }}" class="btn btn-link text-muted">{{ __('admin.advertisements.form_cancel') }}</a>
+                                        <a href="{{ route('admin.advertisements.index') }}" class="btn btn-cancel">{{ __('admin.advertisements.form_cancel') }}</a>
                                     </div>
                                 </form>
                             </div>

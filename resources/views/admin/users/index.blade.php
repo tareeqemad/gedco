@@ -1,7 +1,7 @@
 @php
     $breadcrumbTitle     = __('admin.users.users_list');
-    $breadcrumbParent    = __('admin.menu.users');
-    $breadcrumbParentUrl = route('admin.users.index');
+    $breadcrumbParent    = __('admin.breadcrumbs.home');
+    $breadcrumbParentUrl = route('admin.dashboard');
 @endphp
 @extends('layouts.admin')
 @section('title', __('admin.users.title'))
@@ -50,9 +50,12 @@
                             </select>
                         </div>
                         <div style="flex: 0 0 auto;">
-                            <button type="submit" class="btn btn-primary rounded-3" id="searchBtn">
-                                <i class="bi bi-funnel me-1"></i> {{ __('admin.users.filter') }}
+                            <button type="submit" class="btn btn-outline-secondary rounded-3" id="searchBtn">
+                                <i class="bi bi-search me-1"></i> استعلام
                             </button>
+                            <a href="{{ route('admin.users.index') }}" class="btn btn-outline-danger rounded-3">
+                                <i class="bi bi-x-circle me-1"></i> تفريغ
+                            </a>
                         </div>
                     </div>
                 </form>
@@ -122,8 +125,8 @@
                                     <small class="text-danger">هذا الإجراء لا يمكن التراجع عنه</small>
                                 </div>
                                 <div class="modal-footer border-0">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
-                                    <button type="submit" class="btn btn-danger">
+                                    <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">إلغاء</button>
+                                    <button type="submit" class="btn btn-delete-confirm">
                                         <i class="bi bi-trash me-1"></i>حذف المستخدم
                                     </button>
                                 </div>
@@ -139,11 +142,11 @@
             <div class="modal fade" id="changePasswordModal-{{ $user->id }}" tabindex="-1" aria-labelledby="changePasswordModalLabel-{{ $user->id }}" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
-                        <div class="modal-header border-0 bg-gradient-primary text-white">
-                            <h5 class="modal-title" id="changePasswordModalLabel-{{ $user->id }}">
-                                <i class="bi bi-key-fill me-2"></i>تغيير كلمة المرور
+                        <div class="modal-header border-0">
+                            <h5 class="modal-title" id="changePasswordModalLabel-{{ $user->id }}" style="color: #24364A;">
+                                <i class="bi bi-key-fill me-2" style="color: #1ABC9C;"></i>تغيير كلمة المرور
                             </h5>
-                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <form id="changePasswordForm-{{ $user->id }}" method="POST" action="{{ route('admin.users.update-password', $user) }}">
                             @csrf
@@ -157,7 +160,7 @@
                                     <small class="text-muted">{{ $user->email }}</small>
                                 </div>
 
-                                <div class="alert alert-info d-flex align-items-center mb-3 password-change-alert" id="passwordAlert-{{ $user->id }}" style="display: none !important; visibility: hidden !important; opacity: 0 !important; height: 0 !important; padding: 0 !important; margin: 0 !important; overflow: hidden !important;">
+                                <div class="alert alert-info d-flex align-items-center mb-3 d-none" id="passwordAlert-{{ $user->id }}">
                                     <i class="bi bi-info-circle-fill me-2"></i>
                                     <small>سيتم تغيير كلمة المرور لهذا المستخدم. تأكد من إبلاغه بكلمة المرور الجديدة.</small>
                                 </div>
@@ -198,8 +201,8 @@
                                 </div>
                             </div>
                             <div class="modal-footer border-0">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
-                                <button type="submit" class="btn btn-primary" id="submitBtn-{{ $user->id }}">
+                                <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">إلغاء</button>
+                                <button type="submit" class="btn btn-save" id="submitBtn-{{ $user->id }}">
                                     <i class="bi bi-check-circle me-1"></i>تغيير كلمة المرور
                                 </button>
                             </div>
@@ -218,17 +221,6 @@
 @push('scripts')
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Hide all password alerts on page load
-        document.querySelectorAll('[id^="passwordAlert-"]').forEach(function(alert) {
-            alert.style.display = 'none';
-            alert.style.visibility = 'hidden';
-            alert.style.opacity = '0';
-            alert.style.height = '0';
-            alert.style.padding = '0';
-            alert.style.margin = '0';
-            alert.style.overflow = 'hidden';
-        });
-        
         const filterForm = document.getElementById('usersFilterForm');
         const searchInput = document.getElementById('searchInput');
         const roleSelect = document.getElementById('roleSelect');
@@ -322,7 +314,7 @@
                 // Re-enable button
                 if (searchBtn) {
                     searchBtn.disabled = false;
-                    searchBtn.innerHTML = '<i class="bi bi-funnel me-2"></i>{{ __('admin.users.filter') }}';
+                    searchBtn.innerHTML = '<i class="bi bi-search me-2"></i>استعلام';
                 }
             });
         }
@@ -530,36 +522,10 @@
                 // Show alert only when modal is opened
                 const changePasswordModal{{ $user->id }} = document.getElementById('changePasswordModal-{{ $user->id }}');
                 const passwordAlert{{ $user->id }} = document.getElementById('passwordAlert-{{ $user->id }}');
-                
+
                 if (changePasswordModal{{ $user->id }} && passwordAlert{{ $user->id }}) {
-                    // Ensure alert is hidden on page load
-                    passwordAlert{{ $user->id }}.style.display = 'none';
-                    passwordAlert{{ $user->id }}.style.visibility = 'hidden';
-                    passwordAlert{{ $user->id }}.style.opacity = '0';
-                    passwordAlert{{ $user->id }}.style.height = '0';
-                    passwordAlert{{ $user->id }}.style.padding = '0';
-                    passwordAlert{{ $user->id }}.style.margin = '0';
-                    passwordAlert{{ $user->id }}.style.overflow = 'hidden';
-                    
-                    changePasswordModal{{ $user->id }}.addEventListener('show.bs.modal', function() {
-                        passwordAlert{{ $user->id }}.style.display = 'flex';
-                        passwordAlert{{ $user->id }}.style.visibility = 'visible';
-                        passwordAlert{{ $user->id }}.style.opacity = '1';
-                        passwordAlert{{ $user->id }}.style.height = 'auto';
-                        passwordAlert{{ $user->id }}.style.padding = '0.75rem 1rem';
-                        passwordAlert{{ $user->id }}.style.marginBottom = '1rem';
-                        passwordAlert{{ $user->id }}.style.overflow = 'visible';
-                    });
-                    
-                    changePasswordModal{{ $user->id }}.addEventListener('hidden.bs.modal', function() {
-                        passwordAlert{{ $user->id }}.style.display = 'none';
-                        passwordAlert{{ $user->id }}.style.visibility = 'hidden';
-                        passwordAlert{{ $user->id }}.style.opacity = '0';
-                        passwordAlert{{ $user->id }}.style.height = '0';
-                        passwordAlert{{ $user->id }}.style.padding = '0';
-                        passwordAlert{{ $user->id }}.style.margin = '0';
-                        passwordAlert{{ $user->id }}.style.overflow = 'hidden';
-                    });
+                    changePasswordModal{{ $user->id }}.addEventListener('show.bs.modal', () => passwordAlert{{ $user->id }}.classList.remove('d-none'));
+                    changePasswordModal{{ $user->id }}.addEventListener('hidden.bs.modal', () => passwordAlert{{ $user->id }}.classList.add('d-none'));
                 }
                 
                 const form{{ $user->id }} = document.getElementById('changePasswordForm-{{ $user->id }}');

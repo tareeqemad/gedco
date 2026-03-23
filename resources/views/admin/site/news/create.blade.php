@@ -56,7 +56,7 @@
                                         </label>
                                         <input type="text" name="title" id="titleInput"
                                                class="form-control rounded-3 border-0 bg-light focus-ring focus-ring-primary @error('title') is-invalid @enderror"
-                                               placeholder="{{ __('admin.news.form_title_placeholder') }}" value="{{ old('title') }}" style="height: 45px; font-size: 1rem;">
+                                               placeholder="{{ __('admin.news.form_title_placeholder') }}" value="{{ old('title') }}">
                                         @error('title') <div class="invalid-feedback d-block mt-1">{{ $message }}</div> @enderror
                                     </div>
 
@@ -68,12 +68,12 @@
                                             </label>
                                             <input type="date" name="published_at" id="dateInput"
                                                    class="form-control rounded-3 border-0 bg-light focus-ring focus-ring-info @error('published_at') is-invalid @enderror"
-                                                   value="{{ old('published_at', now()->format('Y-m-d')) }}" style="height: 45px;">
+                                                   value="{{ old('published_at', now()->format('Y-m-d')) }}">
                                             @error('published_at') <div class="invalid-feedback d-block mt-1">{{ $message }}</div> @enderror
                                         </div>
                                         <div class="col-md-4">
                                             <label class="form-label fw-semibold text-dark mb-2">{{ __('admin.news.form_status') }}</label>
-                                            <select name="status" id="statusInput" class="form-select rounded-3 border-0 bg-light @error('status') is-invalid @enderror" style="height: 45px;">
+                                            <select name="status" id="statusInput" class="form-select rounded-3 border-0 bg-light @error('status') is-invalid @enderror">
                                                 <option value="published" @selected(old('status','published')==='published')>{{ __('admin.news.status_published') }}</option>
                                                 <option value="draft" @selected(old('status')==='draft')>{{ __('admin.news.status_draft') }}</option>
                                             </select>
@@ -230,7 +230,7 @@
 
                                     <!-- Buttons -->
                                     <div class="d-flex flex-wrap gap-3 mt-5 pt-3 border-top">
-                                        <button type="button" id="submitBtn" class="btn btn-primary px-5 py-2 d-flex align-items-center gap-2 shadow-sm rounded-3" style="min-width: 150px; font-weight: 600;">
+                                        <button type="button" id="submitBtn" class="btn btn-save d-flex align-items-center gap-2">
                                             <i class="bi bi-check-lg"></i>
                                             <span id="submitText">{{ __('admin.news.form_publish') }}</span>
                                             <span id="submitSpinner" class="spinner-border spinner-border-sm d-none" role="status"></span>
@@ -238,7 +238,7 @@
                                         <button type="button" id="saveDraft" class="btn btn-outline-secondary px-5 py-2 d-flex align-items-center gap-2 rounded-3" style="min-width: 150px; font-weight: 600;">
                                             <i class="bi bi-file-earmark"></i> {{ __('admin.news.form_save_draft') }}
                                         </button>
-                                        <a href="{{ route('admin.news.index') }}" class="btn btn-link text-muted px-3 py-2 d-flex align-items-center" style="font-weight: 500;">
+                                        <a href="{{ route('admin.news.index') }}" class="btn btn-cancel d-flex align-items-center">
                                             <i class="bi bi-x-circle me-1"></i> {{ __('admin.news.form_cancel') }}
                                         </a>
                                     </div>

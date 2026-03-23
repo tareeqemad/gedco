@@ -108,12 +108,12 @@
                     @csrf
                     @method('DELETE')
                     <div class="modal-content shadow-lg border-0 rounded-4">
-                        <div class="modal-header bg-gradient-primary text-white border-0 py-3 px-4 rounded-top-4">
-                            <h5 class="modal-title text-white fw-bold mb-0 d-flex align-items-center gap-2">
+                        <div class="modal-header border-0 py-3 px-4">
+                            <h5 class="modal-title fw-bold mb-0 d-flex align-items-center gap-2 text-danger">
                                 <i class="bi bi-exclamation-triangle-fill"></i>
                                 {{ __('admin.slider.delete_modal_title') }}
                             </h5>
-                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                         </div>
                         <div class="modal-body py-4 text-center">
                             <i class="bi bi-exclamation-triangle-fill text-danger" style="font-size: 3rem;"></i>

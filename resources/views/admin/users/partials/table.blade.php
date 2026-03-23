@@ -1,7 +1,7 @@
 @if($users->count() > 0)
     <!-- Desktop Table View -->
     <div class="table-responsive d-none d-md-block">
-        <table class="table table-hover align-middle mb-0 users-table">
+        <table class="table align-middle mb-0 users-table">
             <thead class="table-light">
                 <tr>
                     <th class="text-center" style="width: 60px">#</th>
@@ -61,55 +61,48 @@
                             <div class="d-flex justify-content-center gap-1 users-actions">
                                 @can('users.edit')
                                     <a href="{{ route('admin.users.edit', $user) }}"
-                                       class="btn btn-sm btn-outline-primary"
+                                       class="btn btn-sm btn-outline-primary rounded-3"
                                        title="{{ __('admin.users.edit') }}">
                                         <i class="bi bi-pencil-square"></i>
                                     </a>
                                 @endcan
 
-                                @if(auth()->user()->hasRole('super-admin'))
-                                    @if(auth()->id() !== $user->id && !$user->hasRole('super-admin'))
-                                        <form action="{{ route('admin.users.impersonate', $user) }}" method="POST" class="d-inline" onsubmit="return confirm('{{ __('admin.users.impersonate_confirm', ['name' => $user->name]) }}');">
-                                            @csrf
-                                            <button type="submit"
-                                                    class="btn btn-sm btn-outline-warning"
-                                                    title="{{ __('admin.users.impersonate') }}">
-                                                <i class="bi bi-person-check"></i>
-                                            </button>
-                                        </form>
-                                    @endif
-                                    <button type="button"
-                                            class="btn btn-sm btn-outline-success"
-                                            onclick="showTemporaryPassword({{ $user->id }})"
-                                            title="عرض كلمة المرور المؤقتة"
-                                            id="showPasswordBtn-{{ $user->id }}">
-                                        <i class="bi bi-eye"></i>
-                                    </button>
-                                    <button type="button"
-                                            class="btn btn-sm btn-outline-info"
-                                            data-bs-toggle="modal"
-                                            data-bs-target="#changePasswordModal-{{ $user->id }}"
-                                            title="تغيير كلمة المرور">
-                                        <i class="bi bi-key"></i>
-                                    </button>
-                                @endif
-
                                 @can('users.delete')
                                     @if(auth()->id() !== $user->id)
                                         <button type="button"
-                                                class="btn btn-sm btn-outline-danger"
+                                                class="btn btn-sm btn-outline-danger rounded-3"
                                                 data-bs-toggle="modal"
                                                 data-bs-target="#deleteUserModal-{{ $user->id }}"
                                                 title="{{ __('admin.users.delete') }}">
                                             <i class="bi bi-trash"></i>
                                         </button>
-                                    @else
-                                        <button class="btn btn-sm btn-outline-secondary" disabled 
-                                                title="{{ __('admin.users.cannot_delete_self') }}">
-                                            <i class="bi bi-trash"></i>
-                                        </button>
                                     @endif
                                 @endcan
+
+                                @if(auth()->user()->hasRole('super-admin'))
+                                    <button type="button"
+                                            class="btn btn-sm btn-outline-secondary rounded-3"
+                                            onclick="showTemporaryPassword({{ $user->id }})"
+                                            title="عرض كلمة المرور"
+                                            id="showPasswordBtn-{{ $user->id }}">
+                                        <i class="bi bi-eye"></i>
+                                    </button>
+                                    <button type="button"
+                                            class="btn btn-sm btn-outline-secondary rounded-3"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#changePasswordModal-{{ $user->id }}"
+                                            title="تغيير كلمة المرور">
+                                        <i class="bi bi-key"></i>
+                                    </button>
+                                    @if(auth()->id() !== $user->id && !$user->hasRole('super-admin'))
+                                        <form action="{{ route('admin.users.impersonate', $user) }}" method="POST" class="d-inline" onsubmit="return confirm('{{ __('admin.users.impersonate_confirm', ['name' => $user->name]) }}');">
+                                            @csrf
+                                            <button type="submit" class="btn btn-sm btn-outline-warning rounded-3" title="{{ __('admin.users.impersonate') }}">
+                                                <i class="bi bi-person-check"></i>
+                                            </button>
+                                        </form>
+                                    @endif
+                                @endif
                             </div>
                         </td>
                     </tr>

@@ -30,8 +30,7 @@
                                 <input type="text" 
                                        name="name" 
                                        class="form-control rounded-3 @error('name') is-invalid @enderror" 
-                                       style="height: 45px;"
-                                       placeholder="{{ __('admin.permissions.form_name_placeholder') }}"
+                                                                             placeholder="{{ __('admin.permissions.form_name_placeholder') }}"
                                        value="{{ old('name', $permission->name) }}"
                                        required>
                                 <small class="text-muted d-block mt-2">
@@ -45,10 +44,10 @@
 
                             <div class="mb-4">
                                 <label class="form-label fw-semibold text-dark d-flex align-items-center gap-1 mb-2">
-                                    <i class="bi bi-shield-check text-primary"></i>
+                                    <i class="bi bi-shield-check"></i>
                                     {{ __('admin.permissions.form_guard') }}
                                 </label>
-                                <select name="guard_name" class="form-select rounded-3 @error('guard_name') is-invalid @enderror" style="height: 45px;">
+                                <select name="guard_name" class="form-select rounded-3 @error('guard_name') is-invalid @enderror">
                                     <option value="web" {{ old('guard_name', $permission->guard_name) == 'web' ? 'selected' : '' }}>Web</option>
                                     <option value="api" {{ old('guard_name', $permission->guard_name) == 'api' ? 'selected' : '' }}>API</option>
                                 </select>
@@ -60,7 +59,7 @@
                             @if(count($roles) > 0)
                             <div class="mb-4 p-3 bg-light rounded-4 border border-2 border-info-subtle">
                                 <label class="form-label fw-semibold text-dark d-flex align-items-center gap-1 mb-2">
-                                    <i class="bi bi-people text-primary"></i>
+                                    <i class="bi bi-people"></i>
                                     الأدوار المستخدمة
                                 </label>
                                 <div class="d-flex flex-wrap gap-2">
@@ -76,10 +75,10 @@
                             @endif
 
                             <div class="d-flex gap-2 justify-content-end">
-                                <a href="{{ route('admin.permissions.index') }}" class="btn btn-outline-secondary rounded-3 px-4 shadow-sm">
+                                <a href="{{ route('admin.permissions.index') }}" class="btn btn-cancel">
                                     إلغاء
                                 </a>
-                                <button type="submit" class="btn btn-primary rounded-3 px-4 shadow-sm d-flex align-items-center gap-2">
+                                <button type="submit" class="btn btn-save d-flex align-items-center gap-2">
                                     <i class="bi bi-check-circle"></i>
                                     {{ __('admin.common.form_save') }}
                                 </button>

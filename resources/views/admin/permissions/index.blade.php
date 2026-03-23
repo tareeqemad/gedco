@@ -43,8 +43,11 @@
                         </div>
                         <div style="flex: 0 0 auto;">
                             <button type="submit" class="btn btn-primary rounded-3">
-                                <i class="bi bi-search me-1"></i> بحث
+                                <i class="bi bi-search me-1"></i> استعلام
                             </button>
+                            <a href="{{ route('admin.permissions.index') }}" class="btn btn-outline-danger rounded-3">
+                                <i class="bi bi-x-circle me-1"></i> تفريغ
+                            </a>
                         </div>
                     </div>
                 </form>

@@ -1,231 +1,147 @@
 @php
     $edit = isset($slider);
     $bullets = [];
-
     if (old('bullets')) {
         $bullets = old('bullets');
     } elseif ($edit && !empty($slider->bullets)) {
-        $bullets = is_array($slider->bullets)
-            ? $slider->bullets
-            : (json_decode($slider->bullets, true) ?? []);
+        $bullets = is_array($slider->bullets) ? $slider->bullets : (json_decode($slider->bullets, true) ?? []);
     }
-
     $bullets = is_array($bullets) ? array_values(array_filter($bullets)) : [];
     $bullets = array_pad($bullets, 4, '');
-
     $currentDirection = session('direction', 'rtl');
     $defaultLang = $currentDirection === 'rtl' ? 'ar' : 'en';
 @endphp
 
-<div class="row g-4">
-    <!-- جميع الحقول -->
-    <div class="col-12">
-        <!-- العنوان والترتيب والحالة -->
-        <div class="card border-0 shadow-sm rounded-4 bg-white mb-4">
-            <div class="card-header bg-light border-0 py-3 px-4">
-                <h6 class="mb-0 fw-bold text-dark d-flex align-items-center gap-2">
-                    <i class="bi bi-info-circle text-primary"></i>
-                    المعلومات الأساسية
-                </h6>
-            </div>
-            <div class="card-body p-4">
-                <div class="row g-3">
-                    <div class="col-md-8">
-                        <label class="form-label fw-semibold text-dark mb-2">
-                            {{ __('admin.slider.form_title') }} <span class="text-danger">*</span>
-                        </label>
-                        <input type="text" 
-                               name="title" 
-                               class="form-control rounded-3 border-0 bg-light @error('title') is-invalid @enderror"
-                               value="{{ old('title', $slider->title ?? '') }}" 
-                               required
-                               style="height: 45px;">
-                        @error('title')
-                            <div class="invalid-feedback d-block mt-1">{{ $message }}</div>
-                        @enderror
-                    </div>
+<x-admin.card>
+    <x-admin.card-header-form
+        icon="bi-images"
+        :title="$edit ? __('admin.slider.edit_slide') : __('admin.slider.add_slide')"
+        :back-route="route('admin.sliders.index')"
+        :back-label="__('admin.slider.slider_items')">
+        <x-slot:actions>
+            <span class="badge bg-light text-dark rounded-pill px-3 py-1">
+                <i class="bi bi-globe me-1"></i>{{ $defaultLang === 'ar' ? __('admin.labels.arabic') : __('admin.labels.english') }}
+            </span>
+        </x-slot:actions>
+    </x-admin.card-header-form>
 
-                    <div class="col-md-2">
-                        <label class="form-label fw-semibold text-dark mb-2">
-                            {{ __('admin.slider.form_order') }}
-                        </label>
-                        @if($edit)
-                            <input type="number" 
-                                   name="sort_order" 
-                                   class="form-control rounded-3 border-0 bg-light @error('sort_order') is-invalid @enderror"
-                                   value="{{ old('sort_order', $slider->sort_order ?? 0) }}" 
-                                   min="0"
-                                   style="height: 45px;">
-                            @error('sort_order')
-                                <div class="invalid-feedback d-block mt-1">{{ $message }}</div>
-                            @enderror
-                        @else
-                            <input type="number" 
-                                   class="form-control rounded-3 border-0 bg-light form-control-readonly" 
-                                   value="{{ $nextOrder ?? 0 }}" 
-                                   readonly
-                                   style="height: 45px; cursor: not-allowed !important;">
-                            <small class="text-muted d-block mt-1" style="font-size: 0.75rem;">{{ __('admin.slider.form_order_auto') }}</small>
-                        @endif
-                    </div>
-
-                    <div class="col-md-2">
-                        <label class="form-label fw-semibold text-dark mb-2">
-                            {{ __('admin.slider.form_status') }}
-                        </label>
-                        <div class="form-check form-switch mt-2">
-                            <input class="form-check-input" 
-                                   type="checkbox" 
-                                   name="is_active" 
-                                   value="1"
-                                   id="is_active" 
-                                   @checked(old('is_active', $slider->is_active ?? true))
-                                   style="width: 3rem; height: 1.5rem; cursor: pointer;">
-                            <label class="form-check-label fw-semibold mt-1 d-block" for="is_active" style="cursor: pointer;">
-                                {{ old('is_active', $slider->is_active ?? true) ? __('admin.slider.form_active') : __('admin.slider.form_inactive') }}
-                            </label>
-                        </div>
-                    </div>
-                </div>
-
-                <input type="hidden" name="language" value="{{ old('language', $slider->language ?? $defaultLang) }}">
-                <div class="mt-3 pt-3 border-top">
-                    <div class="d-flex align-items-center gap-2">
-                        <label class="form-label mb-0" style="font-size: 0.82rem; color: #24364A; font-weight: 600;">اللغة:</label>
-                        <span class="stat-chip">
-                            <i class="bi bi-globe"></i>
-                            {{ $defaultLang === 'ar' ? __('admin.labels.arabic') : __('admin.labels.english') }}
-                        </span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- الوصف الفرعي -->
-        <div class="card border-0 shadow-sm rounded-4 bg-white mb-4">
-            <div class="card-header bg-light border-0 py-3 px-4">
-                <h6 class="mb-0 fw-bold text-dark d-flex align-items-center gap-2">
-                    <i class="bi bi-text-paragraph text-primary"></i>
-                    {{ __('admin.slider.form_subtitle') }}
-                </h6>
-            </div>
-            <div class="card-body p-4">
-                <textarea name="subtitle" 
-                          class="form-control rounded-3 border-0 bg-light @error('subtitle') is-invalid @enderror" 
-                          rows="4"
-                          placeholder="{{ __('admin.slider.form_subtitle_placeholder') }}">{{ old('subtitle', $slider->subtitle ?? '') }}</textarea>
-                @error('subtitle')
-                    <div class="invalid-feedback d-block mt-1">{{ $message }}</div>
-                @enderror
-            </div>
-        </div>
-
-        <!-- صورة الخلفية -->
-        <div class="card border-0 shadow-sm rounded-4 bg-white mb-4">
-            <div class="card-header bg-light border-0 py-3 px-4">
-                <h6 class="mb-0 fw-bold text-dark d-flex align-items-center gap-2">
-                    <i class="bi bi-image text-primary"></i>
-                    {{ __('admin.slider.form_bg_image') }} <span class="text-danger">*</span>
-                </h6>
-            </div>
-            <div class="card-body p-4">
-                @if($edit && !empty($slider->bg_image))
-                    <div class="mb-4 p-4 bg-light-subtle rounded-4 border border-2 border-primary-subtle">
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <label class="form-label fw-bold text-dark mb-0 d-flex align-items-center gap-2">
-                                <i class="bi bi-image text-primary"></i>
-                                الصورة الحالية
-                            </label>
-                            <button type="submit"
-                                    form="remove-image-{{ $slider->id }}"
-                                    class="btn btn-sm btn-danger rounded-3 shadow-sm"
-                                    title="{{ __('admin.slider.form_bg_image_remove') }}"
-                                    onclick="return confirm('{{ __('admin.slider.form_bg_image_remove_confirm') }}')">
-                                <i class="bi bi-trash me-1"></i>
-                                إزالة الصورة
-                            </button>
-                        </div>
-                        <div class="text-center">
-                            <img src="{{ $slider->bg_image_url ?? '' }}"
-                                 alt="الصورة الحالية"
-                                 id="current-image"
-                                 class="rounded-4 shadow-lg"
-                                 style="max-width: 100%; height: auto; max-height: 400px; border: 3px solid #0066cc; cursor: pointer;"
-                                 onclick="window.open(this.src, '_blank')"
-                                 title="انقر لعرض الصورة بحجم كامل">
-                        </div>
-                    </div>
-                @endif
-
-                <label class="form-label fw-semibold text-dark mb-2">رفع صورة جديدة</label>
-                <input type="file"
-                       name="bg_image"
-                       id="bg_image_input"
-                       accept=".webp,.jpg,.jpeg,.png"
-                       class="form-control rounded-3 border-0 bg-light @error('bg_image') is-invalid @enderror"
-                       {{ !$edit ? 'required' : '' }}
-                       style="height: 45px;">
-                <small class="text-muted d-block mt-2">
-                    <i class="bi bi-info-circle me-1"></i>
-                    {{ __('admin.slider.form_bg_image_allowed') }}
-                </small>
-                @error('bg_image')
-                    <div class="invalid-feedback d-block mt-1">{{ $message }}</div>
-                @enderror
-
-                <div id="image-preview-container" class="mt-3" style="display: none;">
-                    <label class="form-label fw-semibold text-success mb-2 d-flex align-items-center gap-2">
-                        <i class="bi bi-eye"></i>{{ __('admin.slider.form_bg_image_preview') }}
-                    </label>
-                    <img id="image-preview"
-                         src="#"
-                         alt="معاينة الصورة"
-                         class="rounded-3 shadow-sm"
-                         style="max-width: 100%; height: auto; max-height: 300px; border: 2px solid #e9ecef;">
-                </div>
-            </div>
-        </div>
-
-        <!-- النقاط البارزة -->
-        <div class="card border-0 shadow-sm rounded-4 bg-white mb-4">
-            <div class="card-header bg-light border-0 py-3 px-4">
-                <h6 class="mb-0 fw-bold text-dark d-flex align-items-center gap-2">
-                    <i class="bi bi-list-ul text-primary"></i>
-                    {{ __('admin.slider.form_bullets_title') }}
-                </h6>
-            </div>
-            <div class="card-body p-4">
-                <div class="row g-3">
-                    @for($i = 0; $i < 4; $i++)
-                        <div class="col-md-6">
-                            <input type="text" 
-                                   name="bullets[]" 
-                                   class="form-control rounded-3 border-0 bg-light"
-                                   value="{{ $bullets[$i] ?? '' }}"
-                                   placeholder="{{ __('admin.slider.form_bullets_placeholder') }}"
-                                   style="height: 45px;">
-                        </div>
-                    @endfor
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- الأزرار -->
-<div class="card border-0 shadow-sm rounded-4 bg-white mt-4">
     <div class="card-body p-4">
-        <div class="d-flex gap-3 justify-content-end">
-            <a href="{{ route('admin.sliders.index') }}" class="btn btn-outline-secondary rounded-3 px-4 shadow-sm">
-                إلغاء
+        {{-- المعلومات الأساسية --}}
+        <h6 class="section-title">
+            <i class="bi bi-info-circle"></i>
+            المعلومات الأساسية
+        </h6>
+        <div class="row g-3 mb-4">
+            <div class="col-md-8">
+                <label class="form-label fw-semibold">
+                    {{ __('admin.slider.form_title') }} <span class="text-danger">*</span>
+                </label>
+                <input type="text" name="title"
+                       class="form-control rounded-3 @error('title') is-invalid @enderror"
+                       value="{{ old('title', $slider->title ?? '') }}" required>
+                @error('title')
+                    <div class="invalid-feedback d-block">{{ $message }}</div>
+                @enderror
+            </div>
+            <div class="col-md-2">
+                <label class="form-label fw-semibold">{{ __('admin.slider.form_order') }}</label>
+                @if($edit)
+                    <input type="number" name="sort_order"
+                           class="form-control rounded-3 @error('sort_order') is-invalid @enderror"
+                           value="{{ old('sort_order', $slider->sort_order ?? 0) }}" min="0">
+                    @error('sort_order') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
+                @else
+                    <input type="number" class="form-control rounded-3" value="{{ $nextOrder ?? 0 }}" readonly>
+                    <small class="text-muted mt-1 d-block">{{ __('admin.slider.form_order_auto') }}</small>
+                @endif
+            </div>
+            <div class="col-md-2">
+                <label class="form-label fw-semibold">{{ __('admin.slider.form_status') }}</label>
+                <div class="form-check form-switch mt-2">
+                    <input class="form-check-input" type="checkbox" name="is_active" value="1" id="is_active"
+                           @checked(old('is_active', $slider->is_active ?? true))
+                           style="width: 2.5rem; height: 1.25rem; cursor: pointer;">
+                    <label class="form-check-label fw-semibold d-block" for="is_active" style="cursor: pointer;">
+                        {{ old('is_active', $slider->is_active ?? true) ? __('admin.slider.form_active') : __('admin.slider.form_inactive') }}
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <input type="hidden" name="language" value="{{ old('language', $slider->language ?? $defaultLang) }}">
+
+        {{-- الوصف الفرعي --}}
+        <h6 class="section-title">
+            <i class="bi bi-text-paragraph"></i>
+            {{ __('admin.slider.form_subtitle') }}
+        </h6>
+        <div class="mb-4">
+            <textarea name="subtitle" class="form-control rounded-3 @error('subtitle') is-invalid @enderror"
+                      rows="3" placeholder="{{ __('admin.slider.form_subtitle_placeholder') }}">{{ old('subtitle', $slider->subtitle ?? '') }}</textarea>
+            @error('subtitle') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
+        </div>
+
+        {{-- صورة الخلفية --}}
+        <h6 class="section-title">
+            <i class="bi bi-image"></i>
+            {{ __('admin.slider.form_bg_image') }} @if(!$edit)<span class="text-danger">*</span>@endif
+        </h6>
+        <div class="mb-4">
+            @if($edit && !empty($slider->bg_image))
+                <div class="mb-3 p-3 rounded-3 border d-flex align-items-start gap-3">
+                    <img src="{{ $slider->bg_image_url ?? '' }}" alt="الصورة الحالية"
+                         class="rounded-3 shadow-sm" style="max-width: 200px; height: auto; cursor: pointer;"
+                         onclick="window.open(this.src, '_blank')">
+                    <div>
+                        <p class="mb-2 fw-semibold" style="color: #24364A;">الصورة الحالية</p>
+                        <button type="submit" form="remove-image-{{ $slider->id }}"
+                                class="btn btn-sm btn-outline-danger rounded-3"
+                                onclick="return confirm('{{ __('admin.slider.form_bg_image_remove_confirm') }}')">
+                            <i class="bi bi-trash me-1"></i>إزالة
+                        </button>
+                    </div>
+                </div>
+            @endif
+
+            <input type="file" name="bg_image" id="bg_image_input" accept=".webp,.jpg,.jpeg,.png"
+                   class="form-control rounded-3 @error('bg_image') is-invalid @enderror"
+                   {{ !$edit ? 'required' : '' }}>
+            <small class="text-muted mt-1 d-block">
+                <i class="bi bi-info-circle me-1"></i>{{ __('admin.slider.form_bg_image_allowed') }}
+            </small>
+            @error('bg_image') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
+
+            <div id="image-preview-container" class="mt-3 d-none">
+                <img id="image-preview" src="#" alt="معاينة" class="rounded-3 shadow-sm" style="max-width: 100%; max-height: 250px;">
+            </div>
+        </div>
+
+        {{-- النقاط البارزة --}}
+        <h6 class="section-title">
+            <i class="bi bi-list-ul"></i>
+            {{ __('admin.slider.form_bullets_title') }}
+        </h6>
+        <div class="row g-3 mb-4">
+            @for($i = 0; $i < 4; $i++)
+                <div class="col-md-6">
+                    <input type="text" name="bullets[]" class="form-control rounded-3"
+                           value="{{ $bullets[$i] ?? '' }}"
+                           placeholder="{{ __('admin.slider.form_bullets_placeholder') }}">
+                </div>
+            @endfor
+        </div>
+
+        {{-- أزرار الإجراءات --}}
+        <div class="d-flex justify-content-end gap-3 pt-3 border-top">
+            <a href="{{ route('admin.sliders.index') }}" class="btn btn-cancel">
+                <i class="bi bi-x-circle me-1"></i>إلغاء
             </a>
-            <button type="submit" class="btn btn-primary rounded-3 px-4 shadow-sm d-flex align-items-center gap-2">
-                <i class="bi bi-check-circle"></i>
-                {{ __('admin.common.form_save') }}
+            <button type="submit" class="btn btn-save">
+                <i class="bi bi-check-circle me-1"></i>{{ __('admin.common.form_save') }}
             </button>
         </div>
     </div>
-</div>
+</x-admin.card>
 
 @push('scripts')
 <script>
@@ -234,85 +150,41 @@
         const previewContainer = document.getElementById('image-preview-container');
         const previewImage = document.getElementById('image-preview');
 
-        if (!input || !previewContainer || !previewImage) return;
-
-        input.addEventListener('change', function (e) {
+        input?.addEventListener('change', function (e) {
             const file = e.target.files[0];
-
-            if (!file) {
-                previewContainer.style.display = 'none';
-                return;
-            }
+            if (!file) { previewContainer?.classList.add('d-none'); return; }
 
             const validTypes = ['image/webp', 'image/jpeg', 'image/jpg', 'image/png'];
             if (!validTypes.includes(file.type)) {
-                if (window.adminNotifications) {
-                    window.adminNotifications.error('{{ __('admin.slider.invalid_image_format') }}');
-                } else {
-                    alert('{{ __('admin.slider.invalid_image_format') }}');
-                }
+                alert('{{ __('admin.slider.invalid_image_format') }}');
                 input.value = '';
-                previewContainer.style.display = 'none';
+                previewContainer?.classList.add('d-none');
                 return;
             }
-
-            const maxSize = 5 * 1024 * 1024;
-            if (file.size > maxSize) {
-                if (window.adminNotifications) {
-                    window.adminNotifications.error('{{ __('admin.slider.image_too_large') }}');
-                } else {
-                    alert('{{ __('admin.slider.image_too_large') }}');
-                }
+            if (file.size > 5 * 1024 * 1024) {
+                alert('{{ __('admin.slider.image_too_large') }}');
                 input.value = '';
-                previewContainer.style.display = 'none';
+                previewContainer?.classList.add('d-none');
                 return;
             }
 
             const reader = new FileReader();
-            reader.onload = function (e) {
-                previewImage.src = e.target.result;
-                previewContainer.style.display = 'block';
-            };
+            reader.onload = e => { previewImage.src = e.target.result; previewContainer?.classList.remove('d-none'); };
             reader.readAsDataURL(file);
         });
 
-        const parentForm = input.closest('form');
-        if (parentForm) {
-            parentForm.addEventListener('submit', function () {
-                setTimeout(() => previewContainer.style.display = 'none', 500);
-            });
-        }
-
-        // تحديث نص الحالة عند تغيير التبديل
         const statusSwitch = document.getElementById('is_active');
-        if (statusSwitch) {
-            statusSwitch.addEventListener('change', function() {
-                const label = this.nextElementSibling;
-                if (label) {
-                    label.textContent = this.checked ? '{{ __('admin.slider.form_active') }}' : '{{ __('admin.slider.form_inactive') }}';
-                }
-            });
-        }
+        statusSwitch?.addEventListener('change', function() {
+            const label = this.nextElementSibling;
+            if (label) label.textContent = this.checked ? '{{ __('admin.slider.form_active') }}' : '{{ __('admin.slider.form_inactive') }}';
+        });
 
-        // منع الإرسال المتكرر للفورم
         const form = document.querySelector('form');
-        const submitButton = form?.querySelector('button[type="submit"]');
-        
-        if (form && submitButton) {
-            form.addEventListener('submit', function(e) {
-                // التحقق من صحة الفورم أولاً
-                if (!form.checkValidity()) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    return;
-                }
-
-                // تعطيل الزر وإظهار loading
-                submitButton.disabled = true;
-                submitButton.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>جاري الحفظ...';
-                submitButton.classList.add('disabled');
-            });
-        }
+        const submitBtn = form?.querySelector('[type="submit"]');
+        form?.addEventListener('submit', function(e) {
+            if (!form.checkValidity()) { e.preventDefault(); return; }
+            if (submitBtn) { submitBtn.disabled = true; submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span>جاري الحفظ...'; }
+        });
     });
 </script>
 @endpush

@@ -73,22 +73,21 @@
                             <div class="col-md-9">
                                 <label class="form-label fw-semibold text-dark mb-1">البحث بالاسم أو البريد الإلكتروني</label>
                                 <input type="text" name="search" class="form-control rounded-3"
-                                       style="height: 45px;"
-                                       placeholder="ابحث عن مستخدم..."
+                                                                             placeholder="ابحث عن مستخدم..."
                                        value="{{ request('search') }}">
                             </div>
                             <div class="col-md-3">
                                 <label class="form-label mb-1">&nbsp;</label>
-                                <button type="submit" class="btn btn-outline-primary w-100 rounded-3" style="height: 45px;">
-                                    <i class="bi bi-search me-2"></i>بحث
+                                <button type="submit" class="btn btn-outline-primary w-100 rounded-3">
+                                    <i class="bi bi-search me-1"></i> استعلام
                                 </button>
+                                <a href="{{ route('admin.activity-logs.active-users') }}" class="btn btn-outline-danger w-100 rounded-3 mt-1">
+                                    <i class="bi bi-x-circle me-1"></i> تفريغ
+                                </a>
                             </div>
                         </form>
                         @if(request()->has('search'))
                             <div class="mt-2">
-                                <a href="{{ route('admin.activity-logs.active-users') }}" class="btn btn-sm btn-outline-secondary">
-                                    <i class="bi bi-x-circle me-1"></i>إلغاء البحث
-                                </a>
                             </div>
                         @endif
                     </div>

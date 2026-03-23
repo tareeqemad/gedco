@@ -51,16 +51,12 @@
                         </div>
                         <div style="flex: 0 0 auto;">
                             <button type="submit" class="btn btn-primary rounded-3">
-                                <i class="bi bi-funnel me-1"></i> تصفية
+                                <i class="bi bi-search me-1"></i> استعلام
                             </button>
+                            <a href="{{ route('admin.advertisements.index') }}" class="btn btn-outline-danger rounded-3">
+                                <i class="bi bi-x-circle me-1"></i> تفريغ
+                            </a>
                         </div>
-                        @if(request()->query())
-                            <div style="flex: 0 0 auto;">
-                                <a href="{{ route('admin.advertisements.index') }}" class="btn btn-outline-secondary rounded-3">
-                                    <i class="bi bi-x-circle"></i>
-                                </a>
-                            </div>
-                        @endif
                     </div>
 
                     {{-- Advanced filters (collapsed) --}}

@@ -5,7 +5,7 @@
 <div class="row">
     <div class="col-md-4 mb-3">
         <label class="form-label fw-semibold text-dark">Group</label>
-        <select name="group" class="form-select rounded-3" style="height: 45px;">
+        <select name="group" class="form-select rounded-3">
             @foreach(['services'=>'services','company'=>'company'] as $val=>$text)
                 <option value="{{ $val }}" @selected(old('group',$link->group ?? '')==$val)>{{ $text }}</option>
             @endforeach
@@ -15,13 +15,13 @@
 
     <div class="col-md-4 mb-3">
         <label class="form-label fw-semibold text-dark">Label (AR)</label>
-        <input name="label_ar" class="form-control rounded-3" style="height: 45px;" value="{{ old('label_ar',$link->label_ar ?? '') }}">
+        <input name="label_ar" class="form-control rounded-3" value="{{ old('label_ar',$link->label_ar ?? '') }}">
         @error('label_ar')<div class="text-danger">{{ $message }}</div>@enderror
     </div>
 
     <div class="col-md-4 mb-3">
         <label class="form-label fw-semibold text-dark">Sort Order</label>
-        <input name="sort_order" type="number" class="form-control rounded-3" style="height: 45px;" value="{{ old('sort_order',$link->sort_order ?? 0) }}">
+        <input name="sort_order" type="number" class="form-control rounded-3" value="{{ old('sort_order',$link->sort_order ?? 0) }}">
         @error('sort_order')<div class="text-danger">{{ $message }}</div>@enderror
     </div>
 </div>
@@ -29,12 +29,12 @@
 <div class="row">
     <div class="col-md-6 mb-3">
         <label class="form-label fw-semibold text-dark">Route Name (اختياري)</label>
-        <input name="route_name" class="form-control rounded-3" style="height: 45px;" value="{{ old('route_name',$link->route_name ?? '') }}" placeholder="مثال: site.about">
+        <input name="route_name" class="form-control rounded-3" value="{{ old('route_name',$link->route_name ?? '') }}" placeholder="مثال: site.about">
         @error('route_name')<div class="text-danger">{{ $message }}</div>@enderror
     </div>
     <div class="col-md-6 mb-3">
         <label class="form-label fw-semibold text-dark">URL (اختياري/خارجي)</label>
-        <input name="url" class="form-control rounded-3" style="height: 45px;" value="{{ old('url',$link->url ?? '') }}" placeholder="https://...">
+        <input name="url" class="form-control rounded-3" value="{{ old('url',$link->url ?? '') }}" placeholder="https://...">
         @error('url')<div class="text-danger">{{ $message }}</div>@enderror
         <small class="text-muted">إن وُجد route_name سيُستخدم هو أولاً.</small>
     </div>
@@ -45,7 +45,7 @@
     <label class="form-check-label">Active</label>
 </div>
 
-<button class="btn btn-primary rounded-3 shadow-sm d-flex align-items-center justify-content-center gap-2 py-2">
+<button class="btn btn-save d-flex align-items-center justify-content-center gap-2">
     <i class="bi bi-check-circle"></i>
     حفظ
 </button>

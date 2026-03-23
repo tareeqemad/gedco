@@ -36,13 +36,11 @@
                         <input type="text"
                                name="search"
                                class="form-control rounded-3"
-                               style="height: 45px;"
-                               placeholder="ابحث عن دور..."
+                                                              placeholder="ابحث عن دور..."
                                value="{{ request('search') }}">
                     </div>
                     <div class="col-12 col-lg-1">
-                        <label class="form-label mb-1">&nbsp;</label>
-                        <button type="submit" class="btn btn-outline-secondary w-100 rounded-3 shadow-sm" style="height: 45px;">
+                        <button type="submit" class="btn btn-outline-secondary w-100 rounded-3">
                             <i class="bi bi-search"></i>
                         </button>
                     </div>

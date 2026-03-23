@@ -211,7 +211,7 @@
 
                             {{-- Section 3: الإجراءات --}}
                             <div class="d-flex flex-wrap gap-2 mt-4 pt-3" style="border-top: 1px solid #E6ECF2;">
-                                <button type="button" id="submitBtn" class="btn btn-primary px-4 d-flex align-items-center gap-2">
+                                <button type="button" id="submitBtn" class="btn btn-save d-flex align-items-center gap-2">
                                     <i class="bi bi-check-lg"></i>
                                     <span id="submitText">نشر الخبر</span>
                                     <span id="submitSpinner" class="spinner-border spinner-border-sm d-none" role="status"></span>
@@ -219,7 +219,7 @@
                                 <button type="button" id="saveDraft" class="btn btn-outline-secondary px-4 d-flex align-items-center gap-2">
                                     <i class="bi bi-file-earmark"></i> حفظ مسودة
                                 </button>
-                                <a href="{{ route('admin.news.index') }}" class="btn btn-link text-muted">إلغاء</a>
+                                <a href="{{ route('admin.news.index') }}" class="btn btn-cancel">إلغاء</a>
                             </div>
                         </form>
                     </div>

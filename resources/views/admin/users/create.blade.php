@@ -203,10 +203,10 @@
 
                     {{-- أزرار الإجراءات --}}
                     <div class="d-flex justify-content-end gap-3 pt-3 border-top">
-                        <a href="{{ route('admin.users.index') }}" class="btn btn-outline-secondary px-4 py-2 rounded-3">
+                        <a href="{{ route('admin.users.index') }}" class="btn btn-cancel">
                             <i class="bi bi-x-circle me-1"></i>{{ __('admin.common.cancel') }}
                         </a>
-                        <button type="submit" class="btn btn-primary px-4 py-2 rounded-3 shadow-sm" id="submitBtn">
+                        <button type="submit" class="btn btn-save" id="submitBtn">
                             <i class="bi bi-check-lg me-1"></i>{{ __('admin.users.save_user') }}
                         </button>
                     </div>

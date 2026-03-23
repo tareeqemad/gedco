@@ -8,73 +8,63 @@
 
 @section('content')
     <div class="container-fluid p-0">
-        <!-- Header Section -->
-        <x-admin.card class="mb-4">
+        <x-admin.card>
             <x-admin.card-header-form
                 icon="bi-person-badge"
-                :title="__('admin.roles.edit_title')" />
-        </x-admin.card>
+                :title="__('admin.roles.edit_title')"
+                back-route="{{ route('admin.roles.index') }}" />
+            <div class="card-body">
+                <form action="{{ route('admin.roles.update', $role->id) }}" method="POST">
+                    @csrf
+                    @method('PUT')
 
-        <form action="{{ route('admin.roles.update', $role->id) }}" method="POST">
-            @csrf
-            @method('PUT')
-            
-            <div class="row g-4">
-                <!-- الجانب الأيسر: اسم الدور والأزرار -->
-                <div class="col-lg-4">
-                    <!-- اسم الدور -->
-                    <div class="card border-0 shadow-sm rounded-4 bg-white mb-4">
-                        <div class="card-header bg-light border-0 py-3 px-4">
-                            <h6 class="mb-0 fw-bold text-dark d-flex align-items-center gap-2">
-                                <i class="bi bi-tag text-primary"></i>
-                                معلومات الدور
-                            </h6>
-                        </div>
-                        <div class="card-body p-4">
-                            <div class="mb-0">
-                                <label class="form-label fw-semibold text-dark mb-2">
-                                    {{ __('admin.roles.form_name') }} <span class="text-danger">*</span>
-                                </label>
-                                <input type="text" 
-                                       name="name" 
-                                       class="form-control rounded-3 border-0 bg-light @error('name') is-invalid @enderror" 
-                                       style="height: 45px;"
-                                       placeholder="{{ __('admin.roles.form_name_placeholder') }}"
-                                       value="{{ old('name', $role->name) }}"
-                                       {{ $role->name === 'super-admin' ? 'readonly' : '' }}
-                                       required>
-                                @if($role->name === 'super-admin')
-                                    <small class="text-muted d-block mt-2">
-                                        <i class="bi bi-info-circle me-1"></i>
-                                        لا يمكن تعديل اسم دور Super Admin
-                                    </small>
-                                @endif
-                                @error('name')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
+                    <div class="row g-4">
+                        <!-- الجانب الأيسر: اسم الدور والأزرار -->
+                        <div class="col-lg-4">
+                            <!-- اسم الدور -->
+                            <div class="mb-4">
+                                <h6 class="section-title d-flex align-items-center gap-2 mb-3">
+                                    <i class="bi bi-tag"></i>
+                                    معلومات الدور
+                                </h6>
+                                <div class="mb-0">
+                                    <label class="form-label fw-semibold text-dark mb-2">
+                                        {{ __('admin.roles.form_name') }} <span class="text-danger">*</span>
+                                    </label>
+                                    <input type="text"
+                                           name="name"
+                                           class="form-control rounded-3 @error('name') is-invalid @enderror"
+                                           placeholder="{{ __('admin.roles.form_name_placeholder') }}"
+                                           value="{{ old('name', $role->name) }}"
+                                           {{ $role->name === 'super-admin' ? 'readonly' : '' }}
+                                           required>
+                                    @if($role->name === 'super-admin')
+                                        <small class="text-muted d-block mt-2">
+                                            <i class="bi bi-info-circle me-1"></i>
+                                            لا يمكن تعديل اسم دور Super Admin
+                                        </small>
+                                    @endif
+                                    @error('name')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
                             </div>
-                        </div>
-                    </div>
 
-                    <!-- الأزرار -->
-                    <div class="card border-0 shadow-sm rounded-4 bg-white sticky-top" style="top: 20px;">
-                        <div class="card-body p-4">
-                            <div class="d-grid gap-2">
-                                <button type="submit" class="btn btn-primary rounded-3 shadow-sm d-flex align-items-center justify-content-center gap-2 py-2">
+                            <!-- الأزرار -->
+                            <div class="d-grid gap-2 sticky-top" style="top: 20px;">
+                                <button type="submit" class="btn btn-save d-flex align-items-center justify-content-center gap-2">
                                     <i class="bi bi-check-circle"></i>
                                     {{ __('admin.common.form_save') }}
                                 </button>
-                                <a href="{{ route('admin.roles.index') }}" class="btn btn-outline-secondary rounded-3 shadow-sm py-2">
+                                <a href="{{ route('admin.roles.index') }}" class="btn btn-cancel">
                                     إلغاء
                                 </a>
                             </div>
                         </div>
-                    </div>
-                </div>
 
-                <!-- الجانب الأيمن: الصلاحيات -->
-                <div class="col-lg-8">
-                    <x-admin.card>
+                        <!-- الجانب الأيمن: الصلاحيات -->
+                        <div class="col-lg-8">
+                            <div>
                         <x-admin.card-header-form
                             icon="bi-shield-lock-fill"
                             :title="__('admin.roles.form_permissions')">
@@ -179,10 +169,12 @@
                                 <div class="text-danger small mt-3">{{ $message }}</div>
                             @enderror
                         </div>
-                    </x-admin.card>
-                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
             </div>
-        </form>
+        </x-admin.card>
     </div>
 
     @push('styles')

@@ -145,7 +145,7 @@
                     <form method="GET" action="{{ route('admin.activity-logs.index') }}" class="row g-3">
                         <div class="col-md-3">
                             <label class="form-label fw-semibold text-dark mb-1">المستخدم</label>
-                            <select name="user_id" class="form-select rounded-3" style="height: 45px;">
+                            <select name="user_id" class="form-select rounded-3">
                                 <option value="">جميع المستخدمين</option>
                                 @foreach($users as $u)
                                     <option value="{{ $u->id }}" {{ request('user_id') == $u->id ? 'selected' : '' }}>
@@ -156,7 +156,7 @@
                         </div>
                         <div class="col-md-2">
                             <label class="form-label fw-semibold text-dark mb-1">العملية</label>
-                            <select name="action" class="form-select rounded-3" style="height: 45px;">
+                            <select name="action" class="form-select rounded-3">
                                 <option value="">جميع العمليات</option>
                                 @foreach($actions as $act)
                                     <option value="{{ $act }}" {{ request('action') == $act ? 'selected' : '' }}>
@@ -167,21 +167,24 @@
                         </div>
                         <div class="col-md-2">
                             <label class="form-label fw-semibold text-dark mb-1">من تاريخ</label>
-                            <input type="date" name="date_from" class="form-control rounded-3" style="height: 45px;" value="{{ request('date_from') }}">
+                            <input type="date" name="date_from" class="form-control rounded-3" value="{{ request('date_from') }}">
                         </div>
                         <div class="col-md-2">
                             <label class="form-label fw-semibold text-dark mb-1">إلى تاريخ</label>
-                            <input type="date" name="date_to" class="form-control rounded-3" style="height: 45px;" value="{{ request('date_to') }}">
+                            <input type="date" name="date_to" class="form-control rounded-3" value="{{ request('date_to') }}">
                         </div>
                         <div class="col-md-2">
                             <label class="form-label fw-semibold text-dark mb-1">الراوت</label>
-                            <input type="text" name="route" class="form-control rounded-3" style="height: 45px;" placeholder="بحث..." value="{{ request('route') }}">
+                            <input type="text" name="route" class="form-control rounded-3" placeholder="بحث..." value="{{ request('route') }}">
                         </div>
                         <div class="col-md-1">
                             <label class="form-label mb-1">&nbsp;</label>
-                            <button type="submit" class="btn btn-outline-primary w-100 rounded-3" style="height: 45px;">
-                                <i class="bi bi-search"></i>
+                            <button type="submit" class="btn btn-outline-primary w-100 rounded-3">
+                                <i class="bi bi-search me-1"></i> استعلام
                             </button>
+                            <a href="{{ route('admin.activity-logs.index') }}" class="btn btn-outline-danger w-100 rounded-3 mt-1">
+                                <i class="bi bi-x-circle me-1"></i> تفريغ
+                            </a>
                         </div>
                     </form>
                 </div>

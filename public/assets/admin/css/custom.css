@@ -3031,6 +3031,134 @@ html {
     color: #24364A !important;
 }
 
+/* ========== Dropdown Fix (Global) ========== */
+/* Force white background on ALL dropdowns - fixes transparent issue in tables */
+.dropdown-menu {
+    background-color: #FFFFFF !important;
+    border: 1px solid #E6ECF2 !important;
+    border-radius: 12px !important;
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12) !important;
+    padding: 0.5rem 0 !important;
+    z-index: 1060 !important;
+}
+.dropdown-menu .dropdown-item {
+    padding: 0.5rem 1rem !important;
+    font-size: 0.85rem !important;
+    color: #24364A !important;
+    transition: background-color 0.15s ease !important;
+}
+.dropdown-menu .dropdown-item:hover,
+.dropdown-menu .dropdown-item:focus {
+    background-color: #F7FAFC !important;
+    color: #24364A !important;
+}
+.dropdown-menu .dropdown-item.text-danger,
+.dropdown-menu .dropdown-item.text-danger:hover {
+    color: #DC2626 !important;
+}
+.dropdown-menu .dropdown-divider {
+    border-color: #E6ECF2 !important;
+}
+/* Ensure dropdown appears above table-responsive overflow */
+@media (min-width: 768px) {
+    .table-responsive {
+        overflow: visible !important;
+    }
+}
+
+/* ========== Global Form Cleanup ========== */
+/* Remove forced height from all form inputs */
+.card-body .form-control[style*="height: 45px"],
+.card-body .form-select[style*="height: 45px"] {
+    height: auto !important;
+    padding: 0.5rem 0.75rem !important;
+    min-height: 42px !important;
+}
+
+/* Neutralize text-primary on section icons inside cards */
+.card-body .section-title i,
+.card-body h6 > i.text-primary {
+    color: #5B7088 !important;
+}
+
+/* Fix old card-header bg-light inside forms */
+.card-body .card-header.bg-light {
+    background: #F8FBFD !important;
+    border-bottom: 1px solid #E6ECF2 !important;
+}
+
+/* Remove bg-gradient-primary remnants */
+.bg-gradient-primary {
+    background: #2474A8 !important;
+}
+
+/* ========== Unified Button System ========== */
+/* Save/Submit button */
+.btn-save {
+    background-color: #1ABC9C !important;
+    border-color: #1ABC9C !important;
+    color: #FFFFFF !important;
+    padding: 0.5rem 1.5rem !important;
+    border-radius: 12px !important;
+    font-weight: 600 !important;
+    font-size: 0.9rem !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 0.4rem !important;
+    transition: all 0.2s ease !important;
+    box-shadow: 0 2px 8px rgba(26, 188, 156, 0.25) !important;
+}
+.btn-save:hover, .btn-save:focus {
+    background-color: #16A085 !important;
+    border-color: #16A085 !important;
+    color: #FFFFFF !important;
+    box-shadow: 0 4px 12px rgba(26, 188, 156, 0.35) !important;
+}
+.btn-save:disabled {
+    opacity: 0.7 !important;
+}
+
+/* Cancel/Back button */
+.btn-cancel {
+    background-color: #FFFFFF !important;
+    border: 1px solid #CDD9E3 !important;
+    color: #5B7088 !important;
+    padding: 0.5rem 1.5rem !important;
+    border-radius: 12px !important;
+    font-weight: 600 !important;
+    font-size: 0.9rem !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 0.4rem !important;
+    transition: all 0.2s ease !important;
+    text-decoration: none !important;
+}
+.btn-cancel:hover, .btn-cancel:focus {
+    background-color: #F7FAFC !important;
+    border-color: #B8C7D6 !important;
+    color: #24364A !important;
+}
+
+/* Delete/Danger confirm button */
+.btn-delete-confirm {
+    background-color: #FFFFFF !important;
+    border: 1px solid #F3B3B3 !important;
+    color: #DC2626 !important;
+    padding: 0.5rem 1.5rem !important;
+    border-radius: 12px !important;
+    font-weight: 600 !important;
+    font-size: 0.9rem !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 0.4rem !important;
+    transition: all 0.2s ease !important;
+}
+.btn-delete-confirm:hover, .btn-delete-confirm:focus {
+    background-color: #FEF2F2 !important;
+    border-color: #DC2626 !important;
+    color: #DC2626 !important;
+}
+
 /* ========== Readonly Input Fields Styling ========== */
 /* Simple rule: if readonly, show not-allowed cursor (except date pickers) */
 input[readonly]:not([type="date"]):not(.flatpickr-input):not(.admin-date-input),

@@ -70,8 +70,7 @@
                                         {{ __('admin.settings.footer_title') }} - {{ __('admin.labels.arabic') }}
                                     </label>
                                     <input type="text" name="footer_title_ar" class="form-control rounded-3 border-0 bg-light @error('footer_title_ar') is-invalid @enderror"
-                                           style="height: 45px;"
-                                           value="{{ old('footer_title_ar', $setting->footer_title_ar) }}" placeholder="مثال: كهرباء غزة">
+                                                                                     value="{{ old('footer_title_ar', $setting->footer_title_ar) }}" placeholder="مثال: كهرباء غزة">
                                     @error('footer_title_ar')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
@@ -82,8 +81,7 @@
                                         {{ __('admin.settings.footer_title') }} - {{ __('admin.labels.english') }}
                                     </label>
                                     <input type="text" name="footer_title_en" class="form-control rounded-3 border-0 bg-light @error('footer_title_en') is-invalid @enderror"
-                                           style="height: 45px;"
-                                           value="{{ old('footer_title_en', $setting->footer_title_en) }}" placeholder="e.g: Gaza Electricity">
+                                                                                     value="{{ old('footer_title_en', $setting->footer_title_en) }}" placeholder="e.g: Gaza Electricity">
                                     @error('footer_title_en')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
@@ -101,8 +99,7 @@
                                         {{ __('admin.settings.logo_white_path') }} - {{ __('admin.labels.arabic') }}
                                     </label>
                                     <input type="text" name="logo_white_path_ar" class="form-control rounded-3 border-0 bg-light @error('logo_white_path_ar') is-invalid @enderror"
-                                           style="height: 45px;"
-                                           value="{{ old('logo_white_path_ar', $setting->logo_white_path_ar) }}" placeholder="assets/site/images/logo-white-ar.png">
+                                                                                     value="{{ old('logo_white_path_ar', $setting->logo_white_path_ar) }}" placeholder="assets/site/images/logo-white-ar.png">
                                     @error('logo_white_path_ar')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
@@ -114,8 +111,7 @@
                                         {{ __('admin.settings.logo_white_path') }} - {{ __('admin.labels.english') }}
                                     </label>
                                     <input type="text" name="logo_white_path_en" class="form-control rounded-3 border-0 bg-light @error('logo_white_path_en') is-invalid @enderror"
-                                           style="height: 45px;"
-                                           value="{{ old('logo_white_path_en', $setting->logo_white_path_en) }}" placeholder="assets/site/images/logo-white-en.png">
+                                                                                     value="{{ old('logo_white_path_en', $setting->logo_white_path_en) }}" placeholder="assets/site/images/logo-white-en.png">
                                     @error('logo_white_path_en')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
@@ -165,8 +161,7 @@
                                         {{ __('admin.settings.contact_us') }} - {{ __('admin.labels.arabic') }}
                                     </label>
                                     <input type="text" name="contact_us_title_ar" class="form-control rounded-3 border-0 bg-light @error('contact_us_title_ar') is-invalid @enderror"
-                                           style="height: 45px;"
-                                           value="{{ old('contact_us_title_ar', $setting->contact_us_title_ar) }}" placeholder="مثال: اتصل بنا">
+                                                                                     value="{{ old('contact_us_title_ar', $setting->contact_us_title_ar) }}" placeholder="مثال: اتصل بنا">
                                     @error('contact_us_title_ar')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
@@ -177,8 +172,7 @@
                                         {{ __('admin.settings.contact_us') }} - {{ __('admin.labels.english') }}
                                     </label>
                                     <input type="text" name="contact_us_title_en" class="form-control rounded-3 border-0 bg-light @error('contact_us_title_en') is-invalid @enderror"
-                                           style="height: 45px;"
-                                           value="{{ old('contact_us_title_en', $setting->contact_us_title_en) }}" placeholder="e.g: Contact Us">
+                                                                                     value="{{ old('contact_us_title_en', $setting->contact_us_title_en) }}" placeholder="e.g: Contact Us">
                                     @error('contact_us_title_en')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
@@ -221,12 +215,11 @@
                                             <div class="row g-3">
                                                 <div class="col-md-4">
                                                     <label class="form-label fw-semibold text-dark d-flex align-items-center gap-1">
-                                                        <i class="bi bi-tag-fill text-primary"></i>
+                                                        <i class="bi bi-tag-fill" style="color: #5B7088;"></i>
                                                         {{ __('admin.settings.label') }}
                                                     </label>
                                                     <input type="text" name="channels[{{ $i }}][label]" class="form-control rounded-3 border-0 bg-white shadow-sm"
-                                                           style="height: 45px;"
-                                                           value="{{ old("channels.$i.label", $channels[$i]['label'] ?? '') }}" placeholder="مثال: المقر الرئيسي">
+                                                                                                                     value="{{ old("channels.$i.label", $channels[$i]['label'] ?? '') }}" placeholder="مثال: المقر الرئيسي">
                                                     @error("channels.$i.label")
                                                         <div class="invalid-feedback d-block">{{ $message }}</div>
                                                     @enderror
@@ -234,12 +227,11 @@
 
                                                 <div class="col-md-4">
                                                     <label class="form-label fw-semibold text-dark d-flex align-items-center gap-1">
-                                                        <i class="bi bi-envelope-fill text-primary"></i>
+                                                        <i class="bi bi-envelope-fill" style="color: #5B7088;"></i>
                                                         {{ __('admin.settings.email') }}
                                                     </label>
                                                     <input type="email" name="channels[{{ $i }}][email]" class="form-control rounded-3 border-0 bg-white shadow-sm"
-                                                           style="height: 45px;"
-                                                           value="{{ old("channels.$i.email", $channels[$i]['email'] ?? '') }}" placeholder="info@example.com">
+                                                                                                                     value="{{ old("channels.$i.email", $channels[$i]['email'] ?? '') }}" placeholder="info@example.com">
                                                     @error("channels.$i.email")
                                                         <div class="invalid-feedback d-block">{{ $message }}</div>
                                                     @enderror
@@ -247,12 +239,11 @@
 
                                                 <div class="col-md-4">
                                                     <label class="form-label fw-semibold text-dark d-flex align-items-center gap-1">
-                                                        <i class="bi bi-telephone-fill text-primary"></i>
+                                                        <i class="bi bi-telephone-fill" style="color: #5B7088;"></i>
                                                         {{ __('admin.settings.phone') }}
                                                     </label>
                                                     <input type="text" name="channels[{{ $i }}][phone]" class="form-control rounded-3 border-0 bg-white shadow-sm tel-input"
-                                                           style="height: 45px;"
-                                                           inputmode="tel" placeholder="+970 59X XXX XXX"
+                                                                                                                     inputmode="tel" placeholder="+970 59X XXX XXX"
                                                            value="{{ old("channels.$i.phone", $channels[$i]['phone'] ?? '') }}">
                                                     @error("channels.$i.phone")
                                                         <div class="invalid-feedback d-block">{{ $message }}</div>
@@ -262,12 +253,11 @@
                                                 <div class="col-md-6">
                                                     <label class="form-label fw-semibold text-dark d-flex align-items-center gap-1">
                                                         <span class="badge bg-primary-subtle text-primary rounded-pill px-2 py-1 me-1" style="font-size: 0.7rem;">ع</span>
-                                                        <i class="bi bi-geo-alt-fill text-primary"></i>
+                                                        <i class="bi bi-geo-alt-fill" style="color: #5B7088;"></i>
                                                         {{ __('admin.settings.address') }} - {{ __('admin.labels.arabic') }}
                                                     </label>
                                                     <input type="text" name="channels[{{ $i }}][address_ar]" class="form-control rounded-3 border-0 bg-white shadow-sm"
-                                                           style="height: 45px;"
-                                                           value="{{ old("channels.$i.address_ar", $channels[$i]['address_ar'] ?? '') }}" placeholder="العنوان بالعربية">
+                                                                                                                     value="{{ old("channels.$i.address_ar", $channels[$i]['address_ar'] ?? '') }}" placeholder="العنوان بالعربية">
                                                     @error("channels.$i.address_ar")
                                                         <div class="invalid-feedback d-block">{{ $message }}</div>
                                                     @enderror
@@ -276,12 +266,11 @@
                                                 <div class="col-md-6">
                                                     <label class="form-label fw-semibold text-dark d-flex align-items-center gap-1">
                                                         <span class="badge bg-info-subtle text-info rounded-pill px-2 py-1 me-1" style="font-size: 0.7rem;">EN</span>
-                                                        <i class="bi bi-geo-alt-fill text-primary"></i>
+                                                        <i class="bi bi-geo-alt-fill" style="color: #5B7088;"></i>
                                                         {{ __('admin.settings.address') }} - {{ __('admin.labels.english') }}
                                                     </label>
                                                     <input type="text" name="channels[{{ $i }}][address_en]" class="form-control rounded-3 border-0 bg-white shadow-sm"
-                                                           style="height: 45px;"
-                                                           value="{{ old("channels.$i.address_en", $channels[$i]['address_en'] ?? '') }}" placeholder="English Address">
+                                                                                                                     value="{{ old("channels.$i.address_en", $channels[$i]['address_en'] ?? '') }}" placeholder="English Address">
                                                     @error("channels.$i.address_en")
                                                         <div class="invalid-feedback d-block">{{ $message }}</div>
                                                     @enderror
@@ -297,10 +286,10 @@
 
                 {{-- Submit --}}
                 <div class="d-flex gap-3 justify-content-end p-3" style="border-top: 1px solid #E6ECF2;">
-                    <a href="{{ route('admin.dashboard') }}" class="btn btn-outline-secondary px-4 py-2 rounded-3">
+                    <a href="{{ route('admin.dashboard') }}" class="btn btn-cancel">
                         <i class="bi bi-x-circle me-1"></i> إلغاء
                     </a>
-                    <button type="submit" class="btn btn-primary px-4 py-2 rounded-3 shadow-sm">
+                    <button type="submit" class="btn btn-save">
                         <i class="bi bi-check-circle me-1"></i>{{ __('admin.settings.save') }}
                     </button>
                 </div>

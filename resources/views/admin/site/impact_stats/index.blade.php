@@ -106,37 +106,37 @@
         <div class="modal fade" id="createModal" tabindex="-1">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content rounded-4 shadow-lg border-0">
-                    <div class="modal-header bg-gradient-primary text-white border-0 py-3 px-4">
-                        <h5 class="modal-title text-white fw-bold d-flex align-items-center gap-2">
+                    <div class="modal-header border-0 border-0 py-3 px-4">
+                        <h5 class="modal-title fw-bold d-flex align-items-center gap-2">
                             <i class="bi bi-plus-lg"></i>{{ __('admin.impact_stats.add_new_statistic') }}
                         </h5>
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
                     <form id="createForm">
                         @csrf
                         <div class="modal-body p-4">
                             <div class="mb-3">
                                 <label class="form-label fw-semibold text-dark d-flex align-items-center gap-1">
-                                    <i class="bi bi-type-h1 text-primary"></i>{{ __('admin.impact_stats.form_title') }} - {{ __('admin.labels.arabic') }}
+                                    <i class="bi bi-type-h1" style="color: #5B7088;"></i>{{ __('admin.impact_stats.form_title') }} - {{ __('admin.labels.arabic') }}
                                 </label>
-                                <input type="text" name="title_ar" class="form-control rounded-3 border-0 bg-light" style="height: 45px;" required>
+                                <input type="text" name="title_ar" class="form-control rounded-3 border-0 bg-light" required>
                             </div>
                             <div class="mb-3">
                                 <label class="form-label fw-semibold text-dark d-flex align-items-center gap-1">
-                                    <i class="bi bi-type-h1 text-primary"></i>{{ __('admin.impact_stats.form_title') }} - {{ __('admin.labels.english') }}
+                                    <i class="bi bi-type-h1" style="color: #5B7088;"></i>{{ __('admin.impact_stats.form_title') }} - {{ __('admin.labels.english') }}
                                 </label>
-                                <input type="text" name="title_en" class="form-control rounded-3 border-0 bg-light" style="height: 45px;">
+                                <input type="text" name="title_en" class="form-control rounded-3 border-0 bg-light">
                             </div>
                             <div class="mb-3">
                                 <label class="form-label fw-semibold text-dark d-flex align-items-center gap-1">
-                                    <i class="bi bi-currency-dollar text-primary"></i>{{ __('admin.impact_stats.form_amount') }}
+                                    <i class="bi bi-currency-dollar" style="color: #5B7088;"></i>{{ __('admin.impact_stats.form_amount') }}
                                 </label>
-                                <input type="number" step="0.1" name="amount_usd" class="form-control rounded-3 border-0 bg-light" style="height: 45px;" required>
+                                <input type="number" step="0.1" name="amount_usd" class="form-control rounded-3 border-0 bg-light" required>
                             </div>
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" name="is_active" id="newActive" checked>
                                 <label class="form-check-label fw-semibold text-dark" for="newActive">
-                                    <i class="bi bi-toggle-on text-primary me-1"></i>{{ __('admin.impact_stats.form_active') }}
+                                    <i class="bi bi-toggle-on me-1" style="color: #5B7088;"></i>{{ __('admin.impact_stats.form_active') }}
                                 </label>
                             </div>
                         </div>
@@ -156,11 +156,11 @@
         <div class="modal fade" id="editModal" tabindex="-1">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content rounded-4 shadow-lg border-0">
-                    <div class="modal-header bg-gradient-primary text-white border-0 py-3 px-4">
-                        <h5 class="modal-title text-white fw-bold d-flex align-items-center gap-2">
+                    <div class="modal-header border-0 border-0 py-3 px-4">
+                        <h5 class="modal-title fw-bold d-flex align-items-center gap-2">
                             <i class="bi bi-pencil-square"></i>{{ __('admin.impact_stats.edit_statistic') }}
                         </h5>
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
                     <form id="editForm" class="edit-form">
                         @csrf @method('PATCH')
@@ -168,26 +168,26 @@
                         <div class="modal-body p-4">
                             <div class="mb-3">
                                 <label class="form-label fw-semibold text-dark d-flex align-items-center gap-1">
-                                    <i class="bi bi-type-h1 text-primary"></i>{{ __('admin.impact_stats.form_title') }} - {{ __('admin.labels.arabic') }}
+                                    <i class="bi bi-type-h1" style="color: #5B7088;"></i>{{ __('admin.impact_stats.form_title') }} - {{ __('admin.labels.arabic') }}
                                 </label>
-                                <input type="text" name="title_ar" id="editTitleAr" class="form-control rounded-3 border-0 bg-light" style="height: 45px;" required>
+                                <input type="text" name="title_ar" id="editTitleAr" class="form-control rounded-3 border-0 bg-light" required>
                             </div>
                             <div class="mb-3">
                                 <label class="form-label fw-semibold text-dark d-flex align-items-center gap-1">
-                                    <i class="bi bi-type-h1 text-primary"></i>{{ __('admin.impact_stats.form_title') }} - {{ __('admin.labels.english') }}
+                                    <i class="bi bi-type-h1" style="color: #5B7088;"></i>{{ __('admin.impact_stats.form_title') }} - {{ __('admin.labels.english') }}
                                 </label>
-                                <input type="text" name="title_en" id="editTitleEn" class="form-control rounded-3 border-0 bg-light" style="height: 45px;">
+                                <input type="text" name="title_en" id="editTitleEn" class="form-control rounded-3 border-0 bg-light">
                             </div>
                             <div class="mb-3">
                                 <label class="form-label fw-semibold text-dark d-flex align-items-center gap-1">
-                                    <i class="bi bi-currency-dollar text-primary"></i>{{ __('admin.impact_stats.form_amount') }}
+                                    <i class="bi bi-currency-dollar" style="color: #5B7088;"></i>{{ __('admin.impact_stats.form_amount') }}
                                 </label>
-                                <input type="number" step="0.1" name="amount_usd" id="editAmount" class="form-control rounded-3 border-0 bg-light" style="height: 45px;" required>
+                                <input type="number" step="0.1" name="amount_usd" id="editAmount" class="form-control rounded-3 border-0 bg-light" required>
                             </div>
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" name="is_active" id="editActive">
                                 <label class="form-check-label fw-semibold text-dark" for="editActive">
-                                    <i class="bi bi-toggle-on text-primary me-1"></i>{{ __('admin.impact_stats.form_active') }}
+                                    <i class="bi bi-toggle-on me-1" style="color: #5B7088;"></i>{{ __('admin.impact_stats.form_active') }}
                                 </label>
                             </div>
                         </div>
@@ -207,11 +207,11 @@
         <div class="modal fade" id="deleteModal" tabindex="-1">
             <div class="modal-dialog modal-dialog-centered modal-sm">
                 <div class="modal-content rounded-4 shadow-lg border-0">
-                    <div class="modal-header bg-gradient-primary text-white border-0 rounded-top-4 pb-2">
-                        <h5 class="modal-title text-white fw-bold d-flex align-items-center gap-2">
+                    <div class="modal-header border-0 border-0 rounded-top-4 pb-2">
+                        <h5 class="modal-title fw-bold d-flex align-items-center gap-2">
                             <i class="bi bi-exclamation-triangle-fill"></i>{{ __('admin.impact_stats.confirm_delete') }}
                         </h5>
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
                     <div class="modal-body pt-2 pb-3 text-center">
                         <i class="bi bi-exclamation-triangle-fill text-danger display-5 mb-3"></i>

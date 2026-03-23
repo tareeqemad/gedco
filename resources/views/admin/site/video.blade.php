@@ -43,7 +43,7 @@
                                 </label>
                                 <input type="text" name="video_url" id="video_url"
                                        class="form-control rounded-3  @error('video_url') is-invalid @enderror"
-                                       style="height: 45px;"
+
                                        placeholder="https://youtu.be/abcdEFGhijk"
                                        value="{{ old('video_url', $videoUrl) }}">
                                 @error('video_url')
@@ -61,7 +61,7 @@
                                 </label>
                                 <input type="text" name="caption" id="caption"
                                        class="form-control rounded-3  @error('caption') is-invalid @enderror"
-                                       style="height: 45px;"
+
                                        value="{{ old('caption', $caption) }}"
                                        placeholder="مثال: شاهد فيديو تعريفي عن خدماتنا"
                                        maxlength="255">
@@ -72,10 +72,10 @@
 
                             <!-- Submit Button -->
                             <div class="d-flex gap-2 justify-content-end">
-                                <a href="{{ route('admin.dashboard') }}" class="btn btn-outline-secondary rounded-3 px-4 shadow-sm">
+                                <a href="{{ route('admin.dashboard') }}" class="btn btn-cancel">
                                     إلغاء
                                 </a>
-                                <button type="submit" class="btn btn-primary rounded-3 px-4 shadow-sm d-flex align-items-center gap-2">
+                                <button type="submit" class="btn btn-save d-flex align-items-center gap-2">
                                     <i class="bi bi-check-circle"></i>
                                     {{ __('admin.settings.save') }}
                                 </button>
