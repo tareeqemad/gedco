@@ -12,97 +12,91 @@
 
 @section('content')
     <div class="container-fluid p-0">
-        <!-- Header Section -->
-        <div class="card border-0 shadow-sm rounded-4 bg-white mb-4">
-            <div class="card-header bg-gradient-primary text-white border-0 py-2 px-3">
-                <div class="d-flex justify-content-between align-items-center flex-wrap w-100" style="gap: 0.75rem;">
-                    <div class="d-flex align-items-center gap-2 flex-wrap" style="flex: 1 1 auto;">
-                        <i class="bi bi-person-lines-fill fs-5"></i>
-                        <div class="d-flex align-items-center gap-2 flex-wrap">
-                            <h5 class="mb-0 fw-bold text-white" style="font-size: 1.1rem; line-height: 1.2;">
-                                {{ __('admin.staff_profiles.title') }}
-                            </h5>
-                            <span class="badge bg-white text-primary rounded-pill" style="font-size: 0.65rem; padding: 0.15rem 0.4rem;">
-                                {{ $stats['total'] }}
-                            </span>
-                            <span class="text-white-50 small d-none d-md-inline" style="font-size: 0.75rem; opacity: 0.9;">
-                                {{ __('admin.staff_profiles.subtitle') }}
-                            </span>
+        <!-- Main Card -->
+        <x-admin.card>
+            <x-admin.card-header-index
+                icon="bi-person-lines-fill"
+                :title="__('admin.staff_profiles.title')">
+                <x-slot:badge>
+                    <span class="badge bg-white text-primary rounded-pill" style="font-size: 0.65rem; padding: 0.15rem 0.4rem;">
+                        {{ $stats['total'] }}
+                    </span>
+                    <span class="text-white-50 small d-none d-md-inline" style="font-size: 0.75rem; opacity: 0.9;">
+                        {{ __('admin.staff_profiles.subtitle') }}
+                    </span>
+                </x-slot:badge>
+            </x-admin.card-header-index>
+
+            {{-- الإحصائيات التفاعلية --}}
+            <div class="card-body p-3 pb-0">
+                {{-- الفلاتر النشطة --}}
+                <div id="active-filters" class="mb-3" style="min-height: 40px;"></div>
+
+                <div class="row g-3 g-md-4 mb-3">
+                    <div class="col-6 col-md-3 col-lg-2">
+                        <div class="stat-card bg-white rounded-4 shadow-sm p-3 text-center border border-3 border-danger cursor-pointer"
+                             data-filter="status" data-value="displaced" data-label="{{ __('admin.staff_profiles.status_displaced') }}"
+                             style="border-color: #dc2626 !important; transition: all 0.3s ease;"
+                             onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 8px 20px rgba(220, 38, 38, 0.2)'"
+                             onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+                            <i class="bi bi-truck fs-4 text-danger mb-1"></i>
+                            <div class="fs-4 fw-bold text-danger">{{ $stats['displaced'] }}</div>
+                            <small class="text-dark fw-semibold">{{ __('admin.staff_profiles.status_displaced') }}</small>
+                        </div>
+                    </div>
+
+                    <div class="col-6 col-md-3 col-lg-2">
+                        <div class="stat-card bg-white rounded-4 shadow-sm p-3 text-center border border-3 border-success cursor-pointer"
+                             data-filter="status" data-value="resident" data-label="{{ __('admin.staff_profiles.status_resident') }}"
+                             style="border-color: #22c55e !important; transition: all 0.3s ease;"
+                             onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 8px 20px rgba(34, 197, 94, 0.2)'"
+                             onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+                            <i class="bi bi-house-door-fill fs-4 text-success mb-1"></i>
+                            <div class="fs-4 fw-bold text-success">{{ $stats['resident'] }}</div>
+                            <small class="text-dark fw-semibold">{{ __('admin.staff_profiles.status_resident') }}</small>
+                        </div>
+                    </div>
+
+                    <div class="col-6 col-md-3 col-lg-2">
+                        <div class="stat-card bg-white rounded-4 shadow-sm p-3 text-center border border-3 border-warning cursor-pointer"
+                             data-filter="readiness" data-value="not_ready" data-label="{{ __('admin.staff_profiles.readiness_not_ready') }}"
+                             style="border-color: #f59e0b !important; transition: all 0.3s ease;"
+                             onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 8px 20px rgba(245, 158, 11, 0.2)'"
+                             onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+                            <i class="bi bi-person-x fs-4 text-warning mb-1"></i>
+                            <div class="fs-4 fw-bold text-warning">{{ $stats['not_ready'] }}</div>
+                            <small class="text-dark fw-semibold">{{ __('admin.staff_profiles.readiness_not_ready') }}</small>
+                        </div>
+                    </div>
+
+                    <div class="col-6 col-md-3 col-lg-2">
+                        <div class="stat-card bg-white rounded-4 shadow-sm p-3 text-center border border-3 border-info cursor-pointer"
+                             data-filter="readiness" data-value="ready" data-label="{{ __('admin.staff_profiles.readiness_ready') }}"
+                             style="border-color: #3b82f6 !important; transition: all 0.3s ease;"
+                             onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 8px 20px rgba(59, 130, 246, 0.2)'"
+                             onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+                            <i class="bi bi-hand-thumbs-up-fill fs-4 text-info mb-1"></i>
+                            <div class="fs-4 fw-bold text-info">{{ $stats['ready'] }}</div>
+                            <small class="text-dark fw-semibold">{{ __('admin.staff_profiles.readiness_ready') }}</small>
+                        </div>
+                    </div>
+
+                    <div class="col-6 col-md-3 col-lg-2">
+                        <div class="stat-card bg-white rounded-4 shadow-sm p-3 text-center border border-3 border-success cursor-pointer"
+                             data-filter="readiness" data-value="working" data-label="{{ __('admin.staff_profiles.readiness_working') }}"
+                             style="border-color: #22c55e !important; transition: all 0.3s ease;"
+                             onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 8px 20px rgba(34, 197, 94, 0.2)'"
+                             onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+                            <i class="bi bi-person-check-fill fs-4 text-success mb-1"></i>
+                            <div class="fs-4 fw-bold text-success">{{ $stats['working'] }}</div>
+                            <small class="text-dark fw-semibold">{{ __('admin.staff_profiles.readiness_working') }}</small>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        {{-- الفلاتر النشطة --}}
-        <div id="active-filters" class="mb-3" style="min-height: 40px;"></div>
-
-        {{-- الإحصائيات التفاعلية --}}
-        <div class="row g-3 g-md-4 mb-4">
-            <div class="col-6 col-md-3 col-lg-2">
-                <div class="stat-card bg-white rounded-4 shadow-sm p-3 text-center border border-3 border-danger cursor-pointer" 
-                     data-filter="status" data-value="displaced" data-label="{{ __('admin.staff_profiles.status_displaced') }}"
-                     style="border-color: #dc2626 !important; transition: all 0.3s ease;"
-                     onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 8px 20px rgba(220, 38, 38, 0.2)'"
-                     onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
-                    <i class="bi bi-truck fs-4 text-danger mb-1"></i>
-                    <div class="fs-4 fw-bold text-danger">{{ $stats['displaced'] }}</div>
-                    <small class="text-dark fw-semibold">{{ __('admin.staff_profiles.status_displaced') }}</small>
-                </div>
-            </div>
-
-            <div class="col-6 col-md-3 col-lg-2">
-                <div class="stat-card bg-white rounded-4 shadow-sm p-3 text-center border border-3 border-success cursor-pointer" 
-                     data-filter="status" data-value="resident" data-label="{{ __('admin.staff_profiles.status_resident') }}"
-                     style="border-color: #22c55e !important; transition: all 0.3s ease;"
-                     onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 8px 20px rgba(34, 197, 94, 0.2)'"
-                     onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
-                    <i class="bi bi-house-door-fill fs-4 text-success mb-1"></i>
-                    <div class="fs-4 fw-bold text-success">{{ $stats['resident'] }}</div>
-                    <small class="text-dark fw-semibold">{{ __('admin.staff_profiles.status_resident') }}</small>
-                </div>
-            </div>
-
-            <div class="col-6 col-md-3 col-lg-2">
-                <div class="stat-card bg-white rounded-4 shadow-sm p-3 text-center border border-3 border-warning cursor-pointer" 
-                     data-filter="readiness" data-value="not_ready" data-label="{{ __('admin.staff_profiles.readiness_not_ready') }}"
-                     style="border-color: #f59e0b !important; transition: all 0.3s ease;"
-                     onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 8px 20px rgba(245, 158, 11, 0.2)'"
-                     onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
-                    <i class="bi bi-person-x fs-4 text-warning mb-1"></i>
-                    <div class="fs-4 fw-bold text-warning">{{ $stats['not_ready'] }}</div>
-                    <small class="text-dark fw-semibold">{{ __('admin.staff_profiles.readiness_not_ready') }}</small>
-                </div>
-            </div>
-
-            <div class="col-6 col-md-3 col-lg-2">
-                <div class="stat-card bg-white rounded-4 shadow-sm p-3 text-center border border-3 border-info cursor-pointer" 
-                     data-filter="readiness" data-value="ready" data-label="{{ __('admin.staff_profiles.readiness_ready') }}"
-                     style="border-color: #3b82f6 !important; transition: all 0.3s ease;"
-                     onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 8px 20px rgba(59, 130, 246, 0.2)'"
-                     onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
-                    <i class="bi bi-hand-thumbs-up-fill fs-4 text-info mb-1"></i>
-                    <div class="fs-4 fw-bold text-info">{{ $stats['ready'] }}</div>
-                    <small class="text-dark fw-semibold">{{ __('admin.staff_profiles.readiness_ready') }}</small>
-                </div>
-            </div>
-
-            <div class="col-6 col-md-3 col-lg-2">
-                <div class="stat-card bg-white rounded-4 shadow-sm p-3 text-center border border-3 border-success cursor-pointer" 
-                     data-filter="readiness" data-value="working" data-label="{{ __('admin.staff_profiles.readiness_working') }}"
-                     style="border-color: #22c55e !important; transition: all 0.3s ease;"
-                     onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 8px 20px rgba(34, 197, 94, 0.2)'"
-                     onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
-                    <i class="bi bi-person-check-fill fs-4 text-success mb-1"></i>
-                    <div class="fs-4 fw-bold text-success">{{ $stats['working'] }}</div>
-                    <small class="text-dark fw-semibold">{{ __('admin.staff_profiles.readiness_working') }}</small>
-                </div>
-            </div>
-        </div>
-
-        {{-- شريط البحث --}}
-        <div class="card rounded-4 shadow-sm border-0 mb-4">
-            <div class="card-body p-4">
+            {{-- شريط البحث --}}
+            <div class="card-body p-3" style="border-top: 1px solid #E6ECF2;">
                 <form method="GET" class="row g-3 align-items-end">
                     <div class="col-lg-8">
                         <label class="form-label fw-semibold text-dark d-flex align-items-center gap-1 mb-1">
@@ -127,12 +121,9 @@
                     @endif
                 </form>
             </div>
-        </div>
 
-        {{-- الجدول --}}
-        <div class="card rounded-4 shadow-sm border-0 overflow-hidden">
-            <div class="card-body p-0">
-                <div class="table-responsive">
+            {{-- الجدول --}}
+            <div class="table-responsive">
                     <table class="table table-hover mb-0">
                         <thead class="bg-light">
                         <tr class="text-secondary small fw-bold">
@@ -193,10 +184,9 @@
                         </tbody>
                     </table>
                 </div>
-            </div>
 
             @if($profiles->hasPages())
-                <div class="card-footer bg-white border-top-0 py-3 px-4">
+                <div class="px-3 py-2" style="border-top: 1px solid #E6ECF2;">
                     <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 small">
                         <div class="text-muted">
                             {{ __('admin.staff_profiles.showing') }} {{ $profiles->firstItem() }} - {{ $profiles->lastItem() }} {{ __('admin.staff_profiles.of') }} {{ $profiles->total() }}
@@ -205,7 +195,7 @@
                     </div>
                 </div>
             @endif
-        </div>
+        </x-admin.card>
     </div>
 
     @push('styles')

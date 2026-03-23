@@ -18,38 +18,22 @@
     @endphp
 
     <div class="container-fluid p-0">
-        <!-- Header Section -->
-        <div class="card border-0 shadow-sm rounded-4 bg-white mb-4">
-            <div class="card-header bg-gradient-primary text-white border-0 py-2 py-md-3 px-3 px-md-4">
-                <div class="d-flex justify-content-between align-items-center w-100" style="gap: 1rem;">
-                    <div class="d-flex align-items-center gap-2" style="flex: 0 0 auto;">
-                        <div>
-                            <h5 class="mb-0 fw-bold text-white" style="font-size: 1.25rem; line-height: 1.3;">
-                                <i class="bi bi-pencil-square me-2"></i>{{ __('admin.about_us.edit_content') }}
-                            </h5>
-                        </div>
-                    </div>
-                    <div class="d-flex gap-2">
-                        <a href="{{ route('admin.about.index') }}" class="btn btn-light btn-sm shadow-sm">
-                            <i class="bi bi-arrow-left me-2"></i>{{ __('admin.common.back') }}
-                        </a>
-                        <a href="{{ $publicPreviewUrl }}" target="_blank" rel="noopener" class="btn btn-light btn-sm shadow-sm">
-                            <i class="bi bi-box-arrow-up-right me-2"></i>{{ __('admin.common.preview_on_site') }}
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <x-admin.card>
+            <x-admin.card-header-form
+                icon="bi-pencil-square"
+                :title="__('admin.about_us.edit_content')"
+                :back-route="route('admin.about.index')"
+                :back-label="__('admin.common.back')">
+                <x-slot:actions>
+                    <a href="{{ $publicPreviewUrl }}" target="_blank" rel="noopener" class="form-btn-back" style="text-decoration: none;">
+                        <i class="bi bi-box-arrow-up-right me-1"></i>{{ __('admin.common.preview_on_site') }}
+                    </a>
+                </x-slot:actions>
+            </x-admin.card-header-form>
 
-        <!-- Main Card -->
-        <div class="card border-0 shadow-sm rounded-4 bg-white">
-            <div class="card-body p-4 p-md-5">
-
-
-                {{-- الفورم (جزئي) --}}
+            <div class="card-body p-3 p-md-4">
                 @include('admin.site.about._form', compact('route','method','model','col1','col2','col1En','col2En'))
 
-                {{-- فورم إزالة الصورة (مستقل وخارج الجزئي) --}}
                 @if(!empty($about->id) && !empty($about->image))
                     <form id="remove-image-{{ $about->id }}"
                           action="{{ route('admin.about.remove-image', $about) }}"
@@ -58,9 +42,8 @@
                         @method('DELETE')
                     </form>
                 @endif
-
             </div>
-        </div>
+        </x-admin.card>
     </div>
 
 @endsection

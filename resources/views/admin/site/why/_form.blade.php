@@ -3,13 +3,10 @@
     @if($method !== 'POST') @method($method) @endif
 
     {{-- ========== Basic Information Section ========== --}}
-    <div class="card border-0 shadow-sm rounded-4 mb-4">
-        <div class="card-header bg-gradient-primary text-white border-0 py-3 px-4 rounded-top-4">
-            <h5 class="mb-0 fw-bold text-white d-flex align-items-center gap-2" style="font-size: 1.1rem;">
-                <i class="bi bi-info-circle"></i>
-                المعلومات الأساسية
-            </h5>
-        </div>
+    <x-admin.card class="mb-4">
+        <x-admin.card-header-form
+            icon="bi-info-circle"
+            title="المعلومات الأساسية" />
         <div class="card-body p-4 p-md-5">
             <div class="row g-4">
                 {{-- Badge --}}
@@ -75,7 +72,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </x-admin.card>
 
     {{-- ========== Features Section ========== --}}
     @php
@@ -92,13 +89,10 @@
         if (empty($items)) $items = [[]];
     @endphp
 
-    <div class="card border-0 shadow-sm rounded-4 mb-4">
-        <div class="card-header bg-gradient-primary text-white border-0 py-3 px-4 rounded-top-4">
-            <h5 class="mb-0 fw-bold text-white d-flex align-items-center gap-2" style="font-size: 1.1rem;">
-                <i class="bi bi-list-check"></i>
-                {{ __('admin.why_choose_us.form_items') }}
-            </h5>
-        </div>
+    <x-admin.card class="mb-4">
+        <x-admin.card-header-form
+            icon="bi-list-check"
+            :title="__('admin.why_choose_us.form_items')" />
         <div class="card-body p-4 p-md-5">
             @foreach($items as $i => $f)
                 @php $iconClass = $f['icon'] ?? 'bi bi-lightning-charge-fill'; @endphp
@@ -151,7 +145,7 @@
                 </div>
             @endforeach
         </div>
-    </div>
+    </x-admin.card>
 
     {{-- Form Actions --}}
     <div class="d-flex gap-3 justify-content-end pt-3 border-top mt-4">

@@ -15,34 +15,27 @@
     <input type="hidden" name="language" value="{{ old('language', $model->language ?? $defaultLang) }}">
 
     {{-- Tabs Navigation --}}
-    <ul class="nav nav-tabs nav-tabs-sm border-0 mb-4 px-3 py-1 rounded-3" id="aboutTabs" role="tablist" style="background: rgba(0, 102, 204, 0.1);">
-        <li class="nav-item" role="presentation">
-            <button class="nav-link active px-3 py-2 rounded-3 text-primary fw-semibold" id="arabic-tab" data-bs-toggle="tab" data-bs-target="#arabic-content" type="button" role="tab" style="background: rgba(255, 255, 255, 0.2); border: 1px solid rgba(0, 102, 204, 0.3);">
-                <i class="bi bi-translate me-2"></i>
-                <span>{{ __('admin.labels.arabic') }}</span>
+    <div class="d-flex align-items-center justify-content-center mb-4">
+        <div class="news-tabs" id="aboutTabs">
+            <button class="news-tab active" id="arabic-tab" data-bs-toggle="tab" data-bs-target="#arabic-content" type="button" role="tab">
+                <i class="bi bi-translate"></i> {{ __('admin.labels.arabic') }}
             </button>
-        </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link px-3 py-2 rounded-3 text-primary fw-semibold" id="english-tab" data-bs-toggle="tab" data-bs-target="#english-content" type="button" role="tab" style="background: transparent; border: 1px solid rgba(0, 102, 204, 0.3);">
-                <i class="bi bi-globe me-2"></i>
-                <span>{{ __('admin.labels.english') }}</span>
+            <button class="news-tab" id="english-tab" data-bs-toggle="tab" data-bs-target="#english-content" type="button" role="tab">
+                <i class="bi bi-globe"></i> {{ __('admin.labels.english') }}
             </button>
-        </li>
-    </ul>
+        </div>
+    </div>
 
     {{-- Tabs Content --}}
     <div class="tab-content" id="aboutTabContent">
         
         {{-- ========== Arabic Content Tab ========== --}}
         <div class="tab-pane fade show active" id="arabic-content" role="tabpanel">
-            <div class="card border-0 shadow-sm rounded-4 mb-4">
-                <div class="card-header bg-gradient-primary text-white border-0 py-3 px-4 rounded-top-4">
-                    <h6 class="mb-0 fw-bold text-white d-flex align-items-center gap-2" style="font-size: 1.1rem;">
-                        <i class="bi bi-translate"></i>
-                        {{ __('admin.labels.arabic') }} - {{ __('admin.about_us.content') }}
-                    </h6>
-                </div>
-                <div class="card-body p-4 p-md-5">
+            <div class="mb-4">
+                <h6 class="fw-bold d-flex align-items-center gap-2 section-title">
+                    <i class="bi bi-translate"></i> {{ __('admin.labels.arabic') }} - {{ __('admin.about_us.content') }}
+                </h6>
+                <div>
                     {{-- العنوان --}}
                     <div class="mb-4">
                         <label class="form-label fw-semibold text-dark d-flex align-items-center gap-2 mb-2">
@@ -73,7 +66,7 @@
                             <i class="bi bi-file-text text-primary"></i>
                             {{ __('admin.about_us.form_paragraph1') }} <span class="text-danger">*</span>
                         </label>
-                        <textarea name="paragraph1" class="form-control rounded-3 border-0 bg-light @error('paragraph1') is-invalid @enderror" rows="5" required style="font-size: 1rem;">{{ old('paragraph1', $model->paragraph1 ?? '') }}</textarea>
+                        <textarea name="paragraph1" class="form-control rounded-3 border-0 bg-light @error('paragraph1') is-invalid @enderror" rows="8" required style="font-size: 0.95rem; line-height: 1.8;">{{ old('paragraph1', $model->paragraph1 ?? '') }}</textarea>
                         @error('paragraph1') <div class="invalid-feedback d-block mt-1">{{ $message }}</div> @enderror
                     </div>
 
@@ -83,7 +76,7 @@
                             <i class="bi bi-file-text text-primary"></i>
                             {{ __('admin.about_us.form_paragraph2') }}
                         </label>
-                        <textarea name="paragraph2" class="form-control rounded-3 border-0 bg-light @error('paragraph2') is-invalid @enderror" rows="4" style="font-size: 1rem;">{{ old('paragraph2', $model->paragraph2 ?? '') }}</textarea>
+                        <textarea name="paragraph2" class="form-control rounded-3 border-0 bg-light @error('paragraph2') is-invalid @enderror" rows="6" style="font-size: 0.95rem; line-height: 1.8;">{{ old('paragraph2', $model->paragraph2 ?? '') }}</textarea>
                         @error('paragraph2') <div class="invalid-feedback d-block mt-1">{{ $message }}</div> @enderror
                     </div>
 
@@ -96,7 +89,7 @@
                         <div class="row g-3">
                             <div class="col-md-6">
                                 <label class="form-label small text-muted mb-2">{{ __('admin.about_us.form_features_col1') }}</label>
-                                <textarea name="features_col1" class="form-control rounded-3 border-0 bg-light @error('features_col1') is-invalid @enderror" rows="6" 
+                                <textarea name="features_col1" class="form-control rounded-3 border-0 bg-light @error('features_col1') is-invalid @enderror" rows="8"
                                           placeholder="{{ __('admin.about_us.form_features_placeholder') }}" style="font-size: 1rem;">{{ $featuresCol1 }}</textarea>
                                 @error('features_col1') <div class="invalid-feedback d-block mt-1">{{ $message }}</div> @enderror
                             </div>
@@ -160,14 +153,11 @@
 
         {{-- ========== English Content Tab ========== --}}
         <div class="tab-pane fade" id="english-content" role="tabpanel">
-            <div class="card border-0 shadow-sm rounded-4 mb-4">
-                <div class="card-header bg-gradient-primary text-white border-0 py-3 px-4 rounded-top-4">
-                    <h6 class="mb-0 fw-bold text-white d-flex align-items-center gap-2" style="font-size: 1.1rem;">
-                        <i class="bi bi-globe"></i>
-                        {{ __('admin.labels.english') }} - {{ __('admin.about_us.content') }}
-                    </h6>
-                </div>
-                <div class="card-body p-4 p-md-5">
+            <div class="mb-4">
+                <h6 class="fw-bold d-flex align-items-center gap-2 section-title">
+                    <i class="bi bi-globe"></i> {{ __('admin.labels.english') }} - {{ __('admin.about_us.content') }}
+                </h6>
+                <div>
                     {{-- العنوان الإنجليزي --}}
                     <div class="mb-4">
                         <label class="form-label fw-semibold text-dark d-flex align-items-center gap-2 mb-2">
@@ -208,7 +198,7 @@
                             <i class="bi bi-file-text text-primary"></i>
                             {{ __('admin.about_us.form_paragraph2') }} - {{ __('admin.labels.english') }}
                         </label>
-                        <textarea name="paragraph2_en" class="form-control rounded-3 border-0 bg-light @error('paragraph2_en') is-invalid @enderror" rows="4" style="font-size: 1rem;">{{ old('paragraph2_en', $model->paragraph2_en ?? '') }}</textarea>
+                        <textarea name="paragraph2_en" class="form-control rounded-3 border-0 bg-light @error('paragraph2_en') is-invalid @enderror" rows="6" style="font-size: 0.95rem; line-height: 1.8;">{{ old('paragraph2_en', $model->paragraph2_en ?? '') }}</textarea>
                         @error('paragraph2_en') <div class="invalid-feedback d-block mt-1">{{ $message }}</div> @enderror
                     </div>
 

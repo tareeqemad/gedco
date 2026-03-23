@@ -9,17 +9,11 @@
 @section('content')
     <div class="container-fluid p-0">
         <!-- Header + Tabs -->
-        <div class="card border-0 shadow-sm rounded-4 bg-white mb-4">
-            <div class="card-header bg-gradient-primary text-white border-0 py-2 px-3">
-                <div class="d-flex justify-content-between align-items-center flex-wrap w-100" style="gap: 1rem;">
-                    <div class="d-flex align-items-center gap-2" style="flex: 0 0 auto;">
-                        <div>
-                            <h5 class="mb-0 fw-bold text-white d-flex align-items-center gap-2 flex-wrap" style="font-size: 1.25rem; line-height: 1.3;">
-                                <i class="bi bi-pencil-square"></i>
-                                <span>{{ __('admin.tenders.edit_title') }} #{{ $tender->id }}</span>
-                            </h5>
-                        </div>
-                    </div>
+        <x-admin.card class="mb-4">
+            <x-admin.card-header-form
+                icon="bi-pencil-square"
+                :title="__('admin.tenders.edit_title') . ' #' . $tender->id">
+                <x-slot:actions>
                     <ul class="nav nav-tabs nav-tabs-sm border-0" id="tenderTabs" role="tablist" style="background: rgba(255, 255, 255, 0.15); border-radius: 0.5rem; padding: 0.25rem;">
                         <li class="nav-item" role="presentation">
                             <button class="nav-link active px-3 py-1 text-white" id="form-tab" data-bs-toggle="tab" data-bs-target="#form-content" type="button">
@@ -32,9 +26,9 @@
                             </button>
                         </li>
                     </ul>
-                </div>
-            </div>
-        </div>
+                </x-slot:actions>
+            </x-admin.card-header-form>
+        </x-admin.card>
 
         <div class="tab-content" id="tenderTabContent">
             <!-- تبويب التعديل -->
@@ -45,12 +39,10 @@
                     <div class="row g-4">
                         <!-- الحقول الأساسية -->
                         <div class="col-lg-5">
-                            <div class="card border-0 shadow-sm rounded-4 bg-white">
-                                <div class="card-header bg-gradient-primary text-white border-0 py-3 px-4">
-                                    <h6 class="mb-0 fw-bold text-white d-flex align-items-center gap-2">
-                                        <i class="bi bi-info-circle"></i>{{ __('admin.tenders.form_basic_info') ?? 'المعلومات الأساسية' }}
-                                    </h6>
-                                </div>
+                            <x-admin.card>
+                                <x-admin.card-header-form
+                                    icon="bi-info-circle"
+                                    :title="__('admin.tenders.form_basic_info') ?? 'المعلومات الأساسية'" />
                                 <div class="card-body p-4 row g-3">
                                     <div class="col-md-4">
                                         <label class="form-label fw-semibold text-dark d-flex align-items-center gap-1">
@@ -125,21 +117,20 @@
                                         @error('the_user_1')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
                                     </div>
                                 </div>
-                            </div>
+                            </x-admin.card>
                         </div>
 
                         <!-- المحرران (OLD / NEW) -->
                         <div class="col-lg-7">
                             {{-- OLD_VALUE_1 --}}
-                            <div class="card border-0 shadow-sm rounded-4 bg-white mb-4">
-                                <div class="card-header bg-gradient-primary text-white border-0 py-3 px-4">
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <h6 class="mb-0 fw-bold text-white d-flex align-items-center gap-2">
-                                            <i class="bi bi-file-text"></i>{{ __('admin.tenders.form_old_value') }}
-                                        </h6>
+                            <x-admin.card class="mb-4">
+                                <x-admin.card-header-form
+                                    icon="bi-file-text"
+                                    :title="__('admin.tenders.form_old_value')">
+                                    <x-slot:actions>
                                         <small class="text-white-50">{{ __('admin.tenders.form_html_supported') }}</small>
-                                    </div>
-                                </div>
+                                    </x-slot:actions>
+                                </x-admin.card-header-form>
                                 <div class="card-body p-3">
                                     <div class="quill-shell border rounded-3 shadow-sm">
                                         <div id="toolbar-old" class="ql-toolbar ql-snow">
@@ -162,18 +153,17 @@
                                     <textarea name="old_value_1" id="old_value_1" class="d-none">{{ old('old_value_1', $tender->old_value_1) }}</textarea>
                                     @error('old_value_1')<div class="invalid-feedback d-block mt-2">{{ $message }}</div>@enderror
                                 </div>
-                            </div>
+                            </x-admin.card>
 
                             {{-- NEW_VALUE_1 --}}
-                            <div class="card border-0 shadow-sm rounded-4 bg-white">
-                                <div class="card-header bg-gradient-primary text-white border-0 py-3 px-4">
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <h6 class="mb-0 fw-bold text-white d-flex align-items-center gap-2">
-                                            <i class="bi bi-file-text"></i>{{ __('admin.tenders.form_new_value') }}
-                                        </h6>
+                            <x-admin.card>
+                                <x-admin.card-header-form
+                                    icon="bi-file-text"
+                                    :title="__('admin.tenders.form_new_value')">
+                                    <x-slot:actions>
                                         <small class="text-white-50">{{ __('admin.tenders.form_html_supported') }}</small>
-                                    </div>
-                                </div>
+                                    </x-slot:actions>
+                                </x-admin.card-header-form>
                                 <div class="card-body p-3">
                                     <div class="quill-shell border rounded-3 shadow-sm">
                                         <div id="toolbar-new" class="ql-toolbar ql-snow">
@@ -196,7 +186,7 @@
                                     <textarea name="new_value_1" id="new_value_1" class="d-none">{{ old('new_value_1', $tender->new_value_1) }}</textarea>
                                     @error('new_value_1')<div class="invalid-feedback d-block mt-2">{{ $message }}</div>@enderror
                                 </div>
-                            </div>
+                            </x-admin.card>
                         </div>
                     </div>
 
@@ -213,19 +203,17 @@
 
             <!-- تبويب المعاينة الكاملة -->
             <div class="tab-pane fade" id="preview-content" role="tabpanel">
-                <div class="card border-0 shadow-sm rounded-4 bg-white">
-                    <div class="card-header bg-gradient-primary text-white border-0 py-3 px-4">
-                        <h6 class="mb-0 fw-bold text-white d-flex align-items-center gap-2">
-                            <i class="bi bi-eye"></i>{{ __('admin.tenders.tab_preview') }}
-                        </h6>
-                    </div>
+                <x-admin.card>
+                    <x-admin.card-header-form
+                        icon="bi-eye"
+                        :title="__('admin.tenders.tab_preview')" />
                     <div class="card-body p-4" id="fullPreview">
                         <div class="text-center text-muted py-5">
                             <i class="bi bi-eye fs-5 d-block mb-2"></i>
                             <small>{{ __('admin.tenders.form_preview_start_editing') }}</small>
                         </div>
                     </div>
-                </div>
+                </x-admin.card>
             </div>
         </div>
     </div>

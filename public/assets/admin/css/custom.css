@@ -121,9 +121,9 @@
 
 /* ========== Primary Colors Override ========== */
 :root {
-    --admin-primary: #0066cc;
-    --admin-primary-dark: #004499;
-    --admin-primary-light: #4d94ff;
+    --admin-primary: #2C3E50;
+    --admin-primary-dark: #1A252F;
+    --admin-primary-light: #5a7a9a;
 }
 
 /* Override Bootstrap Primary Color */
@@ -131,51 +131,51 @@
 .btn-primary,
 .badge.bg-primary,
 .alert-primary {
-    background-color: #0066cc !important;
-    border-color: #0066cc !important;
+    background-color: #2C3E50 !important;
+    border-color: #2C3E50 !important;
 }
 
 .btn-primary:hover,
 .btn-primary:focus,
 .btn-primary:active,
 .btn-primary:not(:disabled):not(.disabled):active {
-    background-color: #004499 !important;
-    border-color: #004499 !important;
+    background-color: #1A252F !important;
+    border-color: #1A252F !important;
 }
 
 .text-primary {
-    color: #0066cc !important;
+    color: #2C3E50 !important;
 }
 
 .border-primary {
-    border-color: #0066cc !important;
+    border-color: #2C3E50 !important;
 }
 
 /* Links */
 a.text-primary,
 a.text-primary:hover {
-    color: #0066cc !important;
+    color: #2C3E50 !important;
 }
 
 /* Card Headers */
 .card-header.bg-primary {
-    background-color: #0066cc !important;
+    background-color: #2C3E50 !important;
 }
 
 /* Avatar with Primary Background */
 .avatar.bg-primary {
-    background-color: #0066cc !important;
+    background-color: #2C3E50 !important;
 }
 
 /* Table Primary Links */
 .table a.text-primary {
-    color: #0066cc !important;
+    color: #2C3E50 !important;
 }
 
 /* Pagination Active */
 .page-item.active .page-link {
-    background-color: #0066cc !important;
-    border-color: #0066cc !important;
+    background-color: #2C3E50 !important;
+    border-color: #2C3E50 !important;
 }
 
 /* Custom Scrollbar */
@@ -189,12 +189,12 @@ a.text-primary:hover {
 }
 
 ::-webkit-scrollbar-thumb {
-    background: #0066cc;
+    background: #2C3E50;
     border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: #004499;
+    background: #1A252F;
 }
 
 
@@ -251,185 +251,240 @@ html[dir="ltr"] *:not([class*="ql-font"]):not([class*="font-"]):not(.ql-editor *
 }
 
 /* ========== Sidebar Menu Colors ========== */
-/* Update sidebar menu colors to match new primary color scheme (#0066cc) */
+/*
+   Color System:
+   - Header:     #ffffff (white, clean)
+   - Sidebar:    #24364A (كحلي مطفي - إداري محترم)
+   - Submenu:    #1F2D3D (أغمق قليلاً)
+   - Active:     #35516F (أفتح = مضاء)
+   - Hover:      #2E445C (بين الخلفية والـ active)
+   - Accent:     #1ABC9C (teal) for indicators
+   - Text:       #FFFFFF (primary)
+   - Text2:      #C7D2DD (secondary)
+   - Category:   #8A99AB (muted)
+*/
 
-/* Override primary color variable for sidebar */
 :root {
-    --primary-color: #0066cc !important;
-    --primary-color-rgb: 0, 102, 204 !important;
-    --menu-prime-color: #66b3ff !important;
+    --primary-color: #2C3E50 !important;
+    --primary-color-rgb: 44, 62, 80 !important;
+    --menu-prime-color: #ffffff !important;
+    --accent-color: #1ABC9C;
 }
 
 html {
-    --primary-color: #0066cc !important;
-    --menu-prime-color: #66b3ff !important;
+    --primary-color: #2C3E50 !important;
+    --menu-prime-color: #ffffff !important;
 }
 
-/* Force override any orange colors in sidebar */
 .app-sidebar,
 .app-sidebar * {
-    --primary-color: #0066cc !important;
-    --menu-prime-color: #66b3ff !important;
+    --primary-color: #2C3E50 !important;
+    --menu-prime-color: #ffffff !important;
 }
 
-/* Override any orange/red colors that might appear in sidebar active states */
+/* Active menu states */
 .app-sidebar .side-menu__item.active,
 .app-sidebar .side-menu__item.active *,
 .app-sidebar .slide.active .side-menu__item,
 .app-sidebar .slide.active .side-menu__item * {
-    color: #66b3ff !important;
-    fill: #66b3ff !important;
+    color: #FFFFFF !important;
+    fill: #FFFFFF !important;
     background-color: transparent !important;
-    background: linear-gradient(90deg, rgba(0, 102, 204, 0.35) 0%, rgba(0, 102, 204, 0.25) 100%) !important;
-    border-color: #4da6ff !important;
+    background: #35516F !important;
 }
 
-/* Ensure no orange colors in any sidebar state */
 .app-sidebar .side-menu__item.active:before,
 .app-sidebar .slide-menu.child1 .side-menu__item.active:before,
 .app-sidebar .slide-menu.child2 .side-menu__item.active:before,
 .app-sidebar .slide-menu.child3 .side-menu__item.active:before {
-    border-color: #0066cc !important;
-    background-color: #0066cc !important;
-    box-shadow: 0 0 8px rgba(0, 102, 204, 0.4) !important;
+    border-color: #1ABC9C !important;
+    background-color: #1ABC9C !important;
+    box-shadow: none !important;
 }
 
-/* Override styles.min.css active states */
 [data-menu-styles="color"] .app-sidebar .side-menu__item.active,
 [data-menu-styles="color"] .app-sidebar .side-menu__item.active * {
-    background-color: rgba(0, 102, 204, 0.35) !important;
-    color: #66b3ff !important;
-    fill: #66b3ff !important;
+    background-color: #35516F !important;
+    color: #FFFFFF !important;
+    fill: #FFFFFF !important;
 }
 
 [data-menu-styles="color"] .app-sidebar .main-menu > .slide > .side-menu__item.active,
 [data-menu-styles="color"] .app-sidebar .main-menu > .slide > .side-menu__item:hover {
-    background-color: rgba(0, 102, 204, 0.35) !important;
-    color: #66b3ff !important;
+    background-color: #35516F !important;
+    color: #FFFFFF !important;
 }
 
-/* Dark sidebar background - Professional Black theme */
+/* Sidebar background: #24364A */
 .app-sidebar {
-    background-color: #1e1e2e !important;
-    --menu-bg: #1e1e2e !important;
-    --menu-border-color: rgba(255, 255, 255, 0.08) !important;
-    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1) !important;
+    background-color: #24364A !important;
+    --menu-bg: #24364A !important;
+    --menu-border-color: rgba(255, 255, 255, 0.06) !important;
+    box-shadow: 1px 0 0 rgba(0,0,0,0.08) !important;
 }
 
-/* Sidebar menu text colors for dark background - Professional styling */
+/* Sidebar text */
 .app-sidebar .side-menu__item,
 .app-sidebar .side-menu__label,
 .app-sidebar .side-menu__angle {
-    color: rgba(255, 255, 255, 0.75) !important;
+    color: #C7D2DD !important;
     transition: all 0.2s ease !important;
 }
 
 .app-sidebar .side-menu__icon {
-    fill: rgba(255, 255, 255, 0.75) !important;
-    color: rgba(255, 255, 255, 0.75) !important;
+    fill: #C7D2DD !important;
+    color: #C7D2DD !important;
     transition: all 0.2s ease !important;
 }
 
 .app-sidebar .slide__category {
-    color: rgba(255, 255, 255, 0.45) !important;
+    color: #8A99AB !important;
     font-weight: 600 !important;
     letter-spacing: 0.5px !important;
+    text-transform: uppercase !important;
+    font-size: 0.7rem !important;
 }
 
-/* Sidebar header - Professional styling */
+/* Sidebar header */
 .app-sidebar .main-sidebar-header {
-    background-color: #1e1e2e !important;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
-    border-inline-end: 1px solid rgba(255, 255, 255, 0.08) !important;
+    background-color: #24364A !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
+    border-inline-end: 1px solid rgba(255, 255, 255, 0.06) !important;
 }
 
-/* Sidebar active/hover items - Professional styling with primary color */
+/* Active/hover items */
 .app-sidebar .side-menu__item.active,
 .app-sidebar .side-menu__item:hover {
     position: relative !important;
 }
 
 .app-sidebar .side-menu__item.active {
-    border-inline-end: 3px solid #4da6ff !important;
-    border-radius: 0 4px 4px 0 !important;
+    border-inline-end: 2px solid #1ABC9C !important;
+    border-radius: 6px !important;
+    margin: 0 8px 0 8px !important;
 }
 
-/* Submenu active items - Professional styling */
+/* Submenu active items */
 .app-sidebar .slide-menu.child1 .side-menu__item.active:before,
 .app-sidebar .slide-menu.child2 .side-menu__item.active:before,
 .app-sidebar .slide-menu.child3 .side-menu__item.active:before {
-    border-color: #0066cc !important;
-    background-color: #0066cc !important;
-    box-shadow: 0 0 8px rgba(0, 102, 204, 0.4) !important;
+    border-color: #1ABC9C !important;
+    background-color: #1ABC9C !important;
+    box-shadow: none !important;
 }
 
-/* Override color style for sidebar - use dark theme instead */
 [data-menu-styles="color"] .app-sidebar {
-    --menu-bg: #1e1e2e !important;
-    background-color: #1e1e2e !important;
+    --menu-bg: #24364A !important;
+    background-color: #24364A !important;
 }
 
 [data-menu-styles="color"] .app-sidebar .side-menu__item,
 [data-menu-styles="color"] .app-sidebar .side-menu__label,
 [data-menu-styles="color"] .app-sidebar .side-menu__icon,
 [data-menu-styles="color"] .app-sidebar .side-menu__angle {
-    color: rgba(255, 255, 255, 0.75) !important;
-    fill: rgba(255, 255, 255, 0.75) !important;
+    color: #C7D2DD !important;
+    fill: #C7D2DD !important;
 }
 
 [data-menu-styles="color"] .app-sidebar .slide__category {
-    color: rgba(255, 255, 255, 0.45) !important;
+    color: #8A99AB !important;
 }
 
-/* Sidebar menu items hover effect - Professional styling */
+/* الأب المفتوح (has-sub.open) */
+.app-sidebar .slide.has-sub.open > .side-menu__item {
+    background: #2E445C !important;
+    color: #FFFFFF !important;
+}
+
+.app-sidebar .slide.has-sub.open > .side-menu__item .side-menu__icon {
+    color: #1ABC9C !important;
+    fill: #1ABC9C !important;
+}
+
+/* Hover: #2E445C */
 .app-sidebar .side-menu__item:hover {
-    background: linear-gradient(90deg, rgba(0, 102, 204, 0.18) 0%, rgba(0, 102, 204, 0.12) 100%) !important;
-    color: #4da6ff !important;
-    padding-inline-start: 28px !important;
+    background: #2E445C !important;
+    color: #FFFFFF !important;
 }
 
 .app-sidebar .side-menu__item:hover .side-menu__label,
 .app-sidebar .side-menu__item:hover .side-menu__icon,
 .app-sidebar .side-menu__item:hover .side-menu__angle {
-    color: #4da6ff !important;
-    fill: #4da6ff !important;
+    color: #FFFFFF !important;
+    fill: #FFFFFF !important;
 }
 
+/* Active: #35516F (أفتح = مضاء) */
 .app-sidebar .side-menu__item.active {
-    background: linear-gradient(90deg, rgba(0, 102, 204, 0.35) 0%, rgba(0, 102, 204, 0.25) 100%) !important;
-    color: #66b3ff !important;
-    padding-inline-start: 27px !important;
+    background: #35516F !important;
+    color: #FFFFFF !important;
 }
 
 .app-sidebar .side-menu__item.active .side-menu__label,
 .app-sidebar .side-menu__item.active .side-menu__icon,
 .app-sidebar .side-menu__item.active .side-menu__angle {
-    color: #66b3ff !important;
-    fill: #66b3ff !important;
+    color: #FFFFFF !important;
+    fill: #FFFFFF !important;
 }
 
-/* Sidebar submenu items - Improved spacing */
+/* ---- Submenu container ---- */
+.app-sidebar .slide-menu {
+    background-color: #1F2D3D !important;
+    border-inline-start: 1px solid rgba(255, 255, 255, 0.06) !important;
+    border-radius: 0 0 6px 6px !important;
+    padding: 0.4rem 0.5rem !important;
+    margin-top: 2px !important;
+    margin-bottom: 0.5rem !important;
+    margin-inline-start: 1rem !important;
+}
+
+/* ---- Submenu items ---- */
 .app-sidebar .slide-menu.child1 .side-menu__item,
 .app-sidebar .slide-menu.child2 .side-menu__item,
 .app-sidebar .slide-menu.child3 .side-menu__item {
-    color: rgba(255, 255, 255, 0.6) !important;
-    padding-top: 0.5rem !important;
-    padding-bottom: 0.5rem !important;
-    padding-inline-start: 1.5rem !important;
-    padding-inline-end: 0.75rem !important;
-    margin-bottom: 0.25rem !important;
-    border-radius: 0.375rem !important;
-    transition: all 0.2s ease !important;
+    color: #B8C4D1 !important;
+    font-size: 0.82rem !important;
+    padding: 0.32rem 0.75rem !important;
+    padding-inline-start: 1.6rem !important;
+    margin-bottom: 1px !important;
+    border-radius: 4px !important;
+    background: transparent !important;
+    transition: all 0.15s ease !important;
+    position: relative !important;
 }
 
+/* نقطة صغيرة قبل كل عنصر فرعي */
+.app-sidebar .slide-menu.child1 .side-menu__item::after,
+.app-sidebar .slide-menu.child2 .side-menu__item::after,
+.app-sidebar .slide-menu.child3 .side-menu__item::after {
+    content: '' !important;
+    position: absolute !important;
+    inset-inline-start: 0.55rem !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    width: 4px !important;
+    height: 4px !important;
+    border-radius: 50% !important;
+    background: rgba(255, 255, 255, 0.25) !important;
+    transition: all 0.15s ease !important;
+}
+
+/* ---- Submenu active ---- */
 .app-sidebar .slide-menu.child1 .side-menu__item.active,
 .app-sidebar .slide-menu.child2 .side-menu__item.active,
 .app-sidebar .slide-menu.child3 .side-menu__item.active {
-    color: #66b3ff !important;
-    background-color: rgba(0, 102, 204, 0.3) !important;
-    padding-inline-start: 1.75rem !important;
-    border-inline-start: 3px solid #4da6ff !important;
-    font-weight: 600 !important;
+    color: #FFFFFF !important;
+    background: rgba(26, 188, 156, 0.1) !important;
+    border-inline-end: 2px solid #1ABC9C !important;
+    font-weight: 500 !important;
+}
+
+.app-sidebar .slide-menu.child1 .side-menu__item.active::after,
+.app-sidebar .slide-menu.child2 .side-menu__item.active::after,
+.app-sidebar .slide-menu.child3 .side-menu__item.active::after {
+    background: #1ABC9C !important;
+    width: 5px !important;
+    height: 5px !important;
 }
 
 .app-sidebar .slide-menu.child1 .side-menu__item.active .side-menu__label,
@@ -438,16 +493,22 @@ html {
 .app-sidebar .slide-menu.child1 .side-menu__item.active .side-menu__icon,
 .app-sidebar .slide-menu.child2 .side-menu__item.active .side-menu__icon,
 .app-sidebar .slide-menu.child3 .side-menu__item.active .side-menu__icon {
-    color: #66b3ff !important;
-    fill: #66b3ff !important;
+    color: #FFFFFF !important;
+    fill: #FFFFFF !important;
 }
 
+/* ---- Submenu hover ---- */
 .app-sidebar .slide-menu.child1 .side-menu__item:hover,
 .app-sidebar .slide-menu.child2 .side-menu__item:hover,
 .app-sidebar .slide-menu.child3 .side-menu__item:hover {
-    color: #4da6ff !important;
-    background-color: rgba(0, 102, 204, 0.2) !important;
-    padding-inline-start: 1.75rem !important;
+    color: #FFFFFF !important;
+    background: rgba(255, 255, 255, 0.06) !important;
+}
+
+.app-sidebar .slide-menu.child1 .side-menu__item:hover::after,
+.app-sidebar .slide-menu.child2 .side-menu__item:hover::after,
+.app-sidebar .slide-menu.child3 .side-menu__item:hover::after {
+    background: rgba(255, 255, 255, 0.5) !important;
 }
 
 .app-sidebar .slide-menu.child1 .side-menu__item:hover .side-menu__label,
@@ -456,42 +517,20 @@ html {
 .app-sidebar .slide-menu.child1 .side-menu__item:hover .side-menu__icon,
 .app-sidebar .slide-menu.child2 .side-menu__item:hover .side-menu__icon,
 .app-sidebar .slide-menu.child3 .side-menu__item:hover .side-menu__icon {
-    color: #4da6ff !important;
-    fill: #4da6ff !important;
+    color: #FFFFFF !important;
+    fill: #FFFFFF !important;
 }
 
-/* Submenu background - Professional styling */
-.app-sidebar .slide-menu {
-    background-color: #1a1a24 !important;
-    border-inline-start: 2px solid rgba(0, 102, 204, 0.2) !important;
-    padding-top: 0.5rem !important;
-    padding-bottom: 0.5rem !important;
-    padding-inline-start: 0.5rem !important;
-    padding-inline-end: 0.5rem !important;
-}
-
-/* Submenu container spacing */
-.app-sidebar .slide.has-sub .slide-menu {
-    margin-top: 0.25rem !important;
-    margin-bottom: 0.5rem !important;
-}
-
-/* Submenu label spacing */
+/* Submenu label */
 .app-sidebar .slide-menu .side-menu__label {
-    font-size: 0.875rem !important;
-    padding-inline-start: 0.5rem !important;
+    font-size: 0.82rem !important;
+    padding-inline-start: 0.25rem !important;
 }
 
-/* Ensure submenu items have proper spacing from each other */
-.app-sidebar .slide-menu .side-menu__item:not(:last-child) {
-    margin-bottom: 0.25rem !important;
-}
-
-/* Submenu icon spacing */
 .app-sidebar .slide-menu .side-menu__icon {
     margin-inline-end: 0.5rem !important;
-    width: 1.125rem !important;
-    height: 1.125rem !important;
+    width: 1rem !important;
+    height: 1rem !important;
 }
 
 /* ========== Users Management Page Improvements ========== */
@@ -529,7 +568,7 @@ html {
 }
 
 .card .table tbody tr:hover .avatar img {
-    border-color: #0066cc;
+    border-color: #2C3E50;
 }
 
 /* Badge improvements */
@@ -569,80 +608,86 @@ html {
     background-color: #fff;
 }
 
-/* Professional header styling */
+/* Header styling - white/light for contrast with dark sidebar */
 [data-header-styles="color"] .app-header {
-    background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%) !important;
-    --header-bg: linear-gradient(135deg, #0066cc 0%, #0052a3 100%) !important;
-    --header-prime-color: rgba(255, 255, 255, 0.95) !important;
-    --header-border-color: rgba(255, 255, 255, 0.1) !important;
-    box-shadow: 0 2px 10px rgba(0, 102, 204, 0.2) !important;
+    background: #ffffff !important;
+    --header-bg: #ffffff !important;
+    --header-prime-color: #2C3E50 !important;
+    --header-border-color: #e9ecef !important;
+    box-shadow: 0 2px 10px rgba(15, 23, 42, 0.05) !important;
 }
 
 [data-header-styles="color"] .app-header .header-link,
 [data-header-styles="color"] .app-header .header-link-icon {
-    color: rgba(255, 255, 255, 0.95) !important;
-    fill: rgba(255, 255, 255, 0.95) !important;
+    color: #4a5568 !important;
+    fill: #4a5568 !important;
 }
 
 [data-header-styles="color"] .app-header .header-link:hover {
-    color: #fff !important;
-    background-color: rgba(255, 255, 255, 0.1) !important;
-    border-radius: 6px !important;
+    color: #2C3E50 !important;
+    background-color: #f0f2f5 !important;
+    border-radius: 8px !important;
 }
 
 [data-header-styles="color"] .app-header .form-control {
-    background-color: rgba(255, 255, 255, 0.15) !important;
-    border-color: rgba(255, 255, 255, 0.2) !important;
-    color: #fff !important;
+    background-color: #f0f2f5 !important;
+    border-color: #e2e8f0 !important;
+    color: #2C3E50 !important;
 }
 
 [data-header-styles="color"] .app-header .form-control::placeholder {
-    color: rgba(255, 255, 255, 0.7) !important;
+    color: #a0aec0 !important;
 }
 
 [data-header-styles="color"] .app-header .form-control:focus {
-    background-color: rgba(255, 255, 255, 0.2) !important;
-    border-color: rgba(255, 255, 255, 0.3) !important;
-    box-shadow: 0 0 0 0.2rem rgba(255, 255, 255, 0.15) !important;
+    background-color: #ffffff !important;
+    border-color: #2C3E50 !important;
+    box-shadow: 0 0 0 0.2rem rgba(44, 62, 80, 0.15) !important;
 }
 
-/* Username color in header - Make sure it's white */
+/* Username color in header */
 .app-header #mainHeaderProfile .d-xl-block p.fw-semibold,
 .app-header #mainHeaderProfile p.fw-semibold,
 [data-header-styles="color"] .app-header #mainHeaderProfile .d-xl-block p.fw-semibold,
 [data-header-styles="color"] .app-header #mainHeaderProfile p.fw-semibold {
-    color: #ffffff !important;
+    color: #2C3E50 !important;
+}
+
+/* sub-admin badge in header */
+.app-header #mainHeaderProfile .text-muted,
+[data-header-styles="color"] .app-header #mainHeaderProfile .text-muted {
+    color: #718096 !important;
 }
 
 /* ========== Dashboard Styles ========== */
 :root {
-    --dashboard-primary: #0066cc;
-    --dashboard-primary-light: #0052a3;
-    --dashboard-primary-dark: #004499;
-    --dashboard-success: #28a745;
-    --dashboard-info: #17a2b8;
-    --dashboard-warning: #ffc107;
-    --dashboard-danger: #dc3545;
-    --dashboard-purple: #6f42c1;
-    --dashboard-teal: #20c997;
-    --dashboard-orange: #fd7e14;
-    --dashboard-light-bg: #f8f9fa;
+    --dashboard-primary: #2C3E50;
+    --dashboard-primary-light: #34495E;
+    --dashboard-primary-dark: #1A252F;
+    --dashboard-success: #27ae60;
+    --dashboard-info: #2980b9;
+    --dashboard-warning: #f39c12;
+    --dashboard-danger: #e74c3c;
+    --dashboard-purple: #8e44ad;
+    --dashboard-teal: #16a085;
+    --dashboard-orange: #e67e22;
+    --dashboard-light-bg: #f5f6fa;
 }
 
 /* Dashboard Statistics Cards */
 .stat-card {
     border: none !important;
-    border-radius: 1rem !important;
+    border-radius: 1.25rem !important;
     overflow: hidden;
-    transition: all 0.3s ease;
+    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
     background: white;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
 }
 
 .stat-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 24px rgba(0,0,0,0.1);
 }
 
 .stat-card::before {
@@ -650,8 +695,8 @@ html {
     position: absolute;
     top: 0;
     left: 0;
-    width: 4px;
-    height: 100%;
+    right: 0;
+    height: 3px;
     background: var(--card-color, var(--dashboard-primary));
 }
 
@@ -665,42 +710,58 @@ html {
 .stat-card.orange { --card-color: var(--dashboard-orange); }
 
 .stat-icon {
-    width: 60px;
-    height: 60px;
-    border-radius: 12px;
+    width: 56px;
+    height: 56px;
+    border-radius: 16px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 28px;
-    color: white;
-    background: linear-gradient(135deg, var(--card-color, var(--dashboard-primary)), var(--card-color-dark, var(--dashboard-primary-light)));
+    font-size: 24px;
+    color: var(--card-color, var(--dashboard-primary));
+    background: color-mix(in srgb, var(--card-color, var(--dashboard-primary)) 10%, transparent);
 }
 
 .stat-value {
-    font-size: 2rem;
-    font-weight: 700;
-    color: #2c3e50;
-    margin: 0.5rem 0;
+    font-size: 1.85rem;
+    font-weight: 800;
+    color: #1a1a2e;
+    margin: 0.25rem 0;
+    letter-spacing: -0.5px;
 }
 
 .stat-label {
-    color: #6c757d;
-    font-size: 0.9rem;
-    font-weight: 500;
+    color: #5a6577;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 .stat-change {
-    font-size: 0.85rem;
-    margin-top: 0.5rem;
+    font-size: 0.8rem;
+    margin-top: 0.35rem;
 }
 
-/* Welcome Card */
+/* Welcome Card - أفتح من السايد بدرجة */
 .welcome-card {
-    background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%);
+    background: linear-gradient(135deg, #2F4761 0%, #314B67 100%);
     color: white !important;
-    border-radius: 1rem;
-    padding: 2rem;
-    box-shadow: 0 10px 30px rgba(0, 102, 204, 0.3);
+    border-radius: 1.25rem;
+    padding: 2rem 2.5rem;
+    box-shadow: 0 4px 15px rgba(47, 71, 97, 0.25);
+    position: relative;
+    overflow: hidden;
+}
+
+.welcome-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -20%;
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.03);
 }
 
 .welcome-card h2,
@@ -715,20 +776,20 @@ html {
 /* Chart Card */
 .chart-card {
     border: none !important;
-    border-radius: 1rem !important;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    border-radius: 1.25rem !important;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
     background: white;
 }
 
 /* Recent Item */
 .recent-item {
-    padding: 1rem;
-    border-bottom: 1px solid #e9ecef;
-    transition: background 0.2s;
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid #f0f2f5;
+    transition: all 0.2s ease;
 }
 
 .recent-item:hover {
-    background: #f8f9fa;
+    background: #f8f9fc;
 }
 
 .recent-item:last-child {
@@ -739,7 +800,7 @@ html {
 .activity-item {
     position: relative;
     padding: 1.25rem 1.5rem;
-    border-bottom: 1px solid #f0f0f0;
+    border-bottom: 1px solid #f0f2f5;
     transition: all 0.2s ease;
 }
 
@@ -755,12 +816,11 @@ html {
 }
 
 .activity-item:hover {
-    background: linear-gradient(90deg, rgba(0, 102, 204, 0.03) 0%, transparent 100%);
-    padding-right: 1.75rem;
+    background: #f8f9fc;
 }
 
 .activity-item:hover::before {
-    background: linear-gradient(180deg, #0066cc 0%, #0052a3 100%);
+    background: linear-gradient(180deg, #2C3E50 0%, #34495E 100%);
 }
 
 .activity-item:last-child {
@@ -773,27 +833,27 @@ html {
 
 .btn-hover-scale:hover {
     transform: scale(1.05);
-    box-shadow: 0 4px 12px rgba(0, 102, 204, 0.2);
+    box-shadow: 0 4px 12px rgba(44, 62, 80, 0.15);
 }
 
-/* Activity Avatar */
+/* Activity Avatar - neutral slate */
 .activity-avatar {
-    width: 42px;
-    height: 42px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #0066cc, #0052a3);
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    background: #3b4a5a;
     display: flex;
     align-items: center;
     justify-content: center;
     color: white;
     font-weight: 600;
-    font-size: 16px;
-    box-shadow: 0 2px 8px rgba(0, 102, 204, 0.3);
+    font-size: 15px;
+    box-shadow: none;
 }
 
 /* Activity Card Header */
 .activity-card-header {
-    background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%);
+    background: linear-gradient(135deg, #2F4761 0%, #314B67 100%);
     padding: 1.25rem 1.5rem;
 }
 
@@ -814,145 +874,155 @@ html {
 }
 
 .activity-user-name {
-    font-size: 0.95rem;
+    font-size: 0.9rem;
 }
 
 .activity-badge {
-    background: rgba(0, 102, 204, 0.1);
-    color: #0066cc;
-    border: 1px solid #0066cc;
-    padding: 0.35rem 0.65rem;
-    border-radius: 0.5rem;
-    font-size: 0.75rem;
+    background: rgba(44, 62, 80, 0.08);
+    color: #2C3E50;
+    border: 1px solid rgba(44, 62, 80, 0.2);
+    padding: 0.3rem 0.6rem;
+    border-radius: 0.4rem;
+    font-size: 0.7rem;
     font-weight: 600;
+    letter-spacing: 0.3px;
 }
 
 .activity-description {
-    font-size: 0.875rem;
+    font-size: 0.85rem;
     line-height: 1.5;
     word-break: break-word;
 }
 
 .activity-meta {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
 }
 
 .activity-meta-icon {
-    font-size: 0.875rem;
+    font-size: 0.8rem;
 }
 
 .activity-code {
     font-family: 'Courier New', monospace;
-    font-size: 0.75rem;
+    font-size: 0.7rem;
 }
 
 /* Custom Scrollbar for Activities */
 .activity-card-body::-webkit-scrollbar {
-    width: 6px;
+    width: 4px;
 }
 
 .activity-card-body::-webkit-scrollbar-track {
-    background: #f1f1f1;
+    background: transparent;
 }
 
 .activity-card-body::-webkit-scrollbar-thumb {
-    background: #0066cc;
-    border-radius: 3px;
+    background: #bdc3c7;
+    border-radius: 4px;
 }
 
 .activity-card-body::-webkit-scrollbar-thumb:hover {
-    background: #0052a3;
+    background: #95a5a6;
 }
 
 /* Badge Custom */
 .badge-custom {
-    padding: 0.35rem 0.65rem;
-    border-radius: 0.5rem;
+    padding: 0.3rem 0.6rem;
+    border-radius: 0.4rem;
     font-weight: 600;
-    font-size: 0.75rem;
+    font-size: 0.7rem;
+    letter-spacing: 0.3px;
 }
 
-/* Stat Icon Gradients */
+/* Stat Icon Colors - Light background style */
 .stat-icon-primary {
-    background: linear-gradient(135deg, #0066cc, #0052a3) !important;
+    background: rgba(44, 62, 80, 0.1) !important;
+    color: #2C3E50 !important;
 }
 
 .stat-icon-success {
-    background: linear-gradient(135deg, #28a745, #218838) !important;
+    background: rgba(39, 174, 96, 0.1) !important;
+    color: #27ae60 !important;
 }
 
 .stat-icon-info {
-    background: linear-gradient(135deg, #17a2b8, #138496) !important;
+    background: rgba(41, 128, 185, 0.1) !important;
+    color: #2980b9 !important;
 }
 
 .stat-icon-warning {
-    background: linear-gradient(135deg, #ffc107, #e0a800) !important;
+    background: rgba(243, 156, 18, 0.1) !important;
+    color: #f39c12 !important;
 }
 
 .stat-icon-danger {
-    background: linear-gradient(135deg, #dc3545, #c82333) !important;
+    background: rgba(231, 76, 60, 0.1) !important;
+    color: #e74c3c !important;
 }
 
 .stat-icon-purple {
-    background: linear-gradient(135deg, #6f42c1, #5a32a3) !important;
+    background: rgba(142, 68, 173, 0.1) !important;
+    color: #8e44ad !important;
 }
 
 .stat-icon-teal {
-    background: linear-gradient(135deg, #20c997, #1ea080) !important;
+    background: rgba(22, 160, 133, 0.1) !important;
+    color: #16a085 !important;
 }
 
 .stat-icon-orange {
-    background: linear-gradient(135deg, #fd7e14, #e8680e) !important;
+    background: rgba(230, 126, 34, 0.1) !important;
+    color: #e67e22 !important;
 }
 
 /* Activity badge colors */
 .activity-badge-login {
-    background: rgba(40, 167, 69, 0.1) !important;
-    color: #28a745 !important;
-    border-color: #28a745 !important;
+    background: rgba(39, 174, 96, 0.08) !important;
+    color: #27ae60 !important;
+    border-color: rgba(39, 174, 96, 0.25) !important;
 }
 
 .activity-badge-logout {
-    background: rgba(108, 117, 125, 0.1) !important;
-    color: #6c757d !important;
-    border-color: #6c757d !important;
+    background: rgba(149, 165, 166, 0.1) !important;
+    color: #7f8c8d !important;
+    border-color: rgba(149, 165, 166, 0.25) !important;
 }
 
 .activity-badge-create {
-    background: rgba(0, 102, 204, 0.1) !important;
-    color: #0066cc !important;
-    border-color: #0066cc !important;
+    background: rgba(41, 128, 185, 0.08) !important;
+    color: #2980b9 !important;
+    border-color: rgba(41, 128, 185, 0.25) !important;
 }
 
 .activity-badge-update {
-    background: rgba(255, 193, 7, 0.1) !important;
-    color: #ffc107 !important;
-    border-color: #ffc107 !important;
+    background: rgba(243, 156, 18, 0.08) !important;
+    color: #e67e22 !important;
+    border-color: rgba(243, 156, 18, 0.25) !important;
 }
 
 .activity-badge-delete {
-    background: rgba(220, 53, 69, 0.1) !important;
-    color: #dc3545 !important;
-    border-color: #dc3545 !important;
+    background: rgba(231, 76, 60, 0.08) !important;
+    color: #e74c3c !important;
+    border-color: rgba(231, 76, 60, 0.25) !important;
 }
 
 .activity-badge-view {
-    background: rgba(23, 162, 184, 0.1) !important;
-    color: #17a2b8 !important;
-    border-color: #17a2b8 !important;
+    background: rgba(41, 128, 185, 0.08) !important;
+    color: #2980b9 !important;
+    border-color: rgba(41, 128, 185, 0.25) !important;
 }
 
 /* Text Colors */
 .text-purple-dashboard {
-    color: #6f42c1 !important;
+    color: #8e44ad !important;
 }
 
 .text-teal-dashboard {
-    color: #20c997 !important;
+    color: #16a085 !important;
 }
 
 .text-orange-dashboard {
-    color: #fd7e14 !important;
+    color: #e67e22 !important;
 }
 
 /* Empty State Icon */
@@ -963,7 +1033,7 @@ html {
 
 /* Activity Card Border Radius */
 .activity-card-wrapper {
-    border-radius: 1rem;
+    border-radius: 1.25rem;
     overflow: hidden;
 }
 
@@ -1270,7 +1340,7 @@ html {
 /* Custom Tabs Style */
 /* About Us Tabs Styling */
 #aboutTabs.nav-tabs-sm {
-    background: rgba(0, 102, 204, 0.1);
+    background: rgba(44, 62, 80, 0.1);
     border-radius: 0.75rem;
     padding: 0.25rem;
     border: none;
@@ -1278,8 +1348,8 @@ html {
 
 #aboutTabs.nav-tabs-sm .nav-link {
     background: transparent;
-    border: 1px solid rgba(0, 102, 204, 0.3);
-    color: #0066cc;
+    border: 1px solid rgba(44, 62, 80, 0.3);
+    color: #2C3E50;
     border-radius: 0.5rem;
     padding: 0.5rem 1rem;
     transition: all 0.3s ease;
@@ -1288,15 +1358,15 @@ html {
 
 #aboutTabs.nav-tabs-sm .nav-link:hover {
     background: rgba(255, 255, 255, 0.3);
-    border-color: rgba(0, 102, 204, 0.5);
-    color: #0052a3;
+    border-color: rgba(44, 62, 80, 0.5);
+    color: #1A252F;
 }
 
 #aboutTabs.nav-tabs-sm .nav-link.active {
     background: rgba(255, 255, 255, 0.2);
-    border-color: rgba(0, 102, 204, 0.5);
-    color: #0066cc;
-    box-shadow: 0 2px 8px rgba(0, 102, 204, 0.2);
+    border-color: rgba(44, 62, 80, 0.5);
+    color: #2C3E50;
+    box-shadow: 0 2px 8px rgba(44, 62, 80, 0.2);
 }
 
 .nav-tabs-custom {
@@ -1326,8 +1396,598 @@ html {
     font-weight: 600;
 }
 
+/* ========== Form Page Card Headers (create/edit) ========== */
+.card-header-form {
+    background: #F8FBFD !important;
+    border-bottom: 1px solid #E6ECF2 !important;
+    border-inline-end: 3px solid #1ABC9C !important;
+    padding: 0.85rem 1.25rem !important;
+}
+
+.card-header-form,
+.card-header-form * {
+    color: #24364A !important;
+    fill: #24364A !important;
+}
+
+.card-header-form .text-white,
+.card-header-form .text-white-50 {
+    color: #6B7C93 !important;
+}
+
+.card-header-form h5,
+.card-header-form h6,
+.card-header-form .fw-bold {
+    color: #24364A !important;
+    font-weight: 700 !important;
+}
+
+.card-header-form .badge {
+    background: rgba(26, 188, 156, 0.1) !important;
+    color: #1ABC9C !important;
+    border: 1px solid rgba(26, 188, 156, 0.2) !important;
+}
+
+/* زر الرجوع */
+.form-btn-back {
+    background: #FFFFFF !important;
+    color: #5B7088 !important;
+    border: 1px solid #E2EAF1 !important;
+    font-size: 0.78rem !important;
+    font-weight: 500 !important;
+    padding: 0.28rem 0.75rem !important;
+    border-radius: 8px !important;
+    transition: all 0.15s ease !important;
+}
+
+.form-btn-back:hover {
+    background: #F0F4F8 !important;
+    color: #24364A !important;
+    border-color: #CDD9E3 !important;
+}
+
+/* أيقونة الفورم */
+.form-icon-wrap {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    background: rgba(26, 188, 156, 0.1);
+    color: #1ABC9C;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 17px;
+    flex-shrink: 0;
+}
+
+/* ========== Form Page Body Styling ========== */
+
+/* 1) فراغات مضبوطة */
+.card-header-form ~ .card-body {
+    padding: 1.25rem 1.5rem !important;
+}
+
+.card-header-form ~ .card-body .mb-4 {
+    margin-bottom: 0.85rem !important;
+}
+
+.card-header-form ~ .card-body .mb-3 {
+    margin-bottom: 0.6rem !important;
+}
+
+.card-header-form ~ .card-body .row.g-3 {
+    --bs-gutter-y: 0.6rem;
+    --bs-gutter-x: 1rem;
+}
+
+/* 2) حقول واضحة */
+.card-header-form ~ .card-body .form-control,
+.card-header-form ~ .card-body .form-select {
+    border: 1.5px solid #CDD9E3 !important;
+    color: #24364A !important;
+    background: #FFFFFF !important;
+    padding: 0.45rem 0.75rem !important;
+    font-size: 0.88rem !important;
+}
+
+.card-header-form ~ .card-body .form-control::placeholder {
+    color: #8D9DAD !important;
+}
+
+.card-header-form ~ .card-body .form-control:focus,
+.card-header-form ~ .card-body .form-select:focus {
+    border-color: #1ABC9C !important;
+    box-shadow: 0 0 0 0.15rem rgba(26, 188, 156, 0.1) !important;
+}
+
+/* 3) section titles - أقوى */
+.card-header-form ~ .card-body h6.fw-bold {
+    font-size: 0.92rem !important;
+    font-weight: 700 !important;
+    color: #24364A !important;
+    padding-bottom: 0.45rem !important;
+    border-bottom: 2px solid #E6ECF2 !important;
+    margin-bottom: 0.85rem !important;
+    margin-top: 0.25rem !important;
+}
+
+.card-header-form ~ .card-body h6.fw-bold i {
+    color: #5B7088 !important;
+    font-size: 0.88rem !important;
+}
+
+/* Form labels */
+.card-header-form ~ .card-body .form-label {
+    color: #24364A !important;
+    font-weight: 600 !important;
+    font-size: 0.82rem !important;
+    margin-bottom: 0.3rem !important;
+}
+
+/* Submit button */
+.card-header-form ~ .card-body .btn-primary {
+    background: #1ABC9C !important;
+    border-color: #1ABC9C !important;
+}
+
+.card-header-form ~ .card-body .btn-primary:hover {
+    background: #16A085 !important;
+    border-color: #16A085 !important;
+}
+
+/* ========== Permissions Section Redesign ========== */
+.perm-header {
+    padding: 0.75rem 1.25rem;
+    background: #F8FBFD;
+    border-bottom: 1px solid #E6ECF2;
+}
+
+.perm-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 22px;
+    height: 22px;
+    padding: 0 6px;
+    border-radius: 6px;
+    background: rgba(26, 188, 156, 0.12);
+    color: #1ABC9C;
+    font-size: 0.72rem;
+    font-weight: 700;
+}
+
+.perm-search {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: #F0F4F8;
+    border: 1px solid #D7E1EA;
+    border-radius: 8px;
+    padding: 0 10px;
+    max-width: 200px;
+}
+
+.perm-search i {
+    color: #8D9DAD;
+    font-size: 0.8rem;
+    flex-shrink: 0;
+}
+
+.perm-search input {
+    border: none;
+    background: transparent;
+    outline: none;
+    font-size: 0.78rem;
+    color: #24364A;
+    padding: 6px 0;
+    width: 100%;
+}
+
+.perm-search input::placeholder {
+    color: #9AA8B6;
+}
+
+.perm-search:focus-within {
+    border-color: #1ABC9C;
+    box-shadow: 0 0 0 2px rgba(26, 188, 156, 0.08);
+}
+
+/* Accordion items */
+.permissions-container .accordion-button {
+    font-size: 0.85rem !important;
+    padding: 0.65rem 1rem !important;
+    background: #FAFCFD !important;
+}
+
+.permissions-container .accordion-button:not(.collapsed) {
+    background: #F0F7F4 !important;
+    box-shadow: none !important;
+}
+
+.permissions-container .accordion-button i.bi-shield-lock-fill {
+    color: #5B7088 !important;
+}
+
+.permissions-container .accordion-body {
+    background: #FFFFFF !important;
+    padding: 1rem !important;
+}
+
+/* Permission subgroups */
+.permission-subgroup {
+    margin-bottom: 1rem !important;
+}
+
+.permission-subgroup h6 {
+    font-size: 0.82rem !important;
+    color: #3D5068 !important;
+    margin-bottom: 0.5rem !important;
+}
+
+.permission-subgroup h6 i.bi-folder-fill {
+    color: #8D9DAD !important;
+    font-size: 0.78rem !important;
+}
+
+.permission-subgroup .badge.bg-secondary {
+    background: #E6ECF2 !important;
+    color: #5B7088 !important;
+    font-size: 0.68rem !important;
+}
+
+.permission-subgroup .badge.bg-success {
+    background: rgba(26, 188, 156, 0.12) !important;
+    color: #1ABC9C !important;
+    font-size: 0.68rem !important;
+}
+
+/* Checkboxes */
+.permission-item .form-check-label small {
+    font-size: 0.78rem !important;
+    color: #4A5E73 !important;
+}
+
+.permission-item .form-check-input:checked {
+    background-color: #1ABC9C !important;
+    border-color: #1ABC9C !important;
+}
+
+/* Select/deselect buttons */
+.permissions-container .btn-outline-success,
+.permissions-container .btn-outline-danger {
+    font-size: 0.72rem !important;
+    padding: 0.2rem 0.6rem !important;
+    border-radius: 6px !important;
+}
+
+/* Statistics bar */
+.permissions-container ~ .mt-3 {
+    background: #F8FBFD !important;
+    border: 1px solid #E6ECF2 !important;
+    border-radius: 8px !important;
+    padding: 0.6rem 1rem !important;
+}
+
+/* Form footer */
+.card-footer-form {
+    padding: 1rem 1.5rem !important;
+    border-top: 1px solid #E6ECF2 !important;
+    background: #FCFDFE !important;
+}
+
+/* ========== Breadcrumb Redesign ========== */
+.breadcrumb-header {
+    margin-bottom: 1.5rem !important;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.breadcrumb-header .page-title {
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: #1a1a2e;
+    margin: 0;
+    letter-spacing: -0.3px;
+}
+
+.breadcrumb-nav {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.82rem;
+}
+
+.breadcrumb-nav a {
+    color: #8A99AB;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.15s ease;
+}
+
+.breadcrumb-nav a:hover {
+    color: #24364A;
+}
+
+.breadcrumb-sep {
+    color: #C7D2DD;
+    font-size: 0.9rem;
+    user-select: none;
+}
+
+.breadcrumb-current {
+    color: #5B7088;
+    font-weight: 600;
+}
+
+/* 2) زر مستخدم جديد: أوضح */
+.card-header .btn-light,
+.card-header .btn-outline-light {
+    padding: 0.4rem 1.15rem !important;
+    font-size: 0.85rem !important;
+    font-weight: 600 !important;
+    border-radius: 6px !important;
+}
+
+.card-header .btn-light i,
+.card-header .btn-outline-light i {
+    font-size: 0.9rem !important;
+}
+
+/* 3) حقل البحث: أوضح */
+.card .card-body .form-control::placeholder {
+    color: #6B7C8E !important;
+}
+
+.card .card-body .input-group .input-group-text {
+    border: 1.5px solid #CBD5E1 !important;
+    color: #5a6c7d !important;
+}
+
 .bg-gradient-primary {
-    background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%) !important;
+    background: #2474A8 !important;
+    background-image: none !important;
+}
+
+.card-header.bg-gradient-primary {
+    padding: 0.6rem 1rem !important;
+    background: #1E5F8A !important;
+    background-image: none !important;
+}
+
+.card-header.bg-gradient-primary h5 {
+    font-size: 1rem !important;
+}
+
+/* ========== Listing Pages Refinements ========== */
+
+/* 1) كل أزرار البحث/الفلتر: outlined وأخف */
+.card .card-body .btn-primary[id="searchBtn"],
+.card .card-body button[type="submit"].btn-primary.w-100,
+.card .card-body .btn-primary[type="submit"] {
+    background: transparent !important;
+    color: #2474A8 !important;
+    border: 1.5px solid #CDD9E3 !important;
+    font-weight: 500 !important;
+    font-size: 0.82rem !important;
+    box-shadow: none !important;
+}
+
+.card .card-body .btn-primary[id="searchBtn"]:hover,
+.card .card-body button[type="submit"].btn-primary.w-100:hover,
+.card .card-body .btn-primary[type="submit"]:hover {
+    background: #2474A8 !important;
+    color: #FFFFFF !important;
+    border-color: #2474A8 !important;
+}
+
+/* 3) توحيد ارتفاع أدوات الفلتر */
+.card .card-body .form-control,
+.card .card-body .form-select,
+.card .card-body .btn {
+    height: 40px !important;
+}
+
+/* Stat chip - بدل كارد كامل للإحصائيات */
+.stat-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: #F0F4F8;
+    border: 1px solid #E6ECF2;
+    border-radius: 20px;
+    padding: 0.25rem 0.85rem;
+    font-size: 0.78rem;
+    color: #5B7088;
+}
+
+.stat-chip strong {
+    color: #24364A;
+}
+
+.stat-chip i {
+    font-size: 0.75rem;
+    color: #8D9DAD;
+}
+
+/* Stat chip inside header (white variant) */
+.stat-chip-header {
+    background: rgba(255, 255, 255, 0.2) !important;
+    border-color: rgba(255, 255, 255, 0.3) !important;
+    color: rgba(255, 255, 255, 0.85) !important;
+}
+
+.stat-chip-header strong {
+    color: #FFFFFF !important;
+}
+
+.stat-chip-header i {
+    color: rgba(255, 255, 255, 0.7) !important;
+}
+
+/* 4) Table text truncation */
+.table td {
+    max-width: 300px;
+}
+
+.table td p,
+.table td .text-muted {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 0 !important;
+    font-size: 0.8rem;
+}
+
+.table td h6,
+.table td .fw-bold,
+.table td .fw-semibold {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 280px;
+    margin-bottom: 2px !important;
+}
+
+/* 6) صور الجدول: موحدة */
+.table img,
+.table .rounded-3 img {
+    width: 80px !important;
+    height: 50px !important;
+    object-fit: cover !important;
+    border-radius: 6px !important;
+}
+
+/* 5) spacing أزرار الإجراءات */
+.table td .d-flex.gap-1,
+.table td .d-flex.gap-2 {
+    gap: 0.35rem !important;
+}
+
+/* ========== News Tabs (segmented control) ========== */
+.news-tabs {
+    display: inline-flex;
+    gap: 2px;
+    background: #EEF2F6;
+    border-radius: 8px;
+    padding: 3px;
+}
+
+.news-tab {
+    border: none;
+    background: transparent;
+    color: #5B7088;
+    font-size: 0.78rem;
+    font-weight: 500;
+    padding: 0.3rem 0.85rem;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.news-tab i {
+    font-size: 0.82rem;
+}
+
+.news-tab.active {
+    background: #FFFFFF;
+    color: #24364A;
+    font-weight: 600;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+
+.news-tab:hover:not(.active) {
+    color: #24364A;
+}
+
+/* Section titles inside forms */
+.section-title {
+    font-size: 0.9rem !important;
+    color: #24364A !important;
+    padding-bottom: 0.4rem !important;
+    border-bottom: 2px solid #E6ECF2 !important;
+    margin-bottom: 0.85rem !important;
+}
+
+.section-title i {
+    color: #5B7088 !important;
+    font-size: 0.85rem !important;
+}
+
+/* Quill editor refinement */
+.quill-wrapper {
+    border: 1.5px solid #CDD9E3 !important;
+    border-radius: 8px !important;
+    overflow: hidden !important;
+}
+
+#quill-toolbar {
+    background: #F8FBFD !important;
+    border-bottom: 1px solid #E6ECF2 !important;
+}
+
+#quill-editor {
+    background: #FFFFFF !important;
+    min-height: 250px;
+}
+
+/* Dropzone refinement */
+.dropzone {
+    border-color: #CDD9E3 !important;
+    background: #FAFCFD !important;
+    transition: all 0.2s ease;
+}
+
+.dropzone:hover {
+    border-color: #1ABC9C !important;
+    background: #F0FAF8 !important;
+}
+
+/* 5) أزرار الإجراءات: soft but visible */
+.table .btn-sm.btn-outline-primary,
+.table .btn-sm.btn-outline-danger,
+.table .btn-sm.btn-outline-success,
+.table .btn-sm.btn-outline-warning,
+.table .btn-sm.btn-outline-info,
+.table .btn-sm.btn-outline-secondary {
+    border-width: 1px !important;
+    padding: 0.22rem 0.42rem !important;
+    font-size: 0.76rem !important;
+    opacity: 0.75 !important;
+    transition: all 0.15s ease !important;
+}
+
+/* 4) حقل البحث: border أوضح */
+.card .card-body .form-control,
+.card .card-body .form-select {
+    border: 1.5px solid #B0BEC5 !important;
+}
+
+.card .card-body .form-control:focus,
+.card .card-body .form-select:focus {
+    border-color: #1E5F8A !important;
+    box-shadow: 0 0 0 0.15rem rgba(30, 95, 138, 0.1) !important;
+}
+
+.table .btn-sm.btn-outline-primary:hover,
+.table .btn-sm.btn-outline-danger:hover,
+.table .btn-sm.btn-outline-success:hover,
+.table .btn-sm.btn-outline-warning:hover,
+.table .btn-sm.btn-outline-info:hover,
+.table .btn-sm.btn-outline-secondary:hover {
+    opacity: 1 !important;
+}
+
+/* صف الإجراءات: hover يبرز الأزرار */
+.table tbody tr:hover .btn-sm {
+    opacity: 0.9 !important;
 }
 
 .bg-gradient-info {

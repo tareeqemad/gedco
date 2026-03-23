@@ -9,34 +9,28 @@
 @section('content')
     <div class="container-fluid">
         <!-- Main Card -->
-        <div class="card border-0 shadow-sm rounded-4 bg-white">
+        <x-admin.card>
             <!-- Header Section -->
-            <div class="card-header bg-gradient-primary text-white border-0 py-2 py-md-3 px-3 px-md-4">
-                <div class="d-flex justify-content-between align-items-center flex-wrap w-100" style="gap: 1rem;">
-                    <div class="d-flex align-items-center gap-3 flex-wrap" style="flex: 1;">
+            <x-admin.card-header-index
+                icon="bi-envelope-fill"
+                title="رسائل الاتصال">
+                <x-slot:badge>
+                    <div class="d-flex align-items-center gap-4 flex-wrap text-white-50" style="font-size: 0.9rem;">
                         <div class="d-flex align-items-center gap-2">
-                            <h5 class="mb-0 fw-bold text-white d-flex align-items-center gap-2 flex-wrap" style="font-size: 1.25rem; line-height: 1.3;">
-                                <i class="bi bi-envelope-fill"></i>
-                                <span>رسائل الاتصال</span>
-                            </h5>
+                            <i class="bi bi-envelope-fill"></i>
+                            <span>إجمالي الرسائل:</span>
+                            <strong class="text-white">{{ $messages->total() }}</strong>
                         </div>
-                        <div class="d-flex align-items-center gap-4 flex-wrap text-white-50" style="font-size: 0.9rem;">
+                        @if($unreadCount > 0)
                             <div class="d-flex align-items-center gap-2">
-                                <i class="bi bi-envelope-fill"></i>
-                                <span>إجمالي الرسائل:</span>
-                                <strong class="text-white">{{ $messages->total() }}</strong>
+                                <i class="bi bi-envelope-exclamation"></i>
+                                <span>غير مقروءة:</span>
+                                <strong class="text-warning">{{ $unreadCount }}</strong>
                             </div>
-                            @if($unreadCount > 0)
-                                <div class="d-flex align-items-center gap-2">
-                                    <i class="bi bi-envelope-exclamation"></i>
-                                    <span>غير مقروءة:</span>
-                                    <strong class="text-warning">{{ $unreadCount }}</strong>
-                                </div>
-                            @endif
-                        </div>
+                        @endif
                     </div>
-                </div>
-            </div>
+                </x-slot:badge>
+            </x-admin.card-header-index>
 
             <!-- Filter Section -->
             <div class="card-body p-3">
@@ -99,6 +93,6 @@
                     </div>
                 </div>
             @endif
-        </div>
+        </x-admin.card>
     </div>
 @endsection

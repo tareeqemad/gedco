@@ -8,84 +8,37 @@
 
 @section('content')
     <div class="container-fluid p-0">
-        <!-- Header Section -->
-        <div class="card border-0 shadow-sm rounded-4 bg-white mb-4">
-            <div class="card-header bg-gradient-primary text-white border-0 py-2 px-3">
-                <div class="d-flex justify-content-between align-items-center flex-wrap w-100" style="gap: 0.75rem;">
-                    <div class="d-flex align-items-center gap-2 flex-wrap" style="flex: 1 1 auto;">
-                        <i class="bi bi-person-badge fs-5"></i>
-                        <h5 class="mb-0 fw-bold text-white" style="font-size: 1.1rem; line-height: 1.2;">
-                            {{ __('admin.menu.roles') }}
-                        </h5>
-                    </div>
-                    <a href="{{ route('admin.roles.create') }}" class="btn btn-light btn-sm shadow-sm">
-                        <i class="bi bi-plus-circle me-1"></i>
-                        <span class="d-none d-md-inline">{{ __('admin.menu.add_role') }}</span>
-                    </a>
-                </div>
-            </div>
-        </div>
+        <!-- Main Card -->
+        <x-admin.card>
+            <x-admin.card-header-index
+                icon="bi-person-badge"
+                :title="__('admin.menu.roles')"
+                :create-route="route('admin.roles.create')"
+                :create-label="__('admin.menu.add_role')" />
 
-        <!-- إحصائيات -->
-        <div class="row g-3 mb-4">
-            <div class="col-12 col-md-4">
-                <div class="card border-0 shadow-sm rounded-4 bg-white">
-                    <div class="card-body p-3">
-                        <div class="d-flex align-items-center gap-3">
-                            <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 45px; height: 45px;">
-                                <i class="bi bi-person-badge"></i>
-                            </div>
-                            <div>
-                                <small class="text-muted d-block mb-1">إجمالي الأدوار</small>
-                                <h5 class="mb-0 fw-bold text-dark">{{ number_format($stats['total']) }}</h5>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <!-- Stat Chips -->
+            <div class="d-flex align-items-center gap-2 px-3 py-2" style="border-bottom: 1px solid #E6ECF2;">
+                <span class="badge bg-primary-subtle text-primary rounded-pill px-3 py-2">
+                    <i class="bi bi-person-badge me-1"></i>إجمالي الأدوار: {{ number_format($stats['total']) }}
+                </span>
+                <span class="badge bg-info-subtle text-info rounded-pill px-3 py-2">
+                    <i class="bi bi-people me-1"></i>المستخدمون: {{ number_format($stats['total_users']) }}
+                </span>
+                <span class="badge bg-success-subtle text-success rounded-pill px-3 py-2">
+                    <i class="bi bi-shield-check me-1"></i>الصلاحيات: {{ number_format($stats['total_permissions']) }}
+                </span>
             </div>
-            <div class="col-12 col-md-4">
-                <div class="card border-0 shadow-sm rounded-4 bg-white">
-                    <div class="card-body p-3">
-                        <div class="d-flex align-items-center gap-3">
-                            <div class="bg-info text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 45px; height: 45px;">
-                                <i class="bi bi-people"></i>
-                            </div>
-                            <div>
-                                <small class="text-muted d-block mb-1">المستخدمون</small>
-                                <h5 class="mb-0 fw-bold text-dark">{{ number_format($stats['total_users']) }}</h5>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 col-md-4">
-                <div class="card border-0 shadow-sm rounded-4 bg-white">
-                    <div class="card-body p-3">
-                        <div class="d-flex align-items-center gap-3">
-                            <div class="bg-success text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 45px; height: 45px;">
-                                <i class="bi bi-shield-check"></i>
-                            </div>
-                            <div>
-                                <small class="text-muted d-block mb-1">الصلاحيات المتاحة</small>
-                                <h5 class="mb-0 fw-bold text-dark">{{ number_format($stats['total_permissions']) }}</h5>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
 
-        <!-- البحث -->
-        <div class="card border-0 shadow-sm rounded-4 bg-white mb-4">
-            <div class="card-body p-3 p-md-4">
+            <!-- البحث -->
+            <div class="card-body p-3">
                 <form method="GET" action="{{ route('admin.roles.index') }}" class="row g-3">
                     <div class="col-12 col-lg-11">
                         <label class="form-label fw-semibold text-dark mb-1">البحث</label>
-                        <input type="text" 
-                               name="search" 
-                               class="form-control rounded-3 border-0 bg-light" 
+                        <input type="text"
+                               name="search"
+                               class="form-control rounded-3 border-0 bg-light"
                                style="height: 45px;"
-                               placeholder="ابحث عن دور..." 
+                               placeholder="ابحث عن دور..."
                                value="{{ request('search') }}">
                     </div>
                     <div class="col-12 col-lg-1">
@@ -96,10 +49,9 @@
                     </div>
                 </form>
             </div>
-        </div>
 
-        <!-- قائمة الأدوار - Desktop Table -->
-        <div class="card border-0 shadow-sm rounded-4 bg-white overflow-hidden d-none d-md-block">
+            <!-- قائمة الأدوار - Desktop Table -->
+            <div class="d-none d-md-block">
             <div class="table-responsive">
                 <table class="table table-hover align-middle mb-0">
                     <thead class="bg-light">
@@ -216,7 +168,7 @@
             </div>
 
             @if($roles->hasPages())
-                <div class="card-footer bg-white border-top py-3 px-4">
+                <div class="px-3 py-2" style="border-top: 1px solid #E6ECF2;">
                     <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 small">
                         <div class="text-muted">
                             عرض {{ $roles->firstItem() }} - {{ $roles->lastItem() }} من {{ $roles->total() }}
@@ -225,10 +177,10 @@
                     </div>
                 </div>
             @endif
-        </div>
+            </div>
 
-        <!-- قائمة الأدوار - Mobile Cards -->
-        <div class="d-md-none">
+            <!-- قائمة الأدوار - Mobile Cards -->
+            <div class="d-md-none p-3">
             @forelse($rolesWithDetails as $item)
                 @php $role = $item['role']; @endphp
                 <div class="card border-0 shadow-sm rounded-4 bg-white mb-3">
@@ -341,18 +293,17 @@
             @endforelse
 
             @if($roles->hasPages())
-                <div class="card border-0 shadow-sm rounded-4 bg-white mt-3">
-                    <div class="card-body py-3">
-                        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 small">
-                            <div class="text-muted">
-                                عرض {{ $roles->firstItem() }} - {{ $roles->lastItem() }} من {{ $roles->total() }}
-                            </div>
-                            {{ $roles->links() }}
+                <div class="px-3 py-2" style="border-top: 1px solid #E6ECF2;">
+                    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 small">
+                        <div class="text-muted">
+                            عرض {{ $roles->firstItem() }} - {{ $roles->lastItem() }} من {{ $roles->total() }}
                         </div>
+                        {{ $roles->links() }}
                     </div>
                 </div>
             @endif
-        </div>
+            </div>
+        </x-admin.card>
     </div>
 
     @push('styles')

@@ -9,22 +9,12 @@
 @section('content')
     <div class="container-fluid p-0">
         <!-- Main Card -->
-        <div class="card border-0 shadow-sm rounded-4 bg-white users-card">
-            <!-- Header Section -->
-            <div class="card-header bg-gradient-primary text-white border-0 py-2 py-md-3 px-3 px-md-4">
-                <div class="d-flex justify-content-between align-items-center w-100" style="gap: 1rem;">
-                    <div class="d-flex align-items-center gap-2" style="flex: 0 0 auto;">
-                        <div>
-                            <h5 class="mb-0 fw-bold text-white" style="font-size: 1.25rem; line-height: 1.3;">
-                                <i class="bi bi-person-plus-fill me-2"></i>{{ __('admin.users.add_new_user') }}
-                            </h5>
-                        </div>
-                    </div>
-                    <a href="{{ route('admin.users.index') }}" class="btn btn-light btn-sm shadow-sm">
-                        <i class="bi bi-arrow-left me-2"></i>{{ __('admin.common.back') }}
-                    </a>
-                </div>
-            </div>
+        <x-admin.card class="users-card">
+            <x-admin.card-header-form
+                icon="bi-person-plus-fill"
+                :title="__('admin.users.add_new_user')"
+                :back-route="route('admin.users.index')"
+                :back-label="__('admin.common.back')" />
             <div class="card-body p-4 p-md-5">
                 <form action="{{ route('admin.users.store') }}" method="POST" id="createUserForm">
                     @csrf
@@ -136,25 +126,19 @@
 
                     <!-- Additional Permissions Section -->
                     <div class="mb-4">
-                        <div class="card border-0 shadow-sm rounded-4 bg-white">
-                            <div class="card-header bg-gradient-primary text-white border-0 py-2 px-3 rounded-top-4">
-                                <div class="d-flex justify-content-between align-items-center w-100" style="gap: 0.75rem;">
-                                    <h6 class="fw-bold text-white mb-0 d-flex align-items-center gap-2" style="font-size: 0.95rem; line-height: 1.3;">
-                                        <i class="bi bi-shield-lock-fill"></i>
-                                        {{ __('admin.users.additional_permissions') }}
-                                        <span class="badge bg-info ms-2" id="permissionsCount">0</span>
-                                    </h6>
-                                    <div class="d-flex gap-2 align-items-center" style="flex: 0 0 auto;">
-                                        <div class="input-group" style="max-width: 200px;">
-                                            <span class="input-group-text bg-white border-0" style="height: 32px; padding: 0.25rem 0.5rem;">
-                                                <i class="bi bi-search text-muted" style="font-size: 0.875rem;"></i>
-                                            </span>
-                                            <input type="text" 
-                                                   id="permissionSearch" 
-                                                   class="form-control border-0 bg-white rounded-end-3" 
-                                                   placeholder="{{ __('admin.users.search_permissions') }}"
-                                                   style="height: 32px; font-size: 0.8rem; padding: 0.25rem 0.5rem;">
-                                        </div>
+                        <x-admin.card>
+                            <div class="perm-header">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <i class="bi bi-shield-lock-fill" style="color: #5B7088;"></i>
+                                        <h6 class="mb-0 fw-bold" style="font-size: 0.92rem; color: #24364A;">{{ __('admin.users.additional_permissions') }}</h6>
+                                        <span class="perm-badge" id="permissionsCount">0</span>
+                                    </div>
+                                    <div class="perm-search">
+                                        <i class="bi bi-search"></i>
+                                        <input type="text"
+                                               id="permissionSearch"
+                                               placeholder="{{ __('admin.users.search_permissions') }}">
                                     </div>
                                 </div>
                             </div>
@@ -278,7 +262,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </x-admin.card>
                     </div>
 
                     <!-- Action Buttons -->
@@ -292,7 +276,7 @@
                     </div>
                 </form>
             </div>
-        </div>
+        </x-admin.card>
     </div>
 @endsection
 

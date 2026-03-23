@@ -9,27 +9,13 @@
 @section('content')
     <div class="container-fluid p-0">
         <!-- Header Section -->
-        <div class="card border-0 shadow-sm rounded-4 bg-white mb-4">
-            <div class="card-header bg-gradient-primary text-white border-0 py-2 px-3">
-                <div class="d-flex justify-content-between align-items-center flex-wrap w-100" style="gap: 1rem;">
-                    <div class="d-flex align-items-center gap-2" style="flex: 0 0 auto;">
-                        <div>
-                            <h5 class="mb-0 fw-bold text-white d-flex align-items-center gap-2 flex-wrap" style="font-size: 1.25rem; line-height: 1.3;">
-                                <i class="bi bi-file-earmark-text"></i>
-                                <span class="d-none d-sm-inline">{{ __('admin.tenders.title') }}</span>
-                                <span class="d-sm-none">{{ __('admin.menu.tenders') }}</span>
-                            </h5>
-                        </div>
-                    </div>
-                    @can('tenders.create')
-                        <a href="{{ route('admin.tenders.create') }}" class="btn btn-light btn-sm shadow-sm">
-                            <i class="bi bi-plus-circle me-1"></i>
-                            <span class="d-none d-md-inline">{{ __('admin.tenders.add_tender') }}</span>
-                            <span class="d-md-none">{{ __('admin.actions.add') }}</span>
-                        </a>
-                    @endcan
-                </div>
-            </div>
+        <x-admin.card>
+            <x-admin.card-header-index
+                icon="bi-file-earmark-text"
+                :title="__('admin.tenders.title')"
+                :create-route="route('admin.tenders.create')"
+                :create-label="__('admin.tenders.add_tender')"
+                create-permission="tenders.create" />
 
             <!-- Filters Section -->
             <div class="card-body p-3">
@@ -120,17 +106,18 @@
                     </div>
                 </form>
             </div>
-        </div>
-
-        {{-- Table (AJAX target) --}}
-        <div id="tenders-table-wrapper" class="card border-0 shadow-sm rounded-4 bg-white">
-            <div class="card-body p-0">
-                @include('admin.site.tenders.partials.table', ['tenders' => $tenders])
+            {{-- Table (AJAX target) --}}
+            <div id="tenders-table-wrapper">
+                <div class="table-responsive">
+                    @include('admin.site.tenders.partials.table', ['tenders' => $tenders])
+                </div>
             </div>
-            <div class="card-footer bg-transparent border-top py-3" id="tenders-pagination">
+
+            <!-- Pagination -->
+            <div class="px-3 py-2" style="border-top: 1px solid #E6ECF2;" id="tenders-pagination">
                 @include('admin.site.tenders.partials.pagination', ['tenders' => $tenders])
             </div>
-        </div>
+        </x-admin.card>
     </div>
 @endsection
 
@@ -201,7 +188,7 @@
                     headers: {'X-Requested-With':'XMLHttpRequest'}
                 }).then(r => r.json())
                     .then(data => {
-                        if(data.html) wrapper.querySelector('.card-body').innerHTML = data.html;
+                        if(data.html) wrapper.querySelector('.table-responsive').innerHTML = data.html;
                         if(data.pagination) pagination.innerHTML = data.pagination;
                     }).catch(()=>{ /* ignore */ });
             }

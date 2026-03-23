@@ -15,7 +15,7 @@
     <div class="container-fluid p-0" id="news-create-page">
         <!-- Header Section -->
         <div class="card border-0 shadow-sm rounded-4 bg-white mb-4">
-            <div class="card-header bg-gradient-primary text-white border-0 py-2 py-md-3 px-3 px-md-4">
+            <div class="card-header card-header-form border-0 py-2 py-md-3 px-3 px-md-4">
                 <div class="d-flex justify-content-between align-items-center w-100" style="gap: 1rem;">
                     <div class="d-flex align-items-center gap-2" style="flex: 0 0 auto;">
                         <div>
@@ -93,15 +93,13 @@
                                         $defaultLang = $currentDirection === 'rtl' ? 'ar' : 'en';
                                     @endphp
                                     <input type="hidden" name="language" value="{{ old('language', $defaultLang) }}">
-                                    <div class="mb-4">
-                                        <div class="d-flex align-items-center gap-2 flex-wrap">
-                                            <label class="form-label fw-semibold text-dark mb-0 d-flex align-items-center gap-2">
-                                                <i class="bi bi-globe text-primary"></i> {{ __('admin.labels.language') }}:
-                                            </label>
-                                            <span class="badge bg-info rounded-pill px-3 py-2" style="font-size: 0.9rem;">
+                                    <div class="mb-3">
+                                        <div class="d-flex align-items-center gap-2">
+                                            <label class="form-label mb-0" style="font-size: 0.82rem; color: #24364A; font-weight: 600;">اللغة:</label>
+                                            <span class="stat-chip">
+                                                <i class="bi bi-globe"></i>
                                                 {{ $defaultLang === 'ar' ? __('admin.labels.arabic') : __('admin.labels.english') }}
                                             </span>
-                                            <small class="text-muted">({{ __('admin.common.language_default_selected') }})</small>
                                         </div>
                                         @error('language') <div class="invalid-feedback d-block mt-1">{{ $message }}</div> @enderror
                                     </div>
@@ -254,7 +252,7 @@
             <!-- Preview Tab -->
             <div class="tab-pane fade" id="preview-content">
                 <div class="card border-0 shadow-sm rounded-4 bg-white">
-                    <div class="card-header bg-gradient-primary text-white py-2 py-md-3 px-3 px-md-4">
+                    <div class="card-header card-header-form py-2 py-md-3 px-3 px-md-4">
                         <h5 class="mb-0 fw-bold text-white d-flex align-items-center gap-2" style="font-size: 1.1rem;">
                             <i class="bi bi-eye"></i> {{ __('admin.news.form_preview_title') }}
                         </h5>

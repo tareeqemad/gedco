@@ -10,19 +10,11 @@
 
     <div class="container-fluid p-0">
         <!-- Header Section -->
-        <div class="card border-0 shadow-sm rounded-4 bg-white mb-4">
-            <div class="card-header bg-gradient-primary text-white border-0 py-2 py-md-3 px-3 px-md-4">
-                <div class="d-flex justify-content-between align-items-center w-100" style="gap: 1rem;">
-                    <div class="d-flex align-items-center gap-2" style="flex: 0 0 auto;">
-                        <div>
-                            <h5 class="mb-0 fw-bold text-white" style="font-size: 1.25rem; line-height: 1.3;">
-                                <i class="bi bi-person-circle me-2"></i>{{ __('admin.profile.title') }}
-                            </h5>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <x-admin.card class="mb-4">
+            <x-admin.card-header-form
+                icon="bi-person-circle"
+                :title="__('admin.profile.title')" />
+        </x-admin.card>
 
         <!-- Flash Messages -->
 
@@ -67,13 +59,10 @@
 
             <!-- Profile Information Form -->
             <div class="col-xl-8">
-                <div class="card border-0 shadow-sm rounded-4 bg-white mb-4">
-                    <div class="card-header bg-gradient-primary text-white border-0 py-3 px-4">
-                        <h6 class="mb-0 fw-bold text-white d-flex align-items-center gap-2">
-                            <i class="bi bi-person-lines-fill"></i>
-                            {{ __('admin.profile.personal_info') }}
-                        </h6>
-                    </div>
+                <x-admin.card class="mb-4">
+                    <x-admin.card-header-form
+                        icon="bi-person-lines-fill"
+                        :title="__('admin.profile.personal_info')" />
                     <div class="card-body p-5">
                         <form id="profileForm" action="{{ route('admin.profile.update') }}" method="POST" enctype="multipart/form-data">
                             @csrf
@@ -129,16 +118,13 @@
                             </div>
                         </form>
                     </div>
-                </div>
+                </x-admin.card>
 
                 <!-- Change Password Card -->
-                <div class="card border-0 shadow-sm rounded-4 bg-white">
-                    <div class="card-header bg-gradient-primary text-white border-0 py-3 px-4">
-                        <h6 class="mb-0 fw-bold text-white d-flex align-items-center gap-2">
-                            <i class="bi bi-shield-lock"></i>
-                            {{ __('admin.profile.change_password') }}
-                        </h6>
-                    </div>
+                <x-admin.card>
+                    <x-admin.card-header-form
+                        icon="bi-shield-lock"
+                        :title="__('admin.profile.change_password')" />
                     <div class="card-body p-5">
                         <form id="passwordForm" action="{{ route('admin.profile.password') }}" method="POST">
                             @csrf
@@ -201,7 +187,7 @@
                             </div>
                         </form>
                     </div>
-                </div>
+                </x-admin.card>
             </div>
         </div>
     </div>

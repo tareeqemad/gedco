@@ -9,18 +9,11 @@
 @section('content')
     <div class="container-fluid p-0">
         <!-- Header Section -->
-        <div class="card border-0 shadow-sm rounded-4 bg-white mb-4">
-            <div class="card-header bg-gradient-primary text-white border-0 py-2 px-3">
-                <div class="d-flex justify-content-between align-items-center flex-wrap w-100" style="gap: 0.75rem;">
-                    <div class="d-flex align-items-center gap-2 flex-wrap" style="flex: 1 1 auto;">
-                        <i class="bi bi-person-badge fs-5"></i>
-                        <h5 class="mb-0 fw-bold text-white" style="font-size: 1.1rem; line-height: 1.2;">
-                            {{ __('admin.roles.edit_title') }}
-                        </h5>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <x-admin.card class="mb-4">
+            <x-admin.card-header-form
+                icon="bi-person-badge"
+                :title="__('admin.roles.edit_title')" />
+        </x-admin.card>
 
         <form action="{{ route('admin.roles.update', $role->id) }}" method="POST">
             @csrf
@@ -81,28 +74,26 @@
 
                 <!-- الجانب الأيمن: الصلاحيات -->
                 <div class="col-lg-8">
-                    <div class="card border-0 shadow-sm rounded-4 bg-white">
-                        <div class="card-header bg-gradient-primary text-white border-0 py-3 px-4">
-                            <div class="d-flex justify-content-between align-items-center flex-wrap w-100" style="gap: 1rem;">
-                                <h6 class="fw-bold text-white mb-0 d-flex align-items-center gap-2">
-                                    <i class="bi bi-shield-lock-fill"></i>
-                                    {{ __('admin.roles.form_permissions') }}
-                                    <span class="badge bg-white text-primary rounded-pill px-3 py-1" id="permissionsCount">0</span>
-                                </h6>
+                    <x-admin.card>
+                        <x-admin.card-header-form
+                            icon="bi-shield-lock-fill"
+                            :title="__('admin.roles.form_permissions')">
+                            <x-slot:actions>
+                                <span class="badge bg-white text-primary rounded-pill px-3 py-1" id="permissionsCount">0</span>
                                 <div class="d-flex gap-2 align-items-center flex-wrap">
                                     <div class="input-group" style="max-width: 250px;">
                                         <span class="input-group-text bg-white border-0 rounded-start-3">
                                             <i class="bi bi-search text-muted"></i>
                                         </span>
-                                        <input type="text" 
-                                               id="permissionSearch" 
-                                               class="form-control border-0 bg-white rounded-end-3" 
+                                        <input type="text"
+                                               id="permissionSearch"
+                                               class="form-control border-0 bg-white rounded-end-3"
                                                placeholder="ابحث عن صلاحية..."
                                                style="height: 38px;">
                                     </div>
                                 </div>
-                            </div>
-                        </div>
+                            </x-slot:actions>
+                        </x-admin.card-header-form>
                         <div class="card-body p-4">
                             @php $selectedPermissions = old('permissions', $rolePermissionIds); @endphp
 
@@ -188,7 +179,7 @@
                                 <div class="text-danger small mt-3">{{ $message }}</div>
                             @enderror
                         </div>
-                    </div>
+                    </x-admin.card>
                 </div>
             </div>
         </form>

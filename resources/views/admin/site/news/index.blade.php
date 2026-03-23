@@ -9,22 +9,13 @@
 @section('content')
     <div class="container-fluid p-0">
         <!-- Header Section -->
-        <div class="card border-0 shadow-sm rounded-4 bg-white mb-4">
-            <div class="card-header bg-gradient-primary text-white border-0 py-2 px-3">
-                <div class="d-flex justify-content-between align-items-center flex-wrap w-100" style="gap: 1rem;">
-                    <div class="d-flex align-items-center gap-2" style="flex: 0 0 auto;">
-                        <div>
-                            <h5 class="mb-0 fw-bold text-white" style="font-size: 1.25rem; line-height: 1.3;">{{ __('admin.menu.news') }}</h5>
-                        </div>
-                    </div>
-                    @can('news.create')
-                        <a href="{{ route('admin.news.create') }}" class="btn btn-light btn-sm shadow-sm" style="flex: 0 0 auto; margin-inline-start: auto;">
-                            <i class="bi bi-plus-circle me-1"></i> <span class="d-none d-md-inline">{{ __('admin.news.add_new_news') }}</span>
-                            <span class="d-md-none">{{ __('admin.actions.add') }}</span>
-                        </a>
-                    @endcan
-                </div>
-            </div>
+        <x-admin.card>
+            <x-admin.card-header-index
+                icon="bi-newspaper"
+                :title="__('admin.menu.news')"
+                :create-route="route('admin.news.create')"
+                :create-label="__('admin.news.add_new_news')"
+                create-permission="news.create" />
 
             <!-- Filters Section -->
             <div class="card-body p-3">
@@ -113,13 +104,12 @@
                     </div>
                 </form>
             </div>
-        </div>
-
-        <!-- News Cards -->
-        <div id="cardsWrap" class="news-cards-container">
-            @include('admin.site.news.partials.cards', ['items'=>$items])
-            @include('admin.site.news.partials.pagination', ['items'=>$items])
-        </div>
+            <!-- News Cards -->
+            <div id="cardsWrap" class="news-cards-container">
+                @include('admin.site.news.partials.cards', ['items'=>$items])
+                @include('admin.site.news.partials.pagination', ['items'=>$items])
+            </div>
+        </x-admin.card>
     </div>
 @push('styles')
     <link rel="stylesheet" href="{{ asset('assets/admin/css/news.css') }}">

@@ -14,17 +14,11 @@
 
     <div class="container-fluid p-0" id="ad-create-page">
         <!-- هيدر + تبويبات -->
-        <div class="card border-0 shadow-sm rounded-4 bg-white mb-4">
-            <div class="card-header bg-gradient-primary text-white border-0 py-2 px-3">
-                <div class="d-flex justify-content-between align-items-center flex-wrap w-100" style="gap: 1rem;">
-                    <div class="d-flex align-items-center gap-2" style="flex: 0 0 auto;">
-                        <div>
-                            <h5 class="mb-0 fw-bold text-white d-flex align-items-center gap-2 flex-wrap" style="font-size: 1.25rem; line-height: 1.3;">
-                                <i class="bi bi-plus-circle"></i>
-                                <span>{{ __('admin.advertisements.create_title') }}</span>
-                            </h5>
-                        </div>
-                    </div>
+        <x-admin.card class="mb-4">
+            <x-admin.card-header-form
+                icon="bi-plus-circle"
+                :title="__('admin.advertisements.create_title')">
+                <x-slot:actions>
                     <ul class="nav nav-tabs nav-tabs-sm border-0" id="adTabs" role="tablist" style="background: rgba(255, 255, 255, 0.15); border-radius: 0.5rem; padding: 0.2rem;">
                         <li class="nav-item" role="presentation">
                             <button class="nav-link active px-2 py-1 rounded-3 text-white" data-bs-toggle="tab" data-bs-target="#form-content" style="background: rgba(255, 255, 255, 0.25); border: 1px solid rgba(255, 255, 255, 0.4); font-weight: 600; font-size: 0.85rem;">
@@ -37,9 +31,9 @@
                             </button>
                         </li>
                     </ul>
-                </div>
-            </div>
-        </div>
+                </x-slot:actions>
+            </x-admin.card-header-form>
+        </x-admin.card>
 
         <div class="tab-content" id="adTabContent">
             <!-- تبويب الإدخال -->
@@ -202,19 +196,17 @@
 
             <!-- Preview Tab -->
             <div class="tab-pane fade" id="preview-content">
-                <div class="card border-0 shadow-sm rounded-4 bg-white">
-                    <div class="card-header bg-gradient-primary text-white border-0 py-3 px-4">
-                        <h6 class="mb-0 fw-bold text-white d-flex align-items-center gap-2">
-                            <i class="bi bi-eye"></i> {{ __('admin.advertisements.form_preview_title') }}
-                        </h6>
-                    </div>
+                <x-admin.card>
+                    <x-admin.card-header-form
+                        icon="bi-eye"
+                        :title="__('admin.advertisements.form_preview_title')" />
                     <div class="card-body p-4" id="fullPreview">
                         <div class="text-center text-muted py-5">
                             <i class="bi bi-eye fs-4 d-block mb-2"></i>
                             <small>{{ __('admin.advertisements.form_preview_start_writing') }}</small>
                         </div>
                     </div>
-                </div>
+                </x-admin.card>
             </div>
         </div> <!-- /tab-content -->
     </div>

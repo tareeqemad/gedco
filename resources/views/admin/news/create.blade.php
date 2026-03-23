@@ -13,89 +13,83 @@
     @endphp
 
     <div class="container-fluid p-0">
-        <div class="card border-0 shadow-sm rounded-3 bg-white mb-4">
-            <div class="card-header bg-white border-bottom py-2 px-3 d-flex align-items-center justify-content-between flex-wrap gap-2">
-                <div class="d-flex align-items-center gap-2">
-                    <i class="ri-add-circle-line text-primary fs-5"></i>
-                    <h6 class="mb-0 fw-semibold text-dark-emphasis">إنشاء خبر جديد</h6>
-                </div>
-                <ul class="nav nav-tabs nav-tabs-sm border-0" id="newsTabs" role="tablist">
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link active px-3 py-1 rounded-3" data-bs-toggle="tab" data-bs-target="#form-content">
-                            <i class="ri-edit-line me-1"></i> إدخال
+        <x-admin.card>
+            <x-admin.card-header-form
+                icon="bi-newspaper"
+                title="إنشاء خبر جديد"
+                :back-route="route('admin.news.index')"
+                back-label="الأخبار">
+                <x-slot:actions>
+                    <div class="news-tabs" id="newsTabs">
+                        <button class="news-tab active" data-bs-toggle="tab" data-bs-target="#form-content">
+                            <i class="bi bi-pencil-square"></i> إدخال
                         </button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link px-3 py-1 rounded-3" data-bs-toggle="tab" data-bs-target="#preview-content">
-                            <i class="ri-eye-line me-1"></i> معاينة
+                        <button class="news-tab" data-bs-toggle="tab" data-bs-target="#preview-content">
+                            <i class="bi bi-eye"></i> معاينة
                         </button>
-                    </li>
-                </ul>
-            </div>
-        </div>
+                    </div>
+                </x-slot:actions>
+            </x-admin.card-header-form>
 
-        <div class="tab-content" id="newsTabContent">
-            <div class="tab-pane fade show active" id="form-content">
-                <div class="row g-4">
-                    <div class="col-12">
-                        <div class="card border-0 shadow-sm rounded-3 bg-white">
-                            <div class="card-body p-4">
-                                <form id="newsForm" method="POST" enctype="multipart/form-data" action="{{ route('admin.news.store') }}">
-                                    @csrf
+            <div class="tab-content" id="newsTabContent">
+                <div class="tab-pane fade show active" id="form-content">
+                    <div class="card-body p-3 p-md-4">
+                        <form id="newsForm" method="POST" enctype="multipart/form-data" action="{{ route('admin.news.store') }}">
+                            @csrf
+                            <input type="file" id="quillImageInput" accept="image/*" multiple class="visually-hidden">
 
-                                    <!-- input مخفي متعدد الملفات لصور Quill -->
-                                    <input type="file" id="quillImageInput" accept="image/*" multiple class="visually-hidden">
+                            {{-- Section 1: المعلومات الأساسية --}}
+                            <h6 class="fw-bold d-flex align-items-center gap-2 section-title">
+                                <i class="bi bi-info-circle"></i> المعلومات الأساسية
+                            </h6>
 
-                                    <!-- العنوان -->
-                                    <div class="mb-4">
-                                        <label class="form-label fw-medium text-secondary d-flex align-items-center gap-1">
-                                            <i class="ri-heading fs-6 text-primary"></i> عنوان الخبر
-                                        </label>
-                                        <input type="text" name="title" id="titleInput"
-                                               class="form-control rounded-3 border-0 shadow-sm focus-ring focus-ring-primary @error('title') is-invalid @enderror"
-                                               placeholder="أدخل عنوانًا..." value="{{ old('title') }}">
-                                        @error('title') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
-                                    </div>
+                            <div class="mb-3">
+                                <label class="form-label">عنوان الخبر <span class="text-danger">*</span></label>
+                                <input type="text" name="title" id="titleInput"
+                                       class="form-control @error('title') is-invalid @enderror"
+                                       placeholder="أدخل عنوانًا..." value="{{ old('title') }}">
+                                @error('title') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
+                            </div>
 
-                                    <!-- تاريخ + حالة + مميز -->
-                                    <div class="row g-3 mb-4">
-                                        <div class="col-md-5">
-                                            <label class="form-label fw-medium text-secondary d-flex align-items-center gap-1">
-                                                <i class="ri-calendar-line fs-6 text-info"></i> تاريخ النشر
-                                            </label>
-                                            <input type="date" name="published_at" id="dateInput"
-                                                   class="form-control rounded-3 border-0 shadow-sm focus-ring focus-ring-info @error('published_at') is-invalid @enderror"
-                                                   value="{{ old('published_at', now()->format('Y-m-d')) }}">
-                                            @error('published_at') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label class="form-label fw-medium text-secondary">الحالة</label>
-                                            <select name="status" id="statusInput" class="form-select rounded-3 shadow-sm @error('status') is-invalid @enderror">
-                                                <option value="published" @selected(old('status','published')==='published')>منشور</option>
-                                                <option value="draft" @selected(old('status')==='draft')>مسودة</option>
-                                            </select>
-                                            @error('status') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
-                                        </div>
-                                        <div class="col-md-3 d-flex align-items-end">
-                                            <div class="form-check form-switch">
-                                                <input class="form-check-input" type="checkbox" name="featured" id="featuredInput" value="1" @checked(old('featured'))>
-                                                <label class="form-check-label fw-medium" for="featuredInput">مميّز</label>
-                                            </div>
-                                        </div>
-                                    </div>
+                            <div class="row g-3 mb-3">
+                                <div class="col-md-4">
+                                    <label class="form-label">تاريخ النشر</label>
+                                    <input type="date" name="published_at" id="dateInput"
+                                           class="form-control @error('published_at') is-invalid @enderror"
+                                           value="{{ old('published_at', now()->format('Y-m-d')) }}">
+                                    @error('published_at') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">الحالة</label>
+                                    <select name="status" id="statusInput" class="form-select @error('status') is-invalid @enderror">
+                                        <option value="published" @selected(old('status','published')==='published')>منشور</option>
+                                        <option value="draft" @selected(old('status')==='draft')>مسودة</option>
+                                    </select>
+                                    @error('status') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
+                                </div>
+                                <div class="col-md-4 d-flex align-items-end">
+                                    <label class="form-label d-flex align-items-center gap-2 mb-0 p-2 rounded" style="background: #F8FBFD; border: 1px solid #E6ECF2; cursor: pointer;">
+                                        <input class="form-check-input m-0" type="checkbox" name="featured" id="featuredInput" value="1" @checked(old('featured'))>
+                                        <span class="fw-medium" style="font-size: 0.85rem;">خبر مميّز</span>
+                                    </label>
+                                </div>
+                            </div>
 
-                                    <!-- المحتوى (Quill) -->
-                                    <div class="mb-4">
-                                        <label class="form-label fw-medium text-secondary d-flex align-items-center gap-2 flex-wrap">
-                                            <span class="d-inline-flex align-items-center gap-1">
-                                                <i class="ri-file-text-line fs-6 text-success"></i> المحتوى
-                                            </span>
-                                            <small class="text-muted">(حتى {{ $MAX_IMAGES }} صور × 2MB كحد أقصى — ويمكن بدون صور)</small>
-                                            <!-- عدّاد الصور -->
-                                            <span id="imgCounter" class="badge img-counter bg-primary">0 / {{ $MAX_IMAGES }}</span>
-                                            <!-- عدّاد النص -->
-                                            <span id="textCounter" class="badge text-counter bg-secondary ms-1">الحروف: 0 | الكلمات: 0</span>
-                                        </label>
+                            {{-- Section 2: المحتوى --}}
+                            <h6 class="fw-bold d-flex align-items-center gap-2 section-title mt-4">
+                                <i class="bi bi-file-text"></i> المحتوى
+                            </h6>
+
+                            <div class="d-flex align-items-center justify-content-between mb-2 flex-wrap gap-2">
+                                <small class="text-muted" style="font-size: 0.75rem;">حتى {{ $MAX_IMAGES }} صور × 2MB</small>
+                                <div class="d-flex gap-2">
+                                    <span id="imgCounter" class="stat-chip" style="font-size: 0.7rem;">0 / {{ $MAX_IMAGES }} صور</span>
+                                    <span id="textCounter" class="stat-chip" style="font-size: 0.7rem;">الحروف: 0 | الكلمات: 0</span>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label d-none">المحتوى</label>
 
                                         <div class="quill-wrapper border rounded-3 shadow-sm overflow-hidden">
                                             <div id="quill-toolbar" class="px-2 py-1">
@@ -215,40 +209,33 @@
                                         @error('pdf') <div class="invalid-feedback d-block mt-2">{{ $message }}</div> @enderror
                                     </div>
 
-                                    <!-- أزرار -->
-                                    <div class="d-flex flex-wrap gap-2 mt-5">
-                                        <button type="button" id="submitBtn" class="btn btn-primary px-4 d-flex align-items-center gap-2 shadow-sm">
-                                            <i class="ri-check-line"></i>
-                                            <span id="submitText">نشر الخبر</span>
-                                            <span id="submitSpinner" class="spinner-border spinner-border-sm d-none" role="status"></span>
-                                        </button>
-                                        <button type="button" id="saveDraft" class="btn btn-outline-secondary px-4 d-flex align-items-center gap-2">
-                                            <i class="ri-draft-line"></i> حفظ مسودة
-                                        </button>
-                                        <a href="{{ route('admin.news.index') }}" class="btn btn-link text-muted">إلغاء</a>
-                                    </div>
-                                </form>
+                            {{-- Section 3: الإجراءات --}}
+                            <div class="d-flex flex-wrap gap-2 mt-4 pt-3" style="border-top: 1px solid #E6ECF2;">
+                                <button type="button" id="submitBtn" class="btn btn-primary px-4 d-flex align-items-center gap-2">
+                                    <i class="bi bi-check-lg"></i>
+                                    <span id="submitText">نشر الخبر</span>
+                                    <span id="submitSpinner" class="spinner-border spinner-border-sm d-none" role="status"></span>
+                                </button>
+                                <button type="button" id="saveDraft" class="btn btn-outline-secondary px-4 d-flex align-items-center gap-2">
+                                    <i class="bi bi-file-earmark"></i> حفظ مسودة
+                                </button>
+                                <a href="{{ route('admin.news.index') }}" class="btn btn-link text-muted">إلغاء</a>
                             </div>
-                        </div>
+                        </form>
                     </div>
                 </div>
-            </div>
 
-            <!-- تبويب المعاينة -->
-            <div class="tab-pane fade" id="preview-content">
-                <div class="card border-0 shadow-sm rounded-3 bg-white">
-                    <div class="card-header bg-light py-2 px-3">
-                        <h6 class="mb-0 fw-semibold text-primary"><i class="ri-file-search-line me-1"></i> معاينة كاملة</h6>
-                    </div>
+                {{-- تبويب المعاينة --}}
+                <div class="tab-pane fade" id="preview-content">
                     <div class="card-body p-4" id="fullPreview">
                         <div class="text-center text-muted py-5">
-                            <i class="ri-file-search-line fs-4 d-block mb-2"></i>
+                            <i class="bi bi-file-search fs-4 d-block mb-2"></i>
                             <small>ابدأ الكتابة في تبويب "إدخال"</small>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </x-admin.card>
     </div>
 @endsection
 

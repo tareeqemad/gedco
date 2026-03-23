@@ -26,8 +26,8 @@
 :root {
 
     --body-bg-rgb: 249, 251, 251; /* خلفية ناعمة جدًا */
-    --primary-rgb: 0, 102, 204;    /* Primary Blue (#0066cc) */
-    --secondary-rgb: 85, 110, 230; /* أزرق مائل للبنفسجي */
+    --primary-rgb: 47, 71, 97;    /* Slate Navy (#2F4761) */
+    --secondary-rgb: 36, 54, 74; /* Slate Dark (#24364A) */
     --warning-rgb: 255, 183, 77;  /* ذهبي محايد */
     --info-rgb: 64, 156, 255;     /* أزرق سماوي أنيق */
     --success-rgb: 46, 204, 113;  /* أخضر تركوازي ناعم */

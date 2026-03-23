@@ -14,43 +14,34 @@
 
     <div class="container-fluid p-0">
         <!-- Header Section -->
-        <div class="card border-0 shadow-sm rounded-4 bg-white mb-4">
-            <div class="card-header bg-gradient-primary text-white border-0 py-2 px-3">
-                <div class="d-flex justify-content-between align-items-center flex-wrap w-100" style="gap: 1rem;">
-                    <div class="d-flex align-items-center gap-2" style="flex: 0 0 auto;">
-                        <div>
-                            <h5 class="mb-0 fw-bold text-white d-flex align-items-center gap-2 flex-wrap" style="font-size: 1.25rem; line-height: 1.3;">
-                                <i class="bi bi-eye"></i>
-                                <span class="text-truncate" style="max-width: 500px;">{{ Str::limit($ad->TITLE, 60) }}</span>
-                            </h5>
-                            <div class="text-white-50 small d-flex align-items-center gap-2 mt-1">
-                                <i class="bi bi-calendar"></i>
-                                <span>{{ $ad->DATE_NEWS?->timezone('Asia/Hebron')->format('l، d F Y') }}</span>
-                                <span>| {{ $ad->DATE_NEWS?->timezone('Asia/Hebron')->format('H:i') }}</span>
-                            </div>
-                        </div>
+        <x-admin.card class="mb-4">
+            <x-admin.card-header-form
+                icon="bi-eye"
+                :title="Str::limit($ad->TITLE, 60)"
+                :back-route="route('admin.advertisements.index')"
+                :back-label="__('admin.advertisements.back')">
+                <x-slot:subtitle>
+                    <div class="text-white-50 small d-flex align-items-center gap-2 mt-1">
+                        <i class="bi bi-calendar"></i>
+                        <span>{{ $ad->DATE_NEWS?->timezone('Asia/Hebron')->format('l، d F Y') }}</span>
+                        <span>| {{ $ad->DATE_NEWS?->timezone('Asia/Hebron')->format('H:i') }}</span>
                     </div>
-                    <div class="d-flex gap-2 flex-wrap">
-                        <a href="{{ route('admin.advertisements.index') }}" class="btn btn-light btn-sm shadow-sm">
-                            <i class="bi bi-arrow-left me-1"></i>{{ __('admin.advertisements.back') }}
-                        </a>
-                        <a href="{{ route('admin.advertisements.edit', $ad) }}" class="btn btn-light btn-sm shadow-sm">
-                            <i class="bi bi-pencil me-1"></i>{{ __('admin.advertisements.edit') }}
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
+                </x-slot:subtitle>
+                <x-slot:actions>
+                    <a href="{{ route('admin.advertisements.edit', $ad) }}" class="btn btn-light btn-sm shadow-sm">
+                        <i class="bi bi-pencil me-1"></i>{{ __('admin.advertisements.edit') }}
+                    </a>
+                </x-slot:actions>
+            </x-admin.card-header-form>
+        </x-admin.card>
 
         <div class="row g-4">
             {{-- BODY --}}
             <div class="col-lg-8">
-                <div class="card border-0 shadow-sm rounded-4 bg-white">
-                    <div class="card-header bg-gradient-primary text-white border-0 py-3 px-4">
-                        <h6 class="mb-0 fw-bold text-white d-flex align-items-center gap-2">
-                            <i class="bi bi-file-text"></i>المحتوى
-                        </h6>
-                    </div>
+                <x-admin.card>
+                    <x-admin.card-header-form
+                        icon="bi-file-text"
+                        title="المحتوى" />
                     <div class="card-body p-5">
 
                         <div class="content-preview lh-lg text-dark" style="font-size:1.1rem; line-height:1.9;">
@@ -83,22 +74,23 @@
                         </div>
 
                     </div>
-                </div>
+                </x-admin.card>
             </div>
 
             {{-- PDF --}}
             <div class="col-lg-4">
-                <div class="card border-0 shadow-sm rounded-4 bg-white sticky-top" style="top:1rem;">
-                    <div class="card-header bg-gradient-primary text-white border-0 py-3 px-4 d-flex justify-content-between align-items-center">
-                        <h6 class="mb-0 fw-bold text-white d-flex align-items-center gap-2">
-                            <i class="bi bi-file-pdf"></i>{{ __('admin.advertisements.show_pdf_file') }}
-                        </h6>
-                        @if($pdfRoute)
-                            <a href="{{ $pdfRoute }}" class="btn btn-light btn-sm shadow-sm" download>
-                                <i class="bi bi-download"></i>
-                            </a>
-                        @endif
-                    </div>
+                <x-admin.card class="sticky-top" style="top:1rem;">
+                    <x-admin.card-header-form
+                        icon="bi-file-pdf"
+                        :title="__('admin.advertisements.show_pdf_file')">
+                        <x-slot:actions>
+                            @if($pdfRoute)
+                                <a href="{{ $pdfRoute }}" class="btn btn-light btn-sm shadow-sm" download>
+                                    <i class="bi bi-download"></i>
+                                </a>
+                            @endif
+                        </x-slot:actions>
+                    </x-admin.card-header-form>
 
                     <div class="card-body p-0">
 
@@ -122,7 +114,7 @@
                         @endif
 
                     </div>
-                </div>
+                </x-admin.card>
             </div>
 
         </div>

@@ -9,23 +9,15 @@
 @section('content')
     <div class="container-fluid p-0">
         <!-- Header Section -->
-        <div class="card border-0 shadow-sm rounded-4 bg-white mb-4">
-            <div class="card-header bg-gradient-primary text-white border-0 py-2 py-md-3 px-3 px-md-4">
-                <div class="d-flex justify-content-between align-items-center w-100" style="gap: 1rem;">
-                    <div class="d-flex align-items-center gap-2" style="flex: 0 0 auto;">
-                        <div>
-                            <h5 class="mb-0 fw-bold text-white" style="font-size: 1.25rem; line-height: 1.3;">
-                                <i class="bi bi-person-gear me-2"></i>{{ __('admin.users.edit_user') }}
-                            </h5>
-                            <small class="text-white-50 d-block mt-1">{{ $user->name }} - {{ $user->email }}</small>
-                        </div>
-                    </div>
-                    <a href="{{ route('admin.users.index') }}" class="btn btn-light btn-sm shadow-sm">
-                        <i class="bi bi-arrow-left me-2"></i>{{ __('admin.common.back') }}
-                    </a>
-                </div>
-            </div>
-        </div>
+        <x-admin.card class="mb-4">
+            <x-admin.card-header-form
+                icon="bi-person-gear"
+                :title="__('admin.users.edit_user')"
+                :back-route="route('admin.users.index')"
+                :back-label="__('admin.common.back')">
+                <x-slot:subtitle>{{ $user->name }} - {{ $user->email }}</x-slot:subtitle>
+            </x-admin.card-header-form>
+        </x-admin.card>
 
 
         <!-- Main Card -->
@@ -152,28 +144,26 @@
 
                     <!-- Additional Permissions Section -->
                     <div class="mb-4">
-                        <div class="card border-0 shadow-sm rounded-4 bg-white">
-                            <div class="card-header bg-gradient-primary text-white border-0 py-2 px-3 rounded-top-4">
-                                <div class="d-flex justify-content-between align-items-center w-100" style="gap: 0.75rem;">
-                                    <h6 class="fw-bold text-white mb-0 d-flex align-items-center gap-2" style="font-size: 0.95rem; line-height: 1.3;">
-                                        <i class="bi bi-shield-lock-fill"></i>
-                                        {{ __('admin.users.additional_permissions') }}
-                                        <span class="badge bg-info ms-2" id="permissionsCount">{{ count(old('permissions', $userPermissionIds ?? [])) }}</span>
-                                    </h6>
+                        <x-admin.card>
+                            <x-admin.card-header-form
+                                icon="bi-shield-lock-fill"
+                                :title="__('admin.users.additional_permissions')">
+                                <x-slot:actions>
+                                    <span class="badge bg-info ms-2" id="permissionsCount">{{ count(old('permissions', $userPermissionIds ?? [])) }}</span>
                                     <div class="d-flex gap-2 align-items-center" style="flex: 0 0 auto;">
                                         <div class="input-group" style="max-width: 200px;">
                                             <span class="input-group-text bg-white border-0" style="height: 32px; padding: 0.25rem 0.5rem;">
                                                 <i class="bi bi-search text-muted" style="font-size: 0.875rem;"></i>
                                             </span>
-                                            <input type="text" 
-                                                   id="permissionSearch" 
-                                                   class="form-control border-0 bg-white rounded-end-3" 
+                                            <input type="text"
+                                                   id="permissionSearch"
+                                                   class="form-control border-0 bg-white rounded-end-3"
                                                    placeholder="{{ __('admin.users.search_permissions') }}"
                                                    style="height: 32px; font-size: 0.8rem; padding: 0.25rem 0.5rem;">
                                         </div>
                                     </div>
-                                </div>
-                            </div>
+                                </x-slot:actions>
+                            </x-admin.card-header-form>
                             <div class="card-body p-3">
                                 @php
                                     $selectedPermissions = old('permissions', $userPermissionIds);
@@ -296,7 +286,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </x-admin.card>
                     </div>
 
                     <!-- Action Buttons -->

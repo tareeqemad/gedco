@@ -91,15 +91,13 @@
                                         $currentLang = old('language', $news->language ?? $defaultLang);
                                     @endphp
                                     <input type="hidden" name="language" value="{{ $currentLang }}">
-                                    <div class="mb-4">
+                                    <div class="mb-3">
                                         <div class="d-flex align-items-center gap-2">
-                                            <label class="form-label fw-medium text-secondary mb-0 d-flex align-items-center gap-1">
-                                                <i class="bi bi-globe fs-6 text-primary"></i> {{ __('admin.labels.language') }}:
-                                            </label>
-                                            <span class="badge bg-info rounded-pill">
+                                            <label class="form-label mb-0" style="font-size: 0.82rem; color: #24364A; font-weight: 600;">اللغة:</label>
+                                            <span class="stat-chip">
+                                                <i class="bi bi-globe"></i>
                                                 {{ $currentLang === 'ar' ? __('admin.labels.arabic') : __('admin.labels.english') }}
                                             </span>
-                                            <small class="text-muted">({{ __('admin.common.language_default_selected') }})</small>
                                         </div>
                                         @error('language') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
                                     </div>

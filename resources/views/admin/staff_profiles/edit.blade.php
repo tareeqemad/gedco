@@ -36,20 +36,12 @@
     <div class="container-fluid p-0">
         <div class="row justify-content-center">
             <div class="col-xxl-11">
-                <div class="card border-0 shadow-sm rounded-4 bg-white">
-                    <div class="card-header bg-gradient-primary text-white border-0 py-2 px-3">
-                        <div class="d-flex justify-content-between align-items-center flex-wrap w-100" style="gap: 1rem;">
-                            <div>
-                                <h5 class="mb-0 fw-bold text-white d-flex align-items-center gap-2 flex-wrap" style="font-size: 1.25rem; line-height: 1.3;">
-                                    <i class="bi bi-person-gear"></i>
-                                    <span>{{ __('admin.staff_profiles.edit_header_title') }}</span>
-                                </h5>
-                            </div>
-                            <a href="{{ route('admin.staff-profiles.show', $profile) }}" class="btn btn-outline-light btn-sm rounded-3 shadow-sm d-flex align-items-center gap-1">
-                                <i class="bi bi-arrow-right"></i><span class="d-none d-md-inline">{{ __('admin.staff_profiles.edit_back_to_view') }}</span>
-                            </a>
-                        </div>
-                    </div>
+                <x-admin.card>
+                    <x-admin.card-header-form
+                        icon="bi-person-gear"
+                        :title="__('admin.staff_profiles.edit_header_title')"
+                        :back-route="route('admin.staff-profiles.show', $profile)"
+                        :back-label="__('admin.staff_profiles.edit_back_to_view')" />
 
                     <div class="card-body p-4 p-xl-5">
                         <!-- بطاقة معلومات سريعة -->
@@ -300,7 +292,7 @@
                             </div>
                         </form>
                     </div>
-                </div>
+                </x-admin.card>
             </div>
         </div>
     </div>

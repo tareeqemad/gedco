@@ -14,18 +14,16 @@
 
     <div class="container-fluid p-0">
         <!-- Header -->
-        <div class="card border-0 shadow-sm rounded-4 bg-white mb-4">
-            <div class="card-header bg-gradient-primary text-white border-0 py-2 px-3 d-flex align-items-center justify-content-between w-100" style="gap: 1rem;">
-                <div class="d-flex align-items-center gap-2" style="flex: 0 0 auto;">
-                    <div>
-                        <h5 class="mb-0 fw-bold text-white" style="font-size: 1.25rem; line-height: 1.3;">{{ __('admin.news.show_title') }} #{{ $item->id }}</h5>
-                        <small class="text-white opacity-75 d-none d-md-block" style="font-size: 0.8rem; line-height: 1.2;">{{ \Illuminate\Support\Str::limit($item->title, 50) }}</small>
-                    </div>
-                </div>
-                <div class="d-flex align-items-center gap-1 gap-md-2 flex-wrap" style="flex: 0 0 auto; margin-inline-start: auto;">
-                    <a href="{{ route('admin.news.index') }}" class="btn btn-light btn-sm shadow-sm">
-                        <i class="bi bi-arrow-left me-1"></i> <span class="d-none d-sm-inline">{{ __('admin.news.back') }}</span>
-                    </a>
+        <x-admin.card class="mb-4">
+            <x-admin.card-header-form
+                icon="bi-newspaper"
+                :title="__('admin.news.show_title') . ' #' . $item->id"
+                :back-route="route('admin.news.index')"
+                :back-label="__('admin.news.back')">
+                <x-slot:subtitle>
+                    <small class="text-white opacity-75 d-none d-md-block" style="font-size: 0.8rem; line-height: 1.2;">{{ \Illuminate\Support\Str::limit($item->title, 50) }}</small>
+                </x-slot:subtitle>
+                <x-slot:actions>
                     @can('news.edit')
                         <a href="{{ route('admin.news.edit', $item) }}" class="btn btn-warning btn-sm shadow-sm">
                             <i class="bi bi-pencil-square me-1"></i> <span class="d-none d-md-inline">{{ __('admin.news.edit_news') }}</span>
@@ -36,9 +34,9 @@
                             <i class="bi bi-trash me-1"></i> <span class="d-none d-sm-inline">{{ __('admin.news.delete') }}</span>
                         </button>
                     @endcan
-                </div>
-            </div>
-        </div>
+                </x-slot:actions>
+            </x-admin.card-header-form>
+        </x-admin.card>
 
         <div class="row g-3 g-md-4">
             <!-- Main content -->

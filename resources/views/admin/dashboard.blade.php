@@ -425,13 +425,13 @@
                 datasets: [{
                             label: '{{ __('admin.dashboard.activities') }}',
                     data: data,
-                    borderColor: '#0066cc',
-                    backgroundColor: 'rgba(0, 102, 204, 0.1)',
+                    borderColor: '#35516F',
+                    backgroundColor: 'rgba(53, 81, 111, 0.1)',
                     tension: 0.4,
                     fill: true,
                     borderWidth: 2,
                     pointRadius: 4,
-                    pointBackgroundColor: '#0066cc',
+                    pointBackgroundColor: '#35516F',
                     pointBorderColor: '#fff',
                     pointBorderWidth: 2,
                 }]

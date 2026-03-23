@@ -25,57 +25,44 @@
 
 @section('content')
     <div class="container-fluid p-0">
-        <!-- Header Section -->
-        <div class="card border-0 shadow-sm rounded-4 bg-white mb-4">
-            <div class="card-header bg-gradient-primary text-white border-0 py-2 px-3">
-                <div class="d-flex justify-content-between align-items-center flex-wrap w-100" style="gap: 0.75rem;">
-                    <div class="d-flex align-items-center gap-2 flex-wrap" style="flex: 1 1 auto;">
-                        <i class="bi bi-gear fs-5"></i>
-                        <h5 class="mb-0 fw-bold text-white" style="font-size: 1.1rem; line-height: 1.2;">
-                            {{ __('admin.settings.title') }}
-                        </h5>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <form method="POST" action="{{ route('admin.site-settings.update', $setting->id) }}">
             @csrf
             @method('PUT')
 
-            {{-- Tabs Navigation --}}
-            <div class="card border-0 shadow-sm rounded-4 bg-white mb-4">
-                <div class="card-header bg-gradient-primary text-white border-0 py-2 px-3">
-                    <ul class="nav nav-tabs nav-tabs-sm border-0" id="settingsTabs" role="tablist" style="background: rgba(255, 255, 255, 0.15); border-radius: 0.5rem; padding: 0.2rem;">
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link active px-3 py-2 rounded-3 text-white" id="footer-tab" data-bs-toggle="tab" data-bs-target="#footer-content" type="button" role="tab" style="background: rgba(255, 255, 255, 0.25); border: 1px solid rgba(255, 255, 255, 0.4); font-weight: 600; font-size: 0.85rem;">
-                                <i class="bi bi-info-circle me-1"></i>معلومات الفوتر
+            <x-admin.card>
+                {{-- Header with tabs --}}
+                <div class="card-header card-header-form border-0">
+                    <div class="d-flex justify-content-between align-items-center w-100 flex-wrap gap-2">
+                        <div class="d-flex align-items-center gap-2">
+                            <div class="form-icon-wrap">
+                                <i class="bi bi-gear"></i>
+                            </div>
+                            <h5 class="mb-0 fw-bold" style="font-size: 1.05rem; color: #24364A;">{{ __('admin.settings.title') }}</h5>
+                        </div>
+                        <div class="news-tabs" id="settingsTabs">
+                            <button class="news-tab active" id="footer-tab" data-bs-toggle="tab" data-bs-target="#footer-content" type="button">
+                                <i class="bi bi-info-circle"></i> معلومات الفوتر
                             </button>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link px-3 py-2 rounded-3 text-white" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact-content" type="button" role="tab" style="background: transparent; border: 1px solid rgba(255, 255, 255, 0.3); font-size: 0.85rem;">
-                                <i class="bi bi-envelope me-1"></i>تواصل معنا
+                            <button class="news-tab" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact-content" type="button">
+                                <i class="bi bi-envelope"></i> تواصل معنا
                             </button>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link px-3 py-2 rounded-3 text-white" id="channels-tab" data-bs-toggle="tab" data-bs-target="#channels-content" type="button" role="tab" style="background: transparent; border: 1px solid rgba(255, 255, 255, 0.3); font-size: 0.85rem;">
-                                <i class="bi bi-telephone me-1"></i>قنوات التواصل
+                            <button class="news-tab" id="channels-tab" data-bs-toggle="tab" data-bs-target="#channels-content" type="button">
+                                <i class="bi bi-telephone"></i> قنوات التواصل
                             </button>
-                        </li>
-                    </ul>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="card-body p-0">
                     <div class="tab-content" id="settingsTabsContent">
                         {{-- Footer Information Tab --}}
-                        <div class="tab-pane fade show active p-4" id="footer-content" role="tabpanel" aria-labelledby="footer-tab">
+                        <div class="tab-pane fade show active p-3 p-md-4" id="footer-content" role="tabpanel" aria-labelledby="footer-tab">
                             <div class="row g-4">
                                 {{-- Footer Title --}}
                                 <div class="col-12">
-                                    <div class="d-flex align-items-center gap-2 mb-3 pb-2 border-bottom">
-                                        <i class="bi bi-type-h1 text-primary fs-5"></i>
-                                        <h6 class="mb-0 fw-bold text-dark">عنوان الفوتر</h6>
-                                    </div>
+                                    <h6 class="fw-bold d-flex align-items-center gap-2 section-title">
+                                        <i class="bi bi-type-h1"></i> عنوان الفوتر
+                                    </h6>
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label fw-semibold text-dark d-flex align-items-center gap-1">
@@ -104,10 +91,9 @@
 
                                 {{-- Logo Path --}}
                                 <div class="col-12 mt-4">
-                                    <div class="d-flex align-items-center gap-2 mb-3 pb-2 border-bottom">
-                                        <i class="bi bi-image text-primary fs-5"></i>
-                                        <h6 class="mb-0 fw-bold text-dark">مسار الشعار</h6>
-                                    </div>
+                                    <h6 class="fw-bold d-flex align-items-center gap-2 section-title">
+                                        <i class="bi bi-image"></i> مسار الشعار
+                                    </h6>
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label fw-semibold text-dark d-flex align-items-center gap-1">
@@ -138,10 +124,9 @@
 
                                 {{-- Copyright --}}
                                 <div class="col-12 mt-4">
-                                    <div class="d-flex align-items-center gap-2 mb-3 pb-2 border-bottom">
-                                        <i class="bi bi-copyright text-primary fs-5"></i>
-                                        <h6 class="mb-0 fw-bold text-dark">حقوق النشر</h6>
-                                    </div>
+                                    <h6 class="fw-bold d-flex align-items-center gap-2 section-title">
+                                        <i class="bi bi-copyright"></i> حقوق النشر
+                                    </h6>
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label fw-semibold text-dark d-flex align-items-center gap-1">
@@ -167,13 +152,12 @@
                         </div>
 
                         {{-- Contact Us Tab --}}
-                        <div class="tab-pane fade p-4" id="contact-content" role="tabpanel" aria-labelledby="contact-tab">
+                        <div class="tab-pane fade p-3 p-md-4" id="contact-content" role="tabpanel" aria-labelledby="contact-tab">
                             <div class="row g-4">
                                 <div class="col-12">
-                                    <div class="d-flex align-items-center gap-2 mb-3 pb-2 border-bottom">
-                                        <i class="bi bi-envelope-heart text-primary fs-5"></i>
-                                        <h6 class="mb-0 fw-bold text-dark">عنوان قسم التواصل</h6>
-                                    </div>
+                                    <h6 class="fw-bold d-flex align-items-center gap-2 section-title">
+                                        <i class="bi bi-envelope-heart"></i> عنوان قسم التواصل
+                                    </h6>
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label fw-semibold text-dark d-flex align-items-center gap-1">
@@ -203,7 +187,7 @@
                         </div>
 
                         {{-- Contact Channels Tab --}}
-                        <div class="tab-pane fade p-4" id="channels-content" role="tabpanel" aria-labelledby="channels-tab">
+                        <div class="tab-pane fade p-3 p-md-4" id="channels-content" role="tabpanel" aria-labelledby="channels-tab">
                             <div class="alert alert-info border-0 rounded-4 mb-4 d-flex align-items-center gap-2">
                                 <i class="bi bi-info-circle fs-5"></i>
                                 <div>
@@ -310,38 +294,25 @@
                         </div>
                     </div>
                 </div>
-            </div>
 
-            {{-- Submit Button --}}
-            <div class="d-flex gap-2 justify-content-end mb-4">
-                <a href="{{ route('admin.dashboard') }}" class="btn btn-outline-secondary rounded-3 px-4 shadow-sm d-flex align-items-center gap-2">
-                    <i class="bi bi-x-circle"></i>
-                    إلغاء
-                </a>
-                <button type="submit" class="btn btn-primary rounded-3 px-4 shadow-sm fw-bold d-flex align-items-center gap-2">
-                    <i class="bi bi-check-circle"></i>
-                    {{ __('admin.settings.save') }}
-                </button>
-            </div>
+                {{-- Submit --}}
+                <div class="d-flex gap-2 justify-content-end p-3" style="border-top: 1px solid #E6ECF2;">
+                    <a href="{{ route('admin.dashboard') }}" class="form-btn-back" style="text-decoration: none;">
+                        <i class="bi bi-x-circle me-1"></i> إلغاء
+                    </a>
+                    <button type="submit" class="btn btn-primary rounded-3 px-4 fw-bold d-flex align-items-center gap-2" style="font-size: 0.85rem;">
+                        <i class="bi bi-check-circle"></i>
+                        {{ __('admin.settings.save') }}
+                    </button>
+                </div>
+            </x-admin.card>
         </form>
     </div>
 
     @push('styles')
     <style>
-        .bg-gradient-light {
-            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
-        }
-        
-        .nav-tabs-sm .nav-link {
-            transition: all 0.3s ease;
-        }
-        
-        .nav-tabs-sm .nav-link:hover {
-            background: rgba(255, 255, 255, 0.2) !important;
-        }
-        
         .border-primary-subtle {
-            border-color: rgba(0, 102, 204, 0.2) !important;
+            border-color: #E6ECF2 !important;
         }
     </style>
     @endpush

@@ -9,116 +9,95 @@
 @section('content')
     <div class="container-fluid">
         <!-- Header Section -->
-        <div class="card border-0 shadow-sm rounded-4 bg-white mb-4">
-            <div class="card-header bg-gradient-primary text-white border-0 py-2 px-3">
-                <div class="d-flex justify-content-between align-items-center flex-wrap w-100" style="gap: 1rem;">
-                    <div class="d-flex align-items-center gap-2" style="flex: 0 0 auto;">
-                        <div>
-                            <h5 class="mb-0 fw-bold text-white d-flex align-items-center gap-2 flex-wrap" style="font-size: 1.25rem; line-height: 1.3;">
-                                <i class="bi bi-images"></i>
-                                <span>{{ __('admin.slider.slider_items') }}</span>
-                            </h5>
-                        </div>
-                    </div>
-                    <div class="d-flex align-items-center gap-2" style="flex: 0 0 auto;">
-                        <span class="badge bg-white text-primary rounded-pill px-3 py-1">
-                            {{ $currentLanguage === 'ar' ? __('admin.labels.arabic') : __('admin.labels.english') }}
-                        </span>
-                        <a href="{{ route('admin.sliders.create') }}" class="btn btn-light btn-sm shadow-sm">
-                            <i class="bi bi-plus-circle me-1"></i>
-                            <span class="d-none d-md-inline">{{ __('admin.slider.add_new_slide') }}</span>
-                            <span class="d-md-none">{{ __('admin.actions.add') }}</span>
-                        </a>
-                    </div>
-                </div>
-            </div>
+        <x-admin.card class="mb-4">
+            <x-admin.card-header-index
+                icon="bi-images"
+                :title="__('admin.slider.slider_items')"
+                :create-route="route('admin.sliders.create')"
+                :create-label="__('admin.slider.add_new_slide')"
+                create-permission="sliders.create">
+                <x-slot:badge>
+                    <span class="badge bg-white text-primary rounded-pill px-3 py-1">
+                        {{ $currentLanguage === 'ar' ? __('admin.labels.arabic') : __('admin.labels.english') }}
+                    </span>
+                    <span class="stat-chip stat-chip-header">
+                        <i class="bi bi-images"></i>
+                        {{ __('admin.slider.total_slides') }}:
+                        <strong id="sliderTotalCount">{{ $sliders->total() }}</strong>
+                    </span>
+                </x-slot:badge>
+            </x-admin.card-header-index>
 
             <!-- Filters Section -->
             <div class="card-body p-3">
-                <div class="slider-filters">
-            <form id="sliderFilterForm" class="slider-filter-form">
-                <div class="slider-filter-row">
-                    <div class="slider-filter-group">
-                        <input type="text" 
-                               name="search" 
-                               id="sliderSearchInput"
-                               class="form-control rounded-3"
-                               placeholder="{{ __('admin.slider.search_placeholder') }}"
-                               value="{{ $search ?? '' }}">
+                <form id="sliderFilterForm" class="slider-filter-form">
+                    <div class="d-flex gap-2 align-items-center flex-wrap">
+                        <div style="flex: 1 1 45%;">
+                            <input type="text"
+                                   name="search"
+                                   id="sliderSearchInput"
+                                   class="form-control rounded-3"
+                                   placeholder="{{ __('admin.slider.search_placeholder') }}"
+                                   value="{{ $search ?? '' }}">
+                        </div>
+                        <div style="flex: 0 1 25%;">
+                            <select name="status" id="sliderStatusSelect" class="form-select rounded-3">
+                                <option value="">{{ __('admin.slider.filter_all') }}</option>
+                                <option value="active" {{ ($status ?? '') === 'active' ? 'selected' : '' }}>
+                                    {{ __('admin.slider.filter_active') }}
+                                </option>
+                                <option value="inactive" {{ ($status ?? '') === 'inactive' ? 'selected' : '' }}>
+                                    {{ __('admin.slider.filter_inactive') }}
+                                </option>
+                            </select>
+                        </div>
+                        <div style="flex: 0 0 auto;">
+                            <button type="submit" class="btn btn-primary rounded-3" id="sliderSearchBtn">
+                                <i class="bi bi-search me-1"></i>
+                                {{ __('admin.slider.search_button') }}
+                            </button>
+                        </div>
                     </div>
-                    <div class="slider-filter-group">
-                        <select name="status" id="sliderStatusSelect" class="form-select rounded-3">
-                            <option value="">{{ __('admin.slider.filter_all') }}</option>
-                            <option value="active" {{ ($status ?? '') === 'active' ? 'selected' : '' }}>
-                                {{ __('admin.slider.filter_active') }}
-                            </option>
-                            <option value="inactive" {{ ($status ?? '') === 'inactive' ? 'selected' : '' }}>
-                                {{ __('admin.slider.filter_inactive') }}
-                            </option>
-                        </select>
-                    </div>
-                    <div class="slider-filter-group">
-                        <button type="submit" class="btn btn-primary rounded-3" id="sliderSearchBtn">
-                            <i class="bi bi-search me-1"></i>
-                            {{ __('admin.slider.search_button') }}
-                        </button>
-                    </div>
-                </div>
-            </form>
+                </form>
+            </div>
+
+            <!-- Loading Indicator -->
+            <div class="slider-loading" id="sliderLoading">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">جاري التحميل...</span>
                 </div>
             </div>
 
-        <!-- Stats -->
-        <div class="card border-0 shadow-sm rounded-4 bg-white mb-4">
-            <div class="card-body py-2 px-3">
-                <div class="d-flex align-items-center gap-2">
-                    <i class="bi bi-images text-primary"></i>
-                    <span class="text-muted small">{{ __('admin.slider.total_slides') }}:</span>
-                    <strong class="text-primary" id="sliderTotalCount">{{ $sliders->total() }}</strong>
-                </div>
-            </div>
-        </div>
-
-        <!-- Loading Indicator -->
-        <div class="slider-loading" id="sliderLoading">
-            <div class="spinner-border text-primary" role="status">
-                <span class="visually-hidden">جاري التحميل...</span>
-            </div>
-        </div>
-
-        <!-- Main Card -->
-        <div class="card border-0 shadow-sm rounded-4 bg-white mb-4">
+            <!-- Table -->
             <div class="slider-table-wrapper">
-            <div class="table-responsive">
-                <table class="table slider-table" id="sliderTable">
-                    <thead>
-                        <tr>
-                            <th style="width: 60px;" class="text-center">#</th>
-                            <th style="width: 150px;" class="text-center">{{ __('admin.slider.table_bg_image') }}</th>
-                            <th>{{ __('admin.slider.table_title') }}</th>
-                            <th style="width: 100px;" class="text-center">{{ __('admin.slider.table_order') }}</th>
-                            <th style="width: 100px;" class="text-center">{{ __('admin.slider.table_status') }}</th>
-                            <th style="width: 120px;" class="text-center">{{ __('admin.slider.table_actions') }}</th>
-                        </tr>
-                    </thead>
-                    <tbody id="sliderGrid">
-                        @include('admin.site.sliders.partials.cards', ['sliders' => $sliders])
-                    </tbody>
-                </table>
+                <div class="table-responsive">
+                    <table class="table slider-table mb-0" id="sliderTable">
+                        <thead>
+                            <tr>
+                                <th style="width: 60px;" class="text-center">#</th>
+                                <th style="width: 150px;" class="text-center">{{ __('admin.slider.table_bg_image') }}</th>
+                                <th>{{ __('admin.slider.table_title') }}</th>
+                                <th style="width: 100px;" class="text-center">{{ __('admin.slider.table_order') }}</th>
+                                <th style="width: 100px;" class="text-center">{{ __('admin.slider.table_status') }}</th>
+                                <th style="width: 120px;" class="text-center">{{ __('admin.slider.table_actions') }}</th>
+                            </tr>
+                        </thead>
+                        <tbody id="sliderGrid">
+                            @include('admin.site.sliders.partials.cards', ['sliders' => $sliders])
+                        </tbody>
+                    </table>
+                </div>
             </div>
-        </div>
-        </div>
 
-        <!-- Pagination -->
-        @if($sliders->hasPages())
-            <div class="card border-0 shadow-sm rounded-4 bg-white mb-4">
-                <div class="card-body py-3">
+            <!-- Pagination -->
+            @if($sliders->hasPages())
+                <div class="px-3 py-2" style="border-top: 1px solid #E6ECF2;">
                     <div id="sliderPagination">
                         @include('admin.site.sliders.partials.pagination', ['sliders' => $sliders])
                     </div>
                 </div>
-            </div>
-        @endif
+            @endif
+        </x-admin.card>
     </div>
 
     <!-- Delete Modals -->
