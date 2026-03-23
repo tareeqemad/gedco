@@ -1897,27 +1897,14 @@ html {
 
 /* ========== Breadcrumb Redesign ========== */
 .breadcrumb-header {
-    margin-bottom: 1.5rem !important;
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-}
-
-.breadcrumb-header .page-title {
-    font-size: 1.35rem;
-    font-weight: 700;
-    color: #1a1a2e;
-    margin: 0;
-    letter-spacing: -0.3px;
+    margin-bottom: 1.25rem !important;
 }
 
 .breadcrumb-nav {
     display: flex;
     align-items: center;
-    gap: 6px;
-    font-size: 0.82rem;
+    gap: 8px;
+    font-size: 0.85rem;
 }
 
 .breadcrumb-nav a {
