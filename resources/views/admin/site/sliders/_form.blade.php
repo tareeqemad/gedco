@@ -29,7 +29,7 @@
         {{-- المعلومات الأساسية --}}
         <h6 class="section-title">
             <i class="bi bi-info-circle"></i>
-            المعلومات الأساسية
+            {{ __('admin.sliders_ui.basic_info') }}
         </h6>
         <div class="row g-3 mb-4">
             <div class="col-md-8">
@@ -93,11 +93,11 @@
                          class="rounded-3 shadow-sm" style="max-width: 200px; height: auto; cursor: pointer;"
                          onclick="window.open(this.src, '_blank')">
                     <div>
-                        <p class="mb-2 fw-semibold" style="color: #24364A;">الصورة الحالية</p>
+                        <p class="mb-2 fw-semibold" style="color: #24364A;">{{ __('admin.sliders_ui.current_image') }}</p>
                         <button type="submit" form="remove-image-{{ $slider->id }}"
                                 class="btn btn-sm btn-outline-danger rounded-3"
                                 onclick="return confirm('{{ __('admin.slider.form_bg_image_remove_confirm') }}')">
-                            <i class="bi bi-trash me-1"></i>إزالة
+                            <i class="bi bi-trash me-1"></i>{{ __('admin.sliders_ui.remove') }}
                         </button>
                     </div>
                 </div>
@@ -134,7 +134,7 @@
         {{-- أزرار الإجراءات --}}
         <div class="d-flex justify-content-end gap-3 pt-3 border-top">
             <a href="{{ route('admin.sliders.index') }}" class="btn btn-cancel">
-                <i class="bi bi-x-circle me-1"></i>إلغاء
+                <i class="bi bi-x-circle me-1"></i>{{ __('admin.actions.cancel') }}
             </a>
             <button type="submit" class="btn btn-save">
                 <i class="bi bi-check-circle me-1"></i>{{ __('admin.common.form_save') }}

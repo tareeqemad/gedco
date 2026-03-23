@@ -208,7 +208,7 @@
                 <li class="slide {{ $isActive('admin.contact-messages.*') }}">
                     <a href="{{ route('admin.contact-messages.index') }}" class="side-menu__item">
                         <i class="bi bi-envelope-fill side-menu__icon"></i>
-                        <span class="side-menu__label">رسائل الاتصال</span>
+                        <span class="side-menu__label">{{ __('admin.sidebar.contact_messages') }}</span>
                         @if(($unreadMessagesCount ?? 0) > 0)
                             <span class="badge bg-danger rounded-pill ms-auto">{{ $unreadMessagesCount }}</span>
                         @endif
@@ -304,18 +304,18 @@
                 <li class="slide has-sub {{ $isOpen('admin.activity-logs.*') }}">
                     <a href="javascript:void(0);" class="side-menu__item {{ $isActive('admin.activity-logs.*') }}">
                         <i class="bi bi-activity side-menu__icon"></i>
-                        <span class="side-menu__label">سجل الأنشطة</span>
+                        <span class="side-menu__label">{{ __('admin.sidebar.activity_log') }}</span>
                         <i class="fe fe-chevron-left side-menu__angle"></i>
                     </a>
                     <ul class="slide-menu child1" style="{{ $show('admin.activity-logs.*') }}">
                         <li class="slide">
                             <a href="{{ route('admin.activity-logs.index') }}" class="side-menu__item {{ $isActive('admin.activity-logs.index') }}">
-                                جميع الأنشطة
+                                {{ __('admin.sidebar.all_activities') }}
                             </a>
                         </li>
                         <li class="slide">
                             <a href="{{ route('admin.activity-logs.active-users') }}" class="side-menu__item {{ $isActive('admin.activity-logs.active-users') }}">
-                                المستخدمون المتصلون
+                                {{ __('admin.sidebar.online_users') }}
                             </a>
                         </li>
                     </ul>

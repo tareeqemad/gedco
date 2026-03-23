@@ -83,7 +83,7 @@
                                     <button type="button"
                                             class="btn btn-sm btn-outline-secondary rounded-3"
                                             onclick="showTemporaryPassword({{ $user->id }})"
-                                            title="عرض كلمة المرور"
+                                            title="{{ __('admin.users_ui.show_password') }}"
                                             id="showPasswordBtn-{{ $user->id }}">
                                         <i class="bi bi-eye"></i>
                                     </button>
@@ -91,7 +91,7 @@
                                             class="btn btn-sm btn-outline-secondary rounded-3"
                                             data-bs-toggle="modal"
                                             data-bs-target="#changePasswordModal-{{ $user->id }}"
-                                            title="تغيير كلمة المرور">
+                                            title="{{ __('admin.users_ui.change_password') }}">
                                         <i class="bi bi-key"></i>
                                     </button>
                                     @if(auth()->id() !== $user->id && !$user->hasRole('super-admin'))
@@ -208,16 +208,16 @@
                                     <button type="button"
                                             class="btn btn-sm btn-outline-success flex-fill"
                                             onclick="showTemporaryPassword({{ $user->id }})"
-                                            title="عرض كلمة المرور المؤقتة"
+                                            title="{{ __('admin.users_ui.show_password') }}"
                                             id="showPasswordBtn-mobile-{{ $user->id }}">
-                                        <i class="bi bi-eye me-1"></i>كلمة المرور
+                                        <i class="bi bi-eye me-1"></i>{{ __('admin.users_ui.password_text') }}
                                     </button>
                                     <button type="button"
                                             class="btn btn-sm btn-outline-info flex-fill"
                                             data-bs-toggle="modal"
                                             data-bs-target="#changePasswordModal-{{ $user->id }}"
-                                            title="تغيير كلمة المرور">
-                                        <i class="bi bi-key me-1"></i>تغيير
+                                            title="{{ __('admin.users_ui.change_password') }}">
+                                        <i class="bi bi-key me-1"></i>{{ __('admin.users_ui.change') }}
                                     </button>
                                 </div>
                             @endif

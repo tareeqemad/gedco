@@ -1,10 +1,10 @@
 @php
-    $breadcrumbTitle = 'عرض الرسالة';
-    $breadcrumbParent = 'رسائل الاتصال';
+    $breadcrumbTitle = __('admin.contact_messages.view_message');
+    $breadcrumbParent = __('admin.contact_messages.title');
     $breadcrumbParentUrl = route('admin.contact-messages.index');
 @endphp
 @extends('layouts.admin')
-@section('title', 'عرض الرسالة #' . $contactMessage->id)
+@section('title', __('admin.contact_messages.view_message') . ' #' . $contactMessage->id)
 
 @section('content')
     <div class="container-fluid p-0">
@@ -14,9 +14,9 @@
                 <x-admin.card>
                     <x-admin.card-header-form
                         icon="bi-envelope-open"
-                        title="تفاصيل الرسالة"
+                        :title="__('admin.contact_messages.message_details')"
                         :back-route="route('admin.contact-messages.index')"
-                        back-label="رسائل الاتصال" />
+                        :back-label="__('admin.contact_messages.title')" />
 
                     <div class="card-body p-4">
                         {{-- الموضوع والحالة --}}
@@ -25,11 +25,11 @@
                             <div class="d-flex align-items-center gap-2 flex-wrap">
                                 @if($contactMessage->is_read)
                                     <span class="badge bg-success-subtle text-success rounded-pill px-3 py-1">
-                                        <i class="bi bi-check-circle me-1"></i>مقروءة
+                                        <i class="bi bi-check-circle me-1"></i>{{ __('admin.ui.read') }}
                                     </span>
                                 @else
                                     <span class="badge rounded-pill px-3 py-1" style="background: rgba(217,119,6,0.1); color: #D97706;">
-                                        <i class="bi bi-circle-fill me-1" style="font-size: 0.4rem;"></i>غير مقروءة
+                                        <i class="bi bi-circle-fill me-1" style="font-size: 0.4rem;"></i>{{ __('admin.ui.unread') }}
                                     </span>
                                 @endif
                                 <small class="text-muted">
@@ -37,7 +37,7 @@
                                 </small>
                                 @if($contactMessage->read_at)
                                     <small class="text-muted">
-                                        <i class="bi bi-check-circle me-1"></i>قرئت: {{ $contactMessage->read_at->translatedFormat('d M Y - h:i A') }}
+                                        <i class="bi bi-check-circle me-1"></i>{{ __('admin.contact_messages.read_at') }} {{ $contactMessage->read_at->translatedFormat('d M Y - h:i A') }}
                                     </small>
                                 @endif
                             </div>
@@ -58,21 +58,21 @@
                     <div class="card-body p-4">
                         <h6 class="section-title mb-3">
                             <i class="bi bi-person"></i>
-                            معلومات المرسل
+                            {{ __('admin.contact_messages.sender_info') }}
                         </h6>
                         <div class="mb-3">
-                            <small class="text-muted d-block mb-1">الاسم</small>
+                            <small class="text-muted d-block mb-1">{{ __('admin.labels.name') }}</small>
                             <div class="fw-semibold" style="color: #24364A;">{{ $contactMessage->name }}</div>
                         </div>
                         <div class="mb-3">
-                            <small class="text-muted d-block mb-1">البريد الإلكتروني</small>
+                            <small class="text-muted d-block mb-1">{{ __('admin.labels.email') }}</small>
                             <a href="mailto:{{ $contactMessage->email }}" class="text-decoration-none" style="color: #1ABC9C;">
                                 {{ $contactMessage->email }}
                             </a>
                         </div>
                         @if($contactMessage->phone)
                             <div>
-                                <small class="text-muted d-block mb-1">الهاتف</small>
+                                <small class="text-muted d-block mb-1">{{ __('admin.labels.phone') }}</small>
                                 <a href="tel:{{ $contactMessage->phone }}" class="text-decoration-none" style="color: #1ABC9C;">
                                     {{ $contactMessage->phone }}
                                 </a>
@@ -86,35 +86,35 @@
                     <div class="card-body p-4">
                         <h6 class="section-title mb-3">
                             <i class="bi bi-lightning"></i>
-                            إجراءات سريعة
+                            {{ __('admin.contact_messages.quick_actions') }}
                         </h6>
                         <div class="d-grid gap-2">
                             <a href="mailto:{{ $contactMessage->email }}?subject=Re: {{ $contactMessage->subject }}"
                                class="btn btn-save btn-sm">
-                                <i class="bi bi-reply me-1"></i>الرد على الرسالة
+                                <i class="bi bi-reply me-1"></i>{{ __('admin.contact_messages.reply') }}
                             </a>
                             @if($contactMessage->phone)
                                 <a href="tel:{{ $contactMessage->phone }}" class="btn btn-cancel btn-sm">
-                                    <i class="bi bi-telephone me-1"></i>اتصال
+                                    <i class="bi bi-telephone me-1"></i>{{ __('admin.contact_messages.call') }}
                                 </a>
                             @endif
                             @if($contactMessage->is_read)
                                 <form action="{{ route('admin.contact-messages.mark-unread', $contactMessage) }}" method="POST">
                                     @csrf @method('PATCH')
                                     <button type="submit" class="btn btn-cancel btn-sm w-100">
-                                        <i class="bi bi-envelope me-1"></i>تحديد كغير مقروءة
+                                        <i class="bi bi-envelope me-1"></i>{{ __('admin.contact_messages.mark_unread') }}
                                     </button>
                                 </form>
                             @else
                                 <form action="{{ route('admin.contact-messages.mark-read', $contactMessage) }}" method="POST">
                                     @csrf @method('PATCH')
                                     <button type="submit" class="btn btn-cancel btn-sm w-100">
-                                        <i class="bi bi-check-circle me-1"></i>تحديد كمقروءة
+                                        <i class="bi bi-check-circle me-1"></i>{{ __('admin.contact_messages.mark_read') }}
                                     </button>
                                 </form>
                             @endif
                             <button type="button" id="btnDelete" class="btn btn-delete-confirm btn-sm">
-                                <i class="bi bi-trash me-1"></i>حذف الرسالة
+                                <i class="bi bi-trash me-1"></i>{{ __('admin.contact_messages.delete_message') }}
                             </button>
                         </div>
                     </div>
@@ -131,13 +131,13 @@
                 <div class="modal-content border-0 rounded-4">
                     <div class="modal-body text-center py-4">
                         <i class="bi bi-exclamation-triangle-fill text-danger" style="font-size: 2.5rem;"></i>
-                        <p class="mt-3 mb-1 fw-semibold">حذف هذه الرسالة؟</p>
+                        <p class="mt-3 mb-1 fw-semibold">{{ __('admin.contact_messages.delete_confirm') }}</p>
                         <small class="text-muted">{{ \Illuminate\Support\Str::limit($contactMessage->subject, 40) }}</small>
                     </div>
                     <div class="modal-footer border-0 justify-content-center gap-2 pt-0 pb-3">
-                        <button type="button" class="btn btn-cancel btn-sm" data-bs-dismiss="modal">إلغاء</button>
+                        <button type="button" class="btn btn-cancel btn-sm" data-bs-dismiss="modal">{{ __('admin.actions.cancel') }}</button>
                         <button type="submit" class="btn btn-delete-confirm btn-sm">
-                            <i class="bi bi-trash me-1"></i>حذف
+                            <i class="bi bi-trash me-1"></i>{{ __('admin.actions.delete') }}
                         </button>
                     </div>
                 </div>

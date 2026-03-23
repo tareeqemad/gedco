@@ -56,7 +56,7 @@
                     {{-- كلمة المرور والدور --}}
                     <h6 class="section-title">
                         <i class="bi bi-shield-lock"></i>
-                        الأمان والدور
+                        {{ __('admin.users_ui.security_role') }}
                     </h6>
                     <div class="row g-3 mb-4">
                         <div class="col-md-6">
@@ -149,7 +149,7 @@
                                                         <span>{{ $guardName }}</span>
                                                         <span class="badge bg-light text-dark rounded-pill px-2" style="font-size: 0.75rem;">{{ $perms->count() }}</span>
                                                         <span class="badge bg-success-subtle text-success rounded-pill px-2 ms-auto" style="font-size: 0.75rem;"
-                                                              id="selectedCount{{ $guardKey }}">{{ $guardSelectedCount }} محدد</span>
+                                                              id="selectedCount{{ $guardKey }}">{{ $guardSelectedCount }} {{ __('admin.ui.selected') }}</span>
                                                     </div>
                                                 </button>
                                             </h2>
@@ -179,7 +179,7 @@
                                                                 {{ ucfirst(str_replace(['-', '_'], ' ', $groupName)) }}
                                                                 <span class="badge bg-light text-muted rounded-pill ms-2" style="font-size: 0.7rem;">{{ count($groupPerms) }}</span>
                                                                 <span class="badge bg-success-subtle text-success rounded-pill ms-1 group-selected-count" style="font-size: 0.7rem;"
-                                                                      data-group="{{ $groupKey }}">{{ $groupSelectedCount }} محدد</span>
+                                                                      data-group="{{ $groupKey }}">{{ $groupSelectedCount }} {{ __('admin.ui.selected') }}</span>
                                                             </h6>
                                                             <div class="row g-2">
                                                                 @foreach($groupPerms as $perm)
@@ -246,13 +246,13 @@
                 document.querySelectorAll('[id^="selectedCount"]').forEach(badge => {
                     const guardId = badge.id.replace('selectedCount', '');
                     const guardChecked = document.querySelectorAll(`.permission-checkbox[data-guard="${guardId}"]:checked`).length;
-                    badge.textContent = `${guardChecked} محدد`;
+                    badge.textContent = `${guardChecked} {{ __('admin.ui.selected') }}`;
                 });
 
                 document.querySelectorAll('.group-selected-count').forEach(badge => {
                     const group = badge.getAttribute('data-group');
                     const groupChecked = document.querySelectorAll(`.permission-checkbox[data-group="${group}"]:checked`).length;
-                    badge.textContent = `${groupChecked} محدد`;
+                    badge.textContent = `${groupChecked} {{ __('admin.ui.selected') }}`;
                 });
             }
 
@@ -298,7 +298,7 @@
             document.getElementById('editUserForm')?.addEventListener('submit', function() {
                 const btn = document.getElementById('submitBtn');
                 btn.disabled = true;
-                btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span>جاري الحفظ...';
+                btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span>{{ __('admin.ui.saving') }}';
             });
         });
     </script>

@@ -947,6 +947,129 @@ return [
         'edit_title' => 'تعديل الدور',
     ],
 
+    // Common UI strings (shared across pages)
+    'ui' => [
+        'query' => 'استعلام',
+        'clear' => 'تفريغ',
+        'loading' => 'جاري التحميل...',
+        'loading_data' => 'جاري تحميل البيانات...',
+        'saving' => 'جاري الحفظ...',
+        'searching' => 'جاري البحث...',
+        'changing' => 'جاري التغيير...',
+        'deleting' => 'جاري الحذف...',
+        'confirm_delete' => 'تأكيد الحذف',
+        'delete_irreversible' => 'هذا الإجراء لا يمكن التراجع عنه',
+        'active_filters' => 'فلاتر نشطة:',
+        'no_results' => 'لا توجد نتائج',
+        'selected' => 'محدد',
+        'select_all' => 'تحديد الكل',
+        'deselect_all' => 'إلغاء تحديد الكل',
+        'more' => 'المزيد',
+        'close' => 'إغلاق',
+        'copy' => 'نسخ',
+        'copied' => 'تم',
+        'error' => 'خطأ',
+        'today' => 'اليوم',
+        'published' => 'منشور',
+        'draft' => 'مسودة',
+        'active' => 'نشط',
+        'deleted' => 'محذوف',
+        'read' => 'مقروءة',
+        'unread' => 'غير مقروءة',
+        'new' => 'جديدة',
+        'all_statuses' => 'كل الحالات',
+        'newest' => 'الأحدث',
+        'subject' => 'الموضوع',
+        'search_error' => 'حدث خطأ أثناء البحث. سيتم إعادة تحميل الصفحة.',
+        'message' => 'رسالة',
+    ],
+
+    // Contact Messages
+    'contact_messages' => [
+        'title' => 'رسائل الاتصال',
+        'view_message' => 'عرض الرسالة',
+        'message_details' => 'تفاصيل الرسالة',
+        'sender_info' => 'معلومات المرسل',
+        'quick_actions' => 'إجراءات سريعة',
+        'reply' => 'الرد على الرسالة',
+        'call' => 'اتصال',
+        'mark_read' => 'تحديد كمقروءة',
+        'mark_unread' => 'تحديد كغير مقروءة',
+        'delete_message' => 'حذف الرسالة',
+        'delete_confirm' => 'حذف هذه الرسالة؟',
+        'sender' => 'المرسل',
+        'date' => 'التاريخ',
+        'actions' => 'الإجراءات',
+        'no_messages' => 'لا توجد رسائل',
+        'search_placeholder' => 'ابحث بالاسم أو البريد أو الموضوع...',
+        'read_at' => 'قرئت:',
+    ],
+
+    // Dashboard
+    'dashboard_ui' => [
+        'today_activity' => 'نشاط اليوم',
+        'quick_links' => 'إجراءات سريعة',
+        'new_news' => 'خبر جديد',
+        'new_slide' => 'شريحة جديدة',
+        'new_user' => 'مستخدم جديد',
+        'new_ad' => 'إعلان جديد',
+        'settings' => 'الإعدادات',
+        'messages' => 'الرسائل',
+    ],
+
+    // Roles UI
+    'roles_ui' => [
+        'role_info' => 'معلومات الدور',
+        'search_permission' => 'ابحث عن صلاحية...',
+        'cannot_edit_super_admin' => 'لا يمكن تعديل اسم دور Super Admin',
+    ],
+
+    // Users UI (password modals etc)
+    'users_ui' => [
+        'security_role' => 'الأمان والدور',
+        'change_password' => 'تغيير كلمة المرور',
+        'change_password_alert' => 'سيتم تغيير كلمة المرور لهذا المستخدم. تأكد من إبلاغه بكلمة المرور الجديدة.',
+        'new_password' => 'كلمة المرور الجديدة',
+        'new_password_placeholder' => 'أدخل كلمة المرور (8 أحرف على الأقل)',
+        'confirm_password' => 'تأكيد كلمة المرور',
+        'confirm_password_placeholder' => 'أعد إدخال كلمة المرور',
+        'password_mismatch' => 'كلمة المرور غير متطابقة',
+        'delete_user' => 'حذف المستخدم',
+        'view_password' => 'عرض كلمة المرور',
+        'temp_password' => 'كلمة المرور المؤقتة',
+        'temp_password_label' => 'كلمة المرور:',
+        'temp_password_expires' => 'تنتهي صلاحيتها:',
+        'temp_password_note' => 'كلمة المرور المؤقتة تنتهي بعد 24 ساعة من الإنشاء/التعديل',
+        'no_temp_password' => 'لا توجد كلمة مرور مؤقتة متاحة',
+        'password_change_error' => 'حدث خطأ أثناء تغيير كلمة المرور',
+        'password_fetch_error' => 'حدث خطأ أثناء جلب كلمة المرور',
+        'show_password' => 'عرض كلمة المرور',
+        'password_text' => 'كلمة المرور',
+        'change' => 'تغيير',
+    ],
+
+    // Sliders UI
+    'sliders_ui' => [
+        'basic_info' => 'المعلومات الأساسية',
+        'current_image' => 'الصورة الحالية',
+        'remove' => 'إزالة',
+        'preview' => 'معاينة',
+    ],
+
+    // Profile UI
+    'profile_ui' => [
+        'image_too_large' => 'حجم الصورة يجب ألا يتجاوز 2 ميجابايت',
+        'file_must_be_image' => 'الملف يجب أن يكون صورة',
+    ],
+
+    // Sidebar extra items
+    'sidebar' => [
+        'contact_messages' => 'رسائل الاتصال',
+        'activity_log' => 'سجل الأنشطة',
+        'all_activities' => 'جميع الأنشطة',
+        'online_users' => 'المستخدمون المتصلون',
+    ],
+
     // Notifications
     'notifications' => [
         'title' => 'الإشعارات',

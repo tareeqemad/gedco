@@ -925,6 +925,129 @@ return [
         'edit_title' => 'Edit Role',
     ],
 
+    // Common UI strings
+    'ui' => [
+        'query' => 'Search',
+        'clear' => 'Clear',
+        'loading' => 'Loading...',
+        'loading_data' => 'Loading data...',
+        'saving' => 'Saving...',
+        'searching' => 'Searching...',
+        'changing' => 'Changing...',
+        'deleting' => 'Deleting...',
+        'confirm_delete' => 'Confirm Delete',
+        'delete_irreversible' => 'This action cannot be undone',
+        'active_filters' => 'Active filters:',
+        'no_results' => 'No results found',
+        'selected' => 'selected',
+        'select_all' => 'Select All',
+        'deselect_all' => 'Deselect All',
+        'more' => 'More',
+        'close' => 'Close',
+        'copy' => 'Copy',
+        'copied' => 'Copied',
+        'error' => 'Error',
+        'today' => 'Today',
+        'published' => 'Published',
+        'draft' => 'Draft',
+        'active' => 'Active',
+        'deleted' => 'Deleted',
+        'read' => 'Read',
+        'unread' => 'Unread',
+        'new' => 'New',
+        'all_statuses' => 'All Statuses',
+        'newest' => 'Newest',
+        'subject' => 'Subject',
+        'search_error' => 'An error occurred while searching. The page will reload.',
+        'message' => 'message',
+    ],
+
+    // Contact Messages
+    'contact_messages' => [
+        'title' => 'Contact Messages',
+        'view_message' => 'View Message',
+        'message_details' => 'Message Details',
+        'sender_info' => 'Sender Information',
+        'quick_actions' => 'Quick Actions',
+        'reply' => 'Reply to Message',
+        'call' => 'Call',
+        'mark_read' => 'Mark as Read',
+        'mark_unread' => 'Mark as Unread',
+        'delete_message' => 'Delete Message',
+        'delete_confirm' => 'Delete this message?',
+        'sender' => 'Sender',
+        'date' => 'Date',
+        'actions' => 'Actions',
+        'no_messages' => 'No messages',
+        'search_placeholder' => 'Search by name, email or subject...',
+        'read_at' => 'Read at:',
+    ],
+
+    // Dashboard
+    'dashboard_ui' => [
+        'today_activity' => "Today's Activity",
+        'quick_links' => 'Quick Actions',
+        'new_news' => 'New Article',
+        'new_slide' => 'New Slide',
+        'new_user' => 'New User',
+        'new_ad' => 'New Ad',
+        'settings' => 'Settings',
+        'messages' => 'Messages',
+    ],
+
+    // Roles UI
+    'roles_ui' => [
+        'role_info' => 'Role Information',
+        'search_permission' => 'Search permissions...',
+        'cannot_edit_super_admin' => 'Cannot edit Super Admin role name',
+    ],
+
+    // Users UI
+    'users_ui' => [
+        'security_role' => 'Security & Role',
+        'change_password' => 'Change Password',
+        'change_password_alert' => 'The password for this user will be changed. Make sure to inform them of the new password.',
+        'new_password' => 'New Password',
+        'new_password_placeholder' => 'Enter password (minimum 8 characters)',
+        'confirm_password' => 'Confirm Password',
+        'confirm_password_placeholder' => 'Re-enter password',
+        'password_mismatch' => 'Passwords do not match',
+        'delete_user' => 'Delete User',
+        'view_password' => 'View Password',
+        'temp_password' => 'Temporary Password',
+        'temp_password_label' => 'Password:',
+        'temp_password_expires' => 'Expires at:',
+        'temp_password_note' => 'Temporary password expires 24 hours after creation/modification',
+        'no_temp_password' => 'No temporary password available',
+        'password_change_error' => 'An error occurred while changing the password',
+        'password_fetch_error' => 'An error occurred while fetching the password',
+        'show_password' => 'Show Password',
+        'password_text' => 'Password',
+        'change' => 'Change',
+    ],
+
+    // Sliders UI
+    'sliders_ui' => [
+        'basic_info' => 'Basic Information',
+        'current_image' => 'Current Image',
+        'remove' => 'Remove',
+        'preview' => 'Preview',
+    ],
+
+    // Profile UI
+    'profile_ui' => [
+        'image_too_large' => 'Image size must not exceed 2 MB',
+        'file_must_be_image' => 'File must be an image',
+    ],
+
+    // Sidebar extra items
+    'sidebar' => [
+        'contact_messages' => 'Contact Messages',
+        'activity_log' => 'Activity Log',
+        'all_activities' => 'All Activities',
+        'online_users' => 'Online Users',
+    ],
+
     // Notifications
     'notifications' => [
         'title' => 'Notifications',

@@ -5,11 +5,11 @@
             <thead class="table-light">
                 <tr>
                     <th class="text-center" style="width: 50px">#</th>
-                    <th>المرسل</th>
-                    <th>الموضوع</th>
-                    <th>التاريخ</th>
-                    <th class="text-center" style="width: 100px">الحالة</th>
-                    <th class="text-center" style="width: 130px">الإجراءات</th>
+                    <th>{{ __('admin.contact_messages.sender') }}</th>
+                    <th>{{ __('admin.ui.subject') }}</th>
+                    <th>{{ __('admin.contact_messages.date') }}</th>
+                    <th class="text-center" style="width: 100px">{{ __('admin.labels.status') }}</th>
+                    <th class="text-center" style="width: 130px">{{ __('admin.contact_messages.actions') }}</th>
                 </tr>
             </thead>
             <tbody>
@@ -41,18 +41,18 @@
                         <td class="text-center">
                             @if($message->is_read)
                                 <span class="stat-chip" style="font-size: 0.65rem; color: #16A34A;">
-                                    <i class="bi bi-check-circle"></i> مقروءة
+                                    <i class="bi bi-check-circle"></i> {{ __('admin.ui.read') }}
                                 </span>
                             @else
                                 <span class="stat-chip" style="font-size: 0.65rem; color: #D97706; background: rgba(217,119,6,0.08); border-color: rgba(217,119,6,0.15);">
-                                    <i class="bi bi-circle-fill" style="font-size: 0.4rem;"></i> جديدة
+                                    <i class="bi bi-circle-fill" style="font-size: 0.4rem;"></i> {{ __('admin.ui.new') }}
                                 </span>
                             @endif
                         </td>
                         <td class="text-center">
                             <div class="d-flex gap-1 justify-content-center">
                                 <a href="{{ route('admin.contact-messages.show', $message) }}"
-                                   class="btn btn-sm btn-outline-primary rounded-3" title="عرض">
+                                   class="btn btn-sm btn-outline-primary rounded-3" title="{{ __('admin.actions.view') }}">
                                     <i class="bi bi-eye"></i>
                                 </a>
                                 <div class="dropdown">
@@ -65,7 +65,7 @@
                                                 <form action="{{ route('admin.contact-messages.mark-unread', $message) }}" method="POST">
                                                     @csrf @method('PATCH')
                                                     <button type="submit" class="dropdown-item">
-                                                        <i class="bi bi-envelope me-2 text-muted"></i>تحديد كغير مقروءة
+                                                        <i class="bi bi-envelope me-2 text-muted"></i>{{ __('admin.contact_messages.mark_unread') }}
                                                     </button>
                                                 </form>
                                             </li>
@@ -74,7 +74,7 @@
                                                 <form action="{{ route('admin.contact-messages.mark-read', $message) }}" method="POST">
                                                     @csrf @method('PATCH')
                                                     <button type="submit" class="dropdown-item">
-                                                        <i class="bi bi-check-circle me-2 text-muted"></i>تحديد كمقروءة
+                                                        <i class="bi bi-check-circle me-2 text-muted"></i>{{ __('admin.contact_messages.mark_read') }}
                                                     </button>
                                                 </form>
                                             </li>
@@ -83,7 +83,7 @@
                                         <li>
                                             <button type="button" class="dropdown-item text-danger"
                                                     data-bs-toggle="modal" data-bs-target="#deleteModal-{{ $message->id }}">
-                                                <i class="bi bi-trash me-2"></i>حذف
+                                                <i class="bi bi-trash me-2"></i>{{ __('admin.actions.delete') }}
                                             </button>
                                         </li>
                                     </ul>
@@ -104,7 +104,7 @@
                     <div class="d-flex align-items-center gap-2 mb-1">
                         <span class="fw-bold" style="font-size: 0.85rem; color: #24364A;">{{ $message->name }}</span>
                         @if(!$message->is_read)
-                            <span class="stat-chip" style="font-size: 0.55rem; color: #D97706; background: rgba(217,119,6,0.08);">جديدة</span>
+                            <span class="stat-chip" style="font-size: 0.55rem; color: #D97706; background: rgba(217,119,6,0.08);">{{ __('admin.ui.new') }}</span>
                         @endif
                     </div>
                     <div class="{{ !$message->is_read ? 'fw-semibold' : '' }}" style="font-size: 0.82rem;">{{ $message->subject }}</div>
@@ -119,7 +119,7 @@
 @else
     <div class="text-center py-5">
         <i class="bi bi-envelope-open" style="font-size: 2.5rem; color: #CDD9E3;"></i>
-        <p class="text-muted mt-3" style="font-size: 0.85rem;">لا توجد رسائل</p>
+        <p class="text-muted mt-3" style="font-size: 0.85rem;">{{ __('admin.contact_messages.no_messages') }}</p>
     </div>
 @endif
 
@@ -132,13 +132,13 @@
                 <div class="modal-content border-0 rounded-4">
                     <div class="modal-body text-center py-4">
                         <i class="bi bi-exclamation-triangle-fill text-danger" style="font-size: 2.5rem;"></i>
-                        <p class="mt-3 mb-1 fw-semibold">حذف هذه الرسالة؟</p>
+                        <p class="mt-3 mb-1 fw-semibold">{{ __('admin.contact_messages.delete_confirm') }}</p>
                         <small class="text-muted">{{ \Illuminate\Support\Str::limit($message->subject, 40) }}</small>
                     </div>
                     <div class="modal-footer border-0 justify-content-center gap-2 pt-0 pb-3">
-                        <button type="button" class="btn btn-cancel btn-sm" data-bs-dismiss="modal">إلغاء</button>
+                        <button type="button" class="btn btn-cancel btn-sm" data-bs-dismiss="modal">{{ __('admin.actions.cancel') }}</button>
                         <button type="submit" class="btn btn-delete-confirm btn-sm">
-                            <i class="bi bi-trash me-1"></i>حذف
+                            <i class="bi bi-trash me-1"></i>{{ __('admin.actions.delete') }}
                         </button>
                     </div>
                 </div>

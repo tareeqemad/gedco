@@ -51,17 +51,17 @@
                         </div>
                         <div style="flex: 0 0 auto;">
                             <button type="submit" class="btn btn-outline-secondary rounded-3" id="searchBtn">
-                                <i class="bi bi-search me-1"></i> استعلام
+                                <i class="bi bi-search me-1"></i> {{ __('admin.ui.query') }}
                             </button>
                             <a href="{{ route('admin.users.index') }}" class="btn btn-outline-danger rounded-3">
-                                <i class="bi bi-x-circle me-1"></i> تفريغ
+                                <i class="bi bi-x-circle me-1"></i> {{ __('admin.ui.clear') }}
                             </a>
                         </div>
                     </div>
                 </form>
                 @if(request()->hasAny(['search', 'role']))
                     <div class="users-filter-badge">
-                        <span class="text-muted">فلاتر نشطة:</span>
+                        <span class="text-muted">{{ __('admin.ui.active_filters') }}</span>
                         @if(request('search'))
                             <span class="badge bg-primary">{{ __('admin.users.search_placeholder') }}: {{ request('search') }}</span>
                         @endif
@@ -114,7 +114,7 @@
                             <div class="modal-content">
                                 <div class="modal-header border-0">
                                     <h5 class="modal-title text-danger" id="deleteUserModalLabel-{{ $user->id }}">
-                                        <i class="bi bi-exclamation-triangle-fill me-2"></i>تأكيد الحذف
+                                        <i class="bi bi-exclamation-triangle-fill me-2"></i>{{ __('admin.ui.confirm_delete') }}
                                     </h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
@@ -122,12 +122,12 @@
                                     <i class="bi bi-exclamation-triangle-fill text-danger" style="font-size: 3rem;"></i>
                                     <p class="mt-3 mb-2">{{ __('admin.users.delete_confirm') }}</p>
                                     <p class="fw-bold text-dark">{{ $user->name }} ({{ $user->email }})</p>
-                                    <small class="text-danger">هذا الإجراء لا يمكن التراجع عنه</small>
+                                    <small class="text-danger">{{ __('admin.ui.delete_irreversible') }}</small>
                                 </div>
                                 <div class="modal-footer border-0">
-                                    <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">إلغاء</button>
+                                    <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">{{ __('admin.actions.cancel') }}</button>
                                     <button type="submit" class="btn btn-delete-confirm">
-                                        <i class="bi bi-trash me-1"></i>حذف المستخدم
+                                        <i class="bi bi-trash me-1"></i>{{ __('admin.users_ui.delete_user') }}
                                     </button>
                                 </div>
                             </div>
@@ -144,7 +144,7 @@
                     <div class="modal-content">
                         <div class="modal-header border-0">
                             <h5 class="modal-title" id="changePasswordModalLabel-{{ $user->id }}" style="color: #24364A;">
-                                <i class="bi bi-key-fill me-2" style="color: #1ABC9C;"></i>تغيير كلمة المرور
+                                <i class="bi bi-key-fill me-2" style="color: #1ABC9C;"></i>{{ __('admin.users_ui.change_password') }}
                             </h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
@@ -162,11 +162,11 @@
 
                                 <div class="alert alert-info d-flex align-items-center mb-3 d-none" id="passwordAlert-{{ $user->id }}">
                                     <i class="bi bi-info-circle-fill me-2"></i>
-                                    <small>سيتم تغيير كلمة المرور لهذا المستخدم. تأكد من إبلاغه بكلمة المرور الجديدة.</small>
+                                    <small>{{ __('admin.users_ui.change_password_alert') }}</small>
                                 </div>
 
                                 <div class="mb-3">
-                                    <label for="password-{{ $user->id }}" class="form-label">كلمة المرور الجديدة</label>
+                                    <label for="password-{{ $user->id }}" class="form-label">{{ __('admin.users_ui.new_password') }}</label>
                                     <div class="input-group">
                                         <input type="password" 
                                                class="form-control" 
@@ -174,7 +174,7 @@
                                                name="password" 
                                                required 
                                                minlength="8"
-                                               placeholder="أدخل كلمة المرور (8 أحرف على الأقل)">
+                                               placeholder="{{ __('admin.users_ui.new_password_placeholder') }}">
                                         <button class="btn btn-outline-secondary" type="button" onclick="togglePassword('password-{{ $user->id }}', this)">
                                             <i class="bi bi-eye"></i>
                                         </button>
@@ -182,7 +182,7 @@
                                 </div>
 
                                 <div class="mb-3">
-                                    <label for="password_confirmation-{{ $user->id }}" class="form-label">تأكيد كلمة المرور</label>
+                                    <label for="password_confirmation-{{ $user->id }}" class="form-label">{{ __('admin.users_ui.confirm_password') }}</label>
                                     <div class="input-group">
                                         <input type="password" 
                                                class="form-control" 
@@ -190,20 +190,20 @@
                                                name="password_confirmation" 
                                                required 
                                                minlength="8"
-                                               placeholder="أعد إدخال كلمة المرور">
+                                               placeholder="{{ __('admin.users_ui.confirm_password_placeholder') }}">
                                         <button class="btn btn-outline-secondary" type="button" onclick="togglePassword('password_confirmation-{{ $user->id }}', this)">
                                             <i class="bi bi-eye"></i>
                                         </button>
                                     </div>
                                     <div id="password-match-{{ $user->id }}" class="invalid-feedback d-none">
-                                        كلمة المرور غير متطابقة
+                                        {{ __('admin.users_ui.password_mismatch') }}
                                     </div>
                                 </div>
                             </div>
                             <div class="modal-footer border-0">
-                                <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">إلغاء</button>
+                                <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">{{ __('admin.actions.cancel') }}</button>
                                 <button type="submit" class="btn btn-save" id="submitBtn-{{ $user->id }}">
-                                    <i class="bi bi-check-circle me-1"></i>تغيير كلمة المرور
+                                    <i class="bi bi-check-circle me-1"></i>{{ __('admin.users_ui.change_password') }}
                                 </button>
                             </div>
                         </form>
@@ -314,7 +314,7 @@
                 // Re-enable button
                 if (searchBtn) {
                     searchBtn.disabled = false;
-                    searchBtn.innerHTML = '<i class="bi bi-search me-2"></i>استعلام';
+                    searchBtn.innerHTML = '<i class="bi bi-search me-2"></i>{{ __('admin.ui.query') }}';
                 }
             });
         }
@@ -591,7 +591,7 @@
                                     alert('خطأ: ' + (data.message || 'حدث خطأ أثناء تغيير كلمة المرور'));
                                 }
                                 submitBtn{{ $user->id }}.disabled = false;
-                                submitBtn{{ $user->id }}.innerHTML = '<i class="bi bi-check-circle me-1"></i>تغيير كلمة المرور';
+                                submitBtn{{ $user->id }}.innerHTML = '<i class="bi bi-check-circle me-1"></i>{{ __('admin.users_ui.change_password') }}';
                             }
                         })
                         .catch(error => {
@@ -602,7 +602,7 @@
                                 alert('حدث خطأ أثناء تغيير كلمة المرور');
                             }
                             submitBtn{{ $user->id }}.disabled = false;
-                            submitBtn{{ $user->id }}.innerHTML = '<i class="bi bi-check-circle me-1"></i>تغيير كلمة المرور';
+                            submitBtn{{ $user->id }}.innerHTML = '<i class="bi bi-check-circle me-1"></i>{{ __('admin.users_ui.change_password') }}';
                         });
                     });
                 }

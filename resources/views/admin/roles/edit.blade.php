@@ -25,7 +25,7 @@
                             <div class="mb-4">
                                 <h6 class="section-title d-flex align-items-center gap-2 mb-3">
                                     <i class="bi bi-tag"></i>
-                                    معلومات الدور
+                                    {{ __('admin.roles_ui.role_info') }}
                                 </h6>
                                 <div class="mb-0">
                                     <label class="form-label fw-semibold text-dark mb-2">
@@ -41,7 +41,7 @@
                                     @if($role->name === 'super-admin')
                                         <small class="text-muted d-block mt-2">
                                             <i class="bi bi-info-circle me-1"></i>
-                                            لا يمكن تعديل اسم دور Super Admin
+                                            {{ __('admin.roles_ui.cannot_edit_super_admin') }}
                                         </small>
                                     @endif
                                     @error('name')
@@ -57,7 +57,7 @@
                                     {{ __('admin.common.form_save') }}
                                 </button>
                                 <a href="{{ route('admin.roles.index') }}" class="btn btn-cancel">
-                                    إلغاء
+                                    {{ __('admin.actions.cancel') }}
                                 </a>
                             </div>
                         </div>
@@ -78,7 +78,7 @@
                                         <input type="text"
                                                id="permissionSearch"
                                                class="form-control border-0 bg-white rounded-end-3"
-                                               placeholder="ابحث عن صلاحية..."
+                                               placeholder="{{ __('admin.roles_ui.search_permission') }}"
                                                style="height: 38px;">
                                     </div>
                                 </div>
