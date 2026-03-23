@@ -80,7 +80,7 @@
                                            name="name" 
                                            id="nameInput"
                                            value="{{ old('name', $user->name) }}"
-                                           class="form-control rounded-3 border-0 bg-light @error('name') is-invalid @enderror" 
+                                           class="form-control rounded-3  @error('name') is-invalid @enderror" 
                                            placeholder="{{ __('admin.profile.name_placeholder') }}"
                                            required
                                            style="height: 45px; font-size: 1rem;">
@@ -98,7 +98,7 @@
                                            name="email" 
                                            id="emailInput"
                                            value="{{ old('email', $user->email) }}"
-                                           class="form-control rounded-3 border-0 bg-light @error('email') is-invalid @enderror" 
+                                           class="form-control rounded-3  @error('email') is-invalid @enderror" 
                                            placeholder="{{ __('admin.profile.email_placeholder') }}"
                                            required
                                            style="height: 45px; font-size: 1rem;">
@@ -139,7 +139,7 @@
                                     <input type="password" 
                                            name="current_password" 
                                            id="currentPasswordInput"
-                                           class="form-control rounded-3 border-0 bg-light @error('current_password') is-invalid @enderror" 
+                                           class="form-control rounded-3  @error('current_password') is-invalid @enderror" 
                                            placeholder="{{ __('admin.profile.current_password_placeholder') }}"
                                            required
                                            style="height: 45px; font-size: 1rem;">
@@ -156,7 +156,7 @@
                                     <input type="password" 
                                            name="password" 
                                            id="passwordInput"
-                                           class="form-control rounded-3 border-0 bg-light @error('password') is-invalid @enderror" 
+                                           class="form-control rounded-3  @error('password') is-invalid @enderror" 
                                            placeholder="{{ __('admin.profile.new_password_placeholder') }}"
                                            required
                                            style="height: 45px; font-size: 1rem;">
@@ -173,7 +173,7 @@
                                     <input type="password" 
                                            name="password_confirmation" 
                                            id="passwordConfirmationInput"
-                                           class="form-control rounded-3 border-0 bg-light" 
+                                           class="form-control rounded-3 " 
                                            placeholder="{{ __('admin.profile.confirm_password_placeholder') }}"
                                            required
                                            style="height: 45px; font-size: 1rem;">
@@ -247,29 +247,6 @@
             box-shadow: 0 0 0 0.2rem rgba(0, 102, 204, 0.15) !important;
         }
 
-        .btn-primary {
-            background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%) !important;
-            border: none !important;
-            transition: all 0.3s ease;
-        }
-
-        .btn-primary:hover {
-            background: linear-gradient(135deg, #0052a3 0%, #004080 100%) !important;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 102, 204, 0.3) !important;
-        }
-
-        .btn-danger {
-            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%) !important;
-            border: none !important;
-            transition: all 0.3s ease;
-        }
-
-        .btn-danger:hover {
-            background: linear-gradient(135deg, #c82333 0%, #bd2130 100%) !important;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(220, 53, 69, 0.3) !important;
-        }
 
         @media (max-width: 768px) {
             .avatar-xl {

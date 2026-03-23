@@ -3015,6 +3015,35 @@ html {
     }
 }
 
+/* ========== Global Form Input Fix: Override border-0 bg-light ========== */
+/* All form inputs should have visible borders for consistency */
+.card-body .form-control.border-0.bg-light,
+.card-body .form-select.border-0.bg-light,
+.card-body .form-control.bg-light,
+.card-body .form-select.bg-light {
+    background-color: #FFFFFF !important;
+    border: 1px solid #CDD9E3 !important;
+}
+.card-body .form-control.border-0.bg-light:focus,
+.card-body .form-select.border-0.bg-light:focus,
+.card-body .form-control.bg-light:focus,
+.card-body .form-select.bg-light:focus {
+    border-color: #1ABC9C !important;
+    box-shadow: 0 0 0 3px rgba(26, 188, 156, 0.1) !important;
+    background-color: #FFFFFF !important;
+}
+
+/* Fix search buttons that are btn-primary in filter bars */
+.card-body form .btn-primary:not(.btn-action-add):not([type="submit"]).rounded-3 {
+    background: #FFFFFF !important;
+    border: 1px solid #CDD9E3 !important;
+    color: #5B7088 !important;
+}
+.card-body form .btn-primary:not(.btn-action-add):not([type="submit"]).rounded-3:hover {
+    background: #F7FAFC !important;
+    color: #24364A !important;
+}
+
 /* ========== Readonly Input Fields Styling ========== */
 /* Simple rule: if readonly, show not-allowed cursor (except date pickers) */
 input[readonly]:not([type="date"]):not(.flatpickr-input):not(.admin-date-input),

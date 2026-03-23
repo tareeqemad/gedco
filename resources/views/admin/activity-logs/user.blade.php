@@ -1,29 +1,13 @@
+@php
+    $breadcrumbTitle = 'أنشطة المستخدم: ' . $user->name;
+    $breadcrumbParent = 'سجل الأنشطة';
+    $breadcrumbParentUrl = route('admin.activity-logs.index');
+@endphp
 @extends('layouts.admin')
 @section('title', 'أنشطة المستخدم')
 
 @section('content')
-    <div class="page-header">
-        <div class="page-block">
-            <div class="row align-items-center">
-                <div class="col-md-12">
-                    <div class="page-header-title">
-                        <h5 class="m-b-10">أنشطة المستخدم: {{ $user->name }}</h5>
-                    </div>
-                    <ul class="breadcrumb">
-                        <li class="breadcrumb-item">
-                            <a href="{{ route('admin.dashboard') }}">
-                                <i class="bi bi-house"></i>
-                            </a>
-                        </li>
-                        <li class="breadcrumb-item">
-                            <a href="{{ route('admin.activity-logs.index') }}">سجل الأنشطة</a>
-                        </li>
-                        <li class="breadcrumb-item active">{{ $user->name }}</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
+    <div class="container-fluid p-0">
 
     <!-- معلومات المستخدم -->
     <div class="row mb-4">
@@ -137,16 +121,16 @@
     </div>
 
     <!-- سجل الأنشطة -->
-    <div class="row">
-        <div class="col-12">
-            <div class="card border-0 shadow-sm">
-                <div class="card-header bg-white border-bottom">
-                    <h5 class="mb-0">سجل الأنشطة</h5>
-                </div>
-                <div class="card-body border-bottom bg-light">
+        <x-admin.card>
+            <x-admin.card-header-index
+                icon="bi-list-check"
+                title="سجل الأنشطة" />
+
+                <div class="card-body p-3">
                     <form method="GET" action="{{ route('admin.activity-logs.user', $user->id) }}" class="row g-3">
                         <div class="col-md-3">
-                            <select name="action" class="form-select form-select-sm">
+                            <label class="form-label fw-semibold text-dark mb-1">العملية</label>
+                            <select name="action" class="form-select rounded-3" style="height: 45px;">
                                 <option value="">جميع العمليات</option>
                                 <option value="login" {{ request('action') == 'login' ? 'selected' : '' }}>تسجيل الدخول</option>
                                 <option value="logout" {{ request('action') == 'logout' ? 'selected' : '' }}>تسجيل الخروج</option>
@@ -157,13 +141,16 @@
                             </select>
                         </div>
                         <div class="col-md-3">
-                            <input type="date" name="date_from" class="form-control form-control-sm" value="{{ request('date_from') }}" placeholder="من تاريخ">
+                            <label class="form-label fw-semibold text-dark mb-1">من تاريخ</label>
+                            <input type="date" name="date_from" class="form-control rounded-3" style="height: 45px;" value="{{ request('date_from') }}">
                         </div>
                         <div class="col-md-3">
-                            <input type="date" name="date_to" class="form-control form-control-sm" value="{{ request('date_to') }}" placeholder="إلى تاريخ">
+                            <label class="form-label fw-semibold text-dark mb-1">إلى تاريخ</label>
+                            <input type="date" name="date_to" class="form-control rounded-3" style="height: 45px;" value="{{ request('date_to') }}">
                         </div>
                         <div class="col-md-3">
-                            <button type="submit" class="btn btn-primary btn-sm w-100">
+                            <label class="form-label mb-1">&nbsp;</label>
+                            <button type="submit" class="btn btn-outline-primary w-100 rounded-3" style="height: 45px;">
                                 <i class="bi bi-search me-1"></i> تصفية
                             </button>
                         </div>
@@ -213,11 +200,17 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="card-footer bg-white">
-                    {{ $logs->links() }}
+                @if($logs->hasPages())
+                <div class="px-3 py-2" style="border-top: 1px solid #E6ECF2;">
+                    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 small">
+                        <div class="text-muted">
+                            عرض {{ $logs->firstItem() }} - {{ $logs->lastItem() }} من {{ $logs->total() }}
+                        </div>
+                        {{ $logs->links() }}
+                    </div>
                 </div>
-            </div>
-        </div>
+                @endif
+        </x-admin.card>
     </div>
 @endsection
 

@@ -1,26 +1,13 @@
+@php
+    $breadcrumbTitle = 'سجل الأنشطة';
+    $breadcrumbParent = __('admin.breadcrumbs.home');
+    $breadcrumbParentUrl = route('admin.dashboard');
+@endphp
 @extends('layouts.admin')
 @section('title', 'سجل الأنشطة')
 
 @section('content')
-    <div class="page-header">
-        <div class="page-block">
-            <div class="row align-items-center">
-                <div class="col-md-12">
-                    <div class="page-header-title">
-                        <h5 class="m-b-10">سجل الأنشطة</h5>
-                    </div>
-                    <ul class="breadcrumb">
-                        <li class="breadcrumb-item">
-                            <a href="{{ route('admin.dashboard') }}">
-                                <i class="bi bi-house"></i>
-                            </a>
-                        </li>
-                        <li class="breadcrumb-item active">سجل الأنشطة</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
+    <div class="container-fluid p-0">
 
     <div class="row mb-4">
         <!-- إحصائيات -->
@@ -141,26 +128,24 @@
         </div>
     </div>
 
-    <div class="row">
-        <div class="col-12">
-            <div class="card border-0 shadow-sm">
-                <div class="card-header bg-white border-bottom d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0">
-                        <i class="bi bi-list-check me-2"></i>
-                        سجل الأنشطة
-                    </h5>
-                    <a href="{{ route('admin.activity-logs.active-users') }}" class="btn btn-primary btn-sm">
+        <x-admin.card>
+            <x-admin.card-header-index
+                icon="bi-list-check"
+                title="سجل الأنشطة">
+                <x-slot:actions>
+                    <a href="{{ route('admin.activity-logs.active-users') }}" class="btn btn-light btn-sm shadow-sm">
                         <i class="bi bi-person-check me-1"></i>
-                        المستخدمون المتصلون
+                        <span class="d-none d-md-inline">المستخدمون المتصلون</span>
                     </a>
-                </div>
+                </x-slot:actions>
+            </x-admin.card-header-index>
 
                 <!-- Filters -->
-                <div class="card-body border-bottom bg-light">
+                <div class="card-body p-3">
                     <form method="GET" action="{{ route('admin.activity-logs.index') }}" class="row g-3">
                         <div class="col-md-3">
-                            <label class="form-label small">المستخدم</label>
-                            <select name="user_id" class="form-select form-select-sm">
+                            <label class="form-label fw-semibold text-dark mb-1">المستخدم</label>
+                            <select name="user_id" class="form-select rounded-3" style="height: 45px;">
                                 <option value="">جميع المستخدمين</option>
                                 @foreach($users as $u)
                                     <option value="{{ $u->id }}" {{ request('user_id') == $u->id ? 'selected' : '' }}>
@@ -170,8 +155,8 @@
                             </select>
                         </div>
                         <div class="col-md-2">
-                            <label class="form-label small">العملية</label>
-                            <select name="action" class="form-select form-select-sm">
+                            <label class="form-label fw-semibold text-dark mb-1">العملية</label>
+                            <select name="action" class="form-select rounded-3" style="height: 45px;">
                                 <option value="">جميع العمليات</option>
                                 @foreach($actions as $act)
                                     <option value="{{ $act }}" {{ request('action') == $act ? 'selected' : '' }}>
@@ -181,20 +166,20 @@
                             </select>
                         </div>
                         <div class="col-md-2">
-                            <label class="form-label small">من تاريخ</label>
-                            <input type="date" name="date_from" class="form-control form-control-sm" value="{{ request('date_from') }}">
+                            <label class="form-label fw-semibold text-dark mb-1">من تاريخ</label>
+                            <input type="date" name="date_from" class="form-control rounded-3" style="height: 45px;" value="{{ request('date_from') }}">
                         </div>
                         <div class="col-md-2">
-                            <label class="form-label small">إلى تاريخ</label>
-                            <input type="date" name="date_to" class="form-control form-control-sm" value="{{ request('date_to') }}">
+                            <label class="form-label fw-semibold text-dark mb-1">إلى تاريخ</label>
+                            <input type="date" name="date_to" class="form-control rounded-3" style="height: 45px;" value="{{ request('date_to') }}">
                         </div>
                         <div class="col-md-2">
-                            <label class="form-label small">الراوت</label>
-                            <input type="text" name="route" class="form-control form-control-sm" placeholder="بحث..." value="{{ request('route') }}">
+                            <label class="form-label fw-semibold text-dark mb-1">الراوت</label>
+                            <input type="text" name="route" class="form-control rounded-3" style="height: 45px;" placeholder="بحث..." value="{{ request('route') }}">
                         </div>
                         <div class="col-md-1">
-                            <label class="form-label small">&nbsp;</label>
-                            <button type="submit" class="btn btn-primary btn-sm w-100">
+                            <label class="form-label mb-1">&nbsp;</label>
+                            <button type="submit" class="btn btn-outline-primary w-100 rounded-3" style="height: 45px;">
                                 <i class="bi bi-search"></i>
                             </button>
                         </div>
@@ -326,12 +311,17 @@
                     </table>
                 </div>
 
-                <div class="card-footer bg-white">
-                    {{ $logs->links() }}
+                @if($logs->hasPages())
+                <div class="px-3 py-2" style="border-top: 1px solid #E6ECF2;">
+                    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 small">
+                        <div class="text-muted">
+                            عرض {{ $logs->firstItem() }} - {{ $logs->lastItem() }} من {{ $logs->total() }}
+                        </div>
+                        {{ $logs->links() }}
+                    </div>
                 </div>
-            </div>
-        </div>
-    </div>
+                @endif
+        </x-admin.card>
 
     <!-- Legend/Help Section -->
     <div class="row mt-4">
@@ -388,19 +378,8 @@
             </div>
         </div>
     </div>
+    </div>
 @endsection
-
-@push('scripts')
-<script>
-    // Initialize Bootstrap tooltips
-    document.addEventListener('DOMContentLoaded', function() {
-        const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-        tooltipTriggerList.map(function (tooltipTriggerEl) {
-            return new bootstrap.Tooltip(tooltipTriggerEl);
-        });
-    });
-</script>
-@endpush
 
 @push('scripts')
 <script>

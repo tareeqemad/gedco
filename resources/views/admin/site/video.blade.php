@@ -42,7 +42,7 @@
                                     {{ __('admin.labels.video_url') }}
                                 </label>
                                 <input type="text" name="video_url" id="video_url"
-                                       class="form-control rounded-3 border-0 bg-light @error('video_url') is-invalid @enderror"
+                                       class="form-control rounded-3  @error('video_url') is-invalid @enderror"
                                        style="height: 45px;"
                                        placeholder="https://youtu.be/abcdEFGhijk"
                                        value="{{ old('video_url', $videoUrl) }}">
@@ -60,7 +60,7 @@
                                     {{ __('admin.settings.video_caption') }}
                                 </label>
                                 <input type="text" name="caption" id="caption"
-                                       class="form-control rounded-3 border-0 bg-light @error('caption') is-invalid @enderror"
+                                       class="form-control rounded-3  @error('caption') is-invalid @enderror"
                                        style="height: 45px;"
                                        value="{{ old('caption', $caption) }}"
                                        placeholder="مثال: شاهد فيديو تعريفي عن خدماتنا"

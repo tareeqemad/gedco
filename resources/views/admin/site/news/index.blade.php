@@ -30,7 +30,7 @@
                                 <span class="input-group-text bg-light border-0">
                                     <i class="bi bi-search text-muted"></i>
                                 </span>
-                                <input type="text" name="q" class="form-control border-0 bg-light" 
+                                <input type="text" name="q" class="form-control " 
                                        placeholder="{{ __('admin.messages.search_by_title_content') }}" 
                                        value="{{ $q ?? '' }}">
                             </div>
@@ -41,14 +41,14 @@
                             <label class="form-label small text-muted mb-1">
                                 <i class="bi bi-calendar-event me-1 d-none d-sm-inline"></i> <span class="d-sm-none">من</span><span class="d-none d-sm-inline">من تاريخ</span>
                             </label>
-                            <input type="date" name="date_from" class="form-control border-0 bg-light" 
+                            <input type="date" name="date_from" class="form-control " 
                                    value="{{ $dateFrom ?? '' }}">
                         </div>
                         <div class="col-6 col-lg-2 col-md-3">
                             <label class="form-label small text-muted mb-1">
                                 <i class="bi bi-calendar-check me-1 d-none d-sm-inline"></i> <span class="d-sm-none">إلى</span><span class="d-none d-sm-inline">إلى تاريخ</span>
                             </label>
-                            <input type="date" name="date_to" class="form-control border-0 bg-light" 
+                            <input type="date" name="date_to" class="form-control " 
                                    value="{{ $dateTo ?? '' }}">
                         </div>
 
@@ -57,7 +57,7 @@
                             <label class="form-label small text-muted mb-1">
                                 <i class="bi bi-funnel me-1 d-none d-sm-inline"></i> {{ __('admin.news.status') }}
                             </label>
-                            <select name="status" class="form-select border-0 bg-light">
+                            <select name="status" class="form-select ">
                                 <option value="">{{ __('admin.news.status_all') }}</option>
                                 <option value="published" @selected(($status ?? '')==='published')>{{ __('admin.news.status_published') }}</option>
                                 <option value="draft" @selected(($status ?? '')==='draft')>{{ __('admin.news.status_draft') }}</option>
@@ -69,7 +69,7 @@
                             <label class="form-label small text-muted mb-1">
                                 <i class="bi bi-sort-down me-1 d-none d-sm-inline"></i> <span class="d-sm-none">ترتيب</span><span class="d-none d-sm-inline">الترتيب</span>
                             </label>
-                            <select name="sort" class="form-select border-0 bg-light">
+                            <select name="sort" class="form-select ">
                                 <option value="published_at" @selected(($sort ?? '')==='published_at')>{{ __('admin.news.sort_latest') }}</option>
                                 <option value="title" @selected(($sort ?? '')==='title')>{{ __('admin.news.sort_title') }}</option>
                                 <option value="views" @selected(($sort ?? '')==='views')>{{ __('admin.news.sort_most_viewed') }}</option>
@@ -88,13 +88,13 @@
                                     {{ __('admin.news.featured_articles') }}
                                 </label>
                             </div>
-                            <select name="dir" class="form-select border-0 bg-light w-100 w-sm-auto" style="max-width: 150px; height: 38px;">
+                            <select name="dir" class="form-select  w-100 w-sm-auto" style="max-width: 150px; height: 38px;">
                                 <option value="desc" @selected(($dir ?? 'desc')==='desc')>{{ __('admin.news.sort_desc') }}</option>
                                 <option value="asc" @selected(($dir ?? 'asc')==='asc')>{{ __('admin.news.sort_asc') }}</option>
                             </select>
                         </div>
                         <div class="d-flex gap-2 justify-content-center w-100 w-sm-auto">
-                            <button class="btn btn-primary shadow-sm" type="submit" style="min-width: 120px;">
+                            <button class="btn btn-outline-secondary shadow-sm" type="submit" style="min-width: 120px;">
                                 <i class="bi bi-funnel me-1"></i> {{ __('admin.news.apply') }}
                             </button>
                             <a href="{{ route('admin.news.index') }}" class="btn btn-outline-secondary shadow-sm" style="min-width: 120px;">

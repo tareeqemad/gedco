@@ -49,7 +49,7 @@
                                             <i class="bi bi-hash text-primary"></i>{{ __('admin.tenders.form_mnews_id') }}
                                         </label>
                                         <input type="number" name="mnews_id"
-                                               class="form-control rounded-3 border-0 bg-light @error('mnews_id') is-invalid @enderror"
+                                               class="form-control rounded-3  @error('mnews_id') is-invalid @enderror"
                                                style="height: 45px;"
                                                value="{{ old('mnews_id', $tender->mnews_id) }}" 
                                                placeholder="{{ __('admin.tenders.form_example_number') }}">
@@ -61,7 +61,7 @@
                                             <i class="bi bi-file-text text-primary"></i>{{ __('admin.tenders.form_column_name_1') }}
                                         </label>
                                         <input type="text" name="column_name_1"
-                                               class="form-control rounded-3 border-0 bg-light @error('column_name_1') is-invalid @enderror"
+                                               class="form-control rounded-3  @error('column_name_1') is-invalid @enderror"
                                                style="height: 45px;"
                                                value="{{ old('column_name_1', $tender->column_name_1) }}"
                                                placeholder="{{ __('admin.tenders.form_column_placeholder') }}">
@@ -74,7 +74,7 @@
                                             <span class="text-muted small">{{ __('admin.tenders.form_date_text') }}</span>
                                         </label>
                                         <input type="date" name="the_date_1"
-                                               class="form-control rounded-3 border-0 bg-light @error('the_date_1') is-invalid @enderror"
+                                               class="form-control rounded-3  @error('the_date_1') is-invalid @enderror"
                                                style="height: 45px;"
                                                value="{{ old('the_date_1', $tender->the_date_1) }}"
                                                placeholder="{{ __('admin.tenders.form_example_date') }}">
@@ -86,7 +86,7 @@
                                             <i class="bi bi-123 text-primary"></i>{{ __('admin.tenders.form_coulm_serial') }}
                                         </label>
                                         <input type="number" name="coulm_serial"
-                                               class="form-control rounded-3 border-0 bg-light @error('coulm_serial') is-invalid @enderror"
+                                               class="form-control rounded-3  @error('coulm_serial') is-invalid @enderror"
                                                style="height: 45px;"
                                                value="{{ old('coulm_serial', $tender->coulm_serial) }}" 
                                                placeholder="{{ __('admin.tenders.form_example_number') }}">
@@ -98,7 +98,7 @@
                                             <i class="bi bi-calendar-event text-primary"></i>{{ __('admin.tenders.form_event_1') }}
                                         </label>
                                         <input type="text" name="event_1"
-                                               class="form-control rounded-3 border-0 bg-light @error('event_1') is-invalid @enderror"
+                                               class="form-control rounded-3  @error('event_1') is-invalid @enderror"
                                                style="height: 45px;"
                                                value="{{ old('event_1', $tender->event_1) }}" 
                                                placeholder="{{ __('admin.tenders.form_event_placeholder') }}">
@@ -110,7 +110,7 @@
                                             <i class="bi bi-person text-primary"></i>{{ __('admin.tenders.form_the_user_1') }}
                                         </label>
                                         <input type="text" name="the_user_1"
-                                               class="form-control rounded-3 border-0 bg-light @error('the_user_1') is-invalid @enderror"
+                                               class="form-control rounded-3  @error('the_user_1') is-invalid @enderror"
                                                style="height: 45px;"
                                                value="{{ old('the_user_1', $tender->the_user_1) }}" 
                                                placeholder="{{ __('admin.tenders.form_example_user') }}">

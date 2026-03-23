@@ -29,7 +29,7 @@
                                 </label>
                                 <input type="text" 
                                        name="name" 
-                                       class="form-control rounded-3 border-0 bg-light @error('name') is-invalid @enderror" 
+                                       class="form-control rounded-3 @error('name') is-invalid @enderror" 
                                        style="height: 45px;"
                                        placeholder="{{ __('admin.permissions.form_name_placeholder') }}"
                                        value="{{ old('name', $permission->name) }}"
@@ -48,7 +48,7 @@
                                     <i class="bi bi-shield-check text-primary"></i>
                                     {{ __('admin.permissions.form_guard') }}
                                 </label>
-                                <select name="guard_name" class="form-select rounded-3 border-0 bg-light @error('guard_name') is-invalid @enderror" style="height: 45px;">
+                                <select name="guard_name" class="form-select rounded-3 @error('guard_name') is-invalid @enderror" style="height: 45px;">
                                     <option value="web" {{ old('guard_name', $permission->guard_name) == 'web' ? 'selected' : '' }}>Web</option>
                                     <option value="api" {{ old('guard_name', $permission->guard_name) == 'api' ? 'selected' : '' }}>API</option>
                                 </select>

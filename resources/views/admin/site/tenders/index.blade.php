@@ -28,7 +28,7 @@
                             <span class="input-group-text bg-light border-0">
                                 <i class="bi bi-search text-muted"></i>
                             </span>
-                            <input type="text" name="q" class="form-control border-0 bg-light rounded-3" 
+                            <input type="text" name="q" class="form-control  rounded-3" 
                                    placeholder="{{ __('admin.tenders.search_placeholder') }}"
                                    value="{{ $q ?? '' }}">
                         </div>
@@ -38,7 +38,7 @@
                         <label class="form-label small text-muted mb-1 fw-semibold">
                             <i class="bi bi-person me-1"></i>{{ __('admin.tenders.user_label') }}
                         </label>
-                        <select name="user" class="form-select border-0 bg-light rounded-3">
+                        <select name="user" class="form-select  rounded-3">
                             <option value="">{{ __('admin.tenders.all_users') }}</option>
                             @foreach($distinctUsers as $u)
                                 <option value="{{ $u }}" @selected(($user ?? '') === $u)>{{ $u }}</option>
@@ -52,7 +52,7 @@
                             <span class="d-sm-none">من</span>
                             <span class="d-none d-sm-inline">{{ __('admin.tenders.date_from') }}</span>
                         </label>
-                        <input type="date" name="date_from" class="form-control border-0 bg-light rounded-3" 
+                        <input type="date" name="date_from" class="form-control  rounded-3" 
                                value="{{ $dateFrom ?? '' }}">
                     </div>
 
@@ -62,7 +62,7 @@
                             <span class="d-sm-none">إلى</span>
                             <span class="d-none d-sm-inline">{{ __('admin.tenders.date_to') }}</span>
                         </label>
-                        <input type="date" name="date_to" class="form-control border-0 bg-light rounded-3" 
+                        <input type="date" name="date_to" class="form-control  rounded-3" 
                                value="{{ $dateTo ?? '' }}">
                     </div>
 
@@ -70,7 +70,7 @@
                         <label class="form-label small text-muted mb-1 fw-semibold">
                             <i class="bi bi-list-ol me-1"></i>{{ __('admin.tenders.per_page') }}
                         </label>
-                        <input type="number" min="5" max="200" name="per_page" class="form-control border-0 bg-light rounded-3"
+                        <input type="number" min="5" max="200" name="per_page" class="form-control  rounded-3"
                                value="{{ $perPage ?? 20 }}">
                     </div>
 
@@ -78,7 +78,7 @@
                         <label class="form-label small text-muted mb-1 fw-semibold">
                             <i class="bi bi-sort-down me-1"></i>{{ __('admin.tenders.sort_by') }}
                         </label>
-                        <select name="sort" class="form-select border-0 bg-light rounded-3">
+                        <select name="sort" class="form-select  rounded-3">
                             @php $sorts = ['id'=>'ID','mnews_id'=>'MNEWS_ID','the_date_1'=>'THE_DATE_1','created_at'=>'Created','updated_at'=>'Updated']; @endphp
                             @foreach($sorts as $key=>$label)
                                 <option value="{{ $key }}" @selected(($sort ?? 'id') === $key)>{{ $label }}</option>
@@ -90,14 +90,14 @@
                         <label class="form-label small text-muted mb-1 fw-semibold">
                             <i class="bi bi-arrow-down-up me-1"></i>{{ __('admin.tenders.sort_direction') }}
                         </label>
-                        <select name="dir" class="form-select border-0 bg-light rounded-3">
+                        <select name="dir" class="form-select  rounded-3">
                             <option value="desc" @selected(($dir ?? 'desc')==='desc')>{{ __('admin.tenders.sort_desc') }}</option>
                             <option value="asc"  @selected(($dir ?? '')==='asc')>{{ __('admin.tenders.sort_asc') }}</option>
                         </select>
                     </div>
 
                     <div class="col-12 col-lg-3 d-flex align-items-end gap-2 filter-buttons-group">
-                        <button class="btn btn-primary flex-fill shadow-sm rounded-3" type="submit" style="min-width: 100px;">
+                        <button class="btn btn-outline-secondary flex-fill shadow-sm rounded-3" type="submit" style="min-width: 100px;">
                             <i class="bi bi-search me-2"></i>{{ __('admin.tenders.apply') }}
                         </button>
                         <a href="{{ route('admin.tenders.index') }}" class="btn btn-outline-secondary flex-fill rounded-3" style="min-width: 100px;">

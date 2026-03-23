@@ -33,17 +33,16 @@
             <div class="card-body p-3">
                 <form method="GET" action="{{ route('admin.roles.index') }}" class="row g-3">
                     <div class="col-12 col-lg-11">
-                        <label class="form-label fw-semibold text-dark mb-1">البحث</label>
                         <input type="text"
                                name="search"
-                               class="form-control rounded-3 border-0 bg-light"
+                               class="form-control rounded-3"
                                style="height: 45px;"
                                placeholder="ابحث عن دور..."
                                value="{{ request('search') }}">
                     </div>
                     <div class="col-12 col-lg-1">
                         <label class="form-label mb-1">&nbsp;</label>
-                        <button type="submit" class="btn btn-primary w-100 rounded-3 shadow-sm" style="height: 45px;">
+                        <button type="submit" class="btn btn-outline-secondary w-100 rounded-3 shadow-sm" style="height: 45px;">
                             <i class="bi bi-search"></i>
                         </button>
                     </div>

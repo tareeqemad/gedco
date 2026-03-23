@@ -1,29 +1,13 @@
+@php
+    $breadcrumbTitle = 'المستخدمون المتصلون';
+    $breadcrumbParent = 'سجل الأنشطة';
+    $breadcrumbParentUrl = route('admin.activity-logs.index');
+@endphp
 @extends('layouts.admin')
 @section('title', 'المستخدمون المتصلون')
 
 @section('content')
-    <div class="page-header">
-        <div class="page-block">
-            <div class="row align-items-center">
-                <div class="col-md-12">
-                    <div class="page-header-title">
-                        <h5 class="m-b-10">المستخدمون المتصلون حالياً</h5>
-                    </div>
-                    <ul class="breadcrumb">
-                        <li class="breadcrumb-item">
-                            <a href="{{ route('admin.dashboard') }}">
-                                <i class="bi bi-house"></i>
-                            </a>
-                        </li>
-                        <li class="breadcrumb-item">
-                            <a href="{{ route('admin.activity-logs.index') }}">سجل الأنشطة</a>
-                        </li>
-                        <li class="breadcrumb-item active">المستخدمون المتصلون</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
+    <div class="container-fluid p-0">
 
     <div class="row mb-4">
         <!-- إحصائيات -->
@@ -74,39 +58,29 @@
         </div>
     </div>
 
-    <div class="row">
-        <div class="col-12">
-            <div class="card shadow-sm border-0">
-                <div class="card-header bg-white d-flex justify-content-between align-items-center border-bottom">
-                    <div class="d-flex align-items-center">
-                        <div class="me-3">
-                            <i class="bi bi-people-fill fs-4 text-success"></i>
-                        </div>
-                        <div>
-                            <h5 class="mb-0 fw-bold">المستخدمون المتصلون حالياً</h5>
-                            <small class="text-muted">المستخدمون الذين لديهم نشاط في آخر 15 دقيقة ({{ $activeUsers->count() }} مستخدم)</small>
-                        </div>
-                    </div>
-                </div>
+        <x-admin.card>
+            <x-admin.card-header-index
+                icon="bi-people-fill"
+                title="المستخدمون المتصلون حالياً">
+                <x-slot:badge>
+                    <span class="badge bg-light text-dark rounded-pill px-3 py-1">{{ $activeUsers->count() }} مستخدم</span>
+                </x-slot:badge>
+            </x-admin.card-header-index>
 
-                <div class="card-body p-0">
                     <!-- Search Bar -->
-                    <div class="p-3 bg-light border-bottom">
+                    <div class="card-body p-3">
                         <form method="GET" action="{{ route('admin.activity-logs.active-users') }}" class="row g-3 align-items-end">
-                            <div class="col-md-8">
-                                <label class="form-label small text-muted mb-1">البحث بالاسم أو البريد الإلكتروني</label>
-                                <div class="input-group">
-                                    <span class="input-group-text bg-white">
-                                        <i class="bi bi-search text-muted"></i>
-                                    </span>
-                                    <input type="text" name="search" class="form-control" 
-                                           placeholder="ابحث عن مستخدم..."
-                                           value="{{ request('search') }}">
-                                </div>
+                            <div class="col-md-9">
+                                <label class="form-label fw-semibold text-dark mb-1">البحث بالاسم أو البريد الإلكتروني</label>
+                                <input type="text" name="search" class="form-control rounded-3"
+                                       style="height: 45px;"
+                                       placeholder="ابحث عن مستخدم..."
+                                       value="{{ request('search') }}">
                             </div>
-                            <div class="col-md-4">
-                                <button type="submit" class="btn btn-primary w-100">
-                                    <i class="bi bi-funnel me-2"></i>بحث
+                            <div class="col-md-3">
+                                <label class="form-label mb-1">&nbsp;</label>
+                                <button type="submit" class="btn btn-outline-primary w-100 rounded-3" style="height: 45px;">
+                                    <i class="bi bi-search me-2"></i>بحث
                                 </button>
                             </div>
                         </form>
@@ -187,8 +161,8 @@
                                             @endif
                                         </td>
                                         <td class="text-center">
-                                            <a href="{{ route('admin.activity-logs.user', $user->id) }}" 
-                                               class="btn btn-sm btn-primary" 
+                                            <a href="{{ route('admin.activity-logs.user', $user->id) }}"
+                                               class="btn btn-sm btn-outline-primary"
                                                title="عرض جميع الأنشطة">
                                                 <i class="bi bi-eye me-1"></i>
                                                 عرض الأنشطة
@@ -212,18 +186,18 @@
 
                     @if($activeUsers->count() > 0)
                         <!-- Pagination Info -->
-                        <div class="card-footer bg-white border-top d-flex justify-content-between align-items-center">
-                            <div class="text-muted small">
-                                عرض <strong>{{ $activeUsers->count() }}</strong> مستخدم نشط
-                            </div>
-                            <div class="text-muted small">
-                                آخر تحديث: <strong>{{ now()->format('H:i:s') }}</strong>
+                        <div class="px-3 py-2" style="border-top: 1px solid #E6ECF2;">
+                            <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 small">
+                                <div class="text-muted">
+                                    عرض <strong>{{ $activeUsers->count() }}</strong> مستخدم نشط
+                                </div>
+                                <div class="text-muted">
+                                    آخر تحديث: <strong>{{ now()->format('H:i:s') }}</strong>
+                                </div>
                             </div>
                         </div>
                     @endif
-                </div>
-            </div>
-        </div>
+        </x-admin.card>
     </div>
 @endsection
 
