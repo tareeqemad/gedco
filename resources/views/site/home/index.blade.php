@@ -516,7 +516,7 @@
 
                     <!-- خدمة 2 -->
                     <div style="flex: 1 1 250px; max-width: 300px;">
-                        <a href="#" style="text-decoration: none; color: inherit; display: block;">
+                        <a href="{{ route('site.gca') }}" style="text-decoration: none; color: inherit; display: block;">
                             <div class="service-card" style="text-align: center; padding: 1.5rem; border-radius: 1rem; height: 100%; display: flex; flex-direction: column; justify-content: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1); background: white; border: 1px solid #eee; transition: all 0.35s ease;"
                                  data-aos="fade-up" data-aos-delay="200">
 

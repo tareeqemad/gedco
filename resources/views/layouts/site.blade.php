@@ -1109,6 +1109,9 @@
     
     // Direction toggle الآن يعمل مباشرة من form - لا حاجة لـ JavaScript إضافي
 </script>
+
+<script src="{{ asset('assets/site/js/slider-fix.js') }}"></script>
+
 @stack('scripts')
 </body>
 </html>

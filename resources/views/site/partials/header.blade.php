@@ -54,7 +54,7 @@
                                 <a class="menu-item" href="#services">{{ __('common.services') }}</a>
                                 <ul>
                                     <li><a href="#" class="text-muted" style="cursor: default;">{{ __('common.e_services') }}</a></li>
-                                    <li><a href="#">{{ __('common.specs') }}</a></li>
+                                    <li><a href="{{ route('site.gca') }}">{{ __('common.specs') }}</a></li>
                                 </ul>
                             </li>
 

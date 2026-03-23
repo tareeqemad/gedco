@@ -33,7 +33,6 @@ class RolesAndPermissionsSeeder extends Seeder
             'permissions',
             'footer-links',
             'social-links',
-            'activity-logs',
         ];
 
         $permissions = [];
@@ -83,7 +82,6 @@ class RolesAndPermissionsSeeder extends Seeder
             'permissions.view','permissions.create','permissions.edit','permissions.delete',
             'footer-links.view','footer-links.create','footer-links.edit','footer-links.delete',
             'social-links.view','social-links.create','social-links.edit','social-links.delete',
-            'activity-logs.view','activity-logs.create','activity-logs.edit','activity-logs.delete',
         ])->get();
         $admin->syncPermissions($adminPermissions);
 
@@ -93,7 +91,6 @@ class RolesAndPermissionsSeeder extends Seeder
             'permissions.view','permissions.create','permissions.edit','permissions.delete',
             'footer-links.view','footer-links.create','footer-links.edit','footer-links.delete',
             'social-links.view','social-links.create','social-links.edit','social-links.delete',
-            'activity-logs.view','activity-logs.create','activity-logs.edit','activity-logs.delete',
         ])->where(function($q){
             $q->where('name','like','%.view')
                 ->orWhere('name','like','%.create')
@@ -107,7 +104,6 @@ class RolesAndPermissionsSeeder extends Seeder
         $viewerPermissions = Permission::whereNotIn('name', [
             'roles.view','permissions.view',
             'footer-links.view','social-links.view',
-            'activity-logs.view',
         ])->where('name','like','%.view')->get();
         $viewer->syncPermissions($viewerPermissions);
 

@@ -8,22 +8,16 @@
 
 @section('content')
     <div class="container-fluid">
-        <!-- Main Card -->
+        <!-- Header Section -->
         <div class="card border-0 shadow-sm rounded-4 bg-white mb-4">
-            <!-- Header Section -->
             <div class="card-header bg-gradient-primary text-white border-0 py-2 px-3">
                 <div class="d-flex justify-content-between align-items-center flex-wrap w-100" style="gap: 1rem;">
-                    <div class="d-flex align-items-center gap-3 flex-wrap" style="flex: 1;">
-                        <div class="d-flex align-items-center gap-2">
+                    <div class="d-flex align-items-center gap-2" style="flex: 0 0 auto;">
+                        <div>
                             <h5 class="mb-0 fw-bold text-white d-flex align-items-center gap-2 flex-wrap" style="font-size: 1.25rem; line-height: 1.3;">
                                 <i class="bi bi-images"></i>
                                 <span>{{ __('admin.slider.slider_items') }}</span>
                             </h5>
-                        </div>
-                        <div class="d-flex align-items-center gap-2 text-white-50" style="font-size: 0.9rem;">
-                            <i class="bi bi-images"></i>
-                            <span>{{ __('admin.slider.total_slides') }}:</span>
-                            <strong class="text-white" id="sliderTotalCount">{{ $sliders->total() }}</strong>
                         </div>
                     </div>
                     <div class="d-flex align-items-center gap-2" style="flex: 0 0 auto;">
@@ -74,44 +68,57 @@
                 </div>
             </div>
 
-            <!-- Loading Indicator -->
-            <div class="slider-loading" id="sliderLoading">
-                <div class="spinner-border text-primary" role="status">
-                    <span class="visually-hidden">جاري التحميل...</span>
+        <!-- Stats -->
+        <div class="card border-0 shadow-sm rounded-4 bg-white mb-4">
+            <div class="card-body py-2 px-3">
+                <div class="d-flex align-items-center gap-2">
+                    <i class="bi bi-images text-primary"></i>
+                    <span class="text-muted small">{{ __('admin.slider.total_slides') }}:</span>
+                    <strong class="text-primary" id="sliderTotalCount">{{ $sliders->total() }}</strong>
                 </div>
             </div>
-            <!-- Table Container -->
-            <div class="p-0">
-                <div class="slider-table-wrapper">
-                    <div class="table-responsive">
-                        <table class="table slider-table" id="sliderTable">
-                            <thead>
-                                <tr>
-                                    <th style="width: 60px;" class="text-center">#</th>
-                                    <th style="width: 150px;" class="text-center">{{ __('admin.slider.table_bg_image') }}</th>
-                                    <th>{{ __('admin.slider.table_title') }}</th>
-                                    <th style="width: 100px;" class="text-center">{{ __('admin.slider.table_order') }}</th>
-                                    <th style="width: 100px;" class="text-center">{{ __('admin.slider.table_status') }}</th>
-                                    <th style="width: 120px;" class="text-center">{{ __('admin.slider.table_actions') }}</th>
-                                </tr>
-                            </thead>
-                            <tbody id="sliderGrid">
-                                @include('admin.site.sliders.partials.cards', ['sliders' => $sliders])
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
+        </div>
 
-            <!-- Pagination -->
-            @if($sliders->hasPages())
-                <div class="card-footer bg-white border-top py-3">
+        <!-- Loading Indicator -->
+        <div class="slider-loading" id="sliderLoading">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">جاري التحميل...</span>
+            </div>
+        </div>
+
+        <!-- Main Card -->
+        <div class="card border-0 shadow-sm rounded-4 bg-white mb-4">
+            <div class="slider-table-wrapper">
+            <div class="table-responsive">
+                <table class="table slider-table" id="sliderTable">
+                    <thead>
+                        <tr>
+                            <th style="width: 60px;" class="text-center">#</th>
+                            <th style="width: 150px;" class="text-center">{{ __('admin.slider.table_bg_image') }}</th>
+                            <th>{{ __('admin.slider.table_title') }}</th>
+                            <th style="width: 100px;" class="text-center">{{ __('admin.slider.table_order') }}</th>
+                            <th style="width: 100px;" class="text-center">{{ __('admin.slider.table_status') }}</th>
+                            <th style="width: 120px;" class="text-center">{{ __('admin.slider.table_actions') }}</th>
+                        </tr>
+                    </thead>
+                    <tbody id="sliderGrid">
+                        @include('admin.site.sliders.partials.cards', ['sliders' => $sliders])
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        </div>
+
+        <!-- Pagination -->
+        @if($sliders->hasPages())
+            <div class="card border-0 shadow-sm rounded-4 bg-white mb-4">
+                <div class="card-body py-3">
                     <div id="sliderPagination">
                         @include('admin.site.sliders.partials.pagination', ['sliders' => $sliders])
                     </div>
                 </div>
-            @endif
-        </div>
+            </div>
+        @endif
     </div>
 
     <!-- Delete Modals -->

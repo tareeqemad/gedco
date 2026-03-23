@@ -20,7 +20,7 @@ class AboutUsSeeder extends Seeder
                 ['كوادر وطنية مخلصة ومؤهلة', 'شفافية في العمل وثقة المجتمع'],
             ],
 
-            'image' => 'assets/site/images/content/c3.webp',
+            'image' => 'assets/site/images/c3.webp',
         ]);
     }
 }

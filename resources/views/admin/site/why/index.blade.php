@@ -17,9 +17,8 @@
     @endphp
 
     <div class="container-fluid p-0">
-        <!-- Main Card -->
-        <div class="card border-0 shadow-sm rounded-4 bg-white">
-            <!-- Header Section -->
+        <!-- Header Section -->
+        <div class="card border-0 shadow-sm rounded-4 bg-white mb-4">
             <div class="card-header bg-gradient-primary text-white border-0 py-2 px-3">
                 <div class="d-flex justify-content-between align-items-center flex-wrap w-100" style="gap: 1rem;">
                     <div class="d-flex align-items-center gap-2" style="flex: 0 0 auto;">
@@ -47,6 +46,10 @@
                     </div>
                 </div>
             </div>
+        </div>
+
+        <!-- Main Card -->
+        <div class="card border-0 shadow-sm rounded-4 bg-white">
             <div class="card-body p-4 p-md-5">
                 {{-- Flash messages --}}
 

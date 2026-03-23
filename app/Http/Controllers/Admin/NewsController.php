@@ -60,14 +60,6 @@ class NewsController extends Controller
         // Determine language from current admin direction
         $adminDirection = session('direction', 'rtl');
         $defaultLanguage = $adminDirection === 'rtl' ? 'ar' : 'en';
-        
-        // Get language from request, fallback to default
-        $language = $request->validated()['language'] ?? $defaultLanguage;
-        
-        // Ensure language is valid
-        if (!in_array($language, ['ar', 'en'])) {
-            $language = $defaultLanguage;
-        }
 
         $data = [
             'title'        => $request->validated()['title'],
@@ -76,7 +68,7 @@ class NewsController extends Controller
             'status'       => $request->validated()['status'],
             'featured'     => (bool)($request->validated()['featured'] ?? false),
             'body'         => $request->validated()['body'],
-            'language'     => $language,
+            'language'     => $request->validated()['language'] ?? $defaultLanguage,
             'created_by'   => auth()->id(),
         ];
 

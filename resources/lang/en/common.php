@@ -10,7 +10,7 @@ return [
     'home' => 'Home',
     'services' => 'Services',
     'e_services' => 'E-Services (Coming Soon)',
-    'specs' => 'Specifications',
+    'specs' => 'GCA Center',
     'company' => 'Company',
     'about_us' => 'About Us',
     'why_choose' => 'Why Choose Us',
@@ -30,7 +30,7 @@ return [
     
     // Services
     'e_services_full' => 'E-Services (Coming Soon)',
-    'specs_full' => 'Specifications & Standards',
+    'specs_full' => 'GCA Center',
     'donate' => 'Donate',
     'job_announcements' => 'Job Announcements',
     

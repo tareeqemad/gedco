@@ -13,7 +13,7 @@ return new class extends Migration {
             $table->string('phone')->nullable();
             $table->string('address_ar')->nullable();
             // خليه يشير لمسار داخل public/assets/site/...
-            $table->string('logo_white_path')->nullable()->default('assets/site/images/logos/logo-white.webp');
+            $table->string('logo_white_path')->nullable()->default('assets/site/images/logo-white.webp');
             $table->timestamps();
         });
     }

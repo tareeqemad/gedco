@@ -725,6 +725,40 @@ header.scroll-light.scroll #logo a:hover img {
     }
 }
 
+/* === SLIDER FIXES === */
+.mh-800 {
+    min-height: 800px;
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+}
+
+.swiper-inner {
+    background-size: cover !important;
+    background-position: center center !important;
+    background-repeat: no-repeat !important;
+    background-attachment: scroll !important;
+    background-color: #1a1c26 !important;
+}
+
+@media (max-width: 1024px) {
+    .mh-800 {
+        min-height: 500px;
+    }
+}
+
+@media (max-width: 768px) {
+    .mh-800 {
+        min-height: 280px;
+    }
+}
+
+@media (max-width: 576px) {
+    .mh-800 {
+        min-height: 240px;
+    }
+}
+
 /* Slider Bullets Responsive */
 @media (max-width: 991px) {
     .slider-bullets {
