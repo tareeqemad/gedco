@@ -1,224 +1,212 @@
 @php
-    $breadcrumbTitle = __('admin.activity_logs.active_users');
+    $breadcrumbTitle = __('admin.activity_logs_ui.online_title');
     $breadcrumbParent = __('admin.activity_logs.title');
     $breadcrumbParentUrl = route('admin.activity-logs.index');
+
+    $totalToday = $activeUsers->sum('today_count');
+    $firstLoginsToday = $activeUsers->filter(fn($u) => $u['first_login_today'])->count();
 @endphp
 @extends('layouts.admin')
-@section('title', __('admin.activity_logs.active_users'))
+@section('title', __('admin.activity_logs_ui.online_title'))
 
 @section('content')
     <div class="container-fluid p-0">
 
-    <div class="row mb-4">
-        <!-- إحصائيات -->
-        <div class="col-md-4">
-            <div class="card border-0 shadow-sm">
-                <div class="card-body">
-                    <div class="d-flex align-items-center">
-                        <div class="avatar avatar-md bg-success text-white rounded-circle me-3 d-flex align-items-center justify-content-center">
-                            <i class="bi bi-person-check fs-5"></i>
-                        </div>
-                        <div>
-                            <h6 class="mb-0 text-muted small">{{ __('admin.activity_logs.active_users') }}</h6>
-                            <h3 class="mb-0 fw-bold">{{ $activeUsers->count() }}</h3>
-                        </div>
+        {{-- KPI Stats Row --}}
+        <div class="row mb-4">
+            <div class="col-6 col-lg-4 mb-3">
+                <div class="dash-kpi">
+                    <div class="dash-kpi-icon" style="background: rgba(22, 163, 74, 0.08); color: #16A34A;">
+                        <i class="bi bi-broadcast"></i>
+                    </div>
+                    <div>
+                        <div class="dash-kpi-value" id="kpiActiveCount">{{ $activeUsers->count() }}</div>
+                        <div class="dash-kpi-label">{{ __('admin.activity_logs_ui.active_now') }}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-lg-4 mb-3">
+                <div class="dash-kpi">
+                    <div class="dash-kpi-icon" style="background: rgba(2, 132, 199, 0.08); color: #0284C7;">
+                        <i class="bi bi-activity"></i>
+                    </div>
+                    <div>
+                        <div class="dash-kpi-value">{{ number_format($totalToday) }}</div>
+                        <div class="dash-kpi-label">{{ __('admin.activity_logs_ui.activities_today') }}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-lg-4 mb-3">
+                <div class="dash-kpi">
+                    <div class="dash-kpi-icon" style="background: rgba(217, 119, 6, 0.08); color: #D97706;">
+                        <i class="bi bi-box-arrow-in-right"></i>
+                    </div>
+                    <div>
+                        <div class="dash-kpi-value">{{ $firstLoginsToday }}</div>
+                        <div class="dash-kpi-label">{{ __('admin.activity_logs_ui.first_logins_today') }}</div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-md-4">
-            <div class="card border-0 shadow-sm">
-                <div class="card-body">
-                    <div class="d-flex align-items-center">
-                        <div class="avatar avatar-md bg-info text-white rounded-circle me-3 d-flex align-items-center justify-content-center">
-                            <i class="bi bi-clock-history fs-5"></i>
-                        </div>
-                        <div>
-                            <h6 class="mb-0 text-muted small">{{ __('admin.activity_logs_ui.last_15_min') }}</h6>
-                            <h3 class="mb-0 fw-bold">{{ \Carbon\Carbon::now()->subMinutes(15)->diffForHumans() }}</h3>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card border-0 shadow-sm">
-                <div class="card-body">
-                    <div class="d-flex align-items-center">
-                        <div class="avatar avatar-md bg-primary text-white rounded-circle me-3 d-flex align-items-center justify-content-center">
-                            <i class="bi bi-activity fs-5"></i>
-                        </div>
-                        <div>
-                            <h6 class="mb-0 text-muted small">{{ __('admin.activity_logs.today_activities') }}</h6>
-                            <h3 class="mb-0 fw-bold">{{ number_format($activeUsers->sum(fn($item) => $item['today_count'] ?? 0)) }}</h3>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 
+        {{-- Main Card --}}
         <x-admin.card>
             <x-admin.card-header-index
-                icon="bi-people-fill"
-                title="{{ __('admin.activity_logs.active_users_now') }}">
+                icon="bi-broadcast"
+                :title="__('admin.activity_logs_ui.online_title')">
                 <x-slot:badge>
-                    <span class="badge bg-light text-dark rounded-pill px-3 py-1">{{ $activeUsers->count() }} {{ __('admin.activity_logs_ui.user_count') }}</span>
+                    <span class="stat-chip stat-chip-header">
+                        <span class="auto-refresh-dot" id="refreshDot"></span>
+                        <span id="headerCount">{{ $activeUsers->count() }}</span> {{ __('admin.activity_logs_ui.active_now') }}
+                    </span>
                 </x-slot:badge>
+                <x-slot:actions>
+                    <label class="auto-refresh-toggle text-white">
+                        <input type="checkbox" class="form-check-input" id="autoRefreshToggle" checked>
+                        {{ __('admin.activity_logs_ui.auto_refresh') }}
+                    </label>
+                </x-slot:actions>
             </x-admin.card-header-index>
 
-                    <!-- Search Bar -->
-                    <div class="card-body p-3">
-                        <form method="GET" action="{{ route('admin.activity-logs.active-users') }}" class="row g-3 align-items-end">
-                            <div class="col-md-9">
-                                <label class="form-label fw-semibold text-dark mb-1">{{ __('admin.activity_logs.search_by_name_email') }}</label>
-                                <input type="text" name="search" class="form-control rounded-3"
-                                                                             placeholder="{{ __('admin.activity_logs.search_user') }}"
-                                       value="{{ request('search') }}">
-                            </div>
-                            <div class="col-md-3">
-                                <label class="form-label mb-1">&nbsp;</label>
-                                <button type="submit" class="btn btn-outline-primary w-100 rounded-3">
-                                    <i class="bi bi-search me-1"></i> {{ __('admin.actions.query') }}
-                                </button>
-                                <a href="{{ route('admin.activity-logs.active-users') }}" class="btn btn-outline-danger w-100 rounded-3 mt-1">
-                                    <i class="bi bi-x-circle me-1"></i> {{ __('admin.actions.clear') }}
-                                </a>
-                            </div>
-                        </form>
-                        @if(request()->has('search'))
-                            <div class="mt-2">
-                            </div>
-                        @endif
-                    </div>
-
-                    <!-- Table -->
-                    <div class="table-responsive">
-                        <table class="table table-hover align-middle mb-0">
-                            <thead class="table-light">
-                                <tr>
-                                    <th style="width: 50px;" class="text-center">#</th>
-                                    <th style="width: 60px;"></th>
-                                    <th>{{ __('admin.activity_logs.user') }}</th>
-                                    <th>{{ __('admin.activity_logs.roles') }}</th>
-                                    <th class="text-center" style="width: 150px;">{{ __('admin.activity_logs_ui.last_activity') }}</th>
-                                    <th class="text-center" style="width: 120px;">{{ __('admin.activity_logs.today_activities') }}</th>
-                                    <th class="text-center" style="width: 150px;">{{ __('admin.activity_logs_ui.first_login_today') }}</th>
-                                    <th class="text-center" style="width: 130px;">{{ __('admin.actions.actions') }}</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @forelse($activeUsers as $index => $active)
-                                    @php $user = $active['user']; @endphp
-                                    <tr>
-                                        <td class="text-center text-muted small">{{ $loop->iteration }}</td>
-                                        <td>
-                                            <div class="user-avatar-sm bg-primary text-white rounded-circle d-flex align-items-center justify-content-center"
-                                                 style="width: 40px; height: 40px; font-weight: 600;">
-                                                {{ mb_substr($user->name, 0, 1) }}
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="d-flex flex-column">
-                                                <span class="fw-semibold text-dark">{{ $user->name }}</span>
-                                                <small class="text-muted">{{ $user->email }}</small>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            @if($user->roles->count() > 0)
-                                                <div class="d-flex flex-wrap gap-1">
-                                                    @foreach($user->roles->take(2) as $role)
-                                                        <span class="badge bg-info">{{ $role->name }}</span>
-                                                    @endforeach
-                                                    @if($user->roles->count() > 2)
-                                                        <span class="badge bg-secondary">+{{ $user->roles->count() - 2 }}</span>
-                                                    @endif
-                                                </div>
-                                            @else
-                                                <span class="text-muted small">—</span>
-                                            @endif
-                                        </td>
-                                        <td class="text-center">
-                                            <div class="d-flex flex-column align-items-center">
-                                                <span class="fw-semibold">{{ \Carbon\Carbon::parse($active['last_activity'])->diffForHumans() }}</span>
-                                                <small class="text-muted">{{ \Carbon\Carbon::parse($active['last_activity'])->format('H:i') }}</small>
-                                            </div>
-                                        </td>
-                                        <td class="text-center">
-                                            <span class="badge bg-primary rounded-pill px-3 py-1">
-                                                {{ number_format($active['today_count']) }}
-                                            </span>
-                                        </td>
-                                        <td class="text-center">
-                                            @if($active['first_login_today'])
-                                                <div class="d-flex flex-column align-items-center">
-                                                    <span class="fw-semibold">{{ \Carbon\Carbon::parse($active['first_login_today'])->format('H:i') }}</span>
-                                                    <small class="text-muted">{{ \Carbon\Carbon::parse($active['first_login_today'])->format('d/m') }}</small>
-                                                </div>
-                                            @else
-                                                <span class="text-muted small">—</span>
-                                            @endif
-                                        </td>
-                                        <td class="text-center">
-                                            <a href="{{ route('admin.activity-logs.user', $user->id) }}"
-                                               class="btn btn-sm btn-outline-primary"
-                                               title="{{ __('admin.activity_logs.view_all_activities') }}">
-                                                <i class="bi bi-eye me-1"></i>
-                                                {{ __('admin.activity_logs.view_activities') }}
-                                            </a>
-                                        </td>
-                                    </tr>
-                                @empty
-                                    <tr>
-                                        <td colspan="8" class="text-center py-5">
-                                            <div class="d-flex flex-column align-items-center">
-                                                <i class="bi bi-person-x display-1 text-muted mb-3"></i>
-                                                <h5 class="text-muted">{{ __('admin.activity_logs.no_active_users') }}</h5>
-                                                <p class="text-muted small">{{ __('admin.activity_logs.no_active_users_desc') }}</p>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                @endforelse
-                            </tbody>
-                        </table>
-                    </div>
-
-                    @if($activeUsers->count() > 0)
-                        <!-- Pagination Info -->
-                        <div class="px-3 py-2" style="border-top: 1px solid #E6ECF2;">
-                            <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 small">
-                                <div class="text-muted">
-                                    {{ __('admin.activity_logs.showing_active_users', ['count' => $activeUsers->count()]) }}
-                                </div>
-                                <div class="text-muted">
-                                    {{ __('admin.activity_logs_ui.last_update') }} <strong>{{ now()->format('H:i:s') }}</strong>
-                                </div>
-                            </div>
+            {{-- Search --}}
+            <div class="card-body p-3">
+                <form id="activeUsersFilterForm">
+                    <div class="d-flex gap-2 align-items-center">
+                        <div style="flex: 1 1 auto;">
+                            <input type="text" name="search" id="activeUsersSearch"
+                                   class="form-control rounded-3"
+                                   placeholder="{{ __('admin.activity_logs_ui.search_name_email') }}"
+                                   value="{{ request('search') }}">
                         </div>
-                    @endif
+                        <div style="flex: 0 0 auto;">
+                            <button type="submit" class="btn btn-primary rounded-3" id="searchBtn">
+                                <i class="bi bi-search me-1"></i> {{ __('admin.actions.search') }}
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            {{-- Loading --}}
+            <div class="active-users-loading" id="activeUsersLoading">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">{{ __('admin.ui.loading') }}</span>
+                </div>
+            </div>
+
+            {{-- Table --}}
+            <div class="table-responsive">
+                <table class="table active-users-table table-hover align-middle mb-0">
+                    <thead>
+                        <tr>
+                            <th>{{ __('admin.activity_logs_ui.user_col') }}</th>
+                            <th>{{ __('admin.activity_logs_ui.role_col') }}</th>
+                            <th>{{ __('admin.activity_logs_ui.last_activity_col') }}</th>
+                            <th class="text-center">{{ __('admin.activity_logs_ui.today_col') }}</th>
+                            <th class="text-center">{{ __('admin.activity_logs_ui.first_login_today') }}</th>
+                        </tr>
+                    </thead>
+                    <tbody id="activeUsersTableBody">
+                        @include('admin.activity-logs.partials.active-users-table', ['activeUsers' => $activeUsers])
+                    </tbody>
+                </table>
+            </div>
+
+            {{-- Last update footer --}}
+            <div class="card-footer bg-white border-top py-2 px-3">
+                <small class="text-muted" style="font-size: 0.72rem;">
+                    <i class="bi bi-clock me-1"></i>
+                    {{ __('admin.activity_logs_ui.last_update') }} <span id="lastUpdateTime">{{ now()->format('h:i:s A') }}</span>
+                </small>
+            </div>
         </x-admin.card>
     </div>
-@endsection
 
 @push('styles')
-<style>
-    .user-avatar-sm {
-        font-size: 14px;
-    }
-
-    .table th {
-        font-weight: 600;
-        font-size: 0.875rem;
-        color: #495057;
-        white-space: nowrap;
-    }
-
-    .table td {
-        vertical-align: middle;
-    }
-
-    .table tbody tr:hover {
-        background-color: #f8f9fa;
-    }
-</style>
+    <link rel="stylesheet" href="{{ asset('assets/admin/css/active-users.css') }}">
 @endpush
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const filterForm  = document.getElementById('activeUsersFilterForm');
+    const searchInput = document.getElementById('activeUsersSearch');
+    const searchBtn   = document.getElementById('searchBtn');
+    const tableBody   = document.getElementById('activeUsersTableBody');
+    const loading     = document.getElementById('activeUsersLoading');
+    const headerCount = document.getElementById('headerCount');
+    const kpiCount    = document.getElementById('kpiActiveCount');
+    const lastUpdate  = document.getElementById('lastUpdateTime');
+    const refreshToggle = document.getElementById('autoRefreshToggle');
+    const refreshDot  = document.getElementById('refreshDot');
+
+    let isLoading = false;
+    let refreshInterval = null;
+
+    function showLoading() {
+        isLoading = true;
+        if (loading) loading.classList.add('active');
+        if (tableBody) tableBody.style.opacity = '0.4';
+    }
+
+    function hideLoading() {
+        isLoading = false;
+        if (loading) loading.classList.remove('active');
+        if (tableBody) tableBody.style.opacity = '1';
+    }
+
+    function fetchUsers(url) {
+        if (isLoading) return;
+        showLoading();
+
+        fetch(url || '{{ route('admin.activity-logs.active-users') }}', {
+            method: 'GET',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'Accept': 'application/json',
+            }
+        })
+        .then(r => r.json())
+        .then(data => {
+            if (data.success) {
+                if (tableBody) tableBody.innerHTML = data.html;
+                if (headerCount) headerCount.textContent = data.count;
+                if (kpiCount) kpiCount.textContent = data.count;
+                if (lastUpdate) lastUpdate.textContent = new Date().toLocaleTimeString();
+            }
+        })
+        .catch(err => console.error('Fetch error:', err))
+        .finally(() => hideLoading());
+    }
+
+    // Search form
+    filterForm?.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const search = searchInput?.value?.trim();
+        const params = search ? `?search=${encodeURIComponent(search)}` : '';
+        fetchUsers(`{{ route('admin.activity-logs.active-users') }}${params}`);
+    });
+
+    // Auto-refresh every 30s
+    function startAutoRefresh() {
+        stopAutoRefresh();
+        refreshInterval = setInterval(() => fetchUsers(), 30000);
+        if (refreshDot) refreshDot.classList.remove('paused');
+    }
+
+    function stopAutoRefresh() {
+        if (refreshInterval) clearInterval(refreshInterval);
+        refreshInterval = null;
+        if (refreshDot) refreshDot.classList.add('paused');
+    }
+
+    refreshToggle?.addEventListener('change', function() {
+        this.checked ? startAutoRefresh() : stopAutoRefresh();
+    });
+
+    // Start auto-refresh by default
+    startAutoRefresh();
+});
+</script>
+@endpush
+@endsection

@@ -1237,6 +1237,20 @@ return [
         'filter_create' => 'إضافة',
         'filter_update' => 'تعديل',
         'filter_delete' => 'حذف',
+        // Active users page
+        'online_title' => 'المستخدمون المتصلون',
+        'active_now' => 'متصلون الآن',
+        'activities_today' => 'أنشطة اليوم',
+        'first_logins_today' => 'أول دخول اليوم',
+        'auto_refresh' => 'تحديث تلقائي',
+        'no_online_users' => 'لا يوجد مستخدمون متصلون حالياً',
+        'no_online_desc' => 'المستخدمون النشطون في آخر 15 دقيقة سيظهرون هنا',
+        'user_col' => 'المستخدم',
+        'role_col' => 'الدور',
+        'last_activity_col' => 'آخر نشاط',
+        'today_col' => 'اليوم',
+        'search_name_email' => 'بحث بالاسم أو البريد...',
+        'time_ago' => 'منذ',
     ],
 
     // Footer Links

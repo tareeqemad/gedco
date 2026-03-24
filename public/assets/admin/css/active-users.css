@@ -1,0 +1,96 @@
+/* Active Users page styles */
+
+/* Avatar with online pulse */
+.active-user-avatar {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    background: #24364A;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 700;
+    font-size: 0.8rem;
+    flex-shrink: 0;
+}
+
+.active-pulse {
+    position: absolute;
+    bottom: 0;
+    right: -2px;
+    width: 10px;
+    height: 10px;
+    background: #16A34A;
+    border-radius: 50%;
+    border: 2px solid white;
+    animation: pulse-green 2s ease-in-out infinite;
+}
+
+@keyframes pulse-green {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(22, 163, 74, 0.4); }
+    50% { box-shadow: 0 0 0 4px rgba(22, 163, 74, 0); }
+}
+
+/* Table */
+.active-users-table thead th {
+    font-weight: 600;
+    font-size: 0.75rem;
+    letter-spacing: 0.03em;
+    color: #5B7088;
+    border-bottom: 2px solid #E6ECF2;
+    text-transform: uppercase;
+    padding: 0.75rem 1rem;
+    white-space: nowrap;
+}
+
+.active-users-table tbody td {
+    padding: 0.85rem 1rem;
+    vertical-align: middle;
+    border-bottom: 1px solid #F0F4F8;
+}
+
+.active-user-row:hover {
+    background: #F8FBFD;
+}
+
+/* Loading overlay */
+.active-users-loading {
+    display: none;
+    text-align: center;
+    padding: 1.5rem;
+}
+
+.active-users-loading.active {
+    display: block;
+}
+
+/* Auto-refresh toggle */
+.auto-refresh-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.72rem;
+    color: #5B7088;
+    cursor: pointer;
+}
+
+.auto-refresh-toggle .form-check-input {
+    width: 2rem;
+    height: 1rem;
+    cursor: pointer;
+}
+
+.auto-refresh-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #16A34A;
+    display: inline-block;
+    animation: pulse-green 2s ease-in-out infinite;
+}
+
+.auto-refresh-dot.paused {
+    background: #9CA3AF;
+    animation: none;
+}

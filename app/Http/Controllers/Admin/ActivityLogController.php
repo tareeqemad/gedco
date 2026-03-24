@@ -127,6 +127,15 @@ class ActivityLogController extends Controller
             ->filter()
             ->values();
 
+        // AJAX response
+        if ($request->expectsJson() || $request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'html' => view('admin.activity-logs.partials.active-users-table', compact('activeUsers'))->render(),
+                'count' => $activeUsers->count(),
+            ]);
+        }
+
         return view('admin.activity-logs.active-users', compact('activeUsers'));
     }
 

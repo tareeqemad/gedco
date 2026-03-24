@@ -1237,6 +1237,20 @@ return [
         'filter_create' => 'Create',
         'filter_update' => 'Update',
         'filter_delete' => 'Delete',
+        // Active users page
+        'online_title' => 'Online Users',
+        'active_now' => 'Active Now',
+        'activities_today' => 'Activities Today',
+        'first_logins_today' => 'First Logins Today',
+        'auto_refresh' => 'Auto-refresh',
+        'no_online_users' => 'No online users at the moment',
+        'no_online_desc' => 'Users active in the last 15 minutes will appear here',
+        'user_col' => 'User',
+        'role_col' => 'Role',
+        'last_activity_col' => 'Last Activity',
+        'today_col' => 'Today',
+        'search_name_email' => 'Search by name or email...',
+        'time_ago' => 'ago',
     ],
 
     // Footer Links
