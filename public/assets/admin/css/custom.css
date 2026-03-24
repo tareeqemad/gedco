@@ -2056,6 +2056,16 @@ html {
 }
 .stat-chip-danger strong, .stat-chip-danger i { color: #DC2626 !important; }
 
+/* Global AJAX loading indicator (hidden by default, shown with .active) */
+.ajax-loading {
+    display: none;
+    text-align: center;
+    padding: 1.5rem;
+}
+.ajax-loading.active {
+    display: block;
+}
+
 /* 4) Table text truncation */
 .table td {
     max-width: 300px;

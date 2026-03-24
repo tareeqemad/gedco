@@ -150,14 +150,19 @@
                             </select>
                         </div>
                         <div style="flex: 0 1 15%;">
-                            <input type="date" name="date_from" id="filterDateFrom"
-                                   class="form-control rounded-3"
-                                   value="{{ request('date_from') }}">
+                            <div class="position-relative">
+                                <label class="form-label mb-0 position-absolute" style="font-size: 0.65rem; color: #7A8CA2; top: -0.55rem; {{ app()->getLocale() === 'ar' ? 'right' : 'left' }}: 0.75rem; background: #fff; padding: 0 0.25rem; z-index: 1;">{{ __('admin.activity_logs.date_from') }}</label>
+                                <input type="date" name="date_from" id="filterDateFrom"
+                                       class="form-control rounded-3"
+                                       value="{{ request('date_from') }}">
+                            </div>
                         </div>
                         <div style="flex: 0 1 15%;">
-                            <input type="date" name="date_to" id="filterDateTo"
-                                   class="form-control rounded-3"
-                                   value="{{ request('date_to') }}">
+                            <div class="position-relative">
+                                <label class="form-label mb-0 position-absolute" style="font-size: 0.65rem; color: #7A8CA2; top: -0.55rem; {{ app()->getLocale() === 'ar' ? 'right' : 'left' }}: 0.75rem; background: #fff; padding: 0 0.25rem; z-index: 1;">{{ __('admin.activity_logs.date_to') }}</label>
+                                <input type="date" name="date_to" id="filterDateTo"
+                                       class="form-control rounded-3"
+                                       value="{{ request('date_to') }}">
                         </div>
                         <div style="flex: 0 0 auto;">
                             <button type="submit" class="btn btn-primary rounded-3" id="logsSearchBtn">
@@ -172,7 +177,7 @@
             </div>
 
             {{-- Loading --}}
-            <div class="permissions-loading" id="logsLoading">
+            <div class="ajax-loading" id="logsLoading">
                 <div class="spinner-border text-primary" role="status">
                     <span class="visually-hidden">{{ __('admin.ui.loading') }}</span>
                 </div>

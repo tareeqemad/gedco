@@ -56,7 +56,7 @@
             </div>
 
             {{-- Loading --}}
-            <div class="permissions-loading" id="permsLoading">
+            <div class="ajax-loading" id="permsLoading">
                 <div class="spinner-border text-primary" role="status">
                     <span class="visually-hidden">{{ __('admin.ui.loading') }}</span>
                 </div>
