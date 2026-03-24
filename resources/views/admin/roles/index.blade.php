@@ -107,7 +107,7 @@
                                                     <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center" 
                                                          style="width: 28px; height: 28px; font-size: 0.7rem; font-weight: bold;"
                                                          title="{{ $user->name }}">
-                                                        {{ strtoupper(substr($user->name, 0, 1)) }}
+                                                        {{ mb_strtoupper(mb_substr($user->name, 0, 1)) }}
                                                     </div>
                                                 @endforeach
                                                 @if($role->users_count > 3)
@@ -231,7 +231,7 @@
                                         <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center" 
                                              style="width: 32px; height: 32px; font-size: 0.75rem; font-weight: bold;"
                                              title="{{ $user->name }}">
-                                            {{ strtoupper(substr($user->name, 0, 1)) }}
+                                            {{ mb_strtoupper(mb_substr($user->name, 0, 1)) }}
                                         </div>
                                     @endforeach
                                     @if($role->users_count > 3)

@@ -240,7 +240,7 @@
                         @forelse($recentActivities as $activity)
                             <div class="dash-list-item">
                                 <div class="activity-avatar flex-shrink-0">
-                                    {{ strtoupper(substr($activity->user->name ?? 'U', 0, 1)) }}
+                                    {{ mb_strtoupper(mb_substr($activity->user->name ?? 'U', 0, 1)) }}
                                 </div>
                                 <div class="flex-grow-1 min-width-0">
                                     <div class="d-flex align-items-center gap-2 flex-wrap">

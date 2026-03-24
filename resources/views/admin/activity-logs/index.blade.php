@@ -86,7 +86,7 @@
                             <div class="list-group-item d-flex justify-content-between align-items-center">
                                 <div class="d-flex align-items-center">
                                     <div class="avatar avatar-xs bg-primary text-white rounded-circle me-2">
-                                        {{ strtoupper(substr($topUser->user->name, 0, 1)) }}
+                                        {{ mb_strtoupper(mb_substr($topUser->user->name, 0, 1)) }}
                                     </div>
                                     <div>
                                         <div class="fw-semibold">{{ $topUser->user->name }}</div>
