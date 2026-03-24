@@ -65,6 +65,7 @@ return [
         'confirm_delete' => 'Are you sure you want to delete?',
         'publish' => 'Publish',
         'save_draft' => 'Save Draft',
+        'logout' => 'Logout',
     ],
 
     // Form Labels
@@ -149,6 +150,9 @@ return [
         'select_file' => 'Select File',
         'youtube_preview_hint' => 'Enter a YouTube URL to see the preview',
         'cancel' => 'Cancel',
+        'back' => 'Back',
+        'edit' => 'Edit',
+        'print' => 'Print',
         'error' => 'Error',
         'success' => 'Success',
         'basic_info' => 'Basic Information',
@@ -244,6 +248,9 @@ return [
         'email_required' => 'Email is required.',
         'email_invalid' => 'Invalid email format.',
         'password_required' => 'Password is required.',
+        'login_success' => 'Logged in successfully. Welcome!',
+        'too_many_attempts' => 'Too many attempts. Please try again in :seconds seconds.',
+        'attempts_remaining' => 'attempts remaining',
     ],
 
     // Settings
@@ -510,8 +517,14 @@ return [
         'email_placeholder' => 'Enter email address',
         'password_placeholder' => 'Enter password (at least 8 characters)',
         'password_hint' => 'Password must be at least 8 characters',
+        'total_users_text' => 'Total Users',
+        'impersonate' => 'Impersonate User',
+        'impersonate_confirm' => 'Are you sure you want to log in as user: :name?',
+        'stop_impersonating' => 'Return to Original User',
+        'impersonating_as' => 'You are logged in as',
+        'original_user' => 'Original User',
     ],
-    
+
     // Tenders
     'tenders' => [
         'title' => 'Tenders',
@@ -576,6 +589,7 @@ return [
         'show_new_summary' => 'NEW_VALUE_1 (Summary)',
         'tab_edit' => 'Edit',
         'tab_preview' => 'Preview',
+        'delete_success' => 'Deleted Successfully',
     ],
 
     // Advertisements
