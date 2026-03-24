@@ -34,7 +34,7 @@
                             <i class="bi bi-clock-history fs-5"></i>
                         </div>
                         <div>
-                            <h6 class="mb-0 text-muted small">آخر 15 دقيقة</h6>
+                            <h6 class="mb-0 text-muted small">{{ __('admin.activity_logs_ui.last_15_min') }}</h6>
                             <h3 class="mb-0 fw-bold">{{ \Carbon\Carbon::now()->subMinutes(15)->diffForHumans() }}</h3>
                         </div>
                     </div>
@@ -63,7 +63,7 @@
                 icon="bi-people-fill"
                 title="{{ __('admin.activity_logs.active_users_now') }}">
                 <x-slot:badge>
-                    <span class="badge bg-light text-dark rounded-pill px-3 py-1">{{ $activeUsers->count() }} مستخدم</span>
+                    <span class="badge bg-light text-dark rounded-pill px-3 py-1">{{ $activeUsers->count() }} {{ __('admin.activity_logs_ui.user_count') }}</span>
                 </x-slot:badge>
             </x-admin.card-header-index>
 
@@ -101,9 +101,9 @@
                                     <th style="width: 60px;"></th>
                                     <th>{{ __('admin.activity_logs.user') }}</th>
                                     <th>{{ __('admin.activity_logs.roles') }}</th>
-                                    <th class="text-center" style="width: 150px;">آخر نشاط</th>
+                                    <th class="text-center" style="width: 150px;">{{ __('admin.activity_logs_ui.last_activity') }}</th>
                                     <th class="text-center" style="width: 120px;">{{ __('admin.activity_logs.today_activities') }}</th>
-                                    <th class="text-center" style="width: 150px;">أول دخول اليوم</th>
+                                    <th class="text-center" style="width: 150px;">{{ __('admin.activity_logs_ui.first_login_today') }}</th>
                                     <th class="text-center" style="width: 130px;">{{ __('admin.actions.actions') }}</th>
                                 </tr>
                             </thead>
@@ -191,7 +191,7 @@
                                     {{ __('admin.activity_logs.showing_active_users', ['count' => $activeUsers->count()]) }}
                                 </div>
                                 <div class="text-muted">
-                                    آخر تحديث: <strong>{{ now()->format('H:i:s') }}</strong>
+                                    {{ __('admin.activity_logs_ui.last_update') }} <strong>{{ now()->format('H:i:s') }}</strong>
                                 </div>
                             </div>
                         </div>

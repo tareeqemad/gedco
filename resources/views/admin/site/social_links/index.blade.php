@@ -1,26 +1,32 @@
 @php
-    $breadcrumbTitle     = 'Social Links';
+    $breadcrumbTitle     = __('admin.social_links.title');
     $breadcrumbParent    = __('admin.breadcrumbs.home');
     $breadcrumbParentUrl = route('admin.dashboard');
 @endphp
 @extends('layouts.admin')
-@section('title','Social Links')
+@section('title', __('admin.social_links.title'))
 
 @section('content')
     <div class="container-fluid p-0">
         <x-admin.card>
             <x-admin.card-header-index
                 icon="bi-share"
-                title="Social Links"
+                :title="__('admin.social_links.title')"
                 :create-route="route('admin.social-links.create')"
-                create-label="+ جديد" />
+                :create-label="__('admin.social_links.create_new')" />
 
             <div class="card-body p-3">
                 <div class="table-responsive">
                     <table class="table table-hover table-sm align-middle mb-0">
                         <thead class="bg-light">
                         <tr>
-                            <th>#</th><th>Platform</th><th>Icon</th><th>URL</th><th>Order</th><th>Active</th><th class="text-end">Actions</th>
+                            <th>#</th>
+                            <th>{{ __('admin.social_links.table_platform') }}</th>
+                            <th>{{ __('admin.social_links.table_icon') }}</th>
+                            <th>{{ __('admin.social_links.table_url') }}</th>
+                            <th>{{ __('admin.social_links.table_order') }}</th>
+                            <th>{{ __('admin.social_links.table_active') }}</th>
+                            <th class="text-end">{{ __('admin.social_links.table_actions') }}</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -38,14 +44,14 @@
                                     </a>
                                     <form action="{{ route('admin.social-links.destroy',$l) }}" method="post" class="d-inline">
                                         @csrf @method('DELETE')
-                                        <button class="btn btn-sm btn-outline-danger rounded-3" onclick="return confirm('حذف؟')">
+                                        <button class="btn btn-sm btn-outline-danger rounded-3" onclick="return confirm('{{ __('admin.social_links.confirm_delete') }}')">
                                             <i class="bi bi-trash"></i>
                                         </button>
                                     </form>
                                 </td>
                             </tr>
                         @empty
-                            <tr><td colspan="7" class="text-center text-muted py-4">لا توجد روابط</td></tr>
+                            <tr><td colspan="7" class="text-center text-muted py-4">{{ __('admin.social_links.no_links') }}</td></tr>
                         @endforelse
                         </tbody>
                     </table>

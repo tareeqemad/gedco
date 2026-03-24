@@ -64,7 +64,7 @@
                             <i class="bi bi-calendar-month"></i>
                         </div>
                         <div>
-                            <h6 class="mb-0 text-muted small">مستخدمون هذا الشهر</h6>
+                            <h6 class="mb-0 text-muted small">{{ __('admin.activity_logs_ui.users_this_month') }}</h6>
                             <h3 class="mb-0 fw-bold">{{ $stats['unique_users_month'] }}</h3>
                         </div>
                     </div>
@@ -103,7 +103,7 @@
         <div class="col-md-6">
             <div class="card border-0 shadow-sm">
                 <div class="card-header bg-white border-bottom">
-                    <h6 class="mb-0">أكثر العمليات تكراراً</h6>
+                    <h6 class="mb-0">{{ __('admin.activity_logs_ui.most_frequent_ops') }}</h6>
                 </div>
                 <div class="list-group list-group-flush">
                     @foreach($topActions as $action)
@@ -155,7 +155,7 @@
                             </select>
                         </div>
                         <div class="col-md-2">
-                            <label class="form-label fw-semibold text-dark mb-1">العملية</label>
+                            <label class="form-label fw-semibold text-dark mb-1">{{ __('admin.activity_logs_ui.operation') }}</label>
                             <select name="action" class="form-select rounded-3">
                                 <option value="">{{ __('admin.activity_logs.all_operations') }}</option>
                                 @foreach($actions as $act)
@@ -174,8 +174,8 @@
                             <input type="date" name="date_to" class="form-control rounded-3" value="{{ request('date_to') }}">
                         </div>
                         <div class="col-md-2">
-                            <label class="form-label fw-semibold text-dark mb-1">الراوت</label>
-                            <input type="text" name="route" class="form-control rounded-3" placeholder="بحث..." value="{{ request('route') }}">
+                            <label class="form-label fw-semibold text-dark mb-1">{{ __('admin.activity_logs_ui.route') }}</label>
+                            <input type="text" name="route" class="form-control rounded-3" placeholder="{{ __('admin.activity_logs_ui.search_placeholder') }}" value="{{ request('route') }}">
                         </div>
                         <div class="col-md-1">
                             <label class="form-label mb-1">&nbsp;</label>
@@ -200,18 +200,18 @@
                                     </span>
                                 </th>
                                 <th>
-                                    <span data-bs-toggle="tooltip" data-bs-placement="top" title="نوع العملية - مرر الماوس على البادج لمعرفة التفاصيل">
-                                        العملية
+                                    <span data-bs-toggle="tooltip" data-bs-placement="top" title="{{ __('admin.activity_logs_ui.operation_type_tooltip') }}">
+                                        {{ __('admin.activity_logs_ui.operation') }}
                                     </span>
                                 </th>
                                 <th>
-                                    <span data-bs-toggle="tooltip" data-bs-placement="top" title="وصف مختصر للنشاط الذي تم تنفيذه">
-                                        الوصف
+                                    <span data-bs-toggle="tooltip" data-bs-placement="top" title="{{ __('admin.activity_logs_ui.activity_desc_tooltip') }}">
+                                        {{ __('admin.activity_logs_ui.description') }}
                                     </span>
                                 </th>
                                 <th>
-                                    <span data-bs-toggle="tooltip" data-bs-placement="top" title="مسار الصفحة أو الراوت الذي تم الوصول إليه">
-                                        الراوت
+                                    <span data-bs-toggle="tooltip" data-bs-placement="top" title="{{ __('admin.activity_logs_ui.route_tooltip') }}">
+                                        {{ __('admin.activity_logs_ui.route') }}
                                     </span>
                                 </th>
                                 <th>
@@ -226,7 +226,7 @@
                                 </th>
                                 <th>
                                     <span data-bs-toggle="tooltip" data-bs-placement="top" title="{{ __('admin.activity_logs.view_user_activities') }}">
-                                        إجراءات
+                                        {{ __('admin.activity_logs_ui.actions') }}
                                     </span>
                                 </th>
                             </tr>
@@ -267,7 +267,7 @@
                                         </span>
                                     </td>
                                     <td>
-                                        <small data-bs-toggle="tooltip" data-bs-placement="top" title="وصف النشاط الذي تم تنفيذه">
+                                        <small data-bs-toggle="tooltip" data-bs-placement="top" title="{{ __('admin.activity_logs_ui.activity_desc_detail') }}">
                                             {{ $log->description }}
                                         </small>
                                     </td>
@@ -275,7 +275,7 @@
                                         <small class="text-muted"
                                                data-bs-toggle="tooltip"
                                                data-bs-placement="top"
-                                               title="مسار الصفحة: {{ $log->route_uri }}">
+                                               title="{{ __('admin.activity_logs_ui.page_route') }} {{ $log->route_uri }}">
                                             {{ $log->route_name ?? $log->route_uri }}
                                         </small>
                                     </td>
@@ -318,7 +318,7 @@
                 <div class="px-3 py-2" style="border-top: 1px solid #E6ECF2;">
                     <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 small">
                         <div class="text-muted">
-                            عرض {{ $logs->firstItem() }} - {{ $logs->lastItem() }} من {{ $logs->total() }}
+                            {{ __('admin.activity_logs_ui.showing_range', ['first' => $logs->firstItem(), 'last' => $logs->lastItem(), 'total' => $logs->total()]) }}
                         </div>
                         {{ $logs->links() }}
                     </div>
@@ -333,42 +333,42 @@
                 <div class="card-body">
                     <h6 class="fw-bold mb-3">
                         <i class="bi bi-info-circle me-2 text-primary"></i>
-                        شرح أنواع العمليات
+                        {{ __('admin.activity_logs_ui.operations_legend') }}
                     </h6>
                     <div class="row g-3">
                         <div class="col-md-3">
                             <div class="d-flex align-items-center gap-2">
-                                <span class="badge bg-info">عرض صفحة</span>
-                                <small class="text-muted">عرض/فتح صفحة أو محتوى</small>
+                                <span class="badge bg-info">{{ __('admin.activity_logs_ui.op_view') }}</span>
+                                <small class="text-muted">{{ __('admin.activity_logs_ui.op_view_desc') }}</small>
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="d-flex align-items-center gap-2">
-                                <span class="badge bg-primary">إضافة جديد</span>
-                                <small class="text-muted">إضافة سجل جديد</small>
+                                <span class="badge bg-primary">{{ __('admin.activity_logs_ui.op_create') }}</span>
+                                <small class="text-muted">{{ __('admin.activity_logs_ui.op_create_desc') }}</small>
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="d-flex align-items-center gap-2">
-                                <span class="badge bg-warning">تعديل</span>
-                                <small class="text-muted">تعديل سجل موجود</small>
+                                <span class="badge bg-warning">{{ __('admin.activity_logs_ui.op_update') }}</span>
+                                <small class="text-muted">{{ __('admin.activity_logs_ui.op_update_desc') }}</small>
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="d-flex align-items-center gap-2">
-                                <span class="badge bg-danger">حذف</span>
-                                <small class="text-muted">حذف سجل</small>
+                                <span class="badge bg-danger">{{ __('admin.activity_logs_ui.op_delete') }}</span>
+                                <small class="text-muted">{{ __('admin.activity_logs_ui.op_delete_desc') }}</small>
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="d-flex align-items-center gap-2">
-                                <span class="badge bg-success">تسجيل دخول</span>
+                                <span class="badge bg-success">{{ __('admin.activity_logs_ui.op_login') }}</span>
                                 <small class="text-muted">{{ __('admin.activity_logs.login') }}</small>
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="d-flex align-items-center gap-2">
-                                <span class="badge bg-secondary">تسجيل خروج</span>
+                                <span class="badge bg-secondary">{{ __('admin.activity_logs_ui.op_logout') }}</span>
                                 <small class="text-muted">{{ __('admin.activity_logs.logout') }}</small>
                             </div>
                         </div>

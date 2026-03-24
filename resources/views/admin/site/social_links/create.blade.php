@@ -1,17 +1,17 @@
 @php
-    $breadcrumbTitle     = 'Create Social Link';
-    $breadcrumbParent    = 'Social Links';
+    $breadcrumbTitle     = __('admin.social_links.create_title');
+    $breadcrumbParent    = __('admin.social_links.title');
     $breadcrumbParentUrl = route('admin.social-links.index');
 @endphp
 @extends('layouts.admin')
-@section('title','Create Social Link')
+@section('title', __('admin.social_links.create_title'))
 
 @section('content')
     <div class="container-fluid p-0">
         <x-admin.card>
             <x-admin.card-header-form
                 icon="bi-share"
-                title="Create Social Link"
+                :title="__('admin.social_links.create_title')"
                 :back-route="route('admin.social-links.index')" />
 
             <div class="card-body p-4">

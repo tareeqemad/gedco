@@ -25,7 +25,7 @@
                     </div>
                     @if($user->roles->count() > 0)
                         <div class="mb-2">
-                            <small class="text-muted d-block mb-1">الصلاحيات</small>
+                            <small class="text-muted d-block mb-1">{{ __('admin.activity_logs_ui.permissions') }}</small>
                             @foreach($user->roles as $role)
                                 <span class="badge bg-info me-1">{{ $role->name }}</span>
                             @endforeach
@@ -55,7 +55,7 @@
                 <div class="col-md-3">
                     <div class="card border-0 shadow-sm">
                         <div class="card-body text-center">
-                            <h6 class="mb-0 text-muted small">أول نشاط</h6>
+                            <h6 class="mb-0 text-muted small">{{ __('admin.activity_logs_ui.first_activity') }}</h6>
                             <small class="fw-semibold">{{ $stats['first_activity']?->format('Y-m-d') ?? 'N/A' }}</small>
                         </div>
                     </div>
@@ -63,7 +63,7 @@
                 <div class="col-md-3">
                     <div class="card border-0 shadow-sm">
                         <div class="card-body text-center">
-                            <h6 class="mb-0 text-muted small">آخر نشاط</h6>
+                            <h6 class="mb-0 text-muted small">{{ __('admin.activity_logs_ui.last_activity') }}</h6>
                             <small class="fw-semibold">{{ $stats['last_activity']?->diffForHumans() ?? 'N/A' }}</small>
                         </div>
                     </div>
@@ -77,7 +77,7 @@
         <div class="col-md-6">
             <div class="card border-0 shadow-sm">
                 <div class="card-header bg-white border-bottom">
-                    <h6 class="mb-0">أكثر الصفحات زيارة</h6>
+                    <h6 class="mb-0">{{ __('admin.activity_logs_ui.most_visited_pages') }}</h6>
                 </div>
                 <div class="list-group list-group-flush">
                     @foreach($topPages as $page)
@@ -95,7 +95,7 @@
         <div class="col-md-6">
             <div class="card border-0 shadow-sm">
                 <div class="card-header bg-white border-bottom">
-                    <h6 class="mb-0">أكثر العمليات</h6>
+                    <h6 class="mb-0">{{ __('admin.activity_logs_ui.most_operations') }}</h6>
                 </div>
                 <div class="list-group list-group-flush">
                     @foreach($topActions as $action)
@@ -129,15 +129,15 @@
                 <div class="card-body p-3">
                     <form method="GET" action="{{ route('admin.activity-logs.user', $user->id) }}" class="row g-3">
                         <div class="col-md-3">
-                            <label class="form-label fw-semibold text-dark mb-1">العملية</label>
+                            <label class="form-label fw-semibold text-dark mb-1">{{ __('admin.activity_logs_ui.operation') }}</label>
                             <select name="action" class="form-select rounded-3">
                                 <option value="">{{ __('admin.activity_logs.all_operations') }}</option>
-                                <option value="login" {{ request('action') == 'login' ? 'selected' : '' }}>تسجيل الدخول</option>
-                                <option value="logout" {{ request('action') == 'logout' ? 'selected' : '' }}>تسجيل الخروج</option>
-                                <option value="view" {{ request('action') == 'view' ? 'selected' : '' }}>عرض</option>
-                                <option value="create" {{ request('action') == 'create' ? 'selected' : '' }}>إضافة</option>
-                                <option value="update" {{ request('action') == 'update' ? 'selected' : '' }}>تعديل</option>
-                                <option value="delete" {{ request('action') == 'delete' ? 'selected' : '' }}>حذف</option>
+                                <option value="login" {{ request('action') == 'login' ? 'selected' : '' }}>{{ __('admin.activity_logs_ui.filter_login') }}</option>
+                                <option value="logout" {{ request('action') == 'logout' ? 'selected' : '' }}>{{ __('admin.activity_logs_ui.filter_logout') }}</option>
+                                <option value="view" {{ request('action') == 'view' ? 'selected' : '' }}>{{ __('admin.activity_logs_ui.filter_view') }}</option>
+                                <option value="create" {{ request('action') == 'create' ? 'selected' : '' }}>{{ __('admin.activity_logs_ui.filter_create') }}</option>
+                                <option value="update" {{ request('action') == 'update' ? 'selected' : '' }}>{{ __('admin.activity_logs_ui.filter_update') }}</option>
+                                <option value="delete" {{ request('action') == 'delete' ? 'selected' : '' }}>{{ __('admin.activity_logs_ui.filter_delete') }}</option>
                             </select>
                         </div>
                         <div class="col-md-3">
@@ -163,9 +163,9 @@
                     <table class="table table-hover mb-0">
                         <thead class="table-light">
                             <tr>
-                                <th>العملية</th>
-                                <th>الوصف</th>
-                                <th>الراوت</th>
+                                <th>{{ __('admin.activity_logs_ui.operation') }}</th>
+                                <th>{{ __('admin.activity_logs_ui.description') }}</th>
+                                <th>{{ __('admin.activity_logs_ui.route') }}</th>
                                 <th>{{ __('admin.activity_logs.ip_address') }}</th>
                                 <th>{{ __('admin.activity_logs.date') }}</th>
                             </tr>
@@ -207,7 +207,7 @@
                 <div class="px-3 py-2" style="border-top: 1px solid #E6ECF2;">
                     <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 small">
                         <div class="text-muted">
-                            عرض {{ $logs->firstItem() }} - {{ $logs->lastItem() }} من {{ $logs->total() }}
+                            {{ __('admin.activity_logs_ui.showing_range', ['first' => $logs->firstItem(), 'last' => $logs->lastItem(), 'total' => $logs->total()]) }}
                         </div>
                         {{ $logs->links() }}
                     </div>
