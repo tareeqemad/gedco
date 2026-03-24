@@ -393,8 +393,10 @@
             // line-height
             document.querySelector('.ql-lineheight')?.addEventListener('change', e => quill.format('lineheight', e.target.value || false));
 
-            // اتجاه افتراضي
-            quill.format('direction', 'rtl'); quill.format('align','right');
+            // اتجاه افتراضي حسب لغة لوحة التحكم
+            const isRtl = '{{ session('direction', 'rtl') }}' === 'rtl';
+            quill.format('direction', isRtl ? 'rtl' : false);
+            quill.format('align', isRtl ? 'right' : false);
 
             // تحميل body إلى Quill + تنميق الصور
             (function initBody(){

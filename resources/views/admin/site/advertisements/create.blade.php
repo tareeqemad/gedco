@@ -266,8 +266,10 @@
             document.querySelector('.ql-undo')?.addEventListener('click', () => quill.history.undo());
             document.querySelector('.ql-redo')?.addEventListener('click', () => quill.history.redo());
 
-            // RTL افتراضي
-            quill.format('direction','rtl'); quill.format('align','right');
+            // اتجاه افتراضي حسب لغة لوحة التحكم
+            const isRtl = '{{ session('direction', 'rtl') }}' === 'rtl';
+            quill.format('direction', isRtl ? 'rtl' : false);
+            quill.format('align', isRtl ? 'right' : false);
 
             function styleQuillImages() {
                 document.querySelectorAll('#quill-editor .ql-editor img').forEach(img=>{

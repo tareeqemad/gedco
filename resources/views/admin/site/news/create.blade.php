@@ -409,9 +409,10 @@
             const lhPicker = document.querySelector('.ql-lineheight');
             if (lhPicker) lhPicker.addEventListener('change', () => quill.format('lineheight', lhPicker.value || false));
 
-            // اتجاه افتراضي
-            quill.format('direction', 'rtl');
-            quill.format('align', 'right');
+            // اتجاه افتراضي حسب لغة لوحة التحكم
+            const isRtl = '{{ session('direction', 'rtl') }}' === 'rtl';
+            quill.format('direction', isRtl ? 'rtl' : false);
+            quill.format('align', isRtl ? 'right' : false);
 
             // عدّادات صور/نص
             const currentImageCount = () => (quill?.root?.querySelectorAll('img')?.length || 0);
