@@ -156,6 +156,7 @@ return [
         'error' => 'Error',
         'success' => 'Success',
         'basic_info' => 'Basic Information',
+        'attachments' => 'Attachments',
 
         // Quill Editor (shared across news & ads)
         'quill_header_1' => 'Heading 1',

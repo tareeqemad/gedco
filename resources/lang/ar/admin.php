@@ -156,6 +156,7 @@ return [
         'error' => 'خطأ',
         'success' => 'نجح',
         'basic_info' => 'المعلومات الأساسية',
+        'attachments' => 'المرفقات',
 
         // Quill Editor (shared across news & ads)
         'quill_header_1' => 'عنوان 1',

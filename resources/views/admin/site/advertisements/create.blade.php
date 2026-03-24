@@ -269,14 +269,16 @@
             // اتجاه افتراضي حسب لغة لوحة التحكم
             const isRtl = '{{ session('direction', 'rtl') }}' === 'rtl';
             const editorEl = document.querySelector('#quill-editor .ql-editor');
+            if (editorEl) {
+                editorEl.setAttribute('dir', isRtl ? 'rtl' : 'ltr');
+                editorEl.style.textAlign = isRtl ? 'right' : 'left';
+            }
             if (isRtl) {
                 quill.format('direction', 'rtl');
                 quill.format('align', 'right');
-                if (editorEl) editorEl.setAttribute('dir', 'rtl');
             } else {
-                quill.format('direction', false);
-                quill.format('align', false);
-                if (editorEl) { editorEl.setAttribute('dir', 'ltr'); editorEl.style.textAlign = 'left'; }
+                quill.root.innerHTML = '<p dir="ltr" style="text-align: left;"><br></p>';
+                quill.setSelection(0, 0);
             }
 
             function styleQuillImages() {

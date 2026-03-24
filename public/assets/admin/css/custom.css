@@ -507,6 +507,43 @@ body {
     font-size: 1.1rem !important; /* 17.6px */
 }
 
+/* ========== Quill Align-Left Button Icon Fix ========== */
+/* Quill doesn't render an icon for align-left since it's the default */
+.ql-snow .ql-toolbar button.ql-align[value="left"] svg,
+.ql-snow.ql-toolbar button.ql-align[value="left"] svg {
+    display: none !important;
+}
+.ql-snow .ql-toolbar button.ql-align[value="left"],
+.ql-snow.ql-toolbar button.ql-align[value="left"] {
+    position: relative;
+}
+.ql-snow .ql-toolbar button.ql-align[value="left"]::after,
+.ql-snow.ql-toolbar button.ql-align[value="left"]::after {
+    content: '';
+    display: block;
+    width: 18px;
+    height: 18px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 18'%3E%3Cline class='ql-stroke' x1='3' x2='15' y1='4' y2='4' stroke='%23444' stroke-width='1.5' stroke-linecap='round'/%3E%3Cline class='ql-stroke' x1='3' x2='11' y1='8' y2='8' stroke='%23444' stroke-width='1.5' stroke-linecap='round'/%3E%3Cline class='ql-stroke' x1='3' x2='13' y1='12' y2='12' stroke='%23444' stroke-width='1.5' stroke-linecap='round'/%3E%3Cline class='ql-stroke' x1='3' x2='9' y1='16' y2='16' stroke='%23444' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 18px 18px;
+}
+
+/* ========== Quill Editor Direction Override ========== */
+/* Ensure .ql-editor respects its own dir attribute, not parent html dir */
+.ql-editor[dir="ltr"] {
+    direction: ltr !important;
+    text-align: left !important;
+}
+.ql-editor[dir="ltr"] p,
+.ql-editor[dir="ltr"] h1,
+.ql-editor[dir="ltr"] h2,
+.ql-editor[dir="ltr"] h3,
+.ql-editor[dir="ltr"] li {
+    direction: ltr !important;
+    text-align: left;
+}
+
 /* ========== Direction-based Font Application ========== */
 /* RTL (Arabic) - Use Tajawal as the official font */
 html[dir="rtl"],

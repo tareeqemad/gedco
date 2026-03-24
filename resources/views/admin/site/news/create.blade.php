@@ -10,262 +10,251 @@
         // القيود
         $MAX_IMAGES = 8;
         $MAX_IMAGE_BYTES = 2 * 1024 * 1024; // 2MB
+
+        $currentDirection = session('direction', 'rtl');
+        $defaultLang = $currentDirection === 'rtl' ? 'ar' : 'en';
     @endphp
 
     <div class="container-fluid p-0" id="news-create-page">
-        <!-- Header Section -->
-        <div class="card border-0 shadow-sm rounded-4 bg-white mb-4">
-            <div class="card-header card-header-form border-0 py-2 py-md-3 px-3 px-md-4">
-                <div class="d-flex justify-content-between align-items-center w-100" style="gap: 1rem;">
-                    <div class="d-flex align-items-center gap-2" style="flex: 0 0 auto;">
-                        <div>
-                            <h5 class="mb-0 fw-bold text-white" style="font-size: 1.25rem; line-height: 1.3;">{{ __('admin.news.create_news') }}</h5>
-                        </div>
+        <x-admin.card>
+            {{-- Header with Tabs --}}
+            <x-admin.card-header-form
+                icon="bi-newspaper"
+                :title="__('admin.news.create_news')"
+                :back-route="route('admin.news.index')"
+                :back-label="__('admin.menu.news')">
+                <x-slot:actions>
+                    <div class="news-tabs" id="newsTabs" role="tablist">
+                        <button class="news-tab active" data-bs-toggle="tab" data-bs-target="#form-content" type="button" role="tab" aria-selected="true">
+                            <i class="bi bi-pencil-square"></i> {{ __('admin.news.form_tab_input') }}
+                        </button>
+                        <button class="news-tab" data-bs-toggle="tab" data-bs-target="#preview-content" type="button" role="tab" aria-selected="false">
+                            <i class="bi bi-eye"></i> {{ __('admin.news.form_tab_preview') }}
+                        </button>
                     </div>
-                    <ul class="nav nav-tabs nav-tabs-sm border-0" id="newsTabs" role="tablist" style="margin-inline-start: auto;">
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link active px-3 py-2 rounded-3 text-white" data-bs-toggle="tab" data-bs-target="#form-content" type="button" role="tab" aria-selected="true" style="background: rgba(255, 255, 255, 0.2); border: 1px solid rgba(255, 255, 255, 0.3);">
-                                <i class="bi bi-pencil me-1"></i> {{ __('admin.news.form_tab_input') }}
-                            </button>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link px-3 py-2 rounded-3 text-white" data-bs-toggle="tab" data-bs-target="#preview-content" type="button" role="tab" aria-selected="false" style="background: transparent; border: 1px solid rgba(255, 255, 255, 0.3);">
-                                <i class="bi bi-eye me-1"></i> {{ __('admin.news.form_tab_preview') }}
-                            </button>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
+                </x-slot:actions>
+            </x-admin.card-header-form>
 
-        <div class="tab-content" id="newsTabContent">
-            <div class="tab-pane fade show active" id="form-content" role="tabpanel">
-                <div class="row g-4">
-                    <div class="col-12">
-                        <div class="card border-0 shadow-sm rounded-4 bg-white">
-                            <div class="card-body p-3 p-md-4">
-                                <form id="newsForm" method="POST" enctype="multipart/form-data" action="{{ route('admin.news.store') }}">
-                                    @csrf
+            <div class="tab-content" id="newsTabContent">
+                {{-- ============ Form Tab ============ --}}
+                <div class="tab-pane fade show active" id="form-content" role="tabpanel">
+                    <div class="card-body p-3 p-md-4">
+                        <form id="newsForm" method="POST" enctype="multipart/form-data" action="{{ route('admin.news.store') }}">
+                            @csrf
+                            <input type="file" id="quillImageInput" accept="image/*" multiple class="visually-hidden">
+                            <input type="hidden" name="language" value="{{ old('language', $defaultLang) }}">
 
-                                    <input type="file" id="quillImageInput" accept="image/*" multiple class="visually-hidden">
+                            {{-- ── Section 1: Basic Info ── --}}
+                            <h6 class="fw-bold d-flex align-items-center gap-2 section-title">
+                                <i class="bi bi-info-circle"></i> {{ __('admin.common.basic_info') }}
+                            </h6>
 
-                                    <!-- Title -->
-                                    <div class="mb-4">
-                                        <label class="form-label fw-semibold text-dark d-flex align-items-center gap-2 mb-2">
-                                            <i class="bi bi-type-h1 text-primary"></i> {{ __('admin.news.form_title') }}
-                                        </label>
-                                        <input type="text" name="title" id="titleInput"
-                                               class="form-control rounded-3 border-0 bg-light focus-ring focus-ring-primary @error('title') is-invalid @enderror"
-                                               placeholder="{{ __('admin.news.form_title_placeholder') }}" value="{{ old('title') }}">
-                                        @error('title') <div class="invalid-feedback d-block mt-1">{{ $message }}</div> @enderror
-                                    </div>
-
-                                    <!-- Date + Status + Featured -->
-                                    <div class="row g-3 mb-4">
-                                        <div class="col-md-5">
-                                            <label class="form-label fw-semibold text-dark d-flex align-items-center gap-2 mb-2">
-                                                <i class="bi bi-calendar text-info"></i> {{ __('admin.news.form_publish_date') }}
-                                            </label>
-                                            <input type="date" name="published_at" id="dateInput"
-                                                   class="form-control rounded-3 border-0 bg-light focus-ring focus-ring-info @error('published_at') is-invalid @enderror"
-                                                   value="{{ old('published_at', now()->format('Y-m-d')) }}">
-                                            @error('published_at') <div class="invalid-feedback d-block mt-1">{{ $message }}</div> @enderror
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label class="form-label fw-semibold text-dark mb-2">{{ __('admin.news.form_status') }}</label>
-                                            <select name="status" id="statusInput" class="form-select rounded-3 border-0 bg-light @error('status') is-invalid @enderror">
-                                                <option value="published" @selected(old('status','published')==='published')>{{ __('admin.news.status_published') }}</option>
-                                                <option value="draft" @selected(old('status')==='draft')>{{ __('admin.news.status_draft') }}</option>
-                                            </select>
-                                            @error('status') <div class="invalid-feedback d-block mt-1">{{ $message }}</div> @enderror
-                                        </div>
-                                        <div class="col-md-3 d-flex align-items-end">
-                                            <div class="form-check form-switch form-switch-lg mb-2">
-                                                <input class="form-check-input" type="checkbox" name="featured" id="featuredInput" value="1" @checked(old('featured')) style="width: 3rem; height: 1.5rem;">
-                                                <label class="form-check-label fw-semibold text-dark ms-2" for="featuredInput">{{ __('admin.news.form_featured') }}</label>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!-- Language - Hidden, automatically set based on admin panel language -->
-                                    @php
-                                        $currentDirection = session('direction', 'rtl');
-                                        $defaultLang = $currentDirection === 'rtl' ? 'ar' : 'en';
-                                    @endphp
-                                    <input type="hidden" name="language" value="{{ old('language', $defaultLang) }}">
-                                    <div class="mb-3">
-                                        <div class="d-flex align-items-center gap-2">
-                                            <label class="form-label mb-0" style="font-size: 0.82rem; color: #24364A; font-weight: 600;">{{ __('admin.labels.language') }}:</label>
-                                            <span class="stat-chip">
-                                                <i class="bi bi-globe"></i>
-                                                {{ $defaultLang === 'ar' ? __('admin.labels.arabic') : __('admin.labels.english') }}
-                                            </span>
-                                        </div>
-                                        @error('language') <div class="invalid-feedback d-block mt-1">{{ $message }}</div> @enderror
-                                    </div>
-
-                                    <!-- Content (Quill) -->
-                                    <div class="mb-4">
-                                        <label class="form-label fw-semibold text-dark d-flex align-items-center gap-2 flex-wrap mb-3">
-                                            <span class="d-inline-flex align-items-center gap-2">
-                                                <i class="bi bi-file-text text-success"></i> {{ __('admin.news.form_content') }}
-                                            </span>
-                                            <small class="text-muted">{{ __('admin.news.form_content_info') }} {{ $MAX_IMAGES }} {{ __('admin.news.form_content_info_end') }}</small>
-                                            <!-- Image Counter -->
-                                            <span id="imgCounter" class="stat-chip stat-chip-primary">0 / {{ $MAX_IMAGES }}</span>
-                                            <!-- Text Counter -->
-                                            <span id="textCounter" class="stat-chip ms-1">{{ __('admin.common.characters') }} 0 | {{ __('admin.common.words') }} 0</span>
-                                        </label>
-
-                                        <div class="quill-wrapper border rounded-4 shadow-sm overflow-hidden">
-                                            <div id="quill-toolbar" class="px-2 py-1">
-                                                <span class="ql-formats">
-                                                    <select class="ql-font">
-                                                        <option value="system" selected>System</option>
-                                                        <option value="cairo">Cairo</option>
-                                                        <option value="tajawal">Tajawal</option>
-                                                    </select>
-                                                </span>
-                                                <span class="ql-formats">
-                                                    <select class="ql-size">
-                                                        <option value="12px">12</option>
-                                                        <option value="14px">14</option>
-                                                        <option value="16px" selected>16</option>
-                                                        <option value="18px">18</option>
-                                                        <option value="24px">24</option>
-                                                        <option value="32px">32</option>
-                                                    </select>
-                                                </span>
-                                                <span class="ql-formats">
-                                                    <select class="ql-lineheight">
-                                                        <option value="">LH</option>
-                                                        <option value="1.4">1.4</option>
-                                                        <option value="1.6" selected>1.6</option>
-                                                        <option value="1.8">1.8</option>
-                                                        <option value="2">2.0</option>
-                                                    </select>
-                                                </span>
-                                                <span class="ql-formats">
-                                                    <select class="ql-header">
-                                                        <option value="1">{{ __('admin.common.quill_header_1') }}</option>
-                                                        <option value="2">{{ __('admin.common.quill_header_2') }}</option>
-                                                        <option value="3">{{ __('admin.common.quill_header_3') }}</option>
-                                                        <option selected>{{ __('admin.common.quill_normal') }}</option>
-                                                    </select>
-                                                </span>
-                                                <span class="ql-formats">
-                                                    <button class="ql-bold"></button>
-                                                    <button class="ql-italic"></button>
-                                                    <button class="ql-underline"></button>
-                                                    <button class="ql-strike"></button>
-                                                    <button class="ql-link"></button>
-                                                </span>
-                                                <span class="ql-formats">
-                                                    <button class="ql-list" value="ordered"></button>
-                                                    <button class="ql-list" value="bullet"></button>
-                                                    <button class="ql-blockquote"></button>
-                                                    <button class="ql-code-block"></button>
-                                                    <button class="ql-clean"></button>
-                                                </span>
-                                                <span class="ql-formats">
-                                                    <button class="ql-align" value="right"></button>
-                                                    <button class="ql-align" value="center"></button>
-                                                    <button class="ql-align" value="left"></button>
-                                                </span>
-                                                <span class="ql-formats">
-                                                    <button class="ql-image" id="imageUploader" title="{{ __('admin.common.quill_add_images') }}"></button>
-                                                </span>
-                                                <span class="ql-formats">
-                                                      <button type="button" class="ql-undo" title="Undo">↶</button>
-                                                      <button type="button" class="ql-redo" title="Redo">↷</button>
-                                                </span>
-                                            </div>
-
-                                            <div id="quill-editor" class="ql-container ql-snow"></div>
-                                        </div>
-
-                                        <textarea name="body" id="bodyInput" class="d-none">{{ old('body') }}</textarea>
-                                        @error('body') <div class="invalid-feedback d-block mt-2">{{ $message }}</div> @enderror
-                                    </div>
-
-                                    <!-- Cover Image -->
-                                    <div class="mb-4">
-                                        <label class="form-label fw-semibold text-dark d-flex align-items-center gap-2 mb-2">
-                                            <i class="bi bi-image text-primary"></i> {{ __('admin.news.form_cover_image') }}
-                                        </label>
-                                        <div class="dropzone border border-2 border-dashed rounded-4 p-4 p-md-5 text-center bg-light transition-all" id="coverDrop" style="cursor: pointer; min-height: 180px; display: flex; align-items: center; justify-content: center;">
-                                            <input type="file" name="cover" id="coverInput" class="visually-hidden" accept="image/*">
-                                            <div class="text-primary">
-                                                <i class="bi bi-image fs-1 mb-3 d-block"></i>
-                                                <p class="mb-2 fw-semibold" style="font-size: 1rem;">
-                                                    {{ __('admin.news.form_cover_drag') }}
-                                                    <label for="coverInput" class="text-primary" style="text-decoration: underline; cursor: pointer;">{{ __('admin.news.form_cover_select') }}</label>
-                                                </p>
-                                                <small class="text-muted">{{ __('admin.news.form_cover_formats') }}</small>
-                                            </div>
-                                        </div>
-                                        <div id="coverPreview" class="mt-3"></div>
-                                        @error('cover') <div class="invalid-feedback d-block mt-2">{{ $message }}</div> @enderror
-                                    </div>
-
-                                    <!-- PDF -->
-                                    <div class="mb-4">
-                                        <label class="form-label fw-semibold text-dark d-flex align-items-center gap-2 mb-2">
-                                            <i class="bi bi-file-pdf text-danger"></i> {{ __('admin.news.form_pdf') }}
-                                        </label>
-                                        <div class="dropzone border border-2 border-dashed rounded-4 p-4 p-md-5 text-center bg-light transition-all" id="pdfDrop" style="cursor: pointer; min-height: 180px; display: flex; align-items: center; justify-content: center;">
-                                            <input type="file" name="pdf" id="pdfInput" class="visually-hidden" accept="application/pdf">
-                                            <div class="text-primary">
-                                                <i class="bi bi-cloud-upload fs-1 mb-3 d-block"></i>
-                                                <p class="mb-2 fw-semibold" style="font-size: 1rem;">
-                                                    {{ __('admin.news.form_pdf_drag') }}
-                                                    <label for="pdfInput" class="text-primary" style="text-decoration: underline; cursor: pointer;">{{ __('admin.news.form_pdf_select') }}</label>
-                                                </p>
-                                                <small class="text-muted">{{ __('admin.news.form_pdf_formats') }}</small>
-                                            </div>
-                                        </div>
-                                        <div id="pdfPreview" class="mt-3"></div>
-                                        @error('pdf') <div class="invalid-feedback d-block mt-2">{{ $message }}</div> @enderror
-                                    </div>
-
-                                    <!-- Buttons -->
-                                    <div class="d-flex flex-wrap gap-3 mt-5 pt-3 border-top">
-                                        <button type="button" id="submitBtn" class="btn btn-save d-flex align-items-center gap-2">
-                                            <i class="bi bi-check-lg"></i>
-                                            <span id="submitText">{{ __('admin.news.form_publish') }}</span>
-                                            <span id="submitSpinner" class="spinner-border spinner-border-sm d-none" role="status"></span>
-                                        </button>
-                                        <button type="button" id="saveDraft" class="btn btn-outline-secondary px-5 py-2 d-flex align-items-center gap-2 rounded-3" style="min-width: 150px; font-weight: 600;">
-                                            <i class="bi bi-file-earmark"></i> {{ __('admin.news.form_save_draft') }}
-                                        </button>
-                                        <a href="{{ route('admin.news.index') }}" class="btn btn-cancel d-flex align-items-center">
-                                            <i class="bi bi-x-circle me-1"></i> {{ __('admin.news.form_cancel') }}
-                                        </a>
-                                    </div>
-                                </form>
+                            {{-- Title --}}
+                            <div class="mb-3">
+                                <label for="titleInput" class="form-label fw-semibold">
+                                    <i class="bi bi-type-h1 me-1"></i> {{ __('admin.news.form_title') }}
+                                </label>
+                                <input type="text" name="title" id="titleInput"
+                                       class="form-control rounded-3 @error('title') is-invalid @enderror"
+                                       placeholder="{{ __('admin.news.form_title_placeholder') }}" value="{{ old('title') }}">
+                                @error('title') <div class="invalid-feedback d-block mt-1">{{ $message }}</div> @enderror
                             </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
-            <!-- Preview Tab -->
-            <div class="tab-pane fade" id="preview-content" role="tabpanel">
-                <div class="card border-0 shadow-sm rounded-4 bg-white">
-                    <div class="card-header card-header-form py-2 py-md-3 px-3 px-md-4">
-                        <h5 class="mb-0 fw-bold text-white d-flex align-items-center gap-2" style="font-size: 1.1rem;">
-                            <i class="bi bi-eye"></i> {{ __('admin.news.form_preview_title') }}
-                        </h5>
+                            {{-- Date + Status + Featured --}}
+                            <div class="row g-3 mb-3">
+                                <div class="col-md-5">
+                                    <label for="dateInput" class="form-label fw-semibold">
+                                        <i class="bi bi-calendar me-1"></i> {{ __('admin.news.form_publish_date') }}
+                                    </label>
+                                    <input type="date" name="published_at" id="dateInput"
+                                           class="form-control rounded-3 @error('published_at') is-invalid @enderror"
+                                           value="{{ old('published_at', now()->format('Y-m-d')) }}">
+                                    @error('published_at') <div class="invalid-feedback d-block mt-1">{{ $message }}</div> @enderror
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="statusInput" class="form-label fw-semibold">{{ __('admin.news.form_status') }}</label>
+                                    <select name="status" id="statusInput" class="form-select rounded-3 @error('status') is-invalid @enderror">
+                                        <option value="published" @selected(old('status','published')==='published')>{{ __('admin.news.status_published') }}</option>
+                                        <option value="draft" @selected(old('status')==='draft')>{{ __('admin.news.status_draft') }}</option>
+                                    </select>
+                                    @error('status') <div class="invalid-feedback d-block mt-1">{{ $message }}</div> @enderror
+                                </div>
+                                <div class="col-md-3 d-flex align-items-end">
+                                    <div class="form-check form-switch mb-2">
+                                        <input class="form-check-input" type="checkbox" name="featured" id="featuredInput" value="1"
+                                               @checked(old('featured')) style="width: 2.5rem; height: 1.25rem; cursor: pointer;">
+                                        <label class="form-check-label fw-semibold ms-2" for="featuredInput">{{ __('admin.news.form_featured') }}</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {{-- Language Badge --}}
+                            <div class="d-flex align-items-center gap-2 mb-4">
+                                <label class="form-label mb-0 fw-semibold">{{ __('admin.labels.language') }}:</label>
+                                <span class="stat-chip">
+                                    <i class="bi bi-globe"></i>
+                                    {{ $defaultLang === 'ar' ? __('admin.labels.arabic') : __('admin.labels.english') }}
+                                </span>
+                                @error('language') <div class="invalid-feedback d-block mt-1">{{ $message }}</div> @enderror
+                            </div>
+
+                            {{-- ── Section 2: Content ── --}}
+                            <h6 class="fw-bold d-flex align-items-center gap-2 section-title">
+                                <i class="bi bi-file-text"></i> {{ __('admin.news.form_content') }}
+                            </h6>
+
+                            <div class="d-flex align-items-center justify-content-between mb-2 flex-wrap gap-2">
+                                <small class="text-muted">{{ __('admin.news.form_content_info') }} {{ $MAX_IMAGES }} {{ __('admin.news.form_content_info_end') }}</small>
+                                <div class="d-flex gap-2">
+                                    <span id="imgCounter" class="stat-chip stat-chip-primary" style="font-size: 0.65rem;">0 / {{ $MAX_IMAGES }}</span>
+                                    <span id="textCounter" class="stat-chip" style="font-size: 0.65rem;">{{ __('admin.common.characters') }} 0 | {{ __('admin.common.words') }} 0</span>
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <div class="quill-wrapper border rounded-3 overflow-hidden">
+                                    <div id="quill-toolbar" class="px-2 py-1">
+                                        <span class="ql-formats">
+                                            <select class="ql-font">
+                                                <option value="system" selected>System</option>
+                                                <option value="cairo">Cairo</option>
+                                                <option value="tajawal">Tajawal</option>
+                                            </select>
+                                        </span>
+                                        <span class="ql-formats">
+                                            <select class="ql-size">
+                                                <option value="12px">12</option>
+                                                <option value="14px">14</option>
+                                                <option value="16px" selected>16</option>
+                                                <option value="18px">18</option>
+                                                <option value="24px">24</option>
+                                                <option value="32px">32</option>
+                                            </select>
+                                        </span>
+                                        <span class="ql-formats">
+                                            <select class="ql-lineheight">
+                                                <option value="">LH</option>
+                                                <option value="1.4">1.4</option>
+                                                <option value="1.6" selected>1.6</option>
+                                                <option value="1.8">1.8</option>
+                                                <option value="2">2.0</option>
+                                            </select>
+                                        </span>
+                                        <span class="ql-formats">
+                                            <select class="ql-header">
+                                                <option value="1">{{ __('admin.common.quill_header_1') }}</option>
+                                                <option value="2">{{ __('admin.common.quill_header_2') }}</option>
+                                                <option value="3">{{ __('admin.common.quill_header_3') }}</option>
+                                                <option selected>{{ __('admin.common.quill_normal') }}</option>
+                                            </select>
+                                        </span>
+                                        <span class="ql-formats">
+                                            <button class="ql-bold"></button>
+                                            <button class="ql-italic"></button>
+                                            <button class="ql-underline"></button>
+                                            <button class="ql-strike"></button>
+                                            <button class="ql-link"></button>
+                                        </span>
+                                        <span class="ql-formats">
+                                            <button class="ql-list" value="ordered"></button>
+                                            <button class="ql-list" value="bullet"></button>
+                                            <button class="ql-blockquote"></button>
+                                            <button class="ql-code-block"></button>
+                                            <button class="ql-clean"></button>
+                                        </span>
+                                        <span class="ql-formats">
+                                            <button class="ql-align" value="right"></button>
+                                            <button class="ql-align" value="center"></button>
+                                            <button class="ql-align" value="left"></button>
+                                        </span>
+                                        <span class="ql-formats">
+                                            <button class="ql-image" id="imageUploader" title="{{ __('admin.common.quill_add_images') }}"></button>
+                                        </span>
+                                        <span class="ql-formats">
+                                            <button type="button" class="ql-undo" title="Undo">↶</button>
+                                            <button type="button" class="ql-redo" title="Redo">↷</button>
+                                        </span>
+                                    </div>
+                                    <div id="quill-editor" class="ql-container ql-snow"></div>
+                                </div>
+                                <textarea name="body" id="bodyInput" class="d-none">{{ old('body') }}</textarea>
+                                @error('body') <div class="invalid-feedback d-block mt-2">{{ $message }}</div> @enderror
+                            </div>
+
+                            {{-- ── Section 3: Attachments ── --}}
+                            <h6 class="fw-bold d-flex align-items-center gap-2 section-title">
+                                <i class="bi bi-paperclip"></i> {{ __('admin.common.attachments') }}
+                            </h6>
+
+                            {{-- Cover Image --}}
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold">
+                                    <i class="bi bi-image me-1"></i> {{ __('admin.news.form_cover_image') }}
+                                </label>
+                                <div class="dropzone border border-2 border-dashed rounded-3 p-4 text-center" id="coverDrop" style="cursor: pointer;">
+                                    <input type="file" name="cover" id="coverInput" class="visually-hidden" accept="image/*">
+                                    <div class="text-muted">
+                                        <i class="bi bi-image fs-2 mb-2 d-block"></i>
+                                        <p class="mb-1 fw-semibold">
+                                            {{ __('admin.news.form_cover_drag') }}
+                                            <label for="coverInput" class="text-primary" style="text-decoration: underline; cursor: pointer;">{{ __('admin.news.form_cover_select') }}</label>
+                                        </p>
+                                        <small class="text-muted">{{ __('admin.news.form_cover_formats') }}</small>
+                                    </div>
+                                </div>
+                                <div id="coverPreview" class="mt-3"></div>
+                                @error('cover') <div class="invalid-feedback d-block mt-2">{{ $message }}</div> @enderror
+                            </div>
+
+                            {{-- PDF --}}
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold">
+                                    <i class="bi bi-file-pdf me-1"></i> {{ __('admin.news.form_pdf') }}
+                                </label>
+                                <div class="dropzone border border-2 border-dashed rounded-3 p-4 text-center" id="pdfDrop" style="cursor: pointer;">
+                                    <input type="file" name="pdf" id="pdfInput" class="visually-hidden" accept="application/pdf">
+                                    <div class="text-muted">
+                                        <i class="bi bi-cloud-upload fs-2 mb-2 d-block"></i>
+                                        <p class="mb-1 fw-semibold">
+                                            {{ __('admin.news.form_pdf_drag') }}
+                                            <label for="pdfInput" class="text-primary" style="text-decoration: underline; cursor: pointer;">{{ __('admin.news.form_pdf_select') }}</label>
+                                        </p>
+                                        <small class="text-muted">{{ __('admin.news.form_pdf_formats') }}</small>
+                                    </div>
+                                </div>
+                                <div id="pdfPreview" class="mt-3"></div>
+                                @error('pdf') <div class="invalid-feedback d-block mt-2">{{ $message }}</div> @enderror
+                            </div>
+
+                            {{-- ── Buttons ── --}}
+                            <div class="d-flex flex-wrap gap-2 mt-4 pt-3 border-top">
+                                <button type="button" id="submitBtn" class="btn btn-save d-flex align-items-center gap-2">
+                                    <i class="bi bi-check-lg"></i>
+                                    <span id="submitText">{{ __('admin.news.form_publish') }}</span>
+                                    <span id="submitSpinner" class="spinner-border spinner-border-sm d-none" role="status"></span>
+                                </button>
+                                <button type="button" id="saveDraft" class="btn btn-cancel d-flex align-items-center gap-2">
+                                    <i class="bi bi-file-earmark"></i> {{ __('admin.news.form_save_draft') }}
+                                </button>
+                                <a href="{{ route('admin.news.index') }}" class="btn btn-cancel d-flex align-items-center">
+                                    <i class="bi bi-x-circle me-1"></i> {{ __('admin.news.form_cancel') }}
+                                </a>
+                            </div>
+                        </form>
                     </div>
-                    <div class="card-body p-4 p-md-5" id="fullPreview">
+                </div>
+
+                {{-- ============ Preview Tab ============ --}}
+                <div class="tab-pane fade" id="preview-content" role="tabpanel">
+                    <div class="card-body p-4" id="fullPreview">
                         <div class="text-center text-muted py-5">
-                            <i class="bi bi-eye fs-1 d-block mb-3 text-primary opacity-50"></i>
-                            <p class="mb-0" style="font-size: 1rem;">{{ __('admin.news.form_preview_start_writing') }}</p>
+                            <i class="bi bi-eye fs-3 d-block mb-2 opacity-50"></i>
+                            <p class="mb-0">{{ __('admin.news.form_preview_start_writing') }}</p>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </x-admin.card>
     </div>
 @endsection
 
@@ -347,7 +336,6 @@
                 if (exist) exist.remove();
             }
 
-
             function styleQuillImages() {
                 const imgs = document.querySelectorAll('#quill-editor .ql-editor img');
                 imgs.forEach(img => {
@@ -412,14 +400,18 @@
             // اتجاه افتراضي حسب لغة لوحة التحكم
             const isRtl = '{{ session('direction', 'rtl') }}' === 'rtl';
             const editorEl = document.querySelector('#quill-editor .ql-editor');
+            if (editorEl) {
+                editorEl.setAttribute('dir', isRtl ? 'rtl' : 'ltr');
+                editorEl.style.textAlign = isRtl ? 'right' : 'left';
+            }
+            // Set default format for new content
             if (isRtl) {
                 quill.format('direction', 'rtl');
                 quill.format('align', 'right');
-                if (editorEl) editorEl.setAttribute('dir', 'rtl');
             } else {
-                quill.format('direction', false);
-                quill.format('align', false);
-                if (editorEl) { editorEl.setAttribute('dir', 'ltr'); editorEl.style.textAlign = 'left'; }
+                // Replace default paragraph to be LTR
+                quill.root.innerHTML = '<p dir="ltr" style="text-align: left;"><br></p>';
+                quill.setSelection(0, 0);
             }
 
             // عدّادات صور/نص
@@ -454,7 +446,7 @@
             refreshCounters();
             quill.on('text-change', () => { refreshCounters(); styleQuillImages(); });
 
-            // اختيار صور متعددة من المتصفح (نفس edit — بدون تصغير)
+            // اختيار صور متعددة من المتصفح
             el.quillImageInput.addEventListener('change', async () => {
                 try {
                     const files = Array.from(el.quillImageInput.files || []);
@@ -515,7 +507,7 @@
                 return data.url;
             }
 
-            // سحب/إفلات + لصق صور (نفس edit)
+            // سحب/إفلات + لصق صور
             const quillEditorArea = document.querySelector('#quill-editor .ql-editor');
             ['dragover','dragenter'].forEach(evt =>
                 quillEditorArea.addEventListener(evt, e => { e.preventDefault(); e.dataTransfer.dropEffect = 'copy'; })
@@ -644,7 +636,7 @@
             }
             window.removePDF = () => { el.pdfInput.value = ''; el.pdfPreview.innerHTML = ''; updatePreview(); autoSave(); };
 
-            // ⭐ مثل edit: تحويل أي صور Base64 في Quill إلى روابط (رفعها) واحترام الحد + تأكيد قبل حذف الزائد
+            // تحويل أي صور Base64 في Quill إلى روابط
             async function replaceBase64ImagesInEditor() {
                 const container = document.createElement('div');
                 container.innerHTML = quill.root.innerHTML;
@@ -702,7 +694,6 @@
                 el.submitBtn.disabled = true;
                 el.submitText.classList.add('d-none');
                 el.submitSpinner.classList.remove('d-none');
-
 
                 const cleanedHtml = await replaceBase64ImagesInEditor();
                 if (cleanedHtml === null) {
@@ -806,23 +797,6 @@
 
             // معاينة أولية
             updatePreview();
-
-            // تحسين التبويبات
-            const tabs = document.querySelectorAll('#newsTabs .nav-link');
-            tabs.forEach(tab => {
-                tab.addEventListener('shown.bs.tab', function (e) {
-                    // تحديث التصميم عند تغيير التبويب
-                    tabs.forEach(t => {
-                        if (t === e.target) {
-                            t.style.background = 'rgba(255, 255, 255, 0.25)';
-                            t.style.borderColor = 'rgba(255, 255, 255, 0.5)';
-                        } else {
-                            t.style.background = 'transparent';
-                            t.style.borderColor = 'rgba(255, 255, 255, 0.3)';
-                        }
-                    });
-                });
-            });
         });
     </script>
 @endpush

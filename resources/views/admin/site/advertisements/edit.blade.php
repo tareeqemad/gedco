@@ -297,14 +297,13 @@
             document.querySelector('.ql-redo')?.addEventListener('click', () => quill.history.redo());
             const isRtl = '{{ session('direction', 'rtl') }}' === 'rtl';
             const editorEl = document.querySelector('#quill-editor .ql-editor');
+            if (editorEl) {
+                editorEl.setAttribute('dir', isRtl ? 'rtl' : 'ltr');
+                editorEl.style.textAlign = isRtl ? 'right' : 'left';
+            }
             if (isRtl) {
                 quill.format('direction', 'rtl');
                 quill.format('align', 'right');
-                if (editorEl) editorEl.setAttribute('dir', 'rtl');
-            } else {
-                quill.format('direction', false);
-                quill.format('align', false);
-                if (editorEl) { editorEl.setAttribute('dir', 'ltr'); editorEl.style.textAlign = 'left'; }
             }
 
             // حمّل القيمة الحالية للمحتوى
