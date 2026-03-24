@@ -72,6 +72,16 @@ class ActivityLogController extends Controller
         $users = User::orderBy('name')->get(['id', 'name', 'email']);
         $actions = ActivityLog::distinct('action')->pluck('action');
 
+        // AJAX response
+        if ($request->expectsJson() || $request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'html' => view('admin.activity-logs.partials.table', compact('logs'))->render(),
+                'pagination' => view('admin.activity-logs.partials.pagination', compact('logs'))->render(),
+                'total' => $logs->total(),
+            ]);
+        }
+
         return view('admin.activity-logs.index', compact('logs', 'stats', 'topActions', 'topUsers', 'users', 'actions'));
     }
 

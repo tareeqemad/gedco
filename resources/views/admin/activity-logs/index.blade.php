@@ -9,389 +9,327 @@
 @section('content')
     <div class="container-fluid p-0">
 
-    <div class="row mb-4">
-        <!-- إحصائيات -->
-        <div class="col-md-3">
-            <div class="card border-0 shadow-sm">
-                <div class="card-body">
-                    <div class="d-flex align-items-center">
-                        <div class="avatar avatar-md bg-primary text-white rounded-circle me-3">
-                            <i class="bi bi-activity"></i>
-                        </div>
-                        <div>
-                            <h6 class="mb-0 text-muted small">{{ __('admin.activity_logs.total_activities') }}</h6>
-                            <h3 class="mb-0 fw-bold">{{ number_format($stats['total_activities']) }}</h3>
-                        </div>
+        {{-- KPI Stats Row --}}
+        <div class="row mb-4">
+            <div class="col-6 col-lg-3 mb-3">
+                <div class="dash-kpi">
+                    <div class="dash-kpi-icon" style="background: rgba(2, 132, 199, 0.08); color: #0284C7;">
+                        <i class="bi bi-clock-history"></i>
+                    </div>
+                    <div>
+                        <div class="dash-kpi-value">{{ number_format($stats['total_activities']) }}</div>
+                        <div class="dash-kpi-label">{{ __('admin.activity_logs.total_activities') }}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-lg-3 mb-3">
+                <div class="dash-kpi">
+                    <div class="dash-kpi-icon" style="background: rgba(22, 163, 74, 0.08); color: #16A34A;">
+                        <i class="bi bi-activity"></i>
+                    </div>
+                    <div>
+                        <div class="dash-kpi-value">{{ number_format($stats['today_activities']) }}</div>
+                        <div class="dash-kpi-label">{{ __('admin.activity_logs.today_activities') }}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-lg-3 mb-3">
+                <div class="dash-kpi">
+                    <div class="dash-kpi-icon" style="background: rgba(217, 119, 6, 0.08); color: #D97706;">
+                        <i class="bi bi-people"></i>
+                    </div>
+                    <div>
+                        <div class="dash-kpi-value">{{ $stats['unique_users_today'] }}</div>
+                        <div class="dash-kpi-label">{{ __('admin.activity_logs.active_users_today') }}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-lg-3 mb-3">
+                <div class="dash-kpi">
+                    <div class="dash-kpi-icon" style="background: rgba(139, 92, 246, 0.08); color: #8B5CF6;">
+                        <i class="bi bi-calendar3"></i>
+                    </div>
+                    <div>
+                        <div class="dash-kpi-value">{{ $stats['unique_users_month'] }}</div>
+                        <div class="dash-kpi-label">{{ __('admin.activity_logs_ui.users_this_month') }}</div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-md-3">
-            <div class="card border-0 shadow-sm">
-                <div class="card-body">
-                    <div class="d-flex align-items-center">
-                        <div class="avatar avatar-md bg-success text-white rounded-circle me-3">
-                            <i class="bi bi-calendar-day"></i>
-                        </div>
-                        <div>
-                            <h6 class="mb-0 text-muted small">{{ __('admin.activity_logs.today_activities') }}</h6>
-                            <h3 class="mb-0 fw-bold">{{ number_format($stats['today_activities']) }}</h3>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card border-0 shadow-sm">
-                <div class="card-body">
-                    <div class="d-flex align-items-center">
-                        <div class="avatar avatar-md bg-info text-white rounded-circle me-3">
-                            <i class="bi bi-people"></i>
-                        </div>
-                        <div>
-                            <h6 class="mb-0 text-muted small">{{ __('admin.activity_logs.active_users_today') }}</h6>
-                            <h3 class="mb-0 fw-bold">{{ $stats['unique_users_today'] }}</h3>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card border-0 shadow-sm">
-                <div class="card-body">
-                    <div class="d-flex align-items-center">
-                        <div class="avatar avatar-md bg-warning text-white rounded-circle me-3">
-                            <i class="bi bi-calendar-month"></i>
-                        </div>
-                        <div>
-                            <h6 class="mb-0 text-muted small">{{ __('admin.activity_logs_ui.users_this_month') }}</h6>
-                            <h3 class="mb-0 fw-bold">{{ $stats['unique_users_month'] }}</h3>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 
-    <!-- إحصائيات أكثر المستخدمين والعمليات -->
-    <div class="row mb-4">
-        <div class="col-md-6">
-            <div class="card border-0 shadow-sm">
-                <div class="card-header bg-white border-bottom">
-                    <h6 class="mb-0">{{ __('admin.activity_logs.most_active_users') }}</h6>
-                </div>
-                <div class="list-group list-group-flush">
-                    @foreach($topUsers as $topUser)
-                        @if($topUser->user)
-                            <div class="list-group-item d-flex justify-content-between align-items-center">
-                                <div class="d-flex align-items-center">
-                                    <div class="avatar avatar-xs bg-primary text-white rounded-circle me-2">
-                                        {{ mb_strtoupper(mb_substr($topUser->user->name, 0, 1)) }}
-                                    </div>
-                                    <div>
-                                        <div class="fw-semibold">{{ $topUser->user->name }}</div>
-                                        <small class="text-muted">{{ $topUser->user->email }}</small>
-                                    </div>
-                                </div>
-                                <span class="badge bg-primary">{{ number_format($topUser->count) }}</span>
-                            </div>
-                        @endif
-                    @endforeach
-                </div>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="card border-0 shadow-sm">
-                <div class="card-header bg-white border-bottom">
-                    <h6 class="mb-0">{{ __('admin.activity_logs_ui.most_frequent_ops') }}</h6>
-                </div>
-                <div class="list-group list-group-flush">
-                    @foreach($topActions as $action)
-                        @php
-                            $badgeColor = match($action->action) {
-                                'login' => 'success',
-                                'logout' => 'secondary',
-                                'create' => 'primary',
-                                'update' => 'warning',
-                                'delete' => 'danger',
-                                'view' => 'info',
-                                default => 'dark',
-                            };
-                        @endphp
-                        <div class="list-group-item d-flex justify-content-between align-items-center">
-                            <span class="badge bg-{{ $badgeColor }}">{{ $action->action }}</span>
-                            <strong>{{ number_format($action->count) }}</strong>
+        {{-- Insights Row --}}
+        <div class="row mb-4">
+            @if($topUsers->count())
+            <div class="col-12 col-lg-6 mb-3">
+                <x-admin.card class="h-100 mb-0">
+                    <div class="card-body p-3">
+                        <h6 class="fw-bold mb-3 d-flex align-items-center gap-2" style="color: #24364A; font-size: 0.85rem;">
+                            <i class="bi bi-trophy" style="color: #D97706;"></i>
+                            {{ __('admin.activity_logs.most_active_users') }}
+                        </h6>
+                        <div class="d-flex flex-wrap gap-2">
+                            @foreach($topUsers->take(8) as $tu)
+                                @if($tu->user)
+                                    <a href="{{ route('admin.activity-logs.user', $tu->user_id) }}" class="text-decoration-none">
+                                        <span class="stat-chip" style="font-size: 0.72rem;">
+                                            <strong>{{ $tu->user->name }}</strong>
+                                            <span class="stat-chip stat-chip-primary" style="font-size: 0.6rem; padding: 0.1rem 0.5rem;">{{ $tu->count }}</span>
+                                        </span>
+                                    </a>
+                                @endif
+                            @endforeach
                         </div>
-                    @endforeach
-                </div>
+                    </div>
+                </x-admin.card>
             </div>
-        </div>
-    </div>
+            @endif
 
+            @if($topActions->count())
+            <div class="col-12 col-lg-6 mb-3">
+                <x-admin.card class="h-100 mb-0">
+                    <div class="card-body p-3">
+                        <h6 class="fw-bold mb-3 d-flex align-items-center gap-2" style="color: #24364A; font-size: 0.85rem;">
+                            <i class="bi bi-bar-chart" style="color: #0284C7;"></i>
+                            {{ __('admin.activity_logs_ui.most_frequent_ops') }}
+                        </h6>
+                        <div class="d-flex flex-wrap gap-2">
+                            @foreach($topActions as $ta)
+                                @php
+                                    $badgeClass = match($ta->action) {
+                                        'login' => 'activity-badge-login',
+                                        'logout' => 'activity-badge-logout',
+                                        'create' => 'activity-badge-create',
+                                        'update' => 'activity-badge-update',
+                                        'delete' => 'activity-badge-delete',
+                                        'view' => 'activity-badge-view',
+                                        default => '',
+                                    };
+                                @endphp
+                                <span class="stat-chip {{ $badgeClass }}" style="font-size: 0.72rem;">
+                                    {{ $ta->action }} <strong>{{ number_format($ta->count) }}</strong>
+                                </span>
+                            @endforeach
+                        </div>
+                    </div>
+                </x-admin.card>
+            </div>
+            @endif
+        </div>
+
+        {{-- Main Logs Card --}}
         <x-admin.card>
             <x-admin.card-header-index
-                icon="bi-list-check"
-                title="{{ __('admin.activity_logs.title') }}">
-                <x-slot:actions>
-                    <a href="{{ route('admin.activity-logs.active-users') }}" class="btn btn-light btn-sm shadow-sm">
-                        <i class="bi bi-person-check me-1"></i>
-                        <span class="d-none d-md-inline">{{ __('admin.activity_logs.active_users') }}</span>
-                    </a>
-                </x-slot:actions>
+                icon="bi-clock-history"
+                :title="__('admin.activity_logs.title')">
+                <x-slot:badge>
+                    <span class="stat-chip stat-chip-header" id="logsHeaderCount">
+                        <i class="bi bi-list-ul"></i>
+                        <strong>{{ number_format($logs->total()) }}</strong>
+                    </span>
+                </x-slot:badge>
             </x-admin.card-header-index>
 
-                <!-- Filters -->
-                <div class="card-body p-3">
-                    <form method="GET" action="{{ route('admin.activity-logs.index') }}" class="row g-3">
-                        <div class="col-md-3">
-                            <label class="form-label fw-semibold text-dark mb-1">{{ __('admin.activity_logs.user') }}</label>
-                            <select name="user_id" class="form-select rounded-3">
+            {{-- Filters --}}
+            <div class="card-body p-3">
+                <form id="logsFilterForm">
+                    <div class="d-flex gap-2 align-items-center flex-wrap">
+                        <div style="flex: 1 1 25%;">
+                            <select name="user_id" id="filterUser" class="form-select rounded-3">
                                 <option value="">{{ __('admin.activity_logs.all_users') }}</option>
                                 @foreach($users as $u)
-                                    <option value="{{ $u->id }}" {{ request('user_id') == $u->id ? 'selected' : '' }}>
-                                        {{ $u->name }} ({{ $u->email }})
-                                    </option>
+                                    <option value="{{ $u->id }}" {{ request('user_id') == $u->id ? 'selected' : '' }}>{{ $u->name }}</option>
                                 @endforeach
                             </select>
                         </div>
-                        <div class="col-md-2">
-                            <label class="form-label fw-semibold text-dark mb-1">{{ __('admin.activity_logs_ui.operation') }}</label>
-                            <select name="action" class="form-select rounded-3">
+                        <div style="flex: 0 1 18%;">
+                            <select name="action" id="filterAction" class="form-select rounded-3">
                                 <option value="">{{ __('admin.activity_logs.all_operations') }}</option>
-                                @foreach($actions as $act)
-                                    <option value="{{ $act }}" {{ request('action') == $act ? 'selected' : '' }}>
-                                        {{ $act }}
-                                    </option>
+                                @foreach($actions as $a)
+                                    <option value="{{ $a }}" {{ request('action') == $a ? 'selected' : '' }}>{{ $a }}</option>
                                 @endforeach
                             </select>
                         </div>
-                        <div class="col-md-2">
-                            <label class="form-label fw-semibold text-dark mb-1">{{ __('admin.activity_logs.date_from') }}</label>
-                            <input type="date" name="date_from" class="form-control rounded-3" value="{{ request('date_from') }}">
+                        <div style="flex: 0 1 15%;">
+                            <input type="date" name="date_from" id="filterDateFrom"
+                                   class="form-control rounded-3"
+                                   value="{{ request('date_from') }}">
                         </div>
-                        <div class="col-md-2">
-                            <label class="form-label fw-semibold text-dark mb-1">{{ __('admin.activity_logs.date_to') }}</label>
-                            <input type="date" name="date_to" class="form-control rounded-3" value="{{ request('date_to') }}">
+                        <div style="flex: 0 1 15%;">
+                            <input type="date" name="date_to" id="filterDateTo"
+                                   class="form-control rounded-3"
+                                   value="{{ request('date_to') }}">
                         </div>
-                        <div class="col-md-2">
-                            <label class="form-label fw-semibold text-dark mb-1">{{ __('admin.activity_logs_ui.route') }}</label>
-                            <input type="text" name="route" class="form-control rounded-3" placeholder="{{ __('admin.activity_logs_ui.search_placeholder') }}" value="{{ request('route') }}">
-                        </div>
-                        <div class="col-md-1">
-                            <label class="form-label mb-1">&nbsp;</label>
-                            <button type="submit" class="btn btn-outline-primary w-100 rounded-3">
-                                <i class="bi bi-search me-1"></i> {{ __('admin.actions.query') }}
+                        <div style="flex: 0 0 auto;">
+                            <button type="submit" class="btn btn-primary rounded-3" id="logsSearchBtn">
+                                <i class="bi bi-search me-1"></i> {{ __('admin.ui.query') }}
                             </button>
-                            <a href="{{ route('admin.activity-logs.index') }}" class="btn btn-outline-danger w-100 rounded-3 mt-1">
-                                <i class="bi bi-x-circle me-1"></i> {{ __('admin.actions.clear') }}
+                            <a href="{{ route('admin.activity-logs.index') }}" class="btn btn-outline-danger rounded-3">
+                                <i class="bi bi-x-circle me-1"></i> {{ __('admin.ui.clear') }}
                             </a>
                         </div>
-                    </form>
-                </div>
+                    </div>
+                </form>
+            </div>
 
-                <!-- Table -->
-                <div class="table-responsive">
-                    <table class="table table-hover mb-0">
-                        <thead class="table-light">
-                            <tr>
-                                <th>
-                                    <span data-bs-toggle="tooltip" data-bs-placement="top" title="{{ __('admin.activity_logs.user_activity_tooltip') }}">
-                                        {{ __('admin.activity_logs.user') }}
-                                    </span>
-                                </th>
-                                <th>
-                                    <span data-bs-toggle="tooltip" data-bs-placement="top" title="{{ __('admin.activity_logs_ui.operation_type_tooltip') }}">
-                                        {{ __('admin.activity_logs_ui.operation') }}
-                                    </span>
-                                </th>
-                                <th>
-                                    <span data-bs-toggle="tooltip" data-bs-placement="top" title="{{ __('admin.activity_logs_ui.activity_desc_tooltip') }}">
-                                        {{ __('admin.activity_logs_ui.description') }}
-                                    </span>
-                                </th>
-                                <th>
-                                    <span data-bs-toggle="tooltip" data-bs-placement="top" title="{{ __('admin.activity_logs_ui.route_tooltip') }}">
-                                        {{ __('admin.activity_logs_ui.route') }}
-                                    </span>
-                                </th>
-                                <th>
-                                    <span data-bs-toggle="tooltip" data-bs-placement="top" title="{{ __('admin.activity_logs.ip_tooltip') }}">
-                                        {{ __('admin.activity_logs.ip_address') }}
-                                    </span>
-                                </th>
-                                <th>
-                                    <span data-bs-toggle="tooltip" data-bs-placement="top" title="{{ __('admin.activity_logs.date_tooltip') }}">
-                                        {{ __('admin.activity_logs.date') }}
-                                    </span>
-                                </th>
-                                <th>
-                                    <span data-bs-toggle="tooltip" data-bs-placement="top" title="{{ __('admin.activity_logs.view_user_activities') }}">
-                                        {{ __('admin.activity_logs_ui.actions') }}
-                                    </span>
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @forelse($logs as $log)
-                                <tr>
-                                    <td>
-                                        <div class="d-flex align-items-center">
-                                            <div class="avatar avatar-xs bg-primary text-white rounded-circle me-2">
-                                                {{ substr($log->user->name ?? 'N', 0, 1) }}
-                                            </div>
-                                            <div>
-                                                <div class="fw-semibold">{{ $log->user->name ?? 'Unknown' }}</div>
-                                                <small class="text-muted">{{ $log->user->email ?? '' }}</small>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        @php
-                                            $badgeColor = match($log->action) {
-                                                'login' => 'success',
-                                                'logout' => 'secondary',
-                                                'create' => 'primary',
-                                                'update' => 'warning',
-                                                'delete' => 'danger',
-                                                'view' => 'info',
-                                                default => 'dark',
-                                            };
-                                            $actionLabel = __('admin.activity_logs.actions.' . $log->action, [], null, $log->action);
-                                            $actionDescription = __('admin.activity_logs.action_descriptions.' . $log->action, [], null, '');
-                                        @endphp
-                                        <span class="badge bg-{{ $badgeColor }}"
-                                              data-bs-toggle="tooltip"
-                                              data-bs-placement="top"
-                                              title="{{ $actionDescription }} - {{ $log->description }}">
-                                            {{ $actionLabel }}
-                                        </span>
-                                    </td>
-                                    <td>
-                                        <small data-bs-toggle="tooltip" data-bs-placement="top" title="{{ __('admin.activity_logs_ui.activity_desc_detail') }}">
-                                            {{ $log->description }}
-                                        </small>
-                                    </td>
-                                    <td>
-                                        <small class="text-muted"
-                                               data-bs-toggle="tooltip"
-                                               data-bs-placement="top"
-                                               title="{{ __('admin.activity_logs_ui.page_route') }} {{ $log->route_uri }}">
-                                            {{ $log->route_name ?? $log->route_uri }}
-                                        </small>
-                                    </td>
-                                    <td>
-                                        <small class="text-muted"
-                                               data-bs-toggle="tooltip"
-                                               data-bs-placement="top"
-                                               title="{{ __('admin.activity_logs.ip_tooltip') }}">
-                                            {{ $log->ip_address }}
-                                        </small>
-                                    </td>
-                                    <td>
-                                        <small data-bs-toggle="tooltip" data-bs-placement="top" title="{{ __('admin.activity_logs.date_tooltip') }}: {{ $log->created_at->format('Y-m-d H:i:s') }}">
-                                            {{ $log->created_at->format('Y-m-d H:i') }}
-                                        </small>
-                                    </td>
-                                    <td>
-                                        <a href="{{ route('admin.activity-logs.user', $log->user_id) }}"
-                                           class="btn btn-sm btn-outline-primary"
-                                           data-bs-toggle="tooltip"
-                                           data-bs-placement="left"
-                                           title="{{ __('admin.activity_logs.view_user_activities') }} {{ $log->user->name ?? 'Unknown' }}">
-                                            <i class="bi bi-eye"></i>
-                                        </a>
-                                    </td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="7" class="text-center py-5 text-muted">
-                                        <i class="bi bi-inbox fs-1 d-block mb-2"></i>
-                                        {{ __('admin.activity_logs.no_activities') }}
-                                    </td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
+            {{-- Loading --}}
+            <div class="permissions-loading" id="logsLoading">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">{{ __('admin.ui.loading') }}</span>
                 </div>
+            </div>
 
-                @if($logs->hasPages())
-                <div class="px-3 py-2" style="border-top: 1px solid #E6ECF2;">
-                    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 small">
-                        <div class="text-muted">
-                            {{ __('admin.activity_logs_ui.showing_range', ['first' => $logs->firstItem(), 'last' => $logs->lastItem(), 'total' => $logs->total()]) }}
-                        </div>
-                        {{ $logs->links() }}
+            {{-- Table --}}
+            <div class="table-responsive">
+                <table class="table permissions-table table-hover align-middle mb-0">
+                    <thead>
+                        <tr>
+                            <th>{{ __('admin.activity_logs.user') }}</th>
+                            <th>{{ __('admin.activity_logs_ui.operation') }}</th>
+                            <th>{{ __('admin.activity_logs_ui.description') }}</th>
+                            <th>{{ __('admin.activity_logs_ui.route') }}</th>
+                            <th>{{ __('admin.activity_logs.ip_address') }}</th>
+                            <th>{{ __('admin.activity_logs.date') }}</th>
+                            <th class="text-end">{{ __('admin.activity_logs_ui.actions') }}</th>
+                        </tr>
+                    </thead>
+                    <tbody id="logsTableBody">
+                        @include('admin.activity-logs.partials.table', ['logs' => $logs])
+                    </tbody>
+                </table>
+            </div>
+
+            {{-- Pagination --}}
+            @if($logs->hasPages())
+                <div class="card-footer bg-white border-top py-3">
+                    <div id="logsPaginationContainer">
+                        @include('admin.activity-logs.partials.pagination', ['logs' => $logs])
                     </div>
                 </div>
-                @endif
-        </x-admin.card>
+            @endif
 
-    <!-- Legend/Help Section -->
-    <div class="row mt-4">
-        <div class="col-12">
-            <div class="card border-0 shadow-sm bg-light">
-                <div class="card-body">
-                    <h6 class="fw-bold mb-3">
-                        <i class="bi bi-info-circle me-2 text-primary"></i>
+            {{-- Operations Legend --}}
+            <div style="border-top: 1px solid #E6ECF2;">
+                <div class="px-3 py-3">
+                    <h6 class="mb-2 fw-bold d-flex align-items-center gap-2" style="font-size: 0.85rem; color: #24364A;">
+                        <i class="bi bi-info-circle" style="color: #5B7088;"></i>
                         {{ __('admin.activity_logs_ui.operations_legend') }}
                     </h6>
-                    <div class="row g-3">
-                        <div class="col-md-3">
-                            <div class="d-flex align-items-center gap-2">
-                                <span class="badge bg-info">{{ __('admin.activity_logs_ui.op_view') }}</span>
-                                <small class="text-muted">{{ __('admin.activity_logs_ui.op_view_desc') }}</small>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="d-flex align-items-center gap-2">
-                                <span class="badge bg-primary">{{ __('admin.activity_logs_ui.op_create') }}</span>
-                                <small class="text-muted">{{ __('admin.activity_logs_ui.op_create_desc') }}</small>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="d-flex align-items-center gap-2">
-                                <span class="badge bg-warning">{{ __('admin.activity_logs_ui.op_update') }}</span>
-                                <small class="text-muted">{{ __('admin.activity_logs_ui.op_update_desc') }}</small>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="d-flex align-items-center gap-2">
-                                <span class="badge bg-danger">{{ __('admin.activity_logs_ui.op_delete') }}</span>
-                                <small class="text-muted">{{ __('admin.activity_logs_ui.op_delete_desc') }}</small>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="d-flex align-items-center gap-2">
-                                <span class="badge bg-success">{{ __('admin.activity_logs_ui.op_login') }}</span>
-                                <small class="text-muted">{{ __('admin.activity_logs.login') }}</small>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="d-flex align-items-center gap-2">
-                                <span class="badge bg-secondary">{{ __('admin.activity_logs_ui.op_logout') }}</span>
-                                <small class="text-muted">{{ __('admin.activity_logs.logout') }}</small>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="alert alert-info mt-3 mb-0">
-                        <i class="bi bi-lightbulb me-2"></i>
-                        <strong>{{ __('admin.activity_logs.tip') }}</strong>
+                    <div class="d-flex flex-wrap gap-2">
+                        @php
+                            $ops = [
+                                ['key' => 'view', 'class' => 'activity-badge-view', 'icon' => 'bi-eye'],
+                                ['key' => 'create', 'class' => 'activity-badge-create', 'icon' => 'bi-plus-circle'],
+                                ['key' => 'update', 'class' => 'activity-badge-update', 'icon' => 'bi-pencil'],
+                                ['key' => 'delete', 'class' => 'activity-badge-delete', 'icon' => 'bi-trash'],
+                                ['key' => 'login', 'class' => 'activity-badge-login', 'icon' => 'bi-box-arrow-in-right'],
+                                ['key' => 'logout', 'class' => 'activity-badge-logout', 'icon' => 'bi-box-arrow-right'],
+                            ];
+                        @endphp
+                        @foreach($ops as $op)
+                            <span class="stat-chip {{ $op['class'] }}" style="font-size: 0.72rem;" title="{{ __('admin.activity_logs_ui.op_' . $op['key'] . '_desc') }}">
+                                <i class="bi {{ $op['icon'] }}"></i>
+                                {{ __('admin.activity_logs_ui.op_' . $op['key']) }}
+                            </span>
+                        @endforeach
                     </div>
                 </div>
             </div>
-        </div>
+        </x-admin.card>
     </div>
-    </div>
-@endsection
 
 @push('scripts')
 <script>
-    // Initialize Bootstrap tooltips
-    document.addEventListener('DOMContentLoaded', function() {
-        const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-        tooltipTriggerList.map(function (tooltipTriggerEl) {
-            return new bootstrap.Tooltip(tooltipTriggerEl);
+document.addEventListener('DOMContentLoaded', function() {
+    const filterForm   = document.getElementById('logsFilterForm');
+    const searchBtn    = document.getElementById('logsSearchBtn');
+    const tableBody    = document.getElementById('logsTableBody');
+    const paginationEl = document.getElementById('logsPaginationContainer');
+    const loading      = document.getElementById('logsLoading');
+    const headerCount  = document.getElementById('logsHeaderCount');
+
+    let isLoading = false;
+
+    function showLoading() {
+        isLoading = true;
+        if (loading) loading.classList.add('active');
+        if (tableBody) tableBody.style.opacity = '0.4';
+        if (paginationEl) paginationEl.style.opacity = '0.4';
+    }
+
+    function hideLoading() {
+        isLoading = false;
+        if (loading) loading.classList.remove('active');
+        if (tableBody) tableBody.style.opacity = '1';
+        if (paginationEl) paginationEl.style.opacity = '1';
+    }
+
+    function performSearch() {
+        if (isLoading) return;
+
+        const formData = new FormData(filterForm);
+        const params = new URLSearchParams(formData);
+
+        showLoading();
+        if (searchBtn) {
+            searchBtn.disabled = true;
+            searchBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span>{{ __('admin.ui.searching') }}';
+        }
+
+        fetch(`{{ route('admin.activity-logs.index') }}?${params.toString()}`, {
+            method: 'GET',
+            headers: { 'X-Requested-With': 'XMLHttpRequest', 'Accept': 'application/json' }
+        })
+        .then(r => r.json())
+        .then(data => {
+            if (data.success) {
+                if (tableBody) tableBody.innerHTML = data.html;
+                if (paginationEl) paginationEl.innerHTML = data.pagination;
+                if (headerCount) headerCount.innerHTML = '<i class="bi bi-list-ul"></i> <strong>' + data.total.toLocaleString() + '</strong>';
+                window.history.pushState({}, '', `{{ route('admin.activity-logs.index') }}?${params.toString()}`);
+            }
+        })
+        .catch(err => {
+            console.error('Error:', err);
+            if (window.adminNotifications) window.adminNotifications.error('{{ __('admin.ui.search_error') }}');
+        })
+        .finally(() => {
+            hideLoading();
+            if (searchBtn) {
+                searchBtn.disabled = false;
+                searchBtn.innerHTML = '<i class="bi bi-search me-1"></i> {{ __('admin.ui.query') }}';
+            }
         });
+    }
+
+    filterForm?.addEventListener('submit', function(e) {
+        e.preventDefault();
+        performSearch();
     });
+
+    document.addEventListener('click', function(e) {
+        const link = e.target.closest('#logsPaginationContainer .pagination a');
+        if (!link) return;
+        e.preventDefault();
+
+        showLoading();
+        fetch(link.href, {
+            method: 'GET',
+            headers: { 'X-Requested-With': 'XMLHttpRequest', 'Accept': 'application/json' }
+        })
+        .then(r => r.json())
+        .then(data => {
+            if (data.success) {
+                if (tableBody) tableBody.innerHTML = data.html;
+                if (paginationEl) paginationEl.innerHTML = data.pagination;
+                if (headerCount) headerCount.innerHTML = '<i class="bi bi-list-ul"></i> <strong>' + data.total.toLocaleString() + '</strong>';
+                window.history.pushState({}, '', link.href);
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        })
+        .catch(() => window.location.href = link.href)
+        .finally(() => hideLoading());
+    });
+});
 </script>
 @endpush
+@endsection
