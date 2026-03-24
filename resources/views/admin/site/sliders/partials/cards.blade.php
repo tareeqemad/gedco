@@ -46,12 +46,11 @@
     </tr>
 @empty
     <tr>
-        <td colspan="6" class="slider-empty-state">
-            <div class="slider-empty-content">
-                <i class="bi bi-images"></i>
-                <h5>{{ __('admin.slider.no_results') }}</h5>
-                <p class="text-muted">{{ __('admin.slider.no_slides') }}</p>
-                <a href="{{ route('admin.sliders.create') }}" class="btn btn-primary rounded-3">
+        <td colspan="6" class="text-center py-5">
+            <div>
+                <i class="bi bi-images display-4 text-muted opacity-50 d-block mb-3"></i>
+                <h5 class="text-muted mb-2">{{ __('admin.slider.no_slides') }}</h5>
+                <a href="{{ route('admin.sliders.create') }}" class="btn btn-save rounded-3 mt-2">
                     <i class="bi bi-plus-circle me-1"></i>
                     {{ __('admin.slider.add_first_slide') }}
                 </a>

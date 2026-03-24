@@ -64,7 +64,7 @@
             <!-- Loading Indicator -->
             <div class="slider-loading" id="sliderLoading">
                 <div class="spinner-border text-primary" role="status">
-                    <span class="visually-hidden">جاري التحميل...</span>
+                    <span class="visually-hidden">{{ __('admin.ui.loading') }}</span>
                 </div>
             </div>
 
@@ -214,7 +214,7 @@
                 .catch(error => {
                     console.error('Error:', error);
                     if (window.adminNotifications) {
-                        window.adminNotifications.error('حدث خطأ أثناء تحميل البيانات');
+                        window.adminNotifications.error('{{ __('admin.ui.search_error') }}');
                     }
                 })
                 .finally(() => {
@@ -228,7 +228,7 @@
                         const submitBtn = form.querySelector('.delete-submit-btn');
                         if (submitBtn && !submitBtn.disabled) {
                             submitBtn.disabled = true;
-                            submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>جاري الحذف...';
+                            submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>{{ __('admin.ui.deleting') }}';
                             submitBtn.classList.add('disabled');
                         }
                     });
