@@ -1005,6 +1005,8 @@ return [
         'new_ad' => 'إعلان جديد',
         'settings' => 'الإعدادات',
         'messages' => 'الرسائل',
+        'today' => 'اليوم',
+        'deleted_user' => 'محذوف',
     ],
 
     // Roles UI

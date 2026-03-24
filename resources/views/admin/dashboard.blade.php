@@ -41,7 +41,7 @@
                     <div class="dash-kpi-value">{{ number_format($stats['users']['total']) }}</div>
                     <div class="dash-kpi-label">{{ __('admin.dashboard.users') }}</div>
                     @if($stats['users']['today'] > 0)
-                        <span class="stat-chip" style="font-size: 0.6rem; color: #16A34A;">+{{ $stats['users']['today'] }} اليوم</span>
+                        <span class="stat-chip" style="font-size: 0.6rem; color: #16A34A;">+{{ $stats['users']['today'] }} {{ __('admin.dashboard_ui.today') }}</span>
                     @endif
                 </div>
             </div>
@@ -131,7 +131,7 @@
                 </div>
                 <div>
                     <div class="dash-kpi-value">{{ number_format($stats['activities']['today']) }}</div>
-                    <div class="dash-kpi-label">نشاط اليوم</div>
+                    <div class="dash-kpi-label">{{ __('admin.dashboard_ui.today_activity') }}</div>
                     <span class="stat-chip" style="font-size: 0.6rem;">{{ $stats['activities']['active_users_today'] }} {{ __('admin.dashboard.active_users') }}</span>
                 </div>
             </div>
@@ -161,24 +161,24 @@
                 <div class="card-body p-3">
                     <h6 class="fw-bold mb-3 d-flex align-items-center gap-2" style="color: #24364A; font-size: 0.88rem;">
                         <i class="bi bi-lightning-charge-fill" style="color: #5B7088;"></i>
-                        إجراءات سريعة
+                        {{ __('admin.dashboard_ui.quick_links') }}
                     </h6>
                     <div class="row g-2">
                         @can('news.create')
-                            <div class="col-6"><a href="{{ route('admin.news.create') }}" class="dash-quick-tile"><i class="bi bi-newspaper"></i><span>خبر جديد</span></a></div>
+                            <div class="col-6"><a href="{{ route('admin.news.create') }}" class="dash-quick-tile"><i class="bi bi-newspaper"></i><span>{{ __('admin.dashboard_ui.new_news') }}</span></a></div>
                         @endcan
                         @can('sliders.create')
-                            <div class="col-6"><a href="{{ route('admin.sliders.create') }}" class="dash-quick-tile"><i class="bi bi-images"></i><span>شريحة جديدة</span></a></div>
+                            <div class="col-6"><a href="{{ route('admin.sliders.create') }}" class="dash-quick-tile"><i class="bi bi-images"></i><span>{{ __('admin.dashboard_ui.new_slide') }}</span></a></div>
                         @endcan
                         @can('users.create')
-                            <div class="col-6"><a href="{{ route('admin.users.create') }}" class="dash-quick-tile"><i class="bi bi-person-plus"></i><span>مستخدم جديد</span></a></div>
+                            <div class="col-6"><a href="{{ route('admin.users.create') }}" class="dash-quick-tile"><i class="bi bi-person-plus"></i><span>{{ __('admin.dashboard_ui.new_user') }}</span></a></div>
                         @endcan
                         @can('advertisements.create')
-                            <div class="col-6"><a href="{{ route('admin.advertisements.create') }}" class="dash-quick-tile"><i class="bi bi-megaphone"></i><span>إعلان جديد</span></a></div>
+                            <div class="col-6"><a href="{{ route('admin.advertisements.create') }}" class="dash-quick-tile"><i class="bi bi-megaphone"></i><span>{{ __('admin.dashboard_ui.new_ad') }}</span></a></div>
                         @endcan
-                        <div class="col-6"><a href="{{ route('admin.site-settings.edit', 1) }}" class="dash-quick-tile"><i class="bi bi-gear"></i><span>الإعدادات</span></a></div>
+                        <div class="col-6"><a href="{{ route('admin.site-settings.edit', 1) }}" class="dash-quick-tile"><i class="bi bi-gear"></i><span>{{ __('admin.dashboard_ui.settings') }}</span></a></div>
                         @can('contact-messages.view')
-                            <div class="col-6"><a href="{{ route('admin.contact-messages.index') }}" class="dash-quick-tile"><i class="bi bi-envelope"></i><span>الرسائل</span></a></div>
+                            <div class="col-6"><a href="{{ route('admin.contact-messages.index') }}" class="dash-quick-tile"><i class="bi bi-envelope"></i><span>{{ __('admin.dashboard_ui.messages') }}</span></a></div>
                         @endcan
                     </div>
                 </div>
@@ -244,7 +244,7 @@
                                 </div>
                                 <div class="flex-grow-1 min-width-0">
                                     <div class="d-flex align-items-center gap-2 flex-wrap">
-                                        <span class="fw-semibold" style="font-size: 0.8rem; color: #24364A;">{{ $activity->user->name ?? 'محذوف' }}</span>
+                                        <span class="fw-semibold" style="font-size: 0.8rem; color: #24364A;">{{ $activity->user->name ?? __('admin.dashboard_ui.deleted_user') }}</span>
                                         @php
                                             $actionIcon = match($activity->action) {
                                                 'login' => 'bi-box-arrow-in-right',

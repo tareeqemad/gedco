@@ -984,6 +984,8 @@ return [
         'new_ad' => 'New Ad',
         'settings' => 'Settings',
         'messages' => 'Messages',
+        'today' => 'today',
+        'deleted_user' => 'Deleted',
     ],
 
     // Roles UI
