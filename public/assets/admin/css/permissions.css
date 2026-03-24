@@ -1,0 +1,56 @@
+/* Permissions page styles */
+
+.permission-row:hover {
+    background-color: #F8FBFD;
+}
+
+.permissions-table thead th {
+    font-weight: 600;
+    font-size: 0.78rem;
+    letter-spacing: 0.03em;
+    color: #5B7088;
+    border-bottom: 2px solid #E6ECF2;
+    text-transform: uppercase;
+    padding: 0.75rem 1rem;
+}
+
+.permissions-table tbody td {
+    padding: 0.85rem 1rem;
+    vertical-align: middle;
+}
+
+/* Loading overlay */
+.permissions-loading {
+    display: none;
+    text-align: center;
+    padding: 2rem;
+}
+
+.permissions-loading.active {
+    display: block;
+}
+
+/* Mobile cards */
+@media (max-width: 767.98px) {
+    .permissions-table-wrap {
+        display: none;
+    }
+
+    .permission-mobile-card {
+        border: 1px solid #E6ECF2;
+        border-radius: 0.75rem;
+        padding: 1rem;
+        background: #fff;
+        transition: box-shadow 0.2s;
+    }
+
+    .permission-mobile-card:hover {
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    }
+}
+
+@media (min-width: 768px) {
+    .permissions-mobile-wrap {
+        display: none !important;
+    }
+}

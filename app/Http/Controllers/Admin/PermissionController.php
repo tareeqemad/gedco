@@ -48,6 +48,16 @@ class PermissionController extends Controller
             ];
         });
 
+        // AJAX response
+        if ($request->expectsJson() || $request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'html' => view('admin.permissions.partials.table', compact('permissionsWithRoles', 'permissions'))->render(),
+                'pagination' => view('admin.permissions.partials.pagination', compact('permissions'))->render(),
+                'total' => $permissions->total(),
+            ]);
+        }
+
         return view('admin.permissions.index', compact(
             'permissions',
             'stats',
