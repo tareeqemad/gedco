@@ -33,7 +33,7 @@ Route::prefix('/')->name('site.')->group(function () {
     Route::get('/news/{news}', [NewsController::class, 'show'])->name('news.show');
     
     Route::get('/contact', [ContactController::class, 'index'])->name('contact');
-    Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
+    Route::post('/contact', [ContactController::class, 'store'])->middleware('throttle:5,1')->name('contact.store');
     
    Route::get('/gca/center', [GcaCenterController::class, 'index'])->name('gca');
 

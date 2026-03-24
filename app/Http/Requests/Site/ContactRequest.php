@@ -24,7 +24,7 @@ class ContactRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255'],
-            'phone' => ['nullable', 'string', 'max:20'],
+            'phone' => ['nullable', 'string', 'max:20', 'regex:/^[\d\s\+\-\(\)]+$/'],
             'subject' => ['required', 'string', 'max:255'],
             'message' => ['required', 'string', 'min:10', 'max:2000'],
         ];
@@ -42,6 +42,7 @@ class ContactRequest extends FormRequest
             'message.required' => 'الرسالة مطلوبة',
             'message.min' => 'الرسالة يجب أن تكون على الأقل 10 أحرف',
             'message.max' => 'الرسالة يجب أن تكون أقل من 2000 حرف',
+            'phone.regex' => 'رقم الهاتف غير صحيح',
         ];
     }
 }

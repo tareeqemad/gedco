@@ -237,7 +237,13 @@
 
                         <form action="{{ route('site.contact.store') }}" method="POST" class="contact-form" id="contactForm">
                             @csrf
-                            
+
+                            {{-- Honeypot: hidden field to catch bots --}}
+                            <div style="position:absolute;left:-9999px;opacity:0;height:0;overflow:hidden;" aria-hidden="true">
+                                <label for="website">Website</label>
+                                <input type="text" name="website" id="website" value="" tabindex="-1" autocomplete="off">
+                            </div>
+
                             <div class="row g-3">
                                 <div class="col-md-6">
                                     <label for="name" class="form-label">

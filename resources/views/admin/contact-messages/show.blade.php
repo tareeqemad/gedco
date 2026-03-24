@@ -66,14 +66,14 @@
                         </div>
                         <div class="mb-3">
                             <small class="text-muted d-block mb-1">{{ __('admin.labels.email') }}</small>
-                            <a href="mailto:{{ $contactMessage->email }}" class="text-decoration-none" style="color: #1ABC9C;">
+                            <a href="mailto:{{ e($contactMessage->email) }}" class="text-decoration-none" style="color: #1ABC9C;">
                                 {{ $contactMessage->email }}
                             </a>
                         </div>
                         @if($contactMessage->phone)
                             <div>
                                 <small class="text-muted d-block mb-1">{{ __('admin.labels.phone') }}</small>
-                                <a href="tel:{{ $contactMessage->phone }}" class="text-decoration-none" style="color: #1ABC9C;">
+                                <a href="tel:{{ e($contactMessage->phone) }}" class="text-decoration-none" style="color: #1ABC9C;">
                                     {{ $contactMessage->phone }}
                                 </a>
                             </div>
@@ -89,12 +89,12 @@
                             {{ __('admin.contact_messages.quick_actions') }}
                         </h6>
                         <div class="d-grid gap-2">
-                            <a href="mailto:{{ $contactMessage->email }}?subject=Re: {{ $contactMessage->subject }}"
+                            <a href="mailto:{{ e($contactMessage->email) }}?subject={{ urlencode('Re: ' . $contactMessage->subject) }}"
                                class="btn btn-save btn-sm">
                                 <i class="bi bi-reply me-1"></i>{{ __('admin.contact_messages.reply') }}
                             </a>
                             @if($contactMessage->phone)
-                                <a href="tel:{{ $contactMessage->phone }}" class="btn btn-cancel btn-sm">
+                                <a href="tel:{{ e($contactMessage->phone) }}" class="btn btn-cancel btn-sm">
                                     <i class="bi bi-telephone me-1"></i>{{ __('admin.contact_messages.call') }}
                                 </a>
                             @endif
