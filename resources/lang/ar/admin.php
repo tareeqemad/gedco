@@ -926,6 +926,17 @@ return [
         'role_name' => 'اسم الدور',
         'users' => 'المستخدمون',
         'cannot_delete_has_users' => 'لا يمكن الحذف - يوجد مستخدمين',
+        'permissions_label' => 'الصلاحيات',
+        'total_permissions' => 'الصلاحيات: :count',
+        'permission_count_singular' => 'صلاحية',
+        'permission_count_plural' => 'صلاحيات',
+        'user_count_singular' => 'مستخدم',
+        'user_count_plural' => 'مستخدمين',
+        'no_permissions' => 'لا توجد صلاحيات',
+        'no_users' => 'لا يوجد مستخدمين',
+        'no_roles' => 'لا توجد أدوار',
+        'protected_role' => 'دور محمي',
+        'and_more' => 'والمزيد...',
     ],
 
     // Common UI strings (shared across pages)

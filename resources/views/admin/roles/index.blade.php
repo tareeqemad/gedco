@@ -25,7 +25,7 @@
                     <i class="bi bi-people me-1"></i>{{ __('admin.roles.users_count') }}: {{ number_format($stats['total_users']) }}
                 </span>
                 <span class="badge bg-success-subtle text-success rounded-pill px-3 py-2">
-                    <i class="bi bi-shield-check me-1"></i>الصلاحيات: {{ number_format($stats['total_permissions']) }}
+                    <i class="bi bi-shield-check me-1"></i>{{ __('admin.roles.total_permissions', ['count' => number_format($stats['total_permissions'])]) }}
                 </span>
             </div>
 
@@ -55,7 +55,7 @@
                         <tr>
                             <th class="text-center" style="width: 60px;">#</th>
                             <th>{{ __('admin.roles.role_name') }}</th>
-                            <th class="text-center" style="width: 200px;">الصلاحيات</th>
+                            <th class="text-center" style="width: 200px;">{{ __('admin.roles.permissions_label') }}</th>
                             <th class="text-center" style="width: 200px;">{{ __('admin.roles.users') }}</th>
                             <th class="text-center" style="width: 120px;">{{ __('admin.actions.actions') }}</th>
                         </tr>
@@ -71,7 +71,7 @@
                                     <div class="d-flex align-items-center gap-2">
                                         <span class="fw-semibold text-dark">{{ $role->name }}</span>
                                         @if($role->name === 'super-admin')
-                                            <span class="badge bg-danger rounded-pill px-2 py-1" style="font-size: 0.7rem;" title="دور محمي">
+                                            <span class="badge bg-danger rounded-pill px-2 py-1" style="font-size: 0.7rem;" title="{{ __('admin.roles.protected_role') }}">
                                                 <i class="bi bi-shield-lock"></i>
                                             </span>
                                         @endif
@@ -81,7 +81,7 @@
                                     @if($item['permissions_count'] > 0)
                                         <div class="d-flex flex-column gap-1 align-items-center">
                                             <small class="text-muted">
-                                                {{ $item['permissions_count'] }} {{ $item['permissions_count'] == 1 ? 'صلاحية' : 'صلاحيات' }}
+                                                {{ $item['permissions_count'] }} {{ $item['permissions_count'] == 1 ? __('admin.roles.permission_count_singular') : __('admin.roles.permission_count_plural') }}
                                             </small>
                                             <div class="d-flex gap-1 flex-wrap justify-content-center">
                                                 @foreach(array_slice($item['permissions'], 0, 3) as $perm)
@@ -93,14 +93,14 @@
                                             </div>
                                         </div>
                                     @else
-                                        <small class="text-muted text-center d-block">لا توجد صلاحيات</small>
+                                        <small class="text-muted text-center d-block">{{ __('admin.roles.no_permissions') }}</small>
                                     @endif
                                 </td>
                                 <td>
                                     @if($role->users_count > 0)
                                         <div class="d-flex flex-column gap-1 align-items-center">
                                             <small class="text-muted">
-                                                {{ $role->users_count }} {{ $role->users_count == 1 ? 'مستخدم' : 'مستخدمين' }}
+                                                {{ $role->users_count }} {{ $role->users_count == 1 ? __('admin.roles.user_count_singular') : __('admin.roles.user_count_plural') }}
                                             </small>
                                             <div class="d-flex gap-1 justify-content-center">
                                                 @foreach($item['users']->take(3) as $user)
@@ -113,14 +113,14 @@
                                                 @if($role->users_count > 3)
                                                     <div class="bg-secondary text-white rounded-circle d-flex align-items-center justify-content-center" 
                                                          style="width: 28px; height: 28px; font-size: 0.7rem; font-weight: bold;"
-                                                         title="والمزيد...">
+                                                         title="{{ __('admin.roles.and_more') }}">
                                                         +{{ $role->users_count - 3 }}
                                                     </div>
                                                 @endif
                                             </div>
                                         </div>
                                     @else
-                                        <small class="text-muted text-center d-block">لا يوجد مستخدمين</small>
+                                        <small class="text-muted text-center d-block">{{ __('admin.roles.no_users') }}</small>
                                     @endif
                                 </td>
                                 <td>
@@ -152,7 +152,7 @@
                             <tr>
                                 <td colspan="5" class="text-center py-5">
                                     <i class="bi bi-person-badge display-4 text-muted opacity-50 d-block mb-3"></i>
-                                    <h5 class="text-muted mb-2">لا توجد أدوار</h5>
+                                    <h5 class="text-muted mb-2">{{ __('admin.roles.no_roles') }}</h5>
                                     <a href="{{ route('admin.roles.create') }}" class="btn btn-primary rounded-3 shadow-sm">
                                         <i class="bi bi-plus-circle me-1"></i>
                                         {{ __('admin.menu.add_role') }}
@@ -168,7 +168,7 @@
                 <div class="px-3 py-2" style="border-top: 1px solid #E6ECF2;">
                     <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 small">
                         <div class="text-muted">
-                            عرض {{ $roles->firstItem() }} - {{ $roles->lastItem() }} من {{ $roles->total() }}
+                            {{ __('admin.ui.showing_range', ['first' => $roles->firstItem(), 'last' => $roles->lastItem(), 'total' => $roles->total()]) }}
                         </div>
                         {{ $roles->links() }}
                     </div>
@@ -187,7 +187,7 @@
                                 <div class="d-flex align-items-center gap-2 mb-1">
                                     <h6 class="mb-0 fw-semibold text-dark">{{ $role->name }}</h6>
                                     @if($role->name === 'super-admin')
-                                        <span class="badge bg-danger rounded-pill px-2 py-1" style="font-size: 0.7rem;" title="دور محمي">
+                                        <span class="badge bg-danger rounded-pill px-2 py-1" style="font-size: 0.7rem;" title="{{ __('admin.roles.protected_role') }}">
                                             <i class="bi bi-shield-lock"></i>
                                         </span>
                                     @endif
@@ -200,7 +200,7 @@
                             <div class="mb-3">
                                 <small class="text-muted d-block mb-1">
                                     <i class="bi bi-shield-check me-1"></i>
-                                    {{ $item['permissions_count'] }} {{ $item['permissions_count'] == 1 ? 'صلاحية' : 'صلاحيات' }}
+                                    {{ $item['permissions_count'] }} {{ $item['permissions_count'] == 1 ? __('admin.roles.permission_count_singular') : __('admin.roles.permission_count_plural') }}
                                 </small>
                                 <div class="d-flex gap-1 flex-wrap">
                                     @foreach(array_slice($item['permissions'], 0, 3) as $perm)
@@ -215,7 +215,7 @@
                             <div class="mb-3">
                                 <small class="text-muted">
                                     <i class="bi bi-info-circle me-1"></i>
-                                    لا توجد صلاحيات
+                                    {{ __('admin.roles.no_permissions') }}
                                 </small>
                             </div>
                         @endif
@@ -224,7 +224,7 @@
                             <div class="mb-3">
                                 <small class="text-muted d-block mb-1">
                                     <i class="bi bi-people me-1"></i>
-                                    {{ $role->users_count }} {{ $role->users_count == 1 ? 'مستخدم' : 'مستخدمين' }}
+                                    {{ $role->users_count }} {{ $role->users_count == 1 ? __('admin.roles.user_count_singular') : __('admin.roles.user_count_plural') }}
                                 </small>
                                 <div class="d-flex gap-1">
                                     @foreach($item['users']->take(3) as $user)
@@ -237,7 +237,7 @@
                                     @if($role->users_count > 3)
                                         <div class="bg-secondary text-white rounded-circle d-flex align-items-center justify-content-center" 
                                              style="width: 32px; height: 32px; font-size: 0.75rem; font-weight: bold;"
-                                             title="والمزيد...">
+                                             title="{{ __('admin.roles.and_more') }}">
                                             +{{ $role->users_count - 3 }}
                                         </div>
                                     @endif
@@ -247,7 +247,7 @@
                             <div class="mb-3">
                                 <small class="text-muted">
                                     <i class="bi bi-info-circle me-1"></i>
-                                    لا يوجد مستخدمين
+                                    {{ __('admin.roles.no_users') }}
                                 </small>
                             </div>
                         @endif
@@ -280,7 +280,7 @@
                 <div class="card border-0 shadow-sm rounded-4 bg-white">
                     <div class="card-body text-center py-5">
                         <i class="bi bi-person-badge display-4 text-muted opacity-50 d-block mb-3"></i>
-                        <h5 class="text-muted mb-2">لا توجد أدوار</h5>
+                        <h5 class="text-muted mb-2">{{ __('admin.roles.no_roles') }}</h5>
                         <a href="{{ route('admin.roles.create') }}" class="btn btn-primary rounded-3 shadow-sm">
                             <i class="bi bi-plus-circle me-1"></i>
                             {{ __('admin.menu.add_role') }}
@@ -293,7 +293,7 @@
                 <div class="px-3 py-2" style="border-top: 1px solid #E6ECF2;">
                     <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 small">
                         <div class="text-muted">
-                            عرض {{ $roles->firstItem() }} - {{ $roles->lastItem() }} من {{ $roles->total() }}
+                            {{ __('admin.ui.showing_range', ['first' => $roles->firstItem(), 'last' => $roles->lastItem(), 'total' => $roles->total()]) }}
                         </div>
                         {{ $roles->links() }}
                     </div>

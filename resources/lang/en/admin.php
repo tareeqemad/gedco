@@ -927,6 +927,17 @@ return [
         'role_name' => 'Role Name',
         'users' => 'Users',
         'cannot_delete_has_users' => 'Cannot delete — role has users',
+        'permissions_label' => 'Permissions',
+        'total_permissions' => 'Permissions: :count',
+        'permission_count_singular' => 'permission',
+        'permission_count_plural' => 'permissions',
+        'user_count_singular' => 'user',
+        'user_count_plural' => 'users',
+        'no_permissions' => 'No permissions',
+        'no_users' => 'No users',
+        'no_roles' => 'No roles found',
+        'protected_role' => 'Protected role',
+        'and_more' => 'and more...',
     ],
 
     // Common UI strings
