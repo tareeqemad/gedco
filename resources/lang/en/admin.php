@@ -534,6 +534,7 @@ return [
         'show_title' => 'Tender Details',
         'back_to_list' => 'Back to List',
         'back' => 'Back',
+        'form_basic_info' => 'Basic Information',
         'search_general' => 'General Search',
         'search_placeholder' => 'Keyword',
         'user_label' => 'User (the_user_1)',

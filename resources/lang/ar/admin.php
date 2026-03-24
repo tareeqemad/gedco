@@ -534,6 +534,7 @@ return [
         'show_title' => 'تفاصيل العطاء',
         'back_to_list' => 'رجوع للقائمة',
         'back' => 'رجوع',
+        'form_basic_info' => 'المعلومات الأساسية',
         'search_general' => 'بحث عام',
         'search_placeholder' => 'كلمة مفتاحية',
         'user_label' => 'المستخدم (the_user_1)',
