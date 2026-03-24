@@ -1,5 +1,5 @@
 @php
-    $breadcrumbTitle = __('admin.activity_logs.user_activities') . ': ' . $user->name;
+    $breadcrumbTitle = __('admin.activity_logs.user_activities') . ': ' . $user->display_name;
     $breadcrumbParent = __('admin.activity_logs.title');
     $breadcrumbParentUrl = route('admin.activity-logs.index');
 @endphp
@@ -16,10 +16,10 @@
                 <div class="card-body">
                     <div class="d-flex align-items-center mb-3">
                         <div class="avatar avatar-lg bg-primary text-white rounded-circle me-3">
-                            {{ substr($user->name, 0, 1) }}
+                            {{ substr($user->display_name, 0, 1) }}
                         </div>
                         <div>
-                            <h5 class="mb-0 fw-bold">{{ $user->name }}</h5>
+                            <h5 class="mb-0 fw-bold">{{ $user->display_name }}</h5>
                             <small class="text-muted">{{ $user->email }}</small>
                         </div>
                     </div>

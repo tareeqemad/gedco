@@ -64,6 +64,7 @@ class UserController extends Controller
     {
         $request->validate([
             'name'       => 'required|string|max:255',
+            'name_en'    => 'nullable|string|max:255',
             'email'      => 'required|email|unique:users',
             'password'   => 'required|min:8',
             'role_id'    => 'nullable|exists:roles,id',
@@ -73,6 +74,7 @@ class UserController extends Controller
 
         $user = User::create([
             'name'     => $request->name,
+            'name_en'  => $request->name_en,
             'email'    => $request->email,
             'password' => Hash::make($request->password),
         ]);
@@ -115,6 +117,7 @@ class UserController extends Controller
     {
         $request->validate([
             'name'       => 'required|string|max:255',
+            'name_en'    => 'nullable|string|max:255',
             'email'      => 'required|email|unique:users,email,' . $user->id,
             'password'   => 'nullable|min:8',
             'role_id'    => 'nullable|exists:roles,id',
@@ -122,8 +125,9 @@ class UserController extends Controller
             'permissions.*' => 'integer|exists:permissions,id',
         ]);
 
-        $user->name  = $request->name;
-        $user->email = $request->email;
+        $user->name    = $request->name;
+        $user->name_en = $request->name_en;
+        $user->email   = $request->email;
 
         if ($request->filled('password')) {
             $user->password = Hash::make($request->password);

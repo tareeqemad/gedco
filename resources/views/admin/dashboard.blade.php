@@ -13,7 +13,7 @@
     <div class="dash-hero mb-4">
         <div class="d-flex align-items-start justify-content-between flex-wrap gap-3">
             <div>
-                <h4 class="mb-1 fw-bold" style="color: #FFFFFF;">{{ __('admin.dashboard.welcome', ['name' => auth()->user()->name]) }}</h4>
+                <h4 class="mb-1 fw-bold" style="color: #FFFFFF;">{{ __('admin.dashboard.welcome', ['name' => auth()->user()->display_name]) }}</h4>
                 <p class="mb-0" style="color: rgba(255,255,255,0.6); font-size: 0.82rem;">{{ now()->translatedFormat('l، d F Y') }} &middot; {{ now()->format('h:i A') }}</p>
             </div>
             @if($pendingItems->count() > 0)
@@ -240,11 +240,11 @@
                         @forelse($recentActivities as $activity)
                             <div class="dash-list-item">
                                 <div class="activity-avatar flex-shrink-0">
-                                    {{ mb_strtoupper(mb_substr($activity->user->name ?? 'U', 0, 1)) }}
+                                    {{ mb_strtoupper(mb_substr($activity->user->display_name ?? 'U', 0, 1)) }}
                                 </div>
                                 <div class="flex-grow-1 min-width-0">
                                     <div class="d-flex align-items-center gap-2 flex-wrap">
-                                        <span class="fw-semibold" style="font-size: 0.8rem; color: #24364A;">{{ $activity->user->name ?? __('admin.dashboard_ui.deleted_user') }}</span>
+                                        <span class="fw-semibold" style="font-size: 0.8rem; color: #24364A;">{{ $activity->user->display_name ?? __('admin.dashboard_ui.deleted_user') }}</span>
                                         @php
                                             $actionIcon = match($activity->action) {
                                                 'login' => 'bi-box-arrow-in-right',

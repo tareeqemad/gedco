@@ -21,11 +21,11 @@
                         <td>
                             <div class="d-flex align-items-center">
                                 <div class="avatar avatar-sm me-3">
-                                    <img src="{{ $user->avatar_url }}" alt="{{ $user->name }}" 
+                                    <img src="{{ $user->avatar_url }}" alt="{{ $user->display_name }}"
                                          class="users-avatar" width="40" height="40">
                                 </div>
                                 <div>
-                                    <div class="fw-semibold">{{ $user->name }}</div>
+                                    <div class="fw-semibold">{{ $user->display_name }}</div>
                                     <small class="text-muted">ID: {{ $user->id }}</small>
                                 </div>
                             </div>
@@ -95,7 +95,7 @@
                                         <i class="bi bi-key"></i>
                                     </button>
                                     @if(auth()->id() !== $user->id && !$user->hasRole('super-admin'))
-                                        <form action="{{ route('admin.users.impersonate', $user) }}" method="POST" class="d-inline" onsubmit="return confirm('{{ __('admin.users.impersonate_confirm', ['name' => $user->name]) }}');">
+                                        <form action="{{ route('admin.users.impersonate', $user) }}" method="POST" class="d-inline" onsubmit="return confirm('{{ __('admin.users.impersonate_confirm', ['name' => $user->display_name]) }}');">
                                             @csrf
                                             <button type="submit" class="btn btn-sm btn-outline-warning rounded-3" title="{{ __('admin.users.impersonate') }}">
                                                 <i class="bi bi-person-check"></i>
@@ -121,11 +121,11 @@
                             <div class="d-flex align-items-start justify-content-between mb-3">
                                 <div class="d-flex align-items-center flex-grow-1">
                                     <div class="avatar avatar-sm me-3">
-                                        <img src="{{ $user->avatar_url }}" alt="{{ $user->name }}" 
+                                        <img src="{{ $user->avatar_url }}" alt="{{ $user->display_name }}"
                                              class="users-avatar" width="50" height="50">
                                     </div>
                                     <div class="flex-grow-1">
-                                        <div class="fw-bold text-dark mb-1">{{ $user->name }}</div>
+                                        <div class="fw-bold text-dark mb-1">{{ $user->display_name }}</div>
                                         <small class="text-muted d-block">ID: {{ $user->id }}</small>
                                         <small class="text-muted d-block">#{{ $users->firstItem() + $index }}</small>
                                     </div>
@@ -196,7 +196,7 @@
                             @if(auth()->user()->hasRole('super-admin'))
                                 <div class="d-flex gap-2 mt-3 pt-3 border-top flex-wrap">
                                     @if(auth()->id() !== $user->id && !$user->hasRole('super-admin'))
-                                        <form action="{{ route('admin.users.impersonate', $user) }}" method="POST" class="d-inline flex-fill" onsubmit="return confirm('{{ __('admin.users.impersonate_confirm', ['name' => $user->name]) }}');">
+                                        <form action="{{ route('admin.users.impersonate', $user) }}" method="POST" class="d-inline flex-fill" onsubmit="return confirm('{{ __('admin.users.impersonate_confirm', ['name' => $user->display_name]) }}');">
                                             @csrf
                                             <button type="submit"
                                                     class="btn btn-sm btn-outline-warning w-100"

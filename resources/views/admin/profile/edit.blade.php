@@ -28,7 +28,7 @@
                                 </div>
                             </div>
                         </div>
-                        <h5 class="fw-bold mb-1" style="color: #24364A;">{{ $user->name }}</h5>
+                        <h5 class="fw-bold mb-1" style="color: #24364A;">{{ $user->display_name }}</h5>
                         <p class="text-muted mb-2" style="font-size: 0.9rem;">{{ $user->email }}</p>
                         <div class="d-flex justify-content-center gap-2 flex-wrap">
                             @foreach($user->roles as $role)
@@ -67,6 +67,16 @@
                                            class="form-control rounded-3 @error('name') is-invalid @enderror"
                                            placeholder="{{ __('admin.profile.name_placeholder') }}" required>
                                     @error('name')
+                                        <div class="invalid-feedback d-block">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">{{ __('admin.users.name_en') }}</label>
+                                    <input type="text" name="name_en"
+                                           value="{{ old('name_en', $user->name_en) }}"
+                                           class="form-control rounded-3 @error('name_en') is-invalid @enderror"
+                                           placeholder="{{ __('admin.users.name_en_placeholder') }}" dir="ltr">
+                                    @error('name_en')
                                         <div class="invalid-feedback d-block">{{ $message }}</div>
                                     @enderror
                                 </div>

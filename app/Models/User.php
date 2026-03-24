@@ -13,8 +13,22 @@ class User extends Authenticatable
     use HasFactory, Notifiable, HasRoles;
 
     protected $fillable = [
-        'name', 'email', 'password', 'avatar',
+        'name', 'name_en', 'email', 'password', 'avatar',
     ];
+
+    /**
+     * Get the display name based on current locale.
+     * Returns name_en in LTR mode, name (Arabic) in RTL mode.
+     * Falls back to name if name_en is empty.
+     */
+    public function getDisplayNameAttribute(): string
+    {
+        $direction = session('direction', 'rtl');
+        if ($direction === 'ltr' && !empty($this->name_en)) {
+            return $this->name_en;
+        }
+        return $this->name;
+    }
 
     protected $hidden = [
         'password', 'remember_token',

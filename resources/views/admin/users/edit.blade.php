@@ -4,7 +4,7 @@
     $breadcrumbParentUrl = route('admin.users.index');
 @endphp
 @extends('layouts.admin')
-@section('title', __('admin.users.edit_user_title') . ': ' . $user->name)
+@section('title', __('admin.users.edit_user_title') . ': ' . $user->display_name)
 
 @section('content')
     <div class="container-fluid p-0">
@@ -14,7 +14,7 @@
                 :title="__('admin.users.edit_user')"
                 :back-route="route('admin.users.index')"
                 :back-label="__('admin.common.back')">
-                <x-slot:subtitle>{{ $user->name }} - {{ $user->email }}</x-slot:subtitle>
+                <x-slot:subtitle>{{ $user->display_name }} - {{ $user->email }}</x-slot:subtitle>
             </x-admin.card-header-form>
 
             <div class="card-body p-4">
@@ -36,6 +36,18 @@
                                    value="{{ old('name', $user->name) }}" required
                                    placeholder="{{ __('admin.users.name_placeholder') }}">
                             @error('name')
+                                <div class="invalid-feedback d-block">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">
+                                {{ __('admin.users.name_en') }}
+                            </label>
+                            <input type="text" name="name_en"
+                                   class="form-control rounded-3 @error('name_en') is-invalid @enderror"
+                                   value="{{ old('name_en', $user->name_en) }}"
+                                   placeholder="{{ __('admin.users.name_en_placeholder') }}" dir="ltr">
+                            @error('name_en')
                                 <div class="invalid-feedback d-block">{{ $message }}</div>
                             @enderror
                         </div>

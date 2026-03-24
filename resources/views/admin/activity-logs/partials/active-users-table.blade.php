@@ -9,13 +9,13 @@
             <div class="d-flex align-items-center gap-3">
                 <div class="position-relative">
                     <div class="active-user-avatar">
-                        {{ mb_strtoupper(mb_substr($user->name, 0, 1)) }}
+                        {{ mb_strtoupper(mb_substr($user->display_name, 0, 1)) }}
                     </div>
                     <span class="active-pulse"></span>
                 </div>
                 <div class="min-width-0">
                     <a href="{{ route('admin.activity-logs.user', $user->id) }}" class="fw-semibold text-dark text-decoration-none d-block text-truncate" style="font-size: 0.85rem; max-width: 180px;">
-                        {{ $user->name }}
+                        {{ $user->display_name }}
                     </a>
                     <small class="text-muted d-block text-truncate" style="font-size: 0.72rem; max-width: 180px;">{{ $user->email }}</small>
                 </div>

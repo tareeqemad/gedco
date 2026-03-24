@@ -24,10 +24,10 @@
         <td>
             <div class="d-flex align-items-center gap-2">
                 <div class="active-user-avatar" style="width: 32px; height: 32px; font-size: 0.7rem; border-radius: 8px;">
-                    {{ mb_strtoupper(mb_substr($log->user->name ?? 'U', 0, 1)) }}
+                    {{ mb_strtoupper(mb_substr($log->user->display_name ?? 'U', 0, 1)) }}
                 </div>
                 <div class="min-width-0">
-                    <span class="fw-semibold d-block text-truncate" style="font-size: 0.82rem; color: #24364A; max-width: 150px;">{{ $log->user->name ?? __('admin.dashboard_ui.deleted_user') }}</span>
+                    <span class="fw-semibold d-block text-truncate" style="font-size: 0.82rem; color: #24364A; max-width: 150px;">{{ $log->user->display_name ?? __('admin.dashboard_ui.deleted_user') }}</span>
                 </div>
             </div>
         </td>

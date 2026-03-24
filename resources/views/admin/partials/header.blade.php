@@ -198,7 +198,7 @@
                             <img src="{{ auth()->user()->avatar_url }}" alt="profile" width="32" height="32" class="rounded-circle shadow-sm">
                         </div>
                         <div class="d-xl-block d-none">
-                            <p class="fw-semibold mb-0 lh-1">{{ auth()->user()->name }}</p>
+                            <p class="fw-semibold mb-0 lh-1">{{ auth()->user()->display_name }}</p>
                             <span class="op-7 fw-normal d-block fs-11">   {{ auth()->user()->getRoleNames()->first() ?? __('admin.header.no_role') }}</span>
                         </div>
                     </div>
@@ -212,7 +212,7 @@
                                 <img src="{{ auth()->user()->avatar_url }}" alt="profile" width="48" height="48" class="rounded-circle shadow-sm">
                             </div>
                             <div class="flex-grow-1">
-                                <p class="fw-semibold mb-0">{{ auth()->user()->name }}</p>
+                                <p class="fw-semibold mb-0">{{ auth()->user()->display_name }}</p>
                                 <small class="text-muted">{{ auth()->user()->email }}</small>
                             </div>
                         </div>

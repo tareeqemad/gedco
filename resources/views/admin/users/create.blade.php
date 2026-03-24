@@ -39,6 +39,18 @@
                         </div>
                         <div class="col-md-6">
                             <label class="form-label fw-semibold">
+                                {{ __('admin.users.name_en') }}
+                            </label>
+                            <input type="text" name="name_en"
+                                   class="form-control rounded-3 @error('name_en') is-invalid @enderror"
+                                   value="{{ old('name_en') }}"
+                                   placeholder="{{ __('admin.users.name_en_placeholder') }}" dir="ltr">
+                            @error('name_en')
+                                <div class="invalid-feedback d-block">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">
                                 {{ __('admin.users.email') }} <span class="text-danger">*</span>
                             </label>
                             <input type="email" name="email"

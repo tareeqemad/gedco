@@ -514,6 +514,8 @@ return [
         'dashboard_web' => 'Dashboard (Web)',
         'basic_information' => 'Basic Information',
         'name_placeholder' => 'Enter user name',
+        'name_en' => 'Name (English)',
+        'name_en_placeholder' => 'Enter name in English',
         'email_placeholder' => 'Enter email address',
         'password_placeholder' => 'Enter password (at least 8 characters)',
         'password_hint' => 'Password must be at least 8 characters',

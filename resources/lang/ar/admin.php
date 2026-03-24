@@ -514,6 +514,8 @@ return [
         'dashboard_web' => 'لوحة التحكم (Web)',
         'basic_information' => 'المعلومات الأساسية',
         'name_placeholder' => 'أدخل اسم المستخدم',
+        'name_en' => 'الاسم بالإنجليزية',
+        'name_en_placeholder' => 'Enter name in English',
         'email_placeholder' => 'أدخل البريد الإلكتروني',
         'password_placeholder' => 'أدخل كلمة المرور (8 أحرف على الأقل)',
         'password_hint' => 'كلمة المرور يجب أن تكون 8 أحرف على الأقل',

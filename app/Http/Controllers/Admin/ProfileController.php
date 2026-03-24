@@ -20,7 +20,7 @@ class ProfileController extends Controller
     public function update(UpdateProfileRequest $request)
     {
         $user = $request->user();
-        $data = $request->only('name', 'email');
+        $data = $request->only('name', 'name_en', 'email');
 
         if ($request->hasFile('avatar')) {
             // 1. امسح القديم

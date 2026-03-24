@@ -121,7 +121,7 @@
                                 <div class="modal-body text-center py-4">
                                     <i class="bi bi-exclamation-triangle-fill text-danger" style="font-size: 3rem;"></i>
                                     <p class="mt-3 mb-2">{{ __('admin.users.delete_confirm') }}</p>
-                                    <p class="fw-bold text-dark">{{ $user->name }} ({{ $user->email }})</p>
+                                    <p class="fw-bold text-dark">{{ $user->display_name }} ({{ $user->email }})</p>
                                     <small class="text-danger">{{ __('admin.ui.delete_irreversible') }}</small>
                                 </div>
                                 <div class="modal-footer border-0">
@@ -153,10 +153,10 @@
                             <div class="modal-body py-4">
                                 <div class="mb-3 text-center">
                                     <div class="avatar avatar-lg mx-auto mb-2">
-                                        <img src="{{ $user->avatar_url }}" alt="{{ $user->name }}" 
+                                        <img src="{{ $user->avatar_url }}" alt="{{ $user->display_name }}"
                                              class="rounded-circle" width="60" height="60" style="object-fit: cover;">
                                     </div>
-                                    <h6 class="mb-1">{{ $user->name }}</h6>
+                                    <h6 class="mb-1">{{ $user->display_name }}</h6>
                                     <small class="text-muted">{{ $user->email }}</small>
                                 </div>
 
