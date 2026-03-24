@@ -904,6 +904,11 @@ return [
         'permission_name' => 'اسم الصلاحية',
         'guard' => 'البيئة',
         'roles' => 'الأدوار',
+        'no_permissions' => 'لا توجد صلاحيات',
+        'no_roles' => 'لا توجد أدوار',
+        'role_count_singular' => 'دور',
+        'role_count_plural' => 'أدوار',
+        'permissions_by_group' => 'الصلاحيات حسب المجموعة',
     ],
 
     // Roles

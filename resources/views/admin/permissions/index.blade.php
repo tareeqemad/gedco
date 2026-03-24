@@ -119,7 +119,7 @@
                             <tr>
                                 <td colspan="5" class="text-center py-5">
                                     <i class="bi bi-shield-x display-4 text-muted opacity-50 d-block mb-3"></i>
-                                    <h5 class="text-muted mb-2">لا توجد صلاحيات</h5>
+                                    <h5 class="text-muted mb-2">{{ __('admin.permissions.no_permissions') }}</h5>
                                     <a href="{{ route('admin.permissions.create') }}" class="btn btn-primary rounded-3 shadow-sm">
                                         <i class="bi bi-plus-circle me-1"></i>
                                         {{ __('admin.permissions.add_new') }}
@@ -135,7 +135,7 @@
                 <div class="px-3 py-2" style="border-top: 1px solid #E6ECF2;">
                     <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 small">
                         <div class="text-muted">
-                            عرض {{ $permissions->firstItem() }} - {{ $permissions->lastItem() }} من {{ $permissions->total() }}
+                            {{ __('admin.ui.showing_range', ['first' => $permissions->firstItem(), 'last' => $permissions->lastItem(), 'total' => $permissions->total()]) }}
                         </div>
                         {{ $permissions->links() }}
                     </div>
@@ -166,7 +166,7 @@
                             <div class="mb-3">
                                 <small class="text-muted d-block mb-1">
                                     <i class="bi bi-people me-1"></i>
-                                    {{ $item['roles_count'] }} {{ $item['roles_count'] == 1 ? 'دور' : 'أدوار' }}
+                                    {{ $item['roles_count'] }} {{ $item['roles_count'] == 1 ? __('admin.permissions.role_count_singular') : __('admin.permissions.role_count_plural') }}
                                 </small>
                                 <div class="d-flex gap-1 flex-wrap">
                                     @foreach(array_slice($item['roles'], 0, 3) as $role)
@@ -181,7 +181,7 @@
                             <div class="mb-3">
                                 <small class="text-muted">
                                     <i class="bi bi-info-circle me-1"></i>
-                                    لا توجد أدوار
+                                    {{ __('admin.permissions.no_roles') }}
                                 </small>
                             </div>
                         @endif
@@ -190,7 +190,7 @@
                             <a href="{{ route('admin.permissions.edit', $perm->id) }}" 
                                class="btn btn-sm btn-outline-warning rounded-3 flex-fill">
                                 <i class="bi bi-pencil me-1"></i>
-                                تعديل
+                                {{ __('admin.actions.edit') }}
                             </a>
                             <form action="{{ route('admin.permissions.destroy', $perm->id) }}"
                                   method="POST"
@@ -211,7 +211,7 @@
                 <div class="card border-0 shadow-sm rounded-4 bg-white">
                     <div class="card-body text-center py-5">
                         <i class="bi bi-shield-x display-4 text-muted opacity-50 d-block mb-3"></i>
-                        <h5 class="text-muted mb-2">لا توجد صلاحيات</h5>
+                        <h5 class="text-muted mb-2">{{ __('admin.permissions.no_permissions') }}</h5>
                         <a href="{{ route('admin.permissions.create') }}" class="btn btn-primary rounded-3 shadow-sm">
                             <i class="bi bi-plus-circle me-1"></i>
                             {{ __('admin.permissions.add_new') }}
@@ -224,7 +224,7 @@
                 <div class="px-3 py-2" style="border-top: 1px solid #E6ECF2;">
                     <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 small">
                         <div class="text-muted">
-                            عرض {{ $permissions->firstItem() }} - {{ $permissions->lastItem() }} من {{ $permissions->total() }}
+                            {{ __('admin.ui.showing_range', ['first' => $permissions->firstItem(), 'last' => $permissions->lastItem(), 'total' => $permissions->total()]) }}
                         </div>
                         {{ $permissions->links() }}
                     </div>
@@ -238,7 +238,7 @@
                 <div class="px-3 py-3">
                     <h6 class="mb-2 fw-bold d-flex align-items-center gap-2" style="font-size: 0.88rem; color: #24364A;">
                         <i class="bi bi-folder" style="color: #5B7088;"></i>
-                        الصلاحيات حسب المجموعة
+                        {{ __('admin.permissions.permissions_by_group') }}
                     </h6>
                     <div class="d-flex flex-wrap gap-2">
                         @foreach($grouped as $group => $perms)

@@ -905,6 +905,11 @@ return [
         'permission_name' => 'Permission Name',
         'guard' => 'Guard',
         'roles' => 'Roles',
+        'no_permissions' => 'No permissions found',
+        'no_roles' => 'No roles',
+        'role_count_singular' => 'role',
+        'role_count_plural' => 'roles',
+        'permissions_by_group' => 'Permissions by Group',
     ],
 
     // Roles
