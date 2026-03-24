@@ -296,8 +296,16 @@
             document.querySelector('.ql-undo')?.addEventListener('click', () => quill.history.undo());
             document.querySelector('.ql-redo')?.addEventListener('click', () => quill.history.redo());
             const isRtl = '{{ session('direction', 'rtl') }}' === 'rtl';
-            quill.format('direction', isRtl ? 'rtl' : false);
-            quill.format('align', isRtl ? 'right' : false);
+            const editorEl = document.querySelector('#quill-editor .ql-editor');
+            if (isRtl) {
+                quill.format('direction', 'rtl');
+                quill.format('align', 'right');
+                if (editorEl) editorEl.setAttribute('dir', 'rtl');
+            } else {
+                quill.format('direction', false);
+                quill.format('align', false);
+                if (editorEl) { editorEl.setAttribute('dir', 'ltr'); editorEl.style.textAlign = 'left'; }
+            }
 
             // حمّل القيمة الحالية للمحتوى
             (function preloadBody(){

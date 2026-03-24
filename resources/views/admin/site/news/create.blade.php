@@ -411,8 +411,16 @@
 
             // اتجاه افتراضي حسب لغة لوحة التحكم
             const isRtl = '{{ session('direction', 'rtl') }}' === 'rtl';
-            quill.format('direction', isRtl ? 'rtl' : false);
-            quill.format('align', isRtl ? 'right' : false);
+            const editorEl = document.querySelector('#quill-editor .ql-editor');
+            if (isRtl) {
+                quill.format('direction', 'rtl');
+                quill.format('align', 'right');
+                if (editorEl) editorEl.setAttribute('dir', 'rtl');
+            } else {
+                quill.format('direction', false);
+                quill.format('align', false);
+                if (editorEl) { editorEl.setAttribute('dir', 'ltr'); editorEl.style.textAlign = 'left'; }
+            }
 
             // عدّادات صور/نص
             const currentImageCount = () => (quill?.root?.querySelectorAll('img')?.length || 0);
