@@ -293,8 +293,8 @@
                 const badge = document.getElementById('imgCounter'); if (!badge) return;
                 const count = currentImageCount();
                 badge.textContent = `${count} / ${MAX_IMAGES}`;
-                badge.classList.remove('bg-primary','bg-warning','bg-danger');
-                badge.classList.add(count < MAX_IMAGES ? 'bg-primary' : (count === MAX_IMAGES ? 'bg-warning' : 'bg-danger'));
+                badge.classList.remove('stat-chip-primary','stat-chip-warning','stat-chip-danger');
+                badge.classList.add(count < MAX_IMAGES ? 'stat-chip-primary' : (count === MAX_IMAGES ? 'stat-chip-warning' : 'stat-chip-danger'));
                 if (imgBtn) {
                     imgBtn.disabled = count >= MAX_IMAGES;
                     imgBtn.setAttribute('aria-disabled', imgBtn.disabled ? 'true' : 'false');

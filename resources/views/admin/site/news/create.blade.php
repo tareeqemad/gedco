@@ -112,9 +112,9 @@
                                             </span>
                                             <small class="text-muted">{{ __('admin.news.form_content_info') }} {{ $MAX_IMAGES }} {{ __('admin.news.form_content_info_end') }}</small>
                                             <!-- Image Counter -->
-                                            <span id="imgCounter" class="badge img-counter bg-primary rounded-pill px-3 py-2">0 / {{ $MAX_IMAGES }}</span>
+                                            <span id="imgCounter" class="stat-chip stat-chip-primary">0 / {{ $MAX_IMAGES }}</span>
                                             <!-- Text Counter -->
-                                            <span id="textCounter" class="badge text-counter bg-secondary rounded-pill px-3 py-2 ms-1">{{ __('admin.common.characters') }} 0 | {{ __('admin.common.words') }} 0</span>
+                                            <span id="textCounter" class="stat-chip ms-1">{{ __('admin.common.characters') }} 0 | {{ __('admin.common.words') }} 0</span>
                                         </label>
 
                                         <div class="quill-wrapper border rounded-4 shadow-sm overflow-hidden">
@@ -433,8 +433,8 @@
                 if (!badge) return;
                 const count = currentImageCount();
                 badge.textContent = `${count} / {{ $MAX_IMAGES }}`;
-                badge.classList.remove('bg-primary','bg-warning','bg-danger');
-                badge.classList.add(count < {{ $MAX_IMAGES }} ? 'bg-primary' : (count === {{ $MAX_IMAGES }} ? 'bg-warning' : 'bg-danger'));
+                badge.classList.remove('stat-chip-primary','stat-chip-warning','stat-chip-danger');
+                badge.classList.add(count < {{ $MAX_IMAGES }} ? 'stat-chip-primary' : (count === {{ $MAX_IMAGES }} ? 'stat-chip-warning' : 'stat-chip-danger'));
                 if (imgBtn) {
                     imgBtn.disabled = count >= {{ $MAX_IMAGES }};
                     imgBtn.setAttribute('aria-disabled', imgBtn.disabled ? 'true' : 'false');

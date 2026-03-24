@@ -2034,6 +2034,28 @@ html {
     color: rgba(255, 255, 255, 0.7) !important;
 }
 
+/* Stat chip color variants */
+.stat-chip-primary {
+    color: #0284C7 !important;
+    background: rgba(2, 132, 199, 0.08) !important;
+    border-color: rgba(2, 132, 199, 0.15) !important;
+}
+.stat-chip-primary strong, .stat-chip-primary i { color: #0284C7 !important; }
+
+.stat-chip-warning {
+    color: #D97706 !important;
+    background: rgba(217, 119, 6, 0.08) !important;
+    border-color: rgba(217, 119, 6, 0.15) !important;
+}
+.stat-chip-warning strong, .stat-chip-warning i { color: #D97706 !important; }
+
+.stat-chip-danger {
+    color: #DC2626 !important;
+    background: rgba(220, 38, 38, 0.08) !important;
+    border-color: rgba(220, 38, 38, 0.15) !important;
+}
+.stat-chip-danger strong, .stat-chip-danger i { color: #DC2626 !important; }
+
 /* 4) Table text truncation */
 .table td {
     max-width: 300px;
