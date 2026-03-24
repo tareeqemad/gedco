@@ -19,13 +19,13 @@
     </div>
 
     <div class="col-12">
-        <label class="form-label">الرابط (اختياري)</label>
+        <label class="form-label">{{ __('admin.jobs.link_label') }}</label>
         <input type="url" name="link" class="form-control" value="{{ old('link', $job->link ?? '') }}" placeholder="https://...">
         @error('link')<div class="text-danger small">{{ $message }}</div>@enderror
     </div>
 
     <div class="col-12">
-        <label class="form-label">الوصف</label>
+        <label class="form-label">{{ __('admin.jobs.description_label') }}</label>
         <textarea name="description" class="form-control" rows="4">{{ old('description', $job->description ?? '') }}</textarea>
         @error('description')<div class="text-danger small">{{ $message }}</div>@enderror
     </div>
@@ -42,7 +42,7 @@
     </div>
 
     <div class="col-12">
-        <button class="btn btn-save">حفظ</button>
-        <a href="{{ route('admin.jobs.index') }}" class="btn btn-cancel">رجوع</a>
+        <button class="btn btn-save">{{ __('admin.common.form_save') }}</button>
+        <a href="{{ route('admin.jobs.index') }}" class="btn btn-cancel">{{ __('admin.actions.back') }}</a>
     </div>
 </div>

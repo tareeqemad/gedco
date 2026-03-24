@@ -1,17 +1,17 @@
 @php
-    $breadcrumbTitle     = 'تعديل: ' . $job->title;
-    $breadcrumbParent    = 'الوظائف';
+    $breadcrumbTitle     = __('admin.jobs.edit_title') . ': ' . $job->title;
+    $breadcrumbParent    = __('admin.jobs.title');
     $breadcrumbParentUrl = route('admin.jobs.index');
 @endphp
 @extends('layouts.admin')
-@section('title', 'تعديل: ' . $job->title)
+@section('title', __('admin.jobs.edit_title') . ': ' . $job->title)
 
 @section('content')
     <div class="container-fluid p-0">
         <x-admin.card>
             <x-admin.card-header-form
                 icon="bi-briefcase"
-                title="تعديل: {{ $job->title }}"
+                :title="__('admin.jobs.edit_title') . ': ' . $job->title"
                 :back-route="route('admin.jobs.index')" />
 
             <div class="card-body p-4">

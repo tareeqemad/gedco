@@ -7,7 +7,7 @@
                 <a href="https://www.gedco.ps" class="text-primary fw-semibold text-decoration-underline">
                     {{ __('admin.auth.company_name') }}
                 </a>
-                — {{ app()->getLocale() === 'ar' ? 'جميع الحقوق محفوظة.' : 'All rights reserved.' }}
+                — {{ __('admin.footer.rights_reserved') }}
             </span>
         </span>
     </div>

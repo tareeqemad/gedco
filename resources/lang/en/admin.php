@@ -1156,6 +1156,26 @@ return [
         'confirm_delete' => 'Delete?',
     ],
 
+    // Jobs
+    'jobs' => [
+        'title' => 'Jobs',
+        'create_title' => 'Add Job',
+        'edit_title' => 'Edit Job',
+        'add' => 'Add',
+        'controls' => 'Controls',
+        'yes' => 'Yes',
+        'no' => 'No',
+        'confirm_delete' => 'Delete permanently?',
+        'no_data' => 'No data found',
+        'link_label' => 'Link (optional)',
+        'description_label' => 'Description',
+    ],
+
+    // Footer
+    'footer' => [
+        'rights_reserved' => 'All rights reserved.',
+    ],
+
     // Activity Logs UI
     'activity_logs_ui' => [
         'last_15_min' => 'Last 15 minutes',

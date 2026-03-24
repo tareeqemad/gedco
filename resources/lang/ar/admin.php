@@ -1155,6 +1155,26 @@ return [
         'confirm_delete' => 'حذف؟',
     ],
 
+    // Jobs
+    'jobs' => [
+        'title' => 'الوظائف',
+        'create_title' => 'إضافة وظيفة',
+        'edit_title' => 'تعديل وظيفة',
+        'add' => 'إضافة',
+        'controls' => 'تحكم',
+        'yes' => 'نعم',
+        'no' => 'لا',
+        'confirm_delete' => 'حذف نهائي؟',
+        'no_data' => 'لا توجد بيانات',
+        'link_label' => 'الرابط (اختياري)',
+        'description_label' => 'الوصف',
+    ],
+
+    // Footer
+    'footer' => [
+        'rights_reserved' => 'جميع الحقوق محفوظة.',
+    ],
+
     // Activity Logs UI (hardcoded strings in activity-log pages)
     'activity_logs_ui' => [
         'last_15_min' => 'آخر 15 دقيقة',
