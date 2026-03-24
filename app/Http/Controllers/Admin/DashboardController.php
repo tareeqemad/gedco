@@ -90,7 +90,7 @@ class DashboardController extends Controller
         // آخر الأنشطة
         $recentActivities = auth()->user()->can('activity-logs.view')
             ? ActivityLog::with(['user' => function($q) {
-                $q->select('id', 'name', 'email');
+                $q->select('id', 'name', 'name_en', 'email');
             }])
                 ->latest()
                 ->limit(8)

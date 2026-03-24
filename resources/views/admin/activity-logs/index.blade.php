@@ -72,7 +72,7 @@
                                 @if($tu->user)
                                     <a href="{{ route('admin.activity-logs.user', $tu->user_id) }}" class="text-decoration-none">
                                         <span class="stat-chip" style="font-size: 0.72rem;">
-                                            <strong>{{ $tu->user->name }}</strong>
+                                            <strong>{{ $tu->user->display_name }}</strong>
                                             <span class="stat-chip stat-chip-primary" style="font-size: 0.6rem; padding: 0.1rem 0.5rem;">{{ $tu->count }}</span>
                                         </span>
                                     </a>
@@ -137,7 +137,7 @@
                             <select name="user_id" id="filterUser" class="form-select rounded-3">
                                 <option value="">{{ __('admin.activity_logs.all_users') }}</option>
                                 @foreach($users as $u)
-                                    <option value="{{ $u->id }}" {{ request('user_id') == $u->id ? 'selected' : '' }}>{{ $u->name }}</option>
+                                    <option value="{{ $u->id }}" {{ request('user_id') == $u->id ? 'selected' : '' }}>{{ $u->display_name }}</option>
                                 @endforeach
                             </select>
                         </div>

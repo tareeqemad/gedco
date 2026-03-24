@@ -63,13 +63,13 @@ class ActivityLogController extends Controller
 
         // أكثر المستخدمين نشاطاً
         $topUsers = ActivityLog::select('user_id', DB::raw('count(*) as count'))
-            ->with('user:id,name,email')
+            ->with('user:id,name,name_en,email')
             ->groupBy('user_id')
             ->orderBy('count', 'desc')
             ->limit(10)
             ->get();
 
-        $users = User::orderBy('name')->get(['id', 'name', 'email']);
+        $users = User::orderBy('name')->get(['id', 'name', 'name_en', 'email']);
         $actions = ActivityLog::distinct('action')->pluck('action');
 
         // AJAX response
@@ -94,7 +94,7 @@ class ActivityLogController extends Controller
         $activeThreshold = Carbon::now()->subMinutes(15);
         
         $query = ActivityLog::select('user_id', DB::raw('MAX(created_at) as last_activity'))
-            ->with(['user:id,name,email'])
+            ->with(['user:id,name,name_en,email'])
             ->where('created_at', '>=', $activeThreshold)
             ->groupBy('user_id');
 
