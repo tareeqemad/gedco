@@ -79,9 +79,9 @@
             <!-- Loading Indicator -->
             <div class="users-loading" id="usersLoading">
                 <div class="spinner-border" role="status">
-                    <span class="visually-hidden">جاري التحميل...</span>
+                    <span class="visually-hidden">{{ __('admin.ui.loading') }}</span>
                 </div>
-                <p class="mt-2 text-muted">جاري تحميل البيانات...</p>
+                <p class="mt-2 text-muted">{{ __('admin.ui.loading_data') }}</p>
             </div>
 
             <!-- Table Container -->
@@ -264,7 +264,7 @@
             // Disable button
             if (searchBtn) {
                 searchBtn.disabled = true;
-                searchBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>جاري البحث...';
+                searchBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>{{ __('admin.ui.searching') }}';
             }
 
             fetch(`{{ route('admin.users.index') }}?${params.toString()}`, {
@@ -298,10 +298,10 @@
             .catch(error => {
                 console.error('Error:', error);
                 if (window.adminNotifications) {
-                    window.adminNotifications.error('حدث خطأ أثناء البحث. سيتم إعادة تحميل الصفحة.');
+                    window.adminNotifications.error('{{ __('admin.ui.search_error') }}');
                     setTimeout(() => window.location.reload(), 2000);
                 } else {
-                    alert('حدث خطأ أثناء البحث. سيتم إعادة تحميل الصفحة.');
+                    alert('{{ __('admin.ui.search_error') }}');
                     window.location.reload();
                 }
             })
@@ -413,13 +413,13 @@
                                 <div class="modal-content">
                                     <div class="modal-header bg-success text-white">
                                         <h5 class="modal-title">
-                                            <i class="bi bi-key-fill me-2"></i>كلمة المرور المؤقتة
+                                            <i class="bi bi-key-fill me-2"></i>{{ __('admin.users_ui.temp_password') }}
                                         </h5>
                                         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                                     </div>
                                     <div class="modal-body text-center py-4">
                                         <div class="mb-3">
-                                            <label class="form-label text-muted">كلمة المرور:</label>
+                                            <label class="form-label text-muted">{{ __('admin.users_ui.temp_password_label') }}</label>
                                             <div class="input-group">
                                                 <input type="text" 
                                                        class="form-control form-control-lg text-center fw-bold" 
@@ -429,21 +429,21 @@
                                                 <button class="btn btn-outline-secondary" 
                                                         type="button" 
                                                         onclick="copyPassword(${userId})">
-                                                    <i class="bi bi-clipboard"></i> نسخ
+                                                    <i class="bi bi-clipboard"></i> {{ __('admin.ui.copy') }}
                                                 </button>
                                             </div>
                                         </div>
                                         <small class="text-muted">
                                             <i class="bi bi-clock me-1"></i>
-                                            تنتهي صلاحيتها: ${new Date(data.expires_at).toLocaleString('ar-SA')}
+                                            {{ __('admin.users_ui.temp_password_expires') }} ${new Date(data.expires_at).toLocaleString('ar-SA')}
                                         </small>
                                         <div class="alert alert-warning mt-3 mb-0">
                                             <i class="bi bi-exclamation-triangle me-1"></i>
-                                            <small>كلمة المرور المؤقتة تنتهي بعد 24 ساعة من الإنشاء/التعديل</small>
+                                            <small>{{ __('admin.users_ui.temp_password_note') }}</small>
                                         </div>
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إغلاق</button>
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __('admin.ui.close') }}</button>
                                     </div>
                                 </div>
                             </div>
@@ -464,9 +464,9 @@
                     });
                 } else {
                     if (window.adminNotifications) {
-                        window.adminNotifications.error(data.message || 'لا توجد كلمة مرور مؤقتة متاحة');
+                        window.adminNotifications.error(data.message || '{{ __('admin.users_ui.no_temp_password') }}');
                     } else {
-                        alert('خطأ: ' + (data.message || 'لا توجد كلمة مرور مؤقتة متاحة'));
+                        alert('{{ __('admin.ui.error') }}: ' + (data.message || '{{ __('admin.users_ui.no_temp_password') }}'));
                     }
                 }
             })
@@ -475,9 +475,9 @@
                 btn.disabled = false;
                 btn.innerHTML = originalHTML;
                 if (window.adminNotifications) {
-                    window.adminNotifications.error('حدث خطأ أثناء جلب كلمة المرور');
+                    window.adminNotifications.error('{{ __('admin.users_ui.password_fetch_error') }}');
                 } else {
-                    alert('حدث خطأ أثناء جلب كلمة المرور');
+                    alert('{{ __('admin.users_ui.password_fetch_error') }}');
                 }
             });
         };
@@ -490,7 +490,7 @@
             
             const btn = passwordInput.nextElementSibling;
             const originalHTML = btn.innerHTML;
-            btn.innerHTML = '<i class="bi bi-check"></i> تم';
+            btn.innerHTML = '<i class="bi bi-check"></i> {{ __('admin.ui.copied') }}';
             btn.classList.remove('btn-outline-secondary');
             btn.classList.add('btn-success');
             
@@ -558,7 +558,7 @@
                         }
 
                         submitBtn{{ $user->id }}.disabled = true;
-                        submitBtn{{ $user->id }}.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span>جاري التغيير...';
+                        submitBtn{{ $user->id }}.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span>{{ __('admin.ui.changing') }}';
 
                         fetch('{{ route('admin.users.update-password', $user) }}', {
                             method: 'POST',
@@ -586,9 +586,9 @@
                                 form{{ $user->id }}.reset();
                             } else {
                                 if (window.adminNotifications) {
-                                    window.adminNotifications.error(data.message || 'حدث خطأ أثناء تغيير كلمة المرور');
+                                    window.adminNotifications.error(data.message || '{{ __('admin.users_ui.password_change_error') }}');
                                 } else {
-                                    alert('خطأ: ' + (data.message || 'حدث خطأ أثناء تغيير كلمة المرور'));
+                                    alert('{{ __('admin.ui.error') }}: ' + (data.message || '{{ __('admin.users_ui.password_change_error') }}'));
                                 }
                                 submitBtn{{ $user->id }}.disabled = false;
                                 submitBtn{{ $user->id }}.innerHTML = '<i class="bi bi-check-circle me-1"></i>{{ __('admin.users_ui.change_password') }}';
@@ -597,9 +597,9 @@
                         .catch(error => {
                             console.error('Error:', error);
                             if (window.adminNotifications) {
-                                window.adminNotifications.error('حدث خطأ أثناء تغيير كلمة المرور');
+                                window.adminNotifications.error('{{ __('admin.users_ui.password_change_error') }}');
                             } else {
-                                alert('حدث خطأ أثناء تغيير كلمة المرور');
+                                alert('{{ __('admin.users_ui.password_change_error') }}');
                             }
                             submitBtn{{ $user->id }}.disabled = false;
                             submitBtn{{ $user->id }}.innerHTML = '<i class="bi bi-check-circle me-1"></i>{{ __('admin.users_ui.change_password') }}';

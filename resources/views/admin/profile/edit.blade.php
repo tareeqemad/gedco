@@ -169,11 +169,11 @@
                 const file = e.target.files[0];
                 if (!file) return;
                 if (file.size > 2 * 1024 * 1024) {
-                    Swal.fire({ icon: 'error', title: 'خطأ', text: 'حجم الصورة يجب ألا يتجاوز 2 ميجابايت', confirmButtonText: 'حسناً' });
+                    Swal.fire({ icon: 'error', title: '{{ __('admin.ui.error') }}', text: '{{ __('admin.common.err_avatar_size') }}', confirmButtonText: '{{ __('admin.ui.ok') }}' });
                     return;
                 }
                 if (!file.type.startsWith('image/')) {
-                    Swal.fire({ icon: 'error', title: 'خطأ', text: 'الملف يجب أن يكون صورة', confirmButtonText: 'حسناً' });
+                    Swal.fire({ icon: 'error', title: '{{ __('admin.ui.error') }}', text: '{{ __('admin.common.err_file_must_be_image') }}', confirmButtonText: '{{ __('admin.ui.ok') }}' });
                     return;
                 }
                 const reader = new FileReader();
@@ -189,7 +189,7 @@
             ['profileForm', 'passwordForm'].forEach(id => {
                 document.getElementById(id)?.addEventListener('submit', function() {
                     const btn = this.querySelector('[type="submit"]');
-                    if (btn) { btn.disabled = true; btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span>جاري الحفظ...'; }
+                    if (btn) { btn.disabled = true; btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span>{{ __('admin.ui.saving') }}'; }
                 });
             });
         });

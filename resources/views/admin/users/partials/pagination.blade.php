@@ -2,7 +2,7 @@
     <div class="users-pagination">
         <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
             <div class="text-muted small">
-                عرض {{ $users->firstItem() }} إلى {{ $users->lastItem() }} من {{ $users->total() }} مستخدم
+                {{ __('admin.ui.showing_range', ['first' => $users->firstItem(), 'last' => $users->lastItem(), 'total' => $users->total()]) }}
             </div>
             {{ $users->appends(request()->query())->links('pagination::bootstrap-5') }}
         </div>

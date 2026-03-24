@@ -199,7 +199,7 @@
                         </div>
                         <div class="d-xl-block d-none">
                             <p class="fw-semibold mb-0 lh-1">{{ auth()->user()->name }}</p>
-                            <span class="op-7 fw-normal d-block fs-11">   {{ auth()->user()->getRoleNames()->first() ?? 'بدون صلاحية' }}</span>
+                            <span class="op-7 fw-normal d-block fs-11">   {{ auth()->user()->getRoleNames()->first() ?? __('admin.header.no_role') }}</span>
                         </div>
                     </div>
                 </a>

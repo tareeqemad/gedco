@@ -89,7 +89,7 @@
         <div class="mb-4">
             @if($edit && !empty($slider->bg_image))
                 <div class="mb-3 p-3 rounded-3 border d-flex align-items-start gap-3">
-                    <img src="{{ $slider->bg_image_url ?? '' }}" alt="الصورة الحالية"
+                    <img src="{{ $slider->bg_image_url ?? '' }}" alt="{{ __('admin.sliders_form.current_image_alt') }}"
                          class="rounded-3 shadow-sm" style="max-width: 200px; height: auto; cursor: pointer;"
                          onclick="window.open(this.src, '_blank')">
                     <div>
@@ -112,7 +112,7 @@
             @error('bg_image') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
 
             <div id="image-preview-container" class="mt-3 d-none">
-                <img id="image-preview" src="#" alt="معاينة" class="rounded-3 shadow-sm" style="max-width: 100%; max-height: 250px;">
+                <img id="image-preview" src="#" alt="{{ __('admin.sliders_form.preview_alt') }}" class="rounded-3 shadow-sm" style="max-width: 100%; max-height: 250px;">
             </div>
         </div>
 
@@ -183,7 +183,7 @@
         const submitBtn = form?.querySelector('[type="submit"]');
         form?.addEventListener('submit', function(e) {
             if (!form.checkValidity()) { e.preventDefault(); return; }
-            if (submitBtn) { submitBtn.disabled = true; submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span>جاري الحفظ...'; }
+            if (submitBtn) { submitBtn.disabled = true; submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span>{{ __('admin.ui.saving') }}'; }
         });
     });
 </script>

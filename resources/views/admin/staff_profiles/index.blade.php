@@ -3,9 +3,9 @@
     $breadcrumbParent    = __('admin.breadcrumbs.home');
     $breadcrumbParentUrl = route('admin.dashboard');
     
-    $locations = ['1'=>'المقر الرئيسي','2'=>'مقر غزة','3'=>'مقر الشمال','4'=>'مقر الوسطى','6'=>'مقر خانيونس','7'=>'مقر رفح','8'=>'مقر الصيانة - غزة'];
-    $statusMap = ['resident'=>['label'=>'مقيم','class'=>'bg-success-subtle text-success'], 'displaced'=>['label'=>'نازح','class'=>'bg-danger-subtle text-danger']];
-    $readinessMap = ['working'=>['label'=>'باشر العمل','class'=>'bg-success text-white'], 'ready'=>['label'=>'جاهز للعودة','class'=>'bg-primary text-white'], 'not_ready'=>['label'=>'غير جاهز','class'=>'bg-warning text-dark']];
+    $locations = ['1'=>__('admin.staff_profiles_data.location_1'),'2'=>__('admin.staff_profiles_data.location_2'),'3'=>__('admin.staff_profiles_data.location_3'),'4'=>__('admin.staff_profiles_data.location_4'),'6'=>__('admin.staff_profiles_data.location_6'),'7'=>__('admin.staff_profiles_data.location_7'),'8'=>__('admin.staff_profiles_data.location_8')];
+    $statusMap = ['resident'=>['label'=>__('admin.staff_profiles_data.status_resident_label'),'class'=>'bg-success-subtle text-success'], 'displaced'=>['label'=>__('admin.staff_profiles_data.status_displaced_label'),'class'=>'bg-danger-subtle text-danger']];
+    $readinessMap = ['working'=>['label'=>__('admin.staff_profiles_data.readiness_working_label'),'class'=>'bg-success text-white'], 'ready'=>['label'=>__('admin.staff_profiles_data.readiness_ready_label'),'class'=>'bg-primary text-white'], 'not_ready'=>['label'=>__('admin.staff_profiles_data.readiness_not_ready_label'),'class'=>'bg-warning text-dark']];
 @endphp
 @extends('layouts.admin')
 @section('title', __('admin.staff_profiles.title'))
@@ -18,12 +18,12 @@
                 icon="bi-person-lines-fill"
                 :title="__('admin.staff_profiles.title')">
                 <x-slot:badge>
-                    <span class="stat-chip stat-chip-header">{{ $stats['total'] }} موظف</span>
+                    <span class="stat-chip stat-chip-header">{{ __('admin.staff_profiles_data.employee_count', ['count' => $stats['total']]) }}</span>
                 </x-slot:badge>
                 <x-slot:actions>
                     <a href="{{ route('admin.staff-profiles.export', request()->query()) }}" class="btn btn-light btn-sm shadow-sm">
                         <i class="bi bi-file-earmark-spreadsheet me-1"></i>
-                        <span class="d-none d-md-inline">تصدير Excel</span>
+                        <span class="d-none d-md-inline">{{ __('admin.staff_profiles_data.export_excel') }}</span>
                     </a>
                 </x-slot:actions>
             </x-admin.card-header-index>

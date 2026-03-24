@@ -52,7 +52,7 @@
                                         </label>
                                         <input type="text" name="title" id="titleInput"
                                                class="form-control rounded-3 border-0 shadow-sm focus-ring focus-ring-primary @error('title') is-invalid @enderror"
-                                               placeholder="أدخل عنوانًا..." value="{{ old('title', $news->title) }}">
+                                               placeholder="{{ __('admin.news.form_title_placeholder') }}" value="{{ old('title', $news->title) }}">
                                         @error('title') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
                                     </div>
 
@@ -108,9 +108,9 @@
                                         <span class="d-inline-flex align-items-center gap-1">
                                             <i class="bi bi-file-text fs-6 text-success"></i> {{ __('admin.news.form_content') }}
                                         </span>
-                                            <small class="text-muted">(حتى {{ $MAX_IMAGES }} صور × 2MB كحد أقصى — ويمكن بدون صور)</small>
+                                            <small class="text-muted">{{ __('admin.ui.content_info', ['max' => $MAX_IMAGES]) }}</small>
                                             <span id="imgCounter" class="badge img-counter bg-primary">0 / {{ $MAX_IMAGES }}</span>
-                                            <span id="textCounter" class="badge text-counter bg-secondary ms-1">الحروف: 0 | الكلمات: 0</span>
+                                            <span id="textCounter" class="badge text-counter bg-secondary ms-1">{{ __('admin.common.characters') }} 0 | {{ __('admin.common.words') }} 0</span>
                                         </label>
 
                                         <div class="quill-wrapper border rounded-3 shadow-sm overflow-hidden">
@@ -143,10 +143,10 @@
                                             </span>
                                                 <span class="ql-formats">
                                                 <select class="ql-header">
-                                                    <option value="1">عنوان 1</option>
-                                                    <option value="2">عنوان 2</option>
-                                                    <option value="3">عنوان 3</option>
-                                                    <option selected>نص عادي</option>
+                                                    <option value="1">{{ __('admin.common.quill_header_1') }}</option>
+                                                    <option value="2">{{ __('admin.common.quill_header_2') }}</option>
+                                                    <option value="3">{{ __('admin.common.quill_header_3') }}</option>
+                                                    <option selected>{{ __('admin.common.quill_normal') }}</option>
                                                 </select>
                                             </span>
                                                 <span class="ql-formats">
@@ -169,7 +169,7 @@
                                                 <button class="ql-align" value="left"></button>
                                             </span>
                                                 <span class="ql-formats">
-                                                <button class="ql-image" id="imageUploader" title="إضافة صور متعددة (اختيار/سحب/لصق)"></button>
+                                                <button class="ql-image" id="imageUploader" title="{{ __('admin.common.quill_add_images') }}"></button>
                                             </span>
                                                 <span class="ql-formats">
                                                 <button type="button" class="ql-undo" title="Undo">↶</button>
@@ -197,7 +197,7 @@
                                                     {{ __('admin.common.drag_image_or') }}
                                                     <label for="coverInput" class="text-primary" style="text-decoration: underline; cursor: pointer;">{{ __('admin.common.select_file') }}</label>
                                                 </p>
-                                                <small class="text-muted">PNG/JPG/WEBP • حتى 2MB</small>
+                                                <small class="text-muted">{{ __('admin.news.form_cover_formats') }}</small>
                                             </div>
                                         </div>
                                         <div id="coverPreview" class="mt-3">
@@ -229,7 +229,7 @@
                                                     {{ __('admin.news.form_pdf_drag') }}
                                                     <label for="pdfInput" class="text-primary" style="text-decoration: underline; cursor: pointer;">{{ __('admin.news.form_pdf_select') }}</label>
                                                 </p>
-                                                <small class="text-muted">PDF • حتى 10MB</small>
+                                                <small class="text-muted">{{ __('admin.news.form_pdf_formats') }}</small>
                                             </div>
                                         </div>
                                         <div id="pdfPreview" class="mt-3">
@@ -365,7 +365,7 @@
 
             quill = new Quill('#quill-editor', {
                 theme: 'snow',
-                placeholder: 'حرّر محتوى الخبر... (يمكنك إضافة صور متعددة)',
+                placeholder: '{{ __('admin.news.form_content_placeholder') }}',
                 modules: {
                     toolbar: {
                         container: '#quill-toolbar',
@@ -414,7 +414,7 @@
             function updateTextCounter(){
                 const badge=document.getElementById('textCounter'); if(!badge) return;
                 let plain=quill.getText()||''; if(plain.endsWith('\n')) plain=plain.slice(0,-1);
-                badge.textContent = `الحروف: ${plain.length} | الكلمات: ${countWords(plain)}`;
+                badge.textContent = `{{ __('admin.common.characters') }} ${plain.length} | {{ __('admin.common.words') }} ${countWords(plain)}`;
             }
             function updateImageCounter(){
                 const badge=document.getElementById('imgCounter'); if(!badge) return;
@@ -435,17 +435,17 @@
                     if (!files.length) return;
 
                     let slots = remainingSlots();
-                    if (slots <= 0) return warn('وصلت للحد الأقصى', `الحد هو ${MAX_IMAGES} صور للخبر.`);
+                    if (slots <= 0) return warn('{{ __('admin.common.err_max_images_reached') }}', `{{ __('admin.common.err_max_images_limit', ['max' => '${MAX_IMAGES}']) }}`);
 
                     for (const file of files) {
-                        if (slots <= 0) { warn('تم تجاوز الحد', `تم إدراج ${MAX_IMAGES} صور كحد أقصى والباقي تم تجاهله.`); break; }
+                        if (slots <= 0) { warn('{{ __('admin.common.err_limit_exceeded') }}', `{{ __('admin.common.err_max_images_inserted', ['max' => '${MAX_IMAGES}']) }}`); break; }
                         if (!file.type.startsWith('image/')) continue;
-                        if (file.size > MAX_IMAGE_BYTES) { warn('حجم الصورة كبير', '2MB حد أقصى للصورة — تم تجاهل الكبيرة.'); continue; }
+                        if (file.size > MAX_IMAGE_BYTES) { warn('{{ __('admin.common.err_image_too_large') }}', '{{ __('admin.common.err_image_max_2mb') }}'); continue; }
                         try {
                             const url = await uploadQuillImage(file);
                             insertImageAtCursor(url);
                             slots--;
-                        } catch (e) { err('خطأ', e.message || 'فشل رفع الصورة'); }
+                        } catch (e) { err('{{ __('admin.ui.error') }}', e.message || '{{ __('admin.common.err_upload_failed') }}'); }
                     }
                 } finally {
                     isPickingImages = false;
@@ -462,8 +462,8 @@
             }
 
             async function uploadQuillImage(file) {
-                if (!file.type.startsWith('image/')) throw new Error('صورة فقط');
-                if (file.size > MAX_IMAGE_BYTES) throw new Error('الحد الأقصى للصورة 2MB');
+                if (!file.type.startsWith('image/')) throw new Error('{{ __('admin.common.err_images_only') }}');
+                if (file.size > MAX_IMAGE_BYTES) throw new Error('{{ __('admin.common.err_image_max_size') }}');
 
                 const fd = new FormData(); fd.append('image', file);
                 const res = await fetch("/admin/uploads/quill-image", {
@@ -477,7 +477,7 @@
                     throw new Error(msg);
                 }
                 const data = await res.json();
-                if (!data.ok || !data.url) throw new Error('استجابة غير متوقعة');
+                if (!data.ok || !data.url) throw new Error('{{ __('admin.common.err_unexpected_response') }}');
                 return data.url;
             }
 
@@ -492,13 +492,13 @@
                 if (!files.length) return;
 
                 let slots = remainingSlots();
-                if (slots <= 0) return warn('وصلت للحد الأقصى', `الحد هو ${MAX_IMAGES} صور للخبر.`);
+                if (slots <= 0) return warn('{{ __('admin.common.err_max_images_reached') }}', `{{ __('admin.common.err_max_images_limit', ['max' => '${MAX_IMAGES}']) }}`);
 
                 for (const file of files) {
-                    if (slots <= 0) { warn('تم تجاوز الحد', `تم إدراج ${MAX_IMAGES} صور كحد أقصى والباقي تم تجاهله.`); break; }
-                    if (file.size > MAX_IMAGE_BYTES) { warn('حجم الصورة كبير', '2MB حد أقصى للصورة.'); continue; }
+                    if (slots <= 0) { warn('{{ __('admin.common.err_limit_exceeded') }}', `{{ __('admin.common.err_max_images_inserted', ['max' => '${MAX_IMAGES}']) }}`); break; }
+                    if (file.size > MAX_IMAGE_BYTES) { warn('{{ __('admin.common.err_image_too_large') }}', '{{ __('admin.common.err_image_max_2mb_short') }}'); continue; }
                     try { const url = await uploadQuillImage(file); insertImageAtCursor(url); slots--; }
-                    catch (e) { err('خطأ', e.message || 'فشل رفع صورة بالسحب والإفلات'); }
+                    catch (e) { err('{{ __('admin.ui.error') }}', e.message || '{{ __('admin.common.err_drag_upload_failed') }}'); }
                 }
                 refreshCounters();
             });
@@ -508,13 +508,13 @@
                 if (!images.length) return;
                 e.preventDefault();
                 let slots = remainingSlots();
-                if (slots <= 0) return warn('وصلت للحد الأقصى', `الحد هو ${MAX_IMAGES} صور للخبر.`);
+                if (slots <= 0) return warn('{{ __('admin.common.err_max_images_reached') }}', `{{ __('admin.common.err_max_images_limit', ['max' => '${MAX_IMAGES}']) }}`);
                 for (const it of images) {
-                    if (slots <= 0) { warn('تم تجاوز الحد', `تم إدراج ${MAX_IMAGES} صور كحد أقصى والباقي تم تجاهله.`); break; }
+                    if (slots <= 0) { warn('{{ __('admin.common.err_limit_exceeded') }}', `{{ __('admin.common.err_max_images_inserted', ['max' => '${MAX_IMAGES}']) }}`); break; }
                     const file = it.getAsFile();
-                    if (file.size > MAX_IMAGE_BYTES) { warn('حجم الصورة كبير', '2MB حد أقصى للصورة.'); continue; }
+                    if (file.size > MAX_IMAGE_BYTES) { warn('{{ __('admin.common.err_image_too_large') }}', '{{ __('admin.common.err_image_max_2mb_short') }}'); continue; }
                     try { const url = await uploadQuillImage(file); insertImageAtCursor(url); slots--; }
-                    catch (e) { err('خطأ', e.message || 'فشل رفع صورة مُلصقة'); }
+                    catch (e) { err('{{ __('admin.ui.error') }}', e.message || '{{ __('admin.common.err_paste_upload_failed') }}'); }
                 }
                 refreshCounters();
             });
@@ -547,21 +547,21 @@
             quill.on('text-change', update);
 
             function updatePreview() {
-                const title = el.title.value || 'عنوان الخبر';
+                const title = el.title.value || '{{ __('admin.news.news_title') }}';
                 const date = el.date.value ? new Date(el.date.value).toLocaleDateString('ar-EG', { year:'numeric', month:'long', day:'numeric' }) : '';
-                const content = quill.root.innerHTML || '<p class="text-muted">ابدأ الكتابة...</p>';
-                const featured = el.featured.checked ? '<span class="badge bg-warning text-dark px-2 py-1 rounded-pill small ms-2">مميز</span>' : '';
-                const status = el.status.value === 'draft' ? '<span class="badge bg-secondary text-white px-2 py-1 rounded-pill small ms-2">مسودة</span>' : '';
+                const content = quill.root.innerHTML || '<p class="text-muted">{{ __('admin.news.preview_start_writing') }}</p>';
+                const featured = el.featured.checked ? '<span class="badge bg-warning text-dark px-2 py-1 rounded-pill small ms-2">{{ __('admin.news.featured_badge') }}</span>' : '';
+                const status = el.status.value === 'draft' ? '<span class="badge bg-secondary text-white px-2 py-1 rounded-pill small ms-2">{{ __('admin.news.draft_badge') }}</span>' : '';
 
                 el.fullPreview.innerHTML = `
         <article class="p-3">
             ${coverSrc ? `<div class="mb-3"><img src="${coverSrc}" class="w-100 rounded" style="max-height:200px; object-fit:cover;"></div>` : ''}
             <h5 class="fw-bold text-primary mb-2">${title} ${featured} ${status}</h5>
             <div class="text-muted small mb-3 d-flex align-items-center gap-1">
-                <i class="bi bi-calendar"></i> <span>${date || 'تاريخ النشر'}</span>
+                <i class="bi bi-calendar"></i> <span>${date || '{{ __('admin.news.publish_date') }}'}</span>
             </div>
             <div class="content-preview lh-lg" style="font-size:.95rem;">${content}</div>
-            ${el.pdfPreview.innerHTML ? `<div class="mt-3"><span class="badge bg-danger-subtle text-danger"><i class="bi bi-file-pdf"></i> مرفق PDF</span></div>` : ''}
+            ${el.pdfPreview.innerHTML ? `<div class="mt-3"><span class="badge bg-danger-subtle text-danger"><i class="bi bi-file-pdf"></i> {{ __('admin.ui.pdf_attachment') }}</span></div>` : ''}
         </article>`;
             }
 
@@ -592,8 +592,8 @@
                 input.addEventListener('change', () => { const f = input.files[0]; if (f) handler(f); });
             }
             function handleCover(file) {
-                if (!file.type.startsWith('image/')) return err('خطأ', 'صورة فقط');
-                if (file.size > MAX_IMAGE_BYTES) return err('خطأ', 'الحد 2MB');
+                if (!file.type.startsWith('image/')) return err('{{ __('admin.ui.error') }}', '{{ __('admin.common.err_images_only') }}');
+                if (file.size > MAX_IMAGE_BYTES) return err('{{ __('admin.ui.error') }}', '{{ __('admin.common.err_cover_max_2mb') }}');
                 const reader = new FileReader();
                 reader.onload = () => {
                     coverSrc = reader.result;
@@ -604,8 +604,8 @@
                 reader.readAsDataURL(file);
             }
             function handlePDF(file) {
-                if (file.type !== 'application/pdf') return err('خطأ', 'PDF فقط');
-                if (file.size > 10 * 1024 * 1024) return err('خطأ', 'الحد 10MB');
+                if (file.type !== 'application/pdf') return err('{{ __('admin.ui.error') }}', '{{ __('admin.common.err_pdf_only') }}');
+                if (file.size > 10 * 1024 * 1024) return err('{{ __('admin.ui.error') }}', '{{ __('admin.common.err_pdf_max_10mb') }}');
                 el.pdfPreview.innerHTML = `
         <div class="alert alert-success d-flex align-items-center justify-content-between p-2 rounded shadow-sm">
             <div class="d-flex align-items-center gap-2">
@@ -638,21 +638,21 @@
                 for (const img of imgs) {
                     try {
                         const file = dataURLtoFile(img.src, 'inline.png');
-                        if (file.size > MAX_IMAGE_BYTES) { await warn('حجم صورة ملصوقة كبير', 'تجاوزت 2MB وتم تجاهلها.'); img.remove(); continue; }
+                        if (file.size > MAX_IMAGE_BYTES) { await warn('{{ __('admin.common.err_pasted_image_large') }}', '{{ __('admin.common.err_pasted_image_ignored') }}'); img.remove(); continue; }
                         const url = await uploadQuillImage(file); img.src = url;
-                    } catch (e) { console.warn('تعذر استبدال صورة base64:', e); img.remove(); }
+                    } catch (e) { console.warn('Failed to replace base64 image:', e); img.remove(); }
                 }
 
                 const finalImgs = Array.from(container.querySelectorAll('img'));
                 if (finalImgs.length > MAX_IMAGES) {
                     const extra = finalImgs.length - MAX_IMAGES;
                     const { isConfirmed } = await Swal.fire({
-                        title: 'عدد الصور زائد',
-                        html: `لديك <b>${finalImgs.length}</b> صورة، والحد الأقصى <b>${MAX_IMAGES}</b>.<br>هل تريد حذف <b>${extra}</b> صورة زائدة والاحتفاظ بالأوائل؟`,
+                        title: '{{ __('admin.common.err_excess_images') }}',
+                        html: `{{ __('admin.common.err_excess_images_html', ['count' => '${finalImgs.length}', 'max' => '${MAX_IMAGES}', 'extra' => '${extra}']) }}`,
                         icon: 'warning',
                         showCancelButton: true,
-                        confirmButtonText: 'نعم، احذف الزائد',
-                        cancelButtonText: 'إلغاء',
+                        confirmButtonText: '{{ __('admin.common.err_yes_delete_excess') }}',
+                        cancelButtonText: '{{ __('admin.actions.cancel') }}',
                     });
                     if (!isConfirmed) return null;
                     finalImgs.slice(MAX_IMAGES).forEach(img => img.remove());
@@ -730,8 +730,8 @@
                     window.location.href = data.redirect || "{{ $breadcrumbParentUrl }}";
                 } catch (error) {
                     if (error.message !== 'VALIDATION_ERROR') {
-                        console.error('فشل التحديث:', error);
-                        Swal.fire('خطأ', 'تعذّر التحديث. تأكد من الاتصال وحجم الملفات.', 'error');
+                        console.error('Update failed:', error);
+                        Swal.fire('{{ __('admin.ui.error') }}', '{{ __('admin.ui.update_failed') }}', 'error');
                     }
                 } finally {
                     isSubmitting = false;
