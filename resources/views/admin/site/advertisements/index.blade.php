@@ -63,12 +63,12 @@
                     <div class="mt-2">
                         <button type="button" class="btn btn-link btn-sm text-muted p-0" style="font-size: 0.75rem; text-decoration: none;"
                                 data-bs-toggle="collapse" data-bs-target="#advancedFilters">
-                            <i class="bi bi-sliders me-1"></i> خيارات متقدمة
+                            <i class="bi bi-sliders me-1"></i> {{ __('admin.advertisements.advanced_options') }}
                         </button>
                         <div class="collapse {{ ($sort !== 'DATE_NEWS' || $dir !== 'desc' || $perPage != 20) ? 'show' : '' }}" id="advancedFilters">
                             <div class="d-flex gap-2 align-items-center flex-wrap mt-2 p-2 rounded-3" style="background: #F8FBFD; border: 1px solid #E6ECF2;">
                                 <div style="flex: 0 1 auto;">
-                                    <label class="form-label mb-0 me-1" style="font-size: 0.72rem; color: #7A8CA2;">ترتيب:</label>
+                                    <label class="form-label mb-0 me-1" style="font-size: 0.72rem; color: #7A8CA2;">{{ __('admin.advertisements.sort_label') }}</label>
                                     <select name="sort" class="form-select form-select-sm rounded-3 d-inline-block" style="width: auto; font-size: 0.78rem;">
                                         <option value="DATE_NEWS" @selected($sort==='DATE_NEWS')>{{ __('admin.advertisements.sort_date_news') }}</option>
                                         <option value="INSERT_DATE" @selected($sort==='INSERT_DATE')>{{ __('admin.advertisements.sort_insert_date') }}</option>
@@ -83,7 +83,7 @@
                                     </select>
                                 </div>
                                 <div style="flex: 0 1 auto;">
-                                    <label class="form-label mb-0 me-1" style="font-size: 0.72rem; color: #7A8CA2;">عدد:</label>
+                                    <label class="form-label mb-0 me-1" style="font-size: 0.72rem; color: #7A8CA2;">{{ __('admin.advertisements.per_page_label') }}</label>
                                     <select name="per_page" class="form-select form-select-sm rounded-3 d-inline-block" style="width: auto; font-size: 0.78rem;">
                                         @foreach([10,20,50,100] as $pp)
                                             <option value="{{ $pp }}" @selected($perPage==$pp)>{{ $pp }}</option>
@@ -92,7 +92,7 @@
                                 </div>
                                 <div class="vr mx-1" style="height: 20px;"></div>
                                 <div class="d-flex gap-2 flex-wrap" style="font-size: 0.75rem;">
-                                    <span class="text-muted fw-semibold">الأعمدة:</span>
+                                    <span class="text-muted fw-semibold">{{ __('admin.advertisements.columns_label') }}</span>
                                     <label class="form-check form-check-inline mb-0">
                                         <input class="form-check-input col-toggle" type="checkbox" data-cols="3" checked>
                                         <span class="form-check-label" style="font-size: 0.72rem;">{{ __('admin.advertisements.col_toggle_date_news') }}</span>
