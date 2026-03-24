@@ -1,10 +1,10 @@
 @php
-    $breadcrumbTitle = 'المستخدمون المتصلون';
-    $breadcrumbParent = 'سجل الأنشطة';
+    $breadcrumbTitle = __('admin.activity_logs.active_users');
+    $breadcrumbParent = __('admin.activity_logs.title');
     $breadcrumbParentUrl = route('admin.activity-logs.index');
 @endphp
 @extends('layouts.admin')
-@section('title', 'المستخدمون المتصلون')
+@section('title', __('admin.activity_logs.active_users'))
 
 @section('content')
     <div class="container-fluid p-0">
@@ -19,7 +19,7 @@
                             <i class="bi bi-person-check fs-5"></i>
                         </div>
                         <div>
-                            <h6 class="mb-0 text-muted small">المستخدمون النشطون</h6>
+                            <h6 class="mb-0 text-muted small">{{ __('admin.activity_logs.active_users') }}</h6>
                             <h3 class="mb-0 fw-bold">{{ $activeUsers->count() }}</h3>
                         </div>
                     </div>
@@ -49,7 +49,7 @@
                             <i class="bi bi-activity fs-5"></i>
                         </div>
                         <div>
-                            <h6 class="mb-0 text-muted small">إجمالي أنشطة اليوم</h6>
+                            <h6 class="mb-0 text-muted small">{{ __('admin.activity_logs.today_activities') }}</h6>
                             <h3 class="mb-0 fw-bold">{{ number_format($activeUsers->sum(fn($item) => $item['today_count'] ?? 0)) }}</h3>
                         </div>
                     </div>
@@ -61,7 +61,7 @@
         <x-admin.card>
             <x-admin.card-header-index
                 icon="bi-people-fill"
-                title="المستخدمون المتصلون حالياً">
+                title="{{ __('admin.activity_logs.active_users_now') }}">
                 <x-slot:badge>
                     <span class="badge bg-light text-dark rounded-pill px-3 py-1">{{ $activeUsers->count() }} مستخدم</span>
                 </x-slot:badge>
@@ -71,18 +71,18 @@
                     <div class="card-body p-3">
                         <form method="GET" action="{{ route('admin.activity-logs.active-users') }}" class="row g-3 align-items-end">
                             <div class="col-md-9">
-                                <label class="form-label fw-semibold text-dark mb-1">البحث بالاسم أو البريد الإلكتروني</label>
+                                <label class="form-label fw-semibold text-dark mb-1">{{ __('admin.activity_logs.search_by_name_email') }}</label>
                                 <input type="text" name="search" class="form-control rounded-3"
-                                                                             placeholder="ابحث عن مستخدم..."
+                                                                             placeholder="{{ __('admin.activity_logs.search_user') }}"
                                        value="{{ request('search') }}">
                             </div>
                             <div class="col-md-3">
                                 <label class="form-label mb-1">&nbsp;</label>
                                 <button type="submit" class="btn btn-outline-primary w-100 rounded-3">
-                                    <i class="bi bi-search me-1"></i> استعلام
+                                    <i class="bi bi-search me-1"></i> {{ __('admin.actions.query') }}
                                 </button>
                                 <a href="{{ route('admin.activity-logs.active-users') }}" class="btn btn-outline-danger w-100 rounded-3 mt-1">
-                                    <i class="bi bi-x-circle me-1"></i> تفريغ
+                                    <i class="bi bi-x-circle me-1"></i> {{ __('admin.actions.clear') }}
                                 </a>
                             </div>
                         </form>
@@ -99,12 +99,12 @@
                                 <tr>
                                     <th style="width: 50px;" class="text-center">#</th>
                                     <th style="width: 60px;"></th>
-                                    <th>المستخدم</th>
-                                    <th>الأدوار</th>
+                                    <th>{{ __('admin.activity_logs.user') }}</th>
+                                    <th>{{ __('admin.activity_logs.roles') }}</th>
                                     <th class="text-center" style="width: 150px;">آخر نشاط</th>
-                                    <th class="text-center" style="width: 120px;">أنشطة اليوم</th>
+                                    <th class="text-center" style="width: 120px;">{{ __('admin.activity_logs.today_activities') }}</th>
                                     <th class="text-center" style="width: 150px;">أول دخول اليوم</th>
-                                    <th class="text-center" style="width: 130px;">الإجراءات</th>
+                                    <th class="text-center" style="width: 130px;">{{ __('admin.actions.actions') }}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -113,7 +113,7 @@
                                     <tr>
                                         <td class="text-center text-muted small">{{ $loop->iteration }}</td>
                                         <td>
-                                            <div class="user-avatar-sm bg-primary text-white rounded-circle d-flex align-items-center justify-content-center" 
+                                            <div class="user-avatar-sm bg-primary text-white rounded-circle d-flex align-items-center justify-content-center"
                                                  style="width: 40px; height: 40px; font-weight: 600;">
                                                 {{ mb_substr($user->name, 0, 1) }}
                                             </div>
@@ -162,9 +162,9 @@
                                         <td class="text-center">
                                             <a href="{{ route('admin.activity-logs.user', $user->id) }}"
                                                class="btn btn-sm btn-outline-primary"
-                                               title="عرض جميع الأنشطة">
+                                               title="{{ __('admin.activity_logs.view_all_activities') }}">
                                                 <i class="bi bi-eye me-1"></i>
-                                                عرض الأنشطة
+                                                {{ __('admin.activity_logs.view_activities') }}
                                             </a>
                                         </td>
                                     </tr>
@@ -173,8 +173,8 @@
                                         <td colspan="8" class="text-center py-5">
                                             <div class="d-flex flex-column align-items-center">
                                                 <i class="bi bi-person-x display-1 text-muted mb-3"></i>
-                                                <h5 class="text-muted">لا يوجد مستخدمون نشطون حالياً</h5>
-                                                <p class="text-muted small">المستخدمون الذين لديهم نشاط في آخر 15 دقيقة سيظهرون هنا</p>
+                                                <h5 class="text-muted">{{ __('admin.activity_logs.no_active_users') }}</h5>
+                                                <p class="text-muted small">{{ __('admin.activity_logs.no_active_users_desc') }}</p>
                                             </div>
                                         </td>
                                     </tr>
@@ -188,7 +188,7 @@
                         <div class="px-3 py-2" style="border-top: 1px solid #E6ECF2;">
                             <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 small">
                                 <div class="text-muted">
-                                    عرض <strong>{{ $activeUsers->count() }}</strong> مستخدم نشط
+                                    {{ __('admin.activity_logs.showing_active_users', ['count' => $activeUsers->count()]) }}
                                 </div>
                                 <div class="text-muted">
                                     آخر تحديث: <strong>{{ now()->format('H:i:s') }}</strong>
@@ -205,18 +205,18 @@
     .user-avatar-sm {
         font-size: 14px;
     }
-    
+
     .table th {
         font-weight: 600;
         font-size: 0.875rem;
         color: #495057;
         white-space: nowrap;
     }
-    
+
     .table td {
         vertical-align: middle;
     }
-    
+
     .table tbody tr:hover {
         background-color: #f8f9fa;
     }

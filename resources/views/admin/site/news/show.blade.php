@@ -49,11 +49,11 @@
                             <div class="d-flex flex-wrap align-items-center gap-3 mb-3">
                                 <span class="badge {{ $published ? 'bg-success' : 'bg-secondary' }} px-3 py-2">
                                     <i class="bi bi-{{ $published ? 'check-circle' : 'clock' }} me-1"></i>
-                                    {{ $published ? 'منشور' : 'مسودة' }}
+                                    {{ $published ? __('admin.labels.published') : __('admin.labels.draft') }}
                                 </span>
                                 @if($item->featured)
                                     <span class="badge bg-warning text-dark px-3 py-2">
-                                        <i class="bi bi-star-fill me-1"></i> مميّز
+                                        <i class="bi bi-star-fill me-1"></i> {{ __('admin.news.featured_badge') }}
                                     </span>
                                 @endif
                                 <span class="text-muted d-flex align-items-center gap-1">
@@ -62,7 +62,7 @@
                                 </span>
                                 <span class="text-muted d-flex align-items-center gap-1">
                                     <i class="bi bi-clock-history"></i>
-                                    آخر تحديث: {{ optional($item->updated_at)->format('Y-m-d H:i') ?? '—' }}
+                                    {{ __('admin.news.show_last_update') }} {{ optional($item->updated_at)->format('Y-m-d H:i') ?? '—' }}
                                 </span>
                             </div>
                         </div>
@@ -71,17 +71,17 @@
                         <ul class="nav nav-pills nav-pills-custom mb-3 mb-md-4 border-bottom pb-2 flex-column flex-sm-row" role="tablist">
                             <li class="nav-item" role="presentation">
                                 <button class="nav-link active px-3 px-md-4 py-2 rounded-pill w-100 w-sm-auto mb-2 mb-sm-0" data-bs-toggle="tab" data-bs-target="#tab-html" type="button" role="tab" aria-selected="true">
-                                    <i class="bi bi-file-earmark-text me-1 me-md-2"></i> <span class="d-none d-md-inline">المحتوى (HTML)</span><span class="d-md-none">HTML</span>
+                                    <i class="bi bi-file-earmark-text me-1 me-md-2"></i> <span class="d-none d-md-inline">{{ __('admin.news.show_tab_html') }}</span><span class="d-md-none">HTML</span>
                                 </button>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <button class="nav-link px-3 px-md-4 py-2 rounded-pill w-100 w-sm-auto mb-2 mb-sm-0" data-bs-toggle="tab" data-bs-target="#tab-text" type="button" role="tab" aria-selected="false">
-                                    <i class="bi bi-file-text me-1 me-md-2"></i> <span class="d-none d-md-inline">نص مجرد</span><span class="d-md-none">نص</span>
+                                    <i class="bi bi-file-text me-1 me-md-2"></i> <span class="d-none d-md-inline">{{ __('admin.news.show_tab_text') }}</span><span class="d-md-none">{{ __('admin.news.show_tab_text') }}</span>
                                 </button>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <button class="nav-link px-3 px-md-4 py-2 rounded-pill w-100 w-sm-auto" data-bs-toggle="tab" data-bs-target="#tab-preview" type="button" role="tab" aria-selected="false">
-                                    <i class="bi bi-eye me-1 me-md-2"></i> <span class="d-none d-md-inline">معاينة مقال</span><span class="d-md-none">معاينة</span>
+                                    <i class="bi bi-eye me-1 me-md-2"></i> <span class="d-none d-md-inline">{{ __('admin.news.show_tab_preview') }}</span><span class="d-md-none">{{ __('admin.common.preview') }}</span>
                                 </button>
                             </li>
                         </ul>
@@ -124,7 +124,7 @@
                             <div class="icon-wrapper bg-primary bg-opacity-10 rounded-circle p-2">
                                 <i class="bi bi-info-circle text-primary"></i>
                             </div>
-                            <h6 class="mb-0 fw-semibold">البيانات</h6>
+                            <h6 class="mb-0 fw-semibold">{{ __('admin.news.show_meta_data') }}</h6>
                         </div>
                     </div>
                     <div class="card-body p-0">
@@ -134,34 +134,34 @@
                                 <span class="badge bg-primary">{{ $item->id }}</span>
                             </div>
                             <div class="list-group-item border-0 px-4 py-3 d-flex justify-content-between align-items-center">
-                                <span class="text-muted small">الحالة</span>
+                                <span class="text-muted small">{{ __('admin.news.show_status') }}</span>
                                 <span class="badge {{ $published ? 'bg-success' : 'bg-secondary' }}">
-                                    {{ $published ? 'منشور' : 'مسودة' }}
+                                    {{ $published ? __('admin.labels.published') : __('admin.labels.draft') }}
                                 </span>
                             </div>
                             <div class="list-group-item border-0 px-4 py-3 d-flex justify-content-between align-items-center">
-                                <span class="text-muted small">تاريخ النشر</span>
+                                <span class="text-muted small">{{ __('admin.news.show_publish_date') }}</span>
                                 <span class="fw-medium">{{ $publishedAt }}</span>
                             </div>
                             <div class="list-group-item border-0 px-4 py-3 d-flex justify-content-between align-items-center">
-                                <span class="text-muted small">مميّز</span>
+                                <span class="text-muted small">{{ __('admin.news.show_featured') }}</span>
                                 <span>{!! $item->featured ? '<i class="bi bi-check-circle-fill text-success fs-5"></i>' : '<i class="bi bi-x-circle text-muted fs-5"></i>' !!}</span>
                             </div>
                             <div class="list-group-item border-0 px-4 py-3 d-flex justify-content-between align-items-center">
-                                <span class="text-muted small">أُنشئ</span>
+                                <span class="text-muted small">{{ __('admin.news.show_created_at') }}</span>
                                 <span class="fw-medium small">{{ optional($item->created_at)->format('Y-m-d H:i') ?? '—' }}</span>
                             </div>
                             <div class="list-group-item border-0 px-4 py-3 d-flex justify-content-between align-items-center">
-                                <span class="text-muted small">آخر تحديث</span>
+                                <span class="text-muted small">{{ __('admin.news.show_updated_at') }}</span>
                                 <span class="fw-medium small">{{ optional($item->updated_at)->format('Y-m-d H:i') ?? '—' }}</span>
                             </div>
                             <div class="list-group-item border-0 px-4 py-3 d-flex justify-content-between align-items-center">
-                                <span class="text-muted small">أضاف</span>
-                                <span class="fw-medium">{{ $item->creator?->name ?? 'غير معروف' }}</span>
+                                <span class="text-muted small">{{ __('admin.news.show_created_by') }}</span>
+                                <span class="fw-medium">{{ $item->creator?->name ?? __('admin.news.show_unknown') }}</span>
                             </div>
                             <div class="list-group-item border-0 px-4 py-3 d-flex justify-content-between align-items-center">
-                                <span class="text-muted small">عدّل</span>
-                                <span class="fw-medium">{{ $item->updater?->name ?? 'غير معروف' }}</span>
+                                <span class="text-muted small">{{ __('admin.news.show_updated_by') }}</span>
+                                <span class="fw-medium">{{ $item->updater?->name ?? __('admin.news.show_unknown') }}</span>
                             </div>
                         </div>
                     </div>
@@ -174,12 +174,12 @@
                                 <div class="icon-wrapper bg-danger bg-opacity-20 rounded-circle p-2">
                                     <i class="bi bi-file-pdf text-danger"></i>
                                 </div>
-                                <h6 class="mb-0 fw-semibold">المرفق</h6>
+                                <h6 class="mb-0 fw-semibold">{{ __('admin.news.show_attachment') }}</h6>
                             </div>
                         </div>
                         <div class="card-body p-4">
                             <a href="{{ $pdfUrl }}" class="btn btn-danger w-100 shadow-sm" target="_blank">
-                                <i class="bi bi-file-earmark-pdf me-2"></i> فتح PDF
+                                <i class="bi bi-file-earmark-pdf me-2"></i> {{ __('admin.news.show_open_pdf') }}
                             </a>
                         </div>
                     </div>

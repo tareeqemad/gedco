@@ -41,13 +41,13 @@
                         </div>
                         <div class="news-tabs" id="settingsTabs" role="tablist">
                             <button class="news-tab active" id="footer-tab" data-bs-toggle="tab" data-bs-target="#footer-content" type="button" role="tab" aria-selected="true">
-                                <i class="bi bi-info-circle"></i> معلومات الفوتر
+                                <i class="bi bi-info-circle"></i> {{ __('admin.settings.footer_info_tab') }}
                             </button>
                             <button class="news-tab" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact-content" type="button" role="tab" aria-selected="false">
-                                <i class="bi bi-envelope"></i> تواصل معنا
+                                <i class="bi bi-envelope"></i> {{ __('admin.settings.contact_us_tab') }}
                             </button>
                             <button class="news-tab" id="channels-tab" data-bs-toggle="tab" data-bs-target="#channels-content" type="button" role="tab" aria-selected="false">
-                                <i class="bi bi-telephone"></i> قنوات التواصل
+                                <i class="bi bi-telephone"></i> {{ __('admin.settings.channels_tab') }}
                             </button>
                         </div>
                     </div>
@@ -61,7 +61,7 @@
                                 {{-- Footer Title --}}
                                 <div class="col-12">
                                     <h6 class="fw-bold d-flex align-items-center gap-2 section-title">
-                                        <i class="bi bi-type-h1"></i> عنوان الفوتر
+                                        <i class="bi bi-type-h1"></i> {{ __('admin.settings.footer_title_section') }}
                                     </h6>
                                 </div>
                                 <div class="col-md-6">
@@ -90,7 +90,7 @@
                                 {{-- Logo Path --}}
                                 <div class="col-12 mt-4">
                                     <h6 class="fw-bold d-flex align-items-center gap-2 section-title">
-                                        <i class="bi bi-image"></i> مسار الشعار
+                                        <i class="bi bi-image"></i> {{ __('admin.settings.logo_path_section') }}
                                     </h6>
                                 </div>
                                 <div class="col-md-6">
@@ -121,13 +121,13 @@
                                 {{-- Copyright --}}
                                 <div class="col-12 mt-4">
                                     <h6 class="fw-bold d-flex align-items-center gap-2 section-title">
-                                        <i class="bi bi-copyright"></i> حقوق النشر
+                                        <i class="bi bi-copyright"></i> {{ __('admin.settings.copyright_section') }}
                                     </h6>
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label fw-semibold text-dark d-flex align-items-center gap-1">
                                         <span class="badge bg-primary-subtle text-primary rounded-pill px-2 py-1" style="font-size: 0.7rem;">ع</span>
-                                        حقوق النشر - {{ __('admin.labels.arabic') }}
+                                        {{ __('admin.settings.copyright_label') }} - {{ __('admin.labels.arabic') }}
                                     </label>
                                     <textarea name="copyright_ar" class="form-control rounded-3 border-0 bg-light @error('copyright_ar') is-invalid @enderror" rows="3" placeholder="مثال: © 2025 شركة كهرباء غزة - جميع الحقوق محفوظة">{{ old('copyright_ar', $setting->copyright_ar) }}</textarea>
                                     @error('copyright_ar')
@@ -137,7 +137,7 @@
                                 <div class="col-md-6">
                                     <label class="form-label fw-semibold text-dark d-flex align-items-center gap-1">
                                         <span class="badge bg-info-subtle text-info rounded-pill px-2 py-1" style="font-size: 0.7rem;">EN</span>
-                                        حقوق النشر - {{ __('admin.labels.english') }}
+                                        {{ __('admin.settings.copyright_label') }} - {{ __('admin.labels.english') }}
                                     </label>
                                     <textarea name="copyright_en" class="form-control rounded-3 border-0 bg-light @error('copyright_en') is-invalid @enderror" rows="3" placeholder="e.g: © 2025 Gaza Electricity Company - All Rights Reserved">{{ old('copyright_en', $setting->copyright_en) }}</textarea>
                                     @error('copyright_en')
@@ -152,7 +152,7 @@
                             <div class="row g-4">
                                 <div class="col-12">
                                     <h6 class="fw-bold d-flex align-items-center gap-2 section-title">
-                                        <i class="bi bi-envelope-heart"></i> عنوان قسم التواصل
+                                        <i class="bi bi-envelope-heart"></i> {{ __('admin.settings.contact_section_title') }}
                                     </h6>
                                 </div>
                                 <div class="col-md-6">
@@ -185,7 +185,7 @@
                             <div class="alert alert-info border-0 rounded-4 mb-4 d-flex align-items-center gap-2">
                                 <i class="bi bi-info-circle fs-5"></i>
                                 <div>
-                                    <strong>ملاحظة:</strong> يمكن إضافة قناتين كحد أقصى. كل قناة تحتوي على معلومات الاتصال الكاملة.
+                                    <strong>{{ __('admin.settings.channels_note') }}</strong> {{ __('admin.settings.channels_note_text') }}
                                 </div>
                             </div>
                             
@@ -199,8 +199,8 @@
                                                         {{ $i + 1 }}
                                                     </div>
                                                     <div>
-                                                        <h6 class="mb-0 fw-bold text-dark">قناة التواصل {{ $i + 1 }}</h6>
-                                                        <small class="text-muted">معلومات الاتصال الكاملة</small>
+                                                        <h6 class="mb-0 fw-bold text-dark">{{ __('admin.settings.channel_title', ['number' => $i + 1]) }}</h6>
+                                                        <small class="text-muted">{{ __('admin.settings.channel_info') }}</small>
                                                     </div>
                                                 </div>
                                                 <span class="badge bg-primary rounded-pill px-3 py-2">
@@ -287,7 +287,7 @@
                 {{-- Submit --}}
                 <div class="d-flex gap-3 justify-content-end p-3" style="border-top: 1px solid #E6ECF2;">
                     <a href="{{ route('admin.dashboard') }}" class="btn btn-cancel">
-                        <i class="bi bi-x-circle me-1"></i> إلغاء
+                        <i class="bi bi-x-circle me-1"></i> {{ __('admin.common.cancel') }}
                     </a>
                     <button type="submit" class="btn btn-save">
                         <i class="bi bi-check-circle me-1"></i>{{ __('admin.settings.save') }}

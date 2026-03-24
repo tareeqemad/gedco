@@ -39,14 +39,14 @@
                         <!-- Date Range -->
                         <div class="col-6 col-lg-2 col-md-3">
                             <label class="form-label small text-muted mb-1">
-                                <i class="bi bi-calendar-event me-1 d-none d-sm-inline"></i> <span class="d-sm-none">من</span><span class="d-none d-sm-inline">من تاريخ</span>
+                                <i class="bi bi-calendar-event me-1 d-none d-sm-inline"></i> {{ __('admin.activity_logs.date_from') }}
                             </label>
                             <input type="date" name="date_from" class="form-control " 
                                    value="{{ $dateFrom ?? '' }}">
                         </div>
                         <div class="col-6 col-lg-2 col-md-3">
                             <label class="form-label small text-muted mb-1">
-                                <i class="bi bi-calendar-check me-1 d-none d-sm-inline"></i> <span class="d-sm-none">إلى</span><span class="d-none d-sm-inline">إلى تاريخ</span>
+                                <i class="bi bi-calendar-check me-1 d-none d-sm-inline"></i> {{ __('admin.activity_logs.date_to') }}
                             </label>
                             <input type="date" name="date_to" class="form-control " 
                                    value="{{ $dateTo ?? '' }}">
@@ -67,7 +67,7 @@
                         <!-- Sort -->
                         <div class="col-6 col-lg-2 col-md-4">
                             <label class="form-label small text-muted mb-1">
-                                <i class="bi bi-sort-down me-1 d-none d-sm-inline"></i> <span class="d-sm-none">ترتيب</span><span class="d-none d-sm-inline">الترتيب</span>
+                                <i class="bi bi-sort-down me-1 d-none d-sm-inline"></i> {{ __('admin.labels.order') }}
                             </label>
                             <select name="sort" class="form-select ">
                                 <option value="published_at" @selected(($sort ?? '')==='published_at')>{{ __('admin.news.sort_latest') }}</option>
@@ -95,10 +95,10 @@
                         </div>
                         <div class="d-flex gap-2 justify-content-center w-100 w-sm-auto">
                             <button class="btn btn-outline-secondary shadow-sm" type="submit" style="min-width: 120px;">
-                                <i class="bi bi-search me-1"></i> استعلام
+                                <i class="bi bi-search me-1"></i> {{ __('admin.actions.query') }}
                             </button>
                             <a href="{{ route('admin.news.index') }}" class="btn btn-outline-danger rounded-3 shadow-sm" style="min-width: 120px;">
-                                <i class="bi bi-x-circle me-1"></i> تفريغ
+                                <i class="bi bi-x-circle me-1"></i> {{ __('admin.actions.clear') }}
                             </a>
                         </div>
                     </div>

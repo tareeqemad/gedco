@@ -62,10 +62,10 @@
                                placeholder="{{ __('admin.staff_profiles.search_placeholder') }}">
                     </div>
                     <button type="submit" class="btn btn-primary rounded-3">
-                        <i class="bi bi-search me-1"></i> استعلام
+                        <i class="bi bi-search me-1"></i> {{ __('admin.actions.query') }}
                     </button>
                     <a href="{{ route('admin.staff-profiles.index') }}" class="btn btn-outline-danger rounded-3">
-                        <i class="bi bi-x-circle me-1"></i> تفريغ
+                        <i class="bi bi-x-circle me-1"></i> {{ __('admin.actions.clear') }}
                     </a>
                 </form>
             </div>

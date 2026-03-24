@@ -22,10 +22,10 @@
                     <thead class="bg-light">
                     <tr>
                         <th class="text-center" style="width: 60px;">#</th>
-                        <th>الصورة</th>
-                        <th>العنوان</th>
-                        <th class="text-center">مفعل؟</th>
-                        <th class="text-center">الترتيب</th>
+                        <th>{{ __('admin.labels.image') }}</th>
+                        <th>{{ __('admin.labels.title') }}</th>
+                        <th class="text-center">{{ __('admin.labels.enabled') }}?</th>
+                        <th class="text-center">{{ __('admin.labels.order') }}</th>
                         <th class="text-center" style="width: 180px;">تحكم</th>
                     </tr>
                     </thead>

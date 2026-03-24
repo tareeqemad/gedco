@@ -98,10 +98,10 @@
 
                     <div class="col-12 col-lg-3 d-flex align-items-end gap-2 filter-buttons-group">
                         <button class="btn btn-outline-secondary flex-fill shadow-sm rounded-3" type="submit" style="min-width: 100px;">
-                            <i class="bi bi-search me-1"></i> استعلام
+                            <i class="bi bi-search me-1"></i> {{ __('admin.actions.query') }}
                         </button>
                         <a href="{{ route('admin.tenders.index') }}" class="btn btn-outline-danger flex-fill rounded-3" style="min-width: 100px;">
-                            <i class="bi bi-x-circle me-1"></i> تفريغ
+                            <i class="bi bi-x-circle me-1"></i> {{ __('admin.actions.clear') }}
                         </a>
                     </div>
                 </form>

@@ -40,30 +40,30 @@
 
                             {{-- Section 1: المعلومات الأساسية --}}
                             <h6 class="fw-bold d-flex align-items-center gap-2 section-title">
-                                <i class="bi bi-info-circle"></i> المعلومات الأساسية
+                                <i class="bi bi-info-circle"></i> {{ __('admin.news.basic_info') }}
                             </h6>
 
                             <div class="mb-3">
                                 <label class="form-label">عنوان الخبر <span class="text-danger">*</span></label>
                                 <input type="text" name="title" id="titleInput"
                                        class="form-control @error('title') is-invalid @enderror"
-                                       placeholder="أدخل عنوانًا..." value="{{ old('title') }}">
+                                       placeholder="{{ __('admin.news.title_placeholder') }}" value="{{ old('title') }}">
                                 @error('title') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
                             </div>
 
                             <div class="row g-3 mb-3">
                                 <div class="col-md-4">
-                                    <label class="form-label">تاريخ النشر</label>
+                                    <label class="form-label">{{ __('admin.news.publish_date') }}</label>
                                     <input type="date" name="published_at" id="dateInput"
                                            class="form-control @error('published_at') is-invalid @enderror"
                                            value="{{ old('published_at', now()->format('Y-m-d')) }}">
                                     @error('published_at') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
                                 </div>
                                 <div class="col-md-4">
-                                    <label class="form-label">الحالة</label>
+                                    <label class="form-label">{{ __('admin.news.status') }}</label>
                                     <select name="status" id="statusInput" class="form-select @error('status') is-invalid @enderror">
-                                        <option value="published" @selected(old('status','published')==='published')>منشور</option>
-                                        <option value="draft" @selected(old('status')==='draft')>مسودة</option>
+                                        <option value="published" @selected(old('status','published')==='published')>{{ __('admin.labels.published') }}</option>
+                                        <option value="draft" @selected(old('status')==='draft')>{{ __('admin.labels.draft') }}</option>
                                     </select>
                                     @error('status') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
                                 </div>
@@ -172,15 +172,15 @@
                                     <!-- صورة الغلاف -->
                                     <div class="mb-4">
                                         <label class="form-label fw-medium text-secondary d-flex align-items-center gap-1">
-                                            <i class="ri-image-add-line fs-6 text-primary"></i> صورة الغلاف (اختياري)
+                                            <i class="ri-image-add-line fs-6 text-primary"></i> {{ __('admin.news.cover_image') }}
                                         </label>
                                         <div class="dropzone border border-2 border-dashed rounded-3 p-4 text-center bg-light-subtle transition" id="coverDrop">
                                             <input type="file" name="cover" id="coverInput" class="visually-hidden" accept="image/*">
                                             <div class="text-primary">
                                                 <i class="ri-image-add-line fs-1 mb-2 d-block"></i>
                                                 <p class="mb-1 fw-medium">
-                                                    اسحب صورة أو
-                                                    <label for="coverInput" class="text-primary" style="text-decoration: underline; cursor: pointer;">اختر ملف</label>
+                                                    {{ __('admin.common.drag_image_or') }}
+                                                    <label for="coverInput" class="text-primary" style="text-decoration: underline; cursor: pointer;">{{ __('admin.common.select_file') }}</label>
                                                 </p>
                                                 <small class="text-muted">PNG/JPG/WEBP • حتى 2MB</small>
                                             </div>
@@ -217,7 +217,7 @@
                                     <span id="submitSpinner" class="spinner-border spinner-border-sm d-none" role="status"></span>
                                 </button>
                                 <button type="button" id="saveDraft" class="btn btn-outline-secondary px-4 d-flex align-items-center gap-2">
-                                    <i class="bi bi-file-earmark"></i> حفظ مسودة
+                                    <i class="bi bi-file-earmark"></i> {{ __('admin.actions.save_draft') }}
                                 </button>
                                 <a href="{{ route('admin.news.index') }}" class="btn btn-cancel">إلغاء</a>
                             </div>
@@ -246,7 +246,10 @@
         :root { --primary: #4361ee; --success: #10b981; --danger: #ef4444; }
         .quill-wrapper { height: 500px; background: #fff; }
         .ql-container { height: calc(100% - 42px); font-size: 1.05rem; }
-        .ql-editor { direction: rtl; text-align: right; min-height: 100%; padding: 1rem; }
+        .ql-editor { min-height: 100%; padding: 1rem; }
+        [dir="rtl"] .ql-editor { direction: rtl !important; text-align: right !important; }
+        [dir="ltr"] .ql-editor { direction: ltr !important; text-align: left !important; }
+        [dir="ltr"] .ql-editor p, [dir="ltr"] .ql-editor .ql-direction-rtl { direction: ltr !important; text-align: left !important; }
         .ql-toolbar { border-bottom: 1px solid #dee2e6; background: #f8f9fa; }
         .dropzone { cursor: pointer; transition: all 0.2s ease; }
         .dropzone.dragover { background: #ebf2ff !important; border-color: var(--primary) !important; }
@@ -391,9 +394,18 @@
             const lhPicker = document.querySelector('.ql-lineheight');
             if (lhPicker) lhPicker.addEventListener('change', () => quill.format('lineheight', lhPicker.value || false));
 
-            // اتجاه افتراضي
-            quill.format('direction', 'rtl');
-            quill.format('align', 'right');
+            // اتجاه افتراضي حسب لغة الصفحة
+            const pageDir = document.documentElement.getAttribute('dir') || 'rtl';
+            if (pageDir === 'rtl') {
+                quill.format('direction', 'rtl');
+                quill.format('align', 'right');
+            } else {
+                quill.format('direction', false);
+                quill.format('align', false);
+                // إزالة أي RTL موروث
+                document.querySelector('#quill-editor .ql-editor').style.direction = 'ltr';
+                document.querySelector('#quill-editor .ql-editor').style.textAlign = 'left';
+            }
 
             // عدّادات صور/نص
             const currentImageCount = () => (quill?.root?.querySelectorAll('img')?.length || 0);

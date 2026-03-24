@@ -48,7 +48,7 @@
                                     {{-- العنوان --}}
                                     <div class="mb-4">
                                         <label class="form-label fw-medium text-secondary d-flex align-items-center gap-1">
-                                            <i class="bi bi-type-h1 fs-6 text-primary"></i> عنوان الخبر
+                                            <i class="bi bi-type-h1 fs-6 text-primary"></i> {{ __('admin.news.form_title') }}
                                         </label>
                                         <input type="text" name="title" id="titleInput"
                                                class="form-control rounded-3 border-0 shadow-sm focus-ring focus-ring-primary @error('title') is-invalid @enderror"
@@ -60,7 +60,7 @@
                                     <div class="row g-3 mb-4">
                                         <div class="col-md-5">
                                             <label class="form-label fw-medium text-secondary d-flex align-items-center gap-1">
-                                                <i class="bi bi-calendar fs-6 text-info"></i> تاريخ النشر
+                                                <i class="bi bi-calendar fs-6 text-info"></i> {{ __('admin.news.publish_date') }}
                                             </label>
                                             <input type="date" name="published_at" id="dateInput"
                                                    class="form-control rounded-3 border-0 shadow-sm focus-ring focus-ring-info @error('published_at') is-invalid @enderror"
@@ -68,17 +68,17 @@
                                             @error('published_at') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
                                         </div>
                                         <div class="col-md-4">
-                                            <label class="form-label fw-medium text-secondary">الحالة</label>
+                                            <label class="form-label fw-medium text-secondary">{{ __('admin.news.status') }}</label>
                                             <select name="status" id="statusInput" class="form-select rounded-3 shadow-sm @error('status') is-invalid @enderror">
-                                                <option value="published" @selected(old('status', $news->status)==='published')>منشور</option>
-                                                <option value="draft"     @selected(old('status', $news->status)==='draft')>مسودة</option>
+                                                <option value="published" @selected(old('status', $news->status)==='published')>{{ __('admin.labels.published') }}</option>
+                                                <option value="draft"     @selected(old('status', $news->status)==='draft')>{{ __('admin.labels.draft') }}</option>
                                             </select>
                                             @error('status') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
                                         </div>
                                         <div class="col-md-3 d-flex align-items-end">
                                             <div class="form-check form-switch">
                                                 <input class="form-check-input" type="checkbox" name="featured" id="featuredInput" value="1" @checked(old('featured', $news->featured))>
-                                                <label class="form-check-label fw-medium" for="featuredInput">مميّز</label>
+                                                <label class="form-check-label fw-medium" for="featuredInput">{{ __('admin.news.form_featured') }}</label>
                                             </div>
                                         </div>
                                     </div>
@@ -93,7 +93,7 @@
                                     <input type="hidden" name="language" value="{{ $currentLang }}">
                                     <div class="mb-3">
                                         <div class="d-flex align-items-center gap-2">
-                                            <label class="form-label mb-0" style="font-size: 0.82rem; color: #24364A; font-weight: 600;">اللغة:</label>
+                                            <label class="form-label mb-0" style="font-size: 0.82rem; color: #24364A; font-weight: 600;">{{ __('admin.labels.language') }}:</label>
                                             <span class="stat-chip">
                                                 <i class="bi bi-globe"></i>
                                                 {{ $currentLang === 'ar' ? __('admin.labels.arabic') : __('admin.labels.english') }}
@@ -106,7 +106,7 @@
                                     <div class="mb-4">
                                         <label class="form-label fw-medium text-secondary d-flex align-items-center gap-2 flex-wrap">
                                         <span class="d-inline-flex align-items-center gap-1">
-                                            <i class="bi bi-file-text fs-6 text-success"></i> المحتوى
+                                            <i class="bi bi-file-text fs-6 text-success"></i> {{ __('admin.news.form_content') }}
                                         </span>
                                             <small class="text-muted">(حتى {{ $MAX_IMAGES }} صور × 2MB كحد أقصى — ويمكن بدون صور)</small>
                                             <span id="imgCounter" class="badge img-counter bg-primary">0 / {{ $MAX_IMAGES }}</span>
@@ -187,15 +187,15 @@
                                     {{-- صورة الغلاف --}}
                                     <div class="mb-4">
                                         <label class="form-label fw-medium text-secondary d-flex align-items-center gap-1">
-                                            <i class="bi bi-image fs-6 text-primary"></i> صورة الغلاف (اختياري)
+                                            <i class="bi bi-image fs-6 text-primary"></i> {{ __('admin.news.cover_image') }}
                                         </label>
                                         <div class="dropzone border border-2 border-dashed rounded-3 p-4 text-center bg-light-subtle transition" id="coverDrop">
                                             <input type="file" name="cover" id="coverInput" class="visually-hidden" accept="image/*">
                                             <div class="text-primary">
                                                 <i class="bi bi-image fs-1 mb-2 d-block"></i>
                                                 <p class="mb-1 fw-medium">
-                                                    اسحب صورة أو
-                                                    <label for="coverInput" class="text-primary" style="text-decoration: underline; cursor: pointer;">اختر ملف</label>
+                                                    {{ __('admin.common.drag_image_or') }}
+                                                    <label for="coverInput" class="text-primary" style="text-decoration: underline; cursor: pointer;">{{ __('admin.common.select_file') }}</label>
                                                 </p>
                                                 <small class="text-muted">PNG/JPG/WEBP • حتى 2MB</small>
                                             </div>
@@ -209,7 +209,7 @@
                                                 <img src="{{ $coverUrl }}" class="w-100 rounded shadow-sm" style="max-height:220px; object-fit:cover;">
                                                 <div class="form-check mt-2">
                                                     <input class="form-check-input" type="checkbox" name="remove_cover" id="removeCover" value="1">
-                                                    <label class="form-check-label small" for="removeCover">إزالة الغلاف الحالي</label>
+                                                    <label class="form-check-label small" for="removeCover">{{ __('admin.news.form_remove_cover') }}</label>
                                                 </div>
                                             @endif
                                         </div>
@@ -219,15 +219,15 @@
                                     {{-- PDF --}}
                                     <div class="mb-4">
                                         <label class="form-label fw-medium text-secondary d-flex align-items-center gap-1">
-                                            <i class="bi bi-file-pdf fs-6 text-danger"></i> ملف PDF (اختياري)
+                                            <i class="bi bi-file-pdf fs-6 text-danger"></i> {{ __('admin.news.form_pdf') }}
                                         </label>
                                         <div class="dropzone border border-2 border-dashed rounded-3 p-4 text-center bg-light-subtle transition" id="pdfDrop">
                                             <input type="file" name="pdf" id="pdfInput" class="visually-hidden" accept="application/pdf">
                                             <div class="text-primary">
                                                 <i class="bi bi-cloud-upload fs-1 mb-2 d-block"></i>
                                                 <p class="mb-1 fw-medium">
-                                                    اسحب ملف أو
-                                                    <label for="pdfInput" class="text-primary" style="text-decoration: underline; cursor: pointer;">اختر ملف</label>
+                                                    {{ __('admin.news.form_pdf_drag') }}
+                                                    <label for="pdfInput" class="text-primary" style="text-decoration: underline; cursor: pointer;">{{ __('admin.news.form_pdf_select') }}</label>
                                                 </p>
                                                 <small class="text-muted">PDF • حتى 10MB</small>
                                             </div>
@@ -254,10 +254,10 @@
                                     <div class="d-flex flex-wrap gap-2 mt-4 form-actions">
                                         <button type="button" id="submitBtn" class="btn btn-save d-flex align-items-center gap-2">
                                             <i class="bi bi-check"></i>
-                                            <span id="submitText">تحديث الخبر</span>
+                                            <span id="submitText">{{ __('admin.news.form_update') }}</span>
                                             <span id="submitSpinner" class="spinner-border spinner-border-sm d-none" role="status"></span>
                                         </button>
-                                        <a href="{{ route('admin.news.index') }}" class="btn btn-cancel">إلغاء</a>
+                                        <a href="{{ route('admin.news.index') }}" class="btn btn-cancel">{{ __('admin.news.form_cancel') }}</a>
                                     </div>
                                 </form>
                             </div>
@@ -270,7 +270,7 @@
             <div class="tab-pane fade" id="preview-content" role="tabpanel">
                 <div class="card border-0 shadow-sm rounded-3 bg-white">
                     <div class="card-header bg-light py-2 px-3">
-                        <h6 class="mb-0 fw-semibold text-primary"><i class="bi bi-eye me-1"></i> معاينة كاملة</h6>
+                        <h6 class="mb-0 fw-semibold text-primary"><i class="bi bi-eye me-1"></i> {{ __('admin.news.form_preview_title') }}</h6>
                     </div>
                     <div class="card-body p-4" id="fullPreview">
                         <div class="text-center text-muted py-5">

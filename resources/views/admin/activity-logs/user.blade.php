@@ -1,10 +1,10 @@
 @php
-    $breadcrumbTitle = 'أنشطة المستخدم: ' . $user->name;
-    $breadcrumbParent = 'سجل الأنشطة';
+    $breadcrumbTitle = __('admin.activity_logs.user_activities') . ': ' . $user->name;
+    $breadcrumbParent = __('admin.activity_logs.title');
     $breadcrumbParentUrl = route('admin.activity-logs.index');
 @endphp
 @extends('layouts.admin')
-@section('title', 'أنشطة المستخدم')
+@section('title', __('admin.activity_logs.user_activities'))
 
 @section('content')
     <div class="container-fluid p-0">
@@ -40,7 +40,7 @@
                     <div class="card border-0 shadow-sm">
                         <div class="card-body text-center">
                             <h3 class="mb-0 fw-bold text-primary">{{ number_format($stats['total_activities']) }}</h3>
-                            <small class="text-muted">إجمالي الأنشطة</small>
+                            <small class="text-muted">{{ __('admin.activity_logs.total_activities') }}</small>
                         </div>
                     </div>
                 </div>
@@ -48,7 +48,7 @@
                     <div class="card border-0 shadow-sm">
                         <div class="card-body text-center">
                             <h3 class="mb-0 fw-bold text-success">{{ number_format($stats['today_activities']) }}</h3>
-                            <small class="text-muted">أنشطة اليوم</small>
+                            <small class="text-muted">{{ __('admin.activity_logs.today_activities') }}</small>
                         </div>
                     </div>
                 </div>
@@ -124,14 +124,14 @@
         <x-admin.card>
             <x-admin.card-header-index
                 icon="bi-list-check"
-                title="سجل الأنشطة" />
+                title="{{ __('admin.activity_logs.title') }}" />
 
                 <div class="card-body p-3">
                     <form method="GET" action="{{ route('admin.activity-logs.user', $user->id) }}" class="row g-3">
                         <div class="col-md-3">
                             <label class="form-label fw-semibold text-dark mb-1">العملية</label>
                             <select name="action" class="form-select rounded-3">
-                                <option value="">جميع العمليات</option>
+                                <option value="">{{ __('admin.activity_logs.all_operations') }}</option>
                                 <option value="login" {{ request('action') == 'login' ? 'selected' : '' }}>تسجيل الدخول</option>
                                 <option value="logout" {{ request('action') == 'logout' ? 'selected' : '' }}>تسجيل الخروج</option>
                                 <option value="view" {{ request('action') == 'view' ? 'selected' : '' }}>عرض</option>
@@ -141,20 +141,20 @@
                             </select>
                         </div>
                         <div class="col-md-3">
-                            <label class="form-label fw-semibold text-dark mb-1">من تاريخ</label>
+                            <label class="form-label fw-semibold text-dark mb-1">{{ __('admin.activity_logs.date_from') }}</label>
                             <input type="date" name="date_from" class="form-control rounded-3" value="{{ request('date_from') }}">
                         </div>
                         <div class="col-md-3">
-                            <label class="form-label fw-semibold text-dark mb-1">إلى تاريخ</label>
+                            <label class="form-label fw-semibold text-dark mb-1">{{ __('admin.activity_logs.date_to') }}</label>
                             <input type="date" name="date_to" class="form-control rounded-3" value="{{ request('date_to') }}">
                         </div>
                         <div class="col-md-3">
                             <label class="form-label mb-1">&nbsp;</label>
                             <button type="submit" class="btn btn-outline-primary w-100 rounded-3">
-                                <i class="bi bi-search me-1"></i> استعلام
+                                <i class="bi bi-search me-1"></i> {{ __('admin.actions.query') }}
                             </button>
                             <a href="{{ route('admin.activity-logs.user', $user->id) }}" class="btn btn-outline-danger w-100 rounded-3 mt-1">
-                                <i class="bi bi-x-circle me-1"></i> تفريغ
+                                <i class="bi bi-x-circle me-1"></i> {{ __('admin.actions.clear') }}
                             </a>
                         </div>
                     </form>
@@ -166,8 +166,8 @@
                                 <th>العملية</th>
                                 <th>الوصف</th>
                                 <th>الراوت</th>
-                                <th>IP</th>
-                                <th>التاريخ</th>
+                                <th>{{ __('admin.activity_logs.ip_address') }}</th>
+                                <th>{{ __('admin.activity_logs.date') }}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -196,7 +196,7 @@
                                 <tr>
                                     <td colspan="5" class="text-center py-5 text-muted">
                                         <i class="bi bi-inbox fs-1 d-block mb-2"></i>
-                                        لا توجد أنشطة
+                                        {{ __('admin.activity_logs.no_activities') }}
                                     </td>
                                 </tr>
                             @endforelse
@@ -216,4 +216,3 @@
         </x-admin.card>
     </div>
 @endsection
-

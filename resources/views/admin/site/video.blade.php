@@ -73,7 +73,7 @@
                             <!-- Submit Button -->
                             <div class="d-flex gap-2 justify-content-end">
                                 <a href="{{ route('admin.dashboard') }}" class="btn btn-cancel">
-                                    إلغاء
+                                    {{ __('admin.common.cancel') }}
                                 </a>
                                 <button type="submit" class="btn btn-save d-flex align-items-center gap-2">
                                     <i class="bi bi-check-circle"></i>
@@ -88,7 +88,7 @@
                 <div class="col-lg-7">
                     <div class="card border-0 shadow-sm rounded-4 bg-white">
                         <div class="card-body p-4">
-                            <h6 class="fw-semibold text-dark mb-3">معاينة الفيديو</h6>
+                            <h6 class="fw-semibold text-dark mb-3">{{ __('admin.settings.video_preview_title') }}</h6>
                             <div id="video-preview" class="border rounded-4 overflow-hidden position-relative bg-light" style="aspect-ratio:16/9; min-height: 300px;">
                                 @if($videoId)
                                     <img src="{{ $thumb }}" 
@@ -109,16 +109,16 @@
                                 @else
                                     <div class="w-100 h-100 d-flex flex-column align-items-center justify-content-center text-muted p-4">
                                         <i class="bi bi-camera-video-off fs-1 mb-2 opacity-50"></i>
-                                        <p class="mb-0 text-center small">أدخل رابط YouTube لرؤية المعاينة</p>
+                                        <p class="mb-0 text-center small">{{ __('admin.common.youtube_preview_hint') }}</p>
                                     </div>
                                 @endif
                             </div>
 
                             @if($videoId)
                                 <div class="mt-3 d-flex align-items-center justify-content-between">
-                                    <small class="text-muted">معرف الفيديو: <code class="text-primary">{{ $videoId }}</code></small>
+                                    <small class="text-muted">{{ __('admin.settings.video_id_label') }} <code class="text-primary">{{ $videoId }}</code></small>
                                     <a href="https://www.youtube.com/watch?v={{ $videoId }}" target="_blank" class="btn btn-sm btn-outline-danger rounded-3">
-                                        <i class="bi bi-youtube me-1"></i>فتح في YouTube
+                                        <i class="bi bi-youtube me-1"></i>{{ __('admin.settings.open_in_youtube') }}
                                     </a>
                                 </div>
                             @endif

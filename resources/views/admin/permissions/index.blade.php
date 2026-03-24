@@ -19,7 +19,7 @@
             <!-- البحث والفلترة -->
             <div class="card-body p-3">
                 <div class="d-flex align-items-center gap-2 mb-3 flex-wrap">
-                    <span class="stat-chip">الإجمالي: <strong>{{ number_format($stats['total']) }}</strong></span>
+                    <span class="stat-chip">{{ __('admin.permissions.total') }}: <strong>{{ number_format($stats['total']) }}</strong></span>
                     <span class="stat-chip">Web: <strong>{{ number_format($stats['web']) }}</strong></span>
                     @if($stats['api'] > 0)
                         <span class="stat-chip">API: <strong>{{ number_format($stats['api']) }}</strong></span>
@@ -31,22 +31,22 @@
                             <input type="text"
                                    name="search"
                                    class="form-control rounded-3"
-                                   placeholder="ابحث عن صلاحية..."
+                                   placeholder="{{ __('admin.permissions.search_placeholder') }}"
                                    value="{{ request('search') }}">
                         </div>
                         <div style="flex: 0 1 25%;">
                             <select name="guard" class="form-select rounded-3">
-                                <option value="">كل البيئات</option>
+                                <option value="">{{ __('admin.permissions.all_guards') }}</option>
                                 <option value="web" {{ request('guard') == 'web' ? 'selected' : '' }}>Web</option>
                                 <option value="api" {{ request('guard') == 'api' ? 'selected' : '' }}>API</option>
                             </select>
                         </div>
                         <div style="flex: 0 0 auto;">
                             <button type="submit" class="btn btn-primary rounded-3">
-                                <i class="bi bi-search me-1"></i> استعلام
+                                <i class="bi bi-search me-1"></i> {{ __('admin.actions.search') }}
                             </button>
                             <a href="{{ route('admin.permissions.index') }}" class="btn btn-outline-danger rounded-3">
-                                <i class="bi bi-x-circle me-1"></i> تفريغ
+                                <i class="bi bi-x-circle me-1"></i> {{ __('admin.actions.reset') }}
                             </a>
                         </div>
                     </div>
@@ -60,10 +60,10 @@
                     <thead class="bg-light">
                         <tr>
                             <th class="text-center" style="width: 60px;">#</th>
-                            <th>اسم الصلاحية</th>
-                            <th class="text-center" style="width: 100px;">البيئة</th>
-                            <th class="text-center" style="width: 180px;">الأدوار</th>
-                            <th class="text-center" style="width: 100px;">الإجراءات</th>
+                            <th>{{ __('admin.permissions.permission_name') }}</th>
+                            <th class="text-center" style="width: 100px;">{{ __('admin.permissions.guard') }}</th>
+                            <th class="text-center" style="width: 180px;">{{ __('admin.permissions.roles') }}</th>
+                            <th class="text-center" style="width: 100px;">{{ __('admin.actions.actions') }}</th>
                         </tr>
                     </thead>
                     <tbody>

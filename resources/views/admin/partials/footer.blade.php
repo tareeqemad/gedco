@@ -5,9 +5,9 @@
             <span>
                 © {{ date('Y') }}
                 <a href="https://www.gedco.ps" class="text-primary fw-semibold text-decoration-underline">
-                    شركة كهرباء غزة
+                    {{ __('admin.auth.company_name') }}
                 </a>
-                — جميع الحقوق محفوظة.
+                — {{ app()->getLocale() === 'ar' ? 'جميع الحقوق محفوظة.' : 'All rights reserved.' }}
             </span>
         </span>
     </div>

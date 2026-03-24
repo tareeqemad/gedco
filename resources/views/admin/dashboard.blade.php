@@ -55,9 +55,9 @@
                     <div class="dash-kpi-value">{{ number_format($stats['news']['total']) }}</div>
                     <div class="dash-kpi-label">{{ __('admin.dashboard.news') }}</div>
                     <div class="d-flex gap-1 mt-1">
-                        <span class="stat-chip" style="font-size: 0.6rem; color: #16A34A;">{{ $stats['news']['published'] }} منشور</span>
+                        <span class="stat-chip" style="font-size: 0.6rem; color: #16A34A;">{{ $stats['news']['published'] }} {{ __('admin.labels.published') }}</span>
                         @if($stats['news']['draft'] > 0)
-                            <span class="stat-chip" style="font-size: 0.6rem; color: #D97706;">{{ $stats['news']['draft'] }} مسودة</span>
+                            <span class="stat-chip" style="font-size: 0.6rem; color: #D97706;">{{ $stats['news']['draft'] }} {{ __('admin.labels.draft') }}</span>
                         @endif
                     </div>
                 </div>
@@ -71,7 +71,7 @@
                 <div>
                     <div class="dash-kpi-value">{{ number_format($stats['sliders']['total']) }}</div>
                     <div class="dash-kpi-label">{{ __('admin.dashboard.sliders') }}</div>
-                    <span class="stat-chip" style="font-size: 0.6rem;">{{ $stats['sliders']['active'] }} نشط</span>
+                    <span class="stat-chip" style="font-size: 0.6rem;">{{ $stats['sliders']['active'] }} {{ __('admin.labels.active') }}</span>
                 </div>
             </div>
         </div>
@@ -109,7 +109,7 @@
                 <div>
                     <div class="dash-kpi-value">{{ number_format($stats['impact_stats']['total']) }}</div>
                     <div class="dash-kpi-label">{{ __('admin.dashboard.impact_stats') }}</div>
-                    <span class="stat-chip" style="font-size: 0.6rem;">{{ $stats['impact_stats']['active'] }} نشط</span>
+                    <span class="stat-chip" style="font-size: 0.6rem;">{{ $stats['impact_stats']['active'] }} {{ __('admin.labels.active') }}</span>
                 </div>
             </div>
         </div>

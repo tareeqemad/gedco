@@ -1,12 +1,12 @@
 <div class="row g-3">
     <div class="col-md-6">
-        <label class="form-label">العنوان *</label>
+        <label class="form-label">{{ __('admin.labels.title') }} *</label>
         <input type="text" name="title" class="form-control" value="{{ old('title', $job->title ?? '') }}" required>
         @error('title')<div class="text-danger small">{{ $message }}</div>@enderror
     </div>
 
     <div class="col-md-3">
-        <label class="form-label">الترتيب</label>
+        <label class="form-label">{{ __('admin.labels.order') }}</label>
         <input type="number" name="sort" class="form-control" value="{{ old('sort', $job->sort ?? 0) }}">
     </div>
 
@@ -14,7 +14,7 @@
         <div class="form-check mt-4">
             <input class="form-check-input" type="checkbox" name="is_active" value="1"
                 {{ old('is_active', ($job->is_active ?? true)) ? 'checked' : '' }}>
-            <label class="form-check-label">مفعل</label>
+            <label class="form-check-label">{{ __('admin.labels.enabled') }}</label>
         </div>
     </div>
 
@@ -31,7 +31,7 @@
     </div>
 
     <div class="col-md-6">
-        <label class="form-label">الصورة (webp/png/jpg)</label>
+        <label class="form-label">{{ __('admin.labels.image') }} (webp/png/jpg)</label>
         <input type="file" name="image" class="form-control" accept="image/*">
         @error('image')<div class="text-danger small">{{ $message }}</div>@enderror
         @isset($job->image)

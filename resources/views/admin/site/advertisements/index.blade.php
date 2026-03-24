@@ -40,21 +40,21 @@
                             </select>
                         </div>
                         <div style="flex: 0 1 14%; position: relative;">
-                            <label class="date-field-label">من تاريخ</label>
+                            <label class="date-field-label">{{ __('admin.activity_logs.date_from') }}</label>
                             <input type="date" name="date_from" value="{{ $dateFrom }}"
                                    class="form-control rounded-3">
                         </div>
                         <div style="flex: 0 1 14%; position: relative;">
-                            <label class="date-field-label">إلى تاريخ</label>
+                            <label class="date-field-label">{{ __('admin.activity_logs.date_to') }}</label>
                             <input type="date" name="date_to" value="{{ $dateTo }}"
                                    class="form-control rounded-3">
                         </div>
                         <div style="flex: 0 0 auto;">
                             <button type="submit" class="btn btn-primary rounded-3">
-                                <i class="bi bi-search me-1"></i> استعلام
+                                <i class="bi bi-search me-1"></i> {{ __('admin.actions.query') }}
                             </button>
                             <a href="{{ route('admin.advertisements.index') }}" class="btn btn-outline-danger rounded-3">
-                                <i class="bi bi-x-circle me-1"></i> تفريغ
+                                <i class="bi bi-x-circle me-1"></i> {{ __('admin.actions.clear') }}
                             </a>
                         </div>
                     </div>

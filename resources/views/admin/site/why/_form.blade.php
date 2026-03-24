@@ -6,7 +6,7 @@
     <x-admin.card class="mb-4">
         <x-admin.card-header-form
             icon="bi-info-circle"
-            title="المعلومات الأساسية" />
+            :title="__('admin.news.basic_info')" />
         <div class="card-body p-4 p-md-5">
             <div class="row g-4">
                 {{-- Badge --}}
@@ -115,7 +115,7 @@
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label fw-semibold text-dark mb-2">{{ __('admin.why_choose_us.form_item_title') }}</label>
-                                    <input type="text" name="feature_title[]" class="form-control rounded-3 border-0 bg-white" value="{{ $f['title'] ?? '' }}" placeholder="العنوان بالعربية" >
+                                    <input type="text" name="feature_title[]" class="form-control rounded-3 border-0 bg-white" value="{{ $f['title'] ?? '' }}" placeholder="{{ __('admin.labels.title') }} - {{ __('admin.labels.arabic') }}" >
                                 </div>
                                 <div>
                                     <label class="form-label fw-semibold text-dark mb-2">{{ __('admin.why_choose_us.form_item_text') }}</label>

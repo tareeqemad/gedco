@@ -19,10 +19,10 @@
             <!-- Stat Chips -->
             <div class="d-flex align-items-center gap-2 px-3 py-2" style="border-bottom: 1px solid #E6ECF2;">
                 <span class="badge bg-primary-subtle text-primary rounded-pill px-3 py-2">
-                    <i class="bi bi-person-badge me-1"></i>إجمالي الأدوار: {{ number_format($stats['total']) }}
+                    <i class="bi bi-person-badge me-1"></i>{{ __('admin.roles.total_roles') }}: {{ number_format($stats['total']) }}
                 </span>
                 <span class="badge bg-info-subtle text-info rounded-pill px-3 py-2">
-                    <i class="bi bi-people me-1"></i>المستخدمون: {{ number_format($stats['total_users']) }}
+                    <i class="bi bi-people me-1"></i>{{ __('admin.roles.users_count') }}: {{ number_format($stats['total_users']) }}
                 </span>
                 <span class="badge bg-success-subtle text-success rounded-pill px-3 py-2">
                     <i class="bi bi-shield-check me-1"></i>الصلاحيات: {{ number_format($stats['total_permissions']) }}
@@ -36,7 +36,7 @@
                         <input type="text"
                                name="search"
                                class="form-control rounded-3"
-                                                              placeholder="ابحث عن دور..."
+                                                              placeholder="{{ __('admin.roles.search_placeholder') }}"
                                value="{{ request('search') }}">
                     </div>
                     <div class="col-12 col-lg-1">
@@ -54,10 +54,10 @@
                     <thead class="bg-light">
                         <tr>
                             <th class="text-center" style="width: 60px;">#</th>
-                            <th>اسم الدور</th>
+                            <th>{{ __('admin.roles.role_name') }}</th>
                             <th class="text-center" style="width: 200px;">الصلاحيات</th>
-                            <th class="text-center" style="width: 200px;">المستخدمون</th>
-                            <th class="text-center" style="width: 120px;">الإجراءات</th>
+                            <th class="text-center" style="width: 200px;">{{ __('admin.roles.users') }}</th>
+                            <th class="text-center" style="width: 120px;">{{ __('admin.actions.actions') }}</th>
                         </tr>
                     </thead>
                     <tbody>
