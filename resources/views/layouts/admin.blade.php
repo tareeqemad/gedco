@@ -41,6 +41,7 @@
     <link rel="stylesheet" href="{{ asset('assets/admin/libs/choices.js/public/assets/styles/choices.min.css') }}">
 
     <link rel="stylesheet" href="{{ asset('assets/admin/css/custom.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/admin/libs/sweetalert2/sweetalert2.min.css') }}">
     @stack('styles')
 </head>
 
@@ -156,8 +157,30 @@
 <!-- Custom JS -->
 <script src="{{ asset('assets/admin/js/custom.js') }}"></script>
 <script src="{{ asset('assets/admin/js/notifications.js') }}"></script>
+<script src="{{ asset('assets/admin/libs/sweetalert2/sweetalert2.min.js') }}"></script>
 @vite(['resources/js/app.js'])
 
+{{-- Global: unified Swal delete confirmation for any form with data-confirm-delete --}}
+<script>
+document.addEventListener('click', function(e) {
+    const btn = e.target.closest('[data-confirm-delete]');
+    if (!btn) return;
+    e.preventDefault();
+    const form = btn.closest('form');
+    if (!form) return;
+    Swal.fire({
+        title: btn.dataset.confirmTitle || '{{ __('admin.ui.confirm_delete') }}',
+        text: btn.dataset.confirmText || '{{ __('admin.ui.delete_irreversible') }}',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: '{{ __('admin.actions.delete') }}',
+        cancelButtonText: '{{ __('admin.actions.cancel') }}',
+        reverseButtons: true,
+        buttonsStyling: false,
+        customClass: { confirmButton: 'btn btn-danger px-4', cancelButton: 'btn btn-secondary px-4 me-2' }
+    }).then(function(result) { if (result.isConfirmed) form.submit(); });
+});
+</script>
 
 @stack('scripts')
 </body>

@@ -926,6 +926,7 @@ return [
         'search_placeholder' => 'Search for a role...',
         'role_name' => 'Role Name',
         'users' => 'Users',
+        'cannot_delete_has_users' => 'Cannot delete — role has users',
     ],
 
     // Common UI strings
@@ -1224,6 +1225,7 @@ return [
     // Footer Links
     'footer_links' => [
         'search_placeholder' => 'Search by title/path/link...',
+        'no_links' => 'No links found',
     ],
 
     // Staff profiles - locations & maps

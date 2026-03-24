@@ -58,14 +58,14 @@
                                     </a>
                                     <form action="{{ route('admin.footer-links.destroy',$l) }}" method="post" class="d-inline">
                                         @csrf @method('DELETE')
-                                        <button class="btn btn-sm btn-outline-danger rounded-3" onclick="return confirm('حذف؟')">
+                                        <button type="button" class="btn btn-sm btn-outline-danger rounded-3" data-confirm-delete>
                                             <i class="bi bi-trash"></i>
                                         </button>
                                     </form>
                                 </td>
                             </tr>
                         @empty
-                            <tr><td colspan="8" class="text-center text-muted py-4">لا توجد روابط</td></tr>
+                            <tr><td colspan="8" class="text-center text-muted py-4">{{ __('admin.footer_links.no_links') }}</td></tr>
                         @endforelse
                         </tbody>
                     </table>

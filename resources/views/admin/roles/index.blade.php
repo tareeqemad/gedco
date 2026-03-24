@@ -125,22 +125,22 @@
                                 </td>
                                 <td>
                                     <div class="d-flex gap-2 justify-content-center">
-                                        <a href="{{ route('admin.roles.edit', $role->id) }}" 
+                                        <a href="{{ route('admin.roles.edit', $role->id) }}"
                                            class="btn btn-sm btn-outline-warning rounded-3"
-                                           title="تعديل">
+                                           title="{{ __('admin.actions.edit') }}">
                                             <i class="bi bi-pencil"></i>
                                         </a>
                                         @if($role->name !== 'super-admin')
-                                            <form action="{{ route('admin.roles.destroy', $role->id) }}" 
-                                                  method="POST" 
-                                                  class="d-inline"
-                                                  onsubmit="return confirm('{{ __('admin.roles.delete_confirm') }}')">
+                                            <form action="{{ route('admin.roles.destroy', $role->id) }}"
+                                                  method="POST"
+                                                  class="d-inline">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" 
+                                                <button type="button"
                                                         class="btn btn-sm btn-outline-danger rounded-3 {{ $role->users_count > 0 ? 'disabled' : '' }}"
-                                                        title="{{ $role->users_count > 0 ? 'لا يمكن الحذف - يوجد مستخدمين' : 'حذف' }}"
-                                                        @if($role->users_count > 0) disabled @endif>
+                                                        title="{{ $role->users_count > 0 ? __('admin.roles.cannot_delete_has_users') : __('admin.actions.delete') }}"
+                                                        @if($role->users_count > 0) disabled @endif
+                                                        data-confirm-delete>
                                                     <i class="bi bi-trash"></i>
                                                 </button>
                                             </form>
@@ -253,23 +253,23 @@
                         @endif
                         
                         <div class="d-flex gap-2">
-                            <a href="{{ route('admin.roles.edit', $role->id) }}" 
+                            <a href="{{ route('admin.roles.edit', $role->id) }}"
                                class="btn btn-sm btn-outline-warning rounded-3 flex-fill">
                                 <i class="bi bi-pencil me-1"></i>
-                                تعديل
+                                {{ __('admin.actions.edit') }}
                             </a>
                             @if($role->name !== 'super-admin')
-                                <form action="{{ route('admin.roles.destroy', $role->id) }}" 
-                                      method="POST" 
-                                      class="d-inline flex-fill"
-                                      onsubmit="return confirm('{{ __('admin.roles.delete_confirm') }}')">
+                                <form action="{{ route('admin.roles.destroy', $role->id) }}"
+                                      method="POST"
+                                      class="d-inline flex-fill">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" 
+                                    <button type="button"
                                             class="btn btn-sm btn-outline-danger rounded-3 w-100 {{ $role->users_count > 0 ? 'disabled' : '' }}"
-                                            @if($role->users_count > 0) disabled @endif>
+                                            @if($role->users_count > 0) disabled @endif
+                                            data-confirm-delete>
                                         <i class="bi bi-trash me-1"></i>
-                                        حذف
+                                        {{ __('admin.actions.delete') }}
                                     </button>
                                 </form>
                             @endif

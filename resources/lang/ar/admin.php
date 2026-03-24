@@ -925,6 +925,7 @@ return [
         'search_placeholder' => 'ابحث عن دور...',
         'role_name' => 'اسم الدور',
         'users' => 'المستخدمون',
+        'cannot_delete_has_users' => 'لا يمكن الحذف - يوجد مستخدمين',
     ],
 
     // Common UI strings (shared across pages)
@@ -1224,6 +1225,7 @@ return [
     // Footer Links
     'footer_links' => [
         'search_placeholder' => 'ابحث بالعنوان/المسار/الرابط...',
+        'no_links' => 'لا توجد روابط',
     ],
 
     // Staff profiles - locations & maps

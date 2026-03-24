@@ -44,7 +44,7 @@
                                     </a>
                                     <form action="{{ route('admin.social-links.destroy',$l) }}" method="post" class="d-inline">
                                         @csrf @method('DELETE')
-                                        <button class="btn btn-sm btn-outline-danger rounded-3" onclick="return confirm('{{ __('admin.social_links.confirm_delete') }}')">
+                                        <button type="button" class="btn btn-sm btn-outline-danger rounded-3" data-confirm-delete>
                                             <i class="bi bi-trash"></i>
                                         </button>
                                     </form>

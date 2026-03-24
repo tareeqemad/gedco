@@ -95,20 +95,20 @@
                                 </td>
                                 <td>
                                     <div class="d-flex gap-2 justify-content-center">
-                                        <a href="{{ route('admin.permissions.edit', $perm->id) }}" 
+                                        <a href="{{ route('admin.permissions.edit', $perm->id) }}"
                                            class="btn btn-sm btn-outline-warning rounded-3"
-                                           title="تعديل">
+                                           title="{{ __('admin.actions.edit') }}">
                                             <i class="bi bi-pencil"></i>
                                         </a>
-                                        <form action="{{ route('admin.permissions.destroy', $perm->id) }}" 
-                                              method="POST" 
-                                              class="d-inline"
-                                              onsubmit="return confirm('{{ __('admin.permissions.delete_confirm') }}')">
+                                        <form action="{{ route('admin.permissions.destroy', $perm->id) }}"
+                                              method="POST"
+                                              class="d-inline">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" 
+                                            <button type="button"
                                                     class="btn btn-sm btn-outline-danger rounded-3"
-                                                    title="حذف">
+                                                    title="{{ __('admin.actions.delete') }}"
+                                                    data-confirm-delete>
                                                 <i class="bi bi-trash"></i>
                                             </button>
                                         </form>
@@ -192,16 +192,16 @@
                                 <i class="bi bi-pencil me-1"></i>
                                 تعديل
                             </a>
-                            <form action="{{ route('admin.permissions.destroy', $perm->id) }}" 
-                                  method="POST" 
-                                  class="d-inline flex-fill"
-                                  onsubmit="return confirm('{{ __('admin.permissions.delete_confirm') }}')">
+                            <form action="{{ route('admin.permissions.destroy', $perm->id) }}"
+                                  method="POST"
+                                  class="d-inline flex-fill">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" 
-                                        class="btn btn-sm btn-outline-danger rounded-3 w-100">
+                                <button type="button"
+                                        class="btn btn-sm btn-outline-danger rounded-3 w-100"
+                                        data-confirm-delete>
                                     <i class="bi bi-trash me-1"></i>
-                                    حذف
+                                    {{ __('admin.actions.delete') }}
                                 </button>
                             </form>
                         </div>

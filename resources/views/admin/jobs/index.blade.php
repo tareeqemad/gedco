@@ -49,10 +49,9 @@
                                         </a>
                                     @endcan
                                     @can('jobs.delete')
-                                        <form action="{{ route('admin.jobs.destroy',$job) }}" method="POST" class="d-inline"
-                                              onsubmit="return confirm('{{ __('admin.jobs.confirm_delete') }}')">
+                                        <form action="{{ route('admin.jobs.destroy',$job) }}" method="POST" class="d-inline">
                                             @csrf @method('DELETE')
-                                            <button class="btn btn-sm btn-outline-danger rounded-3" title="{{ __('admin.actions.delete') }}">
+                                            <button type="button" class="btn btn-sm btn-outline-danger rounded-3" title="{{ __('admin.actions.delete') }}" data-confirm-delete>
                                                 <i class="bi bi-trash"></i>
                                             </button>
                                         </form>
