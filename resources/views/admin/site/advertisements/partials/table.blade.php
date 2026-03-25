@@ -15,7 +15,7 @@
             <th class="text-center text-muted small fw-semibold" style="width:130px">{{ __('admin.advertisements.table_added_by') }}</th>
             <th class="text-center text-muted small fw-semibold" style="width:130px">{{ __('admin.advertisements.table_last_update') }}</th>
             <th class="text-center text-muted small fw-semibold" style="width:80px">{{ __('admin.advertisements.table_file') }}</th>
-            <th class="text-center text-muted small fw-semibold" style="width:160px">{{ __('admin.advertisements.table_actions') }}</th>
+            <th class="text-center text-muted small fw-semibold" style="width:120px">{{ __('admin.advertisements.table_actions') }}</th>
         </tr>
         </thead>
         <tbody>
@@ -84,22 +84,17 @@
                 </td>
 
                 <td class="text-center">
-                    <div class="d-flex gap-2 justify-content-center">
-                        <a href="{{ $showUrl }}" 
-                           class="btn btn-outline-primary btn-sm rounded-3 shadow-sm"
-                           title="{{ __('admin.advertisements.view') }}">
-                            <i class="bi bi-eye me-1"></i><span class="d-none d-lg-inline">{{ __('admin.advertisements.view') }}</span>
+                    <div class="d-flex gap-1 justify-content-center">
+                        <a href="{{ $showUrl }}" class="btn btn-outline-primary btn-sm rounded-circle" style="width:32px;height:32px;padding:0;display:inline-flex;align-items:center;justify-content:center;" title="{{ __('admin.advertisements.view') }}">
+                            <i class="bi bi-eye"></i>
                         </a>
-                        <a href="{{ $editUrl }}" 
-                           class="btn btn-outline-warning btn-sm rounded-3 shadow-sm"
-                           title="{{ __('admin.advertisements.edit') }}">
-                            <i class="bi bi-pencil me-1"></i><span class="d-none d-lg-inline">{{ __('admin.advertisements.edit') }}</span>
+                        <a href="{{ $editUrl }}" class="btn btn-outline-warning btn-sm rounded-circle" style="width:32px;height:32px;padding:0;display:inline-flex;align-items:center;justify-content:center;" title="{{ __('admin.advertisements.edit') }}">
+                            <i class="bi bi-pencil"></i>
                         </a>
                         <form action="{{ $destroyUrl }}" method="POST" onsubmit="return confirmDelete(this,'{{ $ad->ID_ADVER }}')" class="d-inline">
                             @csrf @method('DELETE')
-                            <button type="submit" class="btn btn-outline-danger btn-sm rounded-3 shadow-sm"
-                                    title="{{ __('admin.advertisements.delete') }}">
-                                <i class="bi bi-trash me-1"></i><span class="d-none d-lg-inline">{{ __('admin.advertisements.delete') }}</span>
+                            <button type="submit" class="btn btn-outline-danger btn-sm rounded-circle" style="width:32px;height:32px;padding:0;display:inline-flex;align-items:center;justify-content:center;" title="{{ __('admin.advertisements.delete') }}">
+                                <i class="bi bi-trash"></i>
                             </button>
                         </form>
                     </div>
