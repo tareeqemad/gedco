@@ -141,12 +141,16 @@
                             </select>
                         </div>
                         <div class="col-md-3">
-                            <label class="form-label fw-semibold text-dark mb-1">{{ __('admin.activity_logs.date_from') }}</label>
-                            <input type="date" name="date_from" class="form-control rounded-3" value="{{ request('date_from') }}">
+                            <div class="filter-field-date position-relative">
+                                <label class="date-field-label">{{ __('admin.activity_logs.date_from') }}</label>
+                                <input type="date" name="date_from" class="form-control rounded-3" value="{{ request('date_from') }}">
+                            </div>
                         </div>
                         <div class="col-md-3">
-                            <label class="form-label fw-semibold text-dark mb-1">{{ __('admin.activity_logs.date_to') }}</label>
-                            <input type="date" name="date_to" class="form-control rounded-3" value="{{ request('date_to') }}">
+                            <div class="filter-field-date position-relative">
+                                <label class="date-field-label">{{ __('admin.activity_logs.date_to') }}</label>
+                                <input type="date" name="date_to" class="form-control rounded-3" value="{{ request('date_to') }}">
+                            </div>
                         </div>
                         <div class="col-md-3">
                             <label class="form-label mb-1">&nbsp;</label>

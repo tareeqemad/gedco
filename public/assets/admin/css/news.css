@@ -1,86 +1,14 @@
 /**
  * News Section Styles
- * CSS خاص بصفحات الأخبار فقط - يتم تحميله فقط عند فتح صفحات الأخبار
+ * Flatpickr + Date picker styles are in custom.css (global)
  */
 
-/* ========== Admin Date Picker Styles ========== */
-.admin-date-input {
-    cursor: pointer !important;
-    background-color: #f8f9fa !important;
-    user-select: none !important;
-}
+/* ========== News Index Page Styles ========== */
+/* .bg-gradient-primary defined globally in custom.css */
 
-.admin-date-input:hover {
-    background-color: #e9ecef !important;
-}
+/* All flatpickr styles removed — now in custom.css globally */
 
-.admin-date-input:focus {
-    background-color: #ffffff !important;
-    border-color: #0066cc !important;
-    box-shadow: 0 0 0 0.2rem rgba(0, 102, 204, 0.15) !important;
-}
-
-input[type="date"][data-flatpickr-initialized] {
-    position: absolute !important;
-    opacity: 0 !important;
-    width: 1px !important;
-    height: 1px !important;
-    pointer-events: none !important;
-}
-
-/* Flatpickr Arabic RTL Styles - Redesigned */
-.flatpickr-calendar {
-    direction: rtl !important;
-    font-family: "Tajawal", "Cairo", sans-serif !important;
-    border-radius: 0.75rem !important;
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12) !important;
-    border: 1px solid #e9ecef !important;
-    overflow: hidden !important;
-    background: #ffffff !important;
-}
-
-.flatpickr-calendar.rtl {
-    direction: rtl !important;
-}
-
-/* Header - Month/Year Selector */
-.flatpickr-months {
-    direction: rtl !important;
-    background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%) !important;
-    padding: 0.4rem 1rem !important;
-    border-bottom: 2px solid rgba(255, 255, 255, 0.1) !important;
-    min-height: auto !important;
-    height: auto !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-}
-
-.flatpickr-month {
-    direction: rtl !important;
-    color: #ffffff !important;
-    font-weight: 700 !important;
-    font-size: 1.1rem !important;
-    padding: 0.5rem 0 !important;
-}
-
-.flatpickr-current-month {
-    color: #ffffff !important;
-    font-weight: 700 !important;
-    font-size: 0.95rem !important;
-    padding: 0.1rem 0 !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    gap: 0.35rem !important;
-    flex-wrap: wrap !important;
-    min-height: auto !important;
-    height: auto !important;
-    width: 100% !important;
-    text-align: center !important;
-}
-
-/* نص الشهر والسنة */
+/* ========== KEEP MARKER ========== */
 .flatpickr-current-month .cur-month,
 .flatpickr-current-month .cur-year {
     color: #ffffff !important;
@@ -144,7 +72,7 @@ input[type="date"][data-flatpickr-initialized] {
 
 .flatpickr-current-month .flatpickr-monthDropdown-months option {
     background: #ffffff !important;
-    color: #0066cc !important;
+    color: #0F67C6 !important;
     padding: 0.5rem 0.75rem !important;
     font-weight: 500 !important;
     font-size: 0.85rem !important;
@@ -153,12 +81,12 @@ input[type="date"][data-flatpickr-initialized] {
 .flatpickr-current-month .flatpickr-monthDropdown-months option:hover,
 .flatpickr-current-month .flatpickr-monthDropdown-months option:focus,
 .flatpickr-current-month .flatpickr-monthDropdown-months option:checked {
-    background: #0066cc !important;
+    background: #0F67C6 !important;
     color: #ffffff !important;
 }
 
 .flatpickr-current-month .flatpickr-monthDropdown-months option:active {
-    background: #0052a3 !important;
+    background: #0C58A8 !important;
     color: #ffffff !important;
 }
 
@@ -198,7 +126,7 @@ input[type="date"][data-flatpickr-initialized] {
 
 .flatpickr-current-month .flatpickr-yearDropdown option {
     background: #ffffff !important;
-    color: #0066cc !important;
+    color: #0F67C6 !important;
     padding: 0.5rem 0.75rem !important;
     font-weight: 500 !important;
     font-size: 0.85rem !important;
@@ -207,12 +135,12 @@ input[type="date"][data-flatpickr-initialized] {
 .flatpickr-current-month .flatpickr-yearDropdown option:hover,
 .flatpickr-current-month .flatpickr-yearDropdown option:focus,
 .flatpickr-current-month .flatpickr-yearDropdown option:checked {
-    background: #0066cc !important;
+    background: #0F67C6 !important;
     color: #ffffff !important;
 }
 
 .flatpickr-current-month .flatpickr-yearDropdown option:active {
-    background: #0052a3 !important;
+    background: #0C58A8 !important;
     color: #ffffff !important;
 }
 
@@ -275,14 +203,14 @@ input[type="date"][data-flatpickr-initialized] {
 /* Weekdays Header */
 .flatpickr-weekdays {
     direction: rtl !important;
-    background: linear-gradient(135deg, rgba(0, 102, 204, 0.08) 0%, rgba(0, 82, 163, 0.08) 100%) !important;
+    background: linear-gradient(135deg, rgba(15, 103, 198, 0.08) 0%, rgba(0, 82, 163, 0.08) 100%) !important;
     padding: 0.75rem 0 !important;
-    border-bottom: 2px solid rgba(0, 102, 204, 0.15) !important;
-    border-top: 1px solid rgba(0, 102, 204, 0.1) !important;
+    border-bottom: 2px solid rgba(15, 103, 198, 0.15) !important;
+    border-top: 1px solid rgba(15, 103, 198, 0.1) !important;
 }
 
 .flatpickr-weekday {
-    color: #0066cc !important;
+    color: #0F67C6 !important;
     font-weight: 700 !important;
     font-size: 0.85rem !important;
     text-transform: none !important;
@@ -308,38 +236,38 @@ input[type="date"][data-flatpickr-initialized] {
 }
 
 .flatpickr-day:hover {
-    background: rgba(0, 102, 204, 0.1) !important;
-    border-color: rgba(0, 102, 204, 0.3) !important;
+    background: rgba(15, 103, 198, 0.1) !important;
+    border-color: rgba(15, 103, 198, 0.3) !important;
     transform: scale(1.05) !important;
 }
 
 .flatpickr-day.selected,
 .flatpickr-day.startRange,
 .flatpickr-day.endRange {
-    background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%) !important;
-    border-color: #0066cc !important;
+    background: linear-gradient(135deg, #0F67C6 0%, #0C58A8 100%) !important;
+    border-color: #0F67C6 !important;
     color: #ffffff !important;
     font-weight: 700 !important;
-    box-shadow: 0 2px 8px rgba(0, 102, 204, 0.3) !important;
+    box-shadow: 0 2px 8px rgba(15, 103, 198, 0.3) !important;
 }
 
 .flatpickr-day.selected:hover,
 .flatpickr-day.startRange:hover,
 .flatpickr-day.endRange:hover {
-    background: linear-gradient(135deg, #0052a3 0%, #004080 100%) !important;
+    background: linear-gradient(135deg, #0C58A8 0%, #0A4B90 100%) !important;
     transform: scale(1.05) !important;
 }
 
 .flatpickr-day.today {
-    border-color: #0066cc !important;
-    background: rgba(0, 102, 204, 0.05) !important;
+    border-color: #0F67C6 !important;
+    background: rgba(15, 103, 198, 0.05) !important;
     font-weight: 600 !important;
-    color: #0066cc !important;
+    color: #0F67C6 !important;
 }
 
 .flatpickr-day.today:hover {
-    background: rgba(0, 102, 204, 0.15) !important;
-    border-color: #0066cc !important;
+    background: rgba(15, 103, 198, 0.15) !important;
+    border-color: #0F67C6 !important;
 }
 
 .flatpickr-day.flatpickr-disabled,
@@ -357,8 +285,8 @@ input[type="date"][data-flatpickr-initialized] {
 
 /* Range Selection */
 .flatpickr-day.inRange {
-    background: rgba(0, 102, 204, 0.1) !important;
-    border-color: rgba(0, 102, 204, 0.2) !important;
+    background: rgba(15, 103, 198, 0.1) !important;
+    border-color: rgba(15, 103, 198, 0.2) !important;
 }
 
 /* Animation */
@@ -378,9 +306,7 @@ input[type="date"][data-flatpickr-initialized] {
 }
 
 /* ========== News Index Page Styles ========== */
-.bg-gradient-primary {
-    background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%) !important;
-}
+/* .bg-gradient-primary defined globally in custom.css */
 
 .icon-wrapper {
     display: inline-flex;
@@ -482,8 +408,8 @@ input[type="date"][data-flatpickr-initialized] {
 
 .news-filters .form-control:focus,
 .news-filters .form-select:focus {
-    border-color: #0066cc;
-    box-shadow: 0 0 0 0.2rem rgba(0, 102, 204, 0.15);
+    border-color: #0F67C6;
+    box-shadow: 0 0 0 0.2rem rgba(15, 103, 198, 0.15);
 }
 
 .news-filters .input-group .form-control {
@@ -508,16 +434,7 @@ input[type="date"][data-flatpickr-initialized] {
     min-height: 40px !important;
 }
 
-.news-filters .btn-primary {
-    background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%) !important;
-    border: none !important;
-}
-
-.news-filters .btn-primary:hover {
-    background: linear-gradient(135deg, #0052a3 0%, #004080 100%) !important;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(0, 102, 204, 0.3) !important;
-}
+/* .btn-primary styles handled by global custom.css */
 
 .news-card {
     border: none !important;
@@ -527,7 +444,7 @@ input[type="date"][data-flatpickr-initialized] {
 
 .news-card:hover {
     transform: translateY(-8px);
-    box-shadow: 0 12px 30px rgba(0, 102, 204, 0.15) !important;
+    box-shadow: 0 12px 30px rgba(15, 103, 198, 0.15) !important;
 }
 
 .news-card-image {
@@ -725,20 +642,20 @@ input[type="date"][data-flatpickr-initialized] {
     border-radius: 0.5rem;
     margin: 0 0.25rem;
     border: 1px solid #dee2e6;
-    color: #0066cc;
+    color: #0F67C6;
     transition: all 0.2s ease;
 }
 
 .pagination .page-link:hover {
-    background-color: #0066cc;
+    background-color: #0F67C6;
     color: white;
-    border-color: #0066cc;
+    border-color: #0F67C6;
     transform: translateY(-2px);
 }
 
 .pagination .page-item.active .page-link {
-    background-color: #0066cc;
-    border-color: #0066cc;
+    background-color: #0F67C6;
+    border-color: #0F67C6;
     color: white;
 }
 
@@ -750,9 +667,9 @@ input[type="date"][data-flatpickr-initialized] {
 }
 
 .nav-pills-custom .nav-link.active {
-    background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%);
+    background: linear-gradient(135deg, #0F67C6 0%, #0C58A8 100%);
     color: white;
-    box-shadow: 0 4px 12px rgba(0, 102, 204, 0.3);
+    box-shadow: 0 4px 12px rgba(15, 103, 198, 0.3);
 }
 
 /* ========== News/Advertisement/Tender Editor Styles (Quill) ========== */
@@ -874,17 +791,8 @@ input[type="date"][data-flatpickr-initialized] {
     text-align: right;
 }
 
-#news-edit-page .card:last-of-type {
-    margin-bottom: 0 !important;
-}
-
-#news-edit-page .card-body > *:last-child {
-    margin-bottom: 0 !important;
-}
-
-#news-edit-page {
-    padding-bottom: 0 !important;
-}
+/* Removed aggressive bottom-margin stripping that was causing
+   the edit page to stick to the footer */
 
 /* ========== News Create/Edit Page Styles ========== */
 #news-create-page .nav-tabs .nav-link,
@@ -914,15 +822,15 @@ input[type="date"][data-flatpickr-initialized] {
 #news-create-page .dropzone:hover,
 #news-edit-page .dropzone:hover {
     background: #f8f9fa !important;
-    border-color: #0066cc !important;
+    border-color: #0F67C6 !important;
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 102, 204, 0.1) !important;
+    box-shadow: 0 4px 12px rgba(15, 103, 198, 0.1) !important;
 }
 
 #news-create-page .dropzone.dragover,
 #news-edit-page .dropzone.dragover {
     background: #e7f3ff !important;
-    border-color: #0066cc !important;
+    border-color: #0F67C6 !important;
     border-style: solid !important;
     transform: scale(1.02);
 }
@@ -931,30 +839,18 @@ input[type="date"][data-flatpickr-initialized] {
 #news-create-page .form-select:focus,
 #news-edit-page .form-control:focus,
 #news-edit-page .form-select:focus {
-    background: #ffffff !important;
-    border-color: #0066cc !important;
-    box-shadow: 0 0 0 0.2rem rgba(0, 102, 204, 0.15) !important;
+    background-color: #ffffff !important;
+    border-color: #0F67C6 !important;
+    box-shadow: 0 0 0 0.2rem rgba(15, 103, 198, 0.15) !important;
 }
 
 #news-create-page .form-check-input:checked,
 #news-edit-page .form-check-input:checked {
-    background-color: #0066cc;
-    border-color: #0066cc;
+    background-color: #0F67C6;
+    border-color: #0F67C6;
 }
 
-#news-create-page .btn-primary,
-#news-edit-page .btn-primary {
-    background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%) !important;
-    border: none !important;
-    transition: all 0.3s ease;
-}
-
-#news-create-page .btn-primary:hover,
-#news-edit-page .btn-primary:hover {
-    background: linear-gradient(135deg, #0052a3 0%, #004080 100%) !important;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(0, 102, 204, 0.3) !important;
-}
+/* .btn-primary for news create/edit handled by global custom.css */
 
 #news-create-page .btn-outline-secondary:hover,
 #news-edit-page .btn-outline-secondary:hover {

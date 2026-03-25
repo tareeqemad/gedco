@@ -90,13 +90,13 @@
             </div>
 
             <!-- Pagination -->
-            @if($sliders->hasPages())
-                <div class="px-3 py-2" style="border-top: 1px solid #E6ECF2;">
-                    <div id="sliderPagination">
+            <div class="px-3 py-2" style="border-top: 1px solid #E6ECF2;" id="sliderPaginationWrap">
+                <div id="sliderPagination">
+                    @if($sliders->hasPages())
                         @include('admin.site.sliders.partials.pagination', ['sliders' => $sliders])
-                    </div>
+                    @endif
                 </div>
-            @endif
+            </div>
         </x-admin.card>
     </div>
 
@@ -158,16 +158,16 @@
 
             function showLoading() {
                 isLoading = true;
-                sliderLoading.classList.add('active');
-                sliderGrid.style.opacity = '0.5';
-                sliderPagination.style.opacity = '0.5';
+                if (sliderLoading) sliderLoading.classList.add('active');
+                if (sliderGrid) sliderGrid.style.opacity = '0.5';
+                if (sliderPagination) sliderPagination.style.opacity = '0.5';
             }
 
             function hideLoading() {
                 isLoading = false;
-                sliderLoading.classList.remove('active');
-                sliderGrid.style.opacity = '1';
-                sliderPagination.style.opacity = '1';
+                if (sliderLoading) sliderLoading.classList.remove('active');
+                if (sliderGrid) sliderGrid.style.opacity = '1';
+                if (sliderPagination) sliderPagination.style.opacity = '1';
             }
 
             function buildUrl(params) {

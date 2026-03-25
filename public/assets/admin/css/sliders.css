@@ -35,7 +35,7 @@
 .slider-filter-group .form-select {
     height: 42px;
     border: 1px solid #dee2e6;
-    background: white;
+    background-color: white;
     border-radius: 0.5rem;
     transition: all 0.2s ease;
     font-size: 0.9rem;
@@ -43,9 +43,9 @@
 
 .slider-filter-group .form-control:focus,
 .slider-filter-group .form-select:focus {
-    border-color: #0066cc;
-    background: white;
-    box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.1);
+    border-color: #0F67C6;
+    background-color: white;
+    box-shadow: 0 0 0 3px rgba(15, 103, 198, 0.1);
     outline: none;
 }
 
@@ -129,7 +129,7 @@
     width: 36px;
     height: 36px;
     background: #f0f7ff;
-    color: #0066cc;
+    color: #0F67C6;
     border-radius: 0.5rem;
     font-weight: 700;
     font-size: 0.875rem;
@@ -152,8 +152,8 @@
 }
 
 .slider-table-row:hover .slider-image-wrapper {
-    border-color: #0066cc;
-    box-shadow: 0 4px 12px rgba(0, 102, 204, 0.15);
+    border-color: #0F67C6;
+    box-shadow: 0 4px 12px rgba(15, 103, 198, 0.15);
 }
 
 .slider-image-wrapper img {
@@ -196,7 +196,7 @@
 
 .slider-order-badge {
     background: #f0f7ff;
-    color: #0066cc;
+    color: #0F67C6;
     padding: 0.35rem 0.75rem;
     border-radius: 0.4rem;
     font-size: 0.875rem;
@@ -330,13 +330,13 @@
 
 .slider-pagination-links .pagination .page-link:hover {
     background: #f0f7ff;
-    border-color: #0066cc;
-    color: #0066cc;
+    border-color: #0F67C6;
+    color: #0F67C6;
 }
 
 .slider-pagination-links .pagination .page-item.active .page-link {
-    background: #0066cc;
-    border-color: #0066cc;
+    background: #0F67C6;
+    border-color: #0F67C6;
     color: white;
 }
 

@@ -13,8 +13,8 @@
     <div class="dash-hero mb-4">
         <div class="d-flex align-items-start justify-content-between flex-wrap gap-3">
             <div>
-                <h4 class="mb-1 fw-bold" style="color: #FFFFFF;">{{ __('admin.dashboard.welcome', ['name' => auth()->user()->display_name]) }}</h4>
-                <p class="mb-0" style="color: rgba(255,255,255,0.6); font-size: 0.82rem;">{{ now()->translatedFormat('l، d F Y') }} &middot; {{ now()->format('h:i A') }}</p>
+                <h4 class="mb-1 fw-bold text-white">{{ __('admin.dashboard.welcome', ['name' => auth()->user()->display_name]) }}</h4>
+                <p class="mb-0 dash-hero-subtitle">{{ now()->translatedFormat('l، d F Y') }} &middot; {{ now()->format('h:i A') }}</p>
             </div>
             @if($pendingItems->count() > 0)
                 <div class="d-flex flex-column gap-1">
@@ -22,7 +22,7 @@
                         <a href="{{ $item['route'] }}" class="dash-hero-alert">
                             <i class="bi {{ $item['icon'] }}" style="color: {{ $item['color'] }};"></i>
                             <span>{{ $item['text'] }}</span>
-                            <i class="bi bi-chevron-left" style="font-size: 0.65rem; opacity: 0.5;"></i>
+                            <i class="bi bi-chevron-left dash-hero-alert-arrow"></i>
                         </a>
                     @endforeach
                 </div>
@@ -34,30 +34,30 @@
     <div class="row mb-3">
         <div class="col-6 col-lg-3 mb-3">
             <div class="dash-kpi">
-                <div class="dash-kpi-icon" style="background: rgba(15, 103, 198, 0.08); color: #0F67C6;">
+                <div class="dash-kpi-icon kpi-primary">
                     <i class="bi bi-people-fill"></i>
                 </div>
                 <div>
                     <div class="dash-kpi-value">{{ number_format($stats['users']['total']) }}</div>
                     <div class="dash-kpi-label">{{ __('admin.dashboard.users') }}</div>
                     @if($stats['users']['today'] > 0)
-                        <span class="stat-chip" style="font-size: 0.6rem; color: #16A34A;">+{{ $stats['users']['today'] }} {{ __('admin.dashboard_ui.today') }}</span>
+                        <span class="stat-chip chip-success">+{{ $stats['users']['today'] }} {{ __('admin.dashboard_ui.today') }}</span>
                     @endif
                 </div>
             </div>
         </div>
         <div class="col-6 col-lg-3 mb-3">
             <div class="dash-kpi">
-                <div class="dash-kpi-icon" style="background: rgba(22, 163, 74, 0.08); color: #16A34A;">
+                <div class="dash-kpi-icon kpi-success">
                     <i class="bi bi-newspaper"></i>
                 </div>
                 <div>
                     <div class="dash-kpi-value">{{ number_format($stats['news']['total']) }}</div>
                     <div class="dash-kpi-label">{{ __('admin.dashboard.news') }}</div>
                     <div class="d-flex gap-1 mt-1">
-                        <span class="stat-chip" style="font-size: 0.6rem; color: #16A34A;">{{ $stats['news']['published'] }} {{ __('admin.labels.published') }}</span>
+                        <span class="stat-chip chip-success">{{ $stats['news']['published'] }} {{ __('admin.labels.published') }}</span>
                         @if($stats['news']['draft'] > 0)
-                            <span class="stat-chip" style="font-size: 0.6rem; color: #D97706;">{{ $stats['news']['draft'] }} {{ __('admin.labels.draft') }}</span>
+                            <span class="stat-chip chip-warning">{{ $stats['news']['draft'] }} {{ __('admin.labels.draft') }}</span>
                         @endif
                     </div>
                 </div>
@@ -65,19 +65,19 @@
         </div>
         <div class="col-6 col-lg-3 mb-3">
             <div class="dash-kpi">
-                <div class="dash-kpi-icon" style="background: rgba(2, 132, 199, 0.08); color: #0284C7;">
+                <div class="dash-kpi-icon kpi-info">
                     <i class="bi bi-images"></i>
                 </div>
                 <div>
                     <div class="dash-kpi-value">{{ number_format($stats['sliders']['total']) }}</div>
                     <div class="dash-kpi-label">{{ __('admin.dashboard.sliders') }}</div>
-                    <span class="stat-chip" style="font-size: 0.6rem;">{{ $stats['sliders']['active'] }} {{ __('admin.labels.active') }}</span>
+                    <span class="stat-chip">{{ $stats['sliders']['active'] }} {{ __('admin.labels.active') }}</span>
                 </div>
             </div>
         </div>
         <div class="col-6 col-lg-3 mb-3">
             <div class="dash-kpi">
-                <div class="dash-kpi-icon" style="background: rgba(217, 119, 6, 0.08); color: #D97706;">
+                <div class="dash-kpi-icon kpi-warning">
                     <i class="bi bi-megaphone-fill"></i>
                 </div>
                 <div>
@@ -92,7 +92,7 @@
     <div class="row mb-4">
         <div class="col-6 col-lg-3 mb-3">
             <div class="dash-kpi">
-                <div class="dash-kpi-icon" style="background: rgba(220, 38, 38, 0.08); color: #DC2626;">
+                <div class="dash-kpi-icon kpi-danger">
                     <i class="bi bi-file-earmark-text-fill"></i>
                 </div>
                 <div>
@@ -103,19 +103,19 @@
         </div>
         <div class="col-6 col-lg-3 mb-3">
             <div class="dash-kpi">
-                <div class="dash-kpi-icon" style="background: rgba(124, 58, 237, 0.08); color: #7C3AED;">
+                <div class="dash-kpi-icon kpi-purple">
                     <i class="bi bi-graph-up-arrow"></i>
                 </div>
                 <div>
                     <div class="dash-kpi-value">{{ number_format($stats['impact_stats']['total']) }}</div>
                     <div class="dash-kpi-label">{{ __('admin.dashboard.impact_stats') }}</div>
-                    <span class="stat-chip" style="font-size: 0.6rem;">{{ $stats['impact_stats']['active'] }} {{ __('admin.labels.active') }}</span>
+                    <span class="stat-chip">{{ $stats['impact_stats']['active'] }} {{ __('admin.labels.active') }}</span>
                 </div>
             </div>
         </div>
         <div class="col-6 col-lg-3 mb-3">
             <div class="dash-kpi">
-                <div class="dash-kpi-icon" style="background: rgba(13, 148, 136, 0.08); color: #0D9488;">
+                <div class="dash-kpi-icon kpi-teal">
                     <i class="bi bi-person-badge-fill"></i>
                 </div>
                 <div>
@@ -126,13 +126,13 @@
         </div>
         <div class="col-6 col-lg-3 mb-3">
             <div class="dash-kpi">
-                <div class="dash-kpi-icon" style="background: rgba(234, 88, 12, 0.08); color: #EA580C;">
+                <div class="dash-kpi-icon kpi-orange">
                     <i class="bi bi-activity"></i>
                 </div>
                 <div>
                     <div class="dash-kpi-value">{{ number_format($stats['activities']['today']) }}</div>
                     <div class="dash-kpi-label">{{ __('admin.dashboard_ui.today_activity') }}</div>
-                    <span class="stat-chip" style="font-size: 0.6rem;">{{ $stats['activities']['active_users_today'] }} {{ __('admin.dashboard.active_users') }}</span>
+                    <span class="stat-chip">{{ $stats['activities']['active_users_today'] }} {{ __('admin.dashboard.active_users') }}</span>
                 </div>
             </div>
         </div>
@@ -145,8 +145,8 @@
         <div class="col-12 col-lg-8 mb-3">
             <div class="card border-0 shadow-sm rounded-4">
                 <div class="card-body p-3">
-                    <h6 class="fw-bold mb-3 d-flex align-items-center gap-2" style="color: #24364A; font-size: 0.88rem;">
-                        <i class="bi bi-bar-chart-fill" style="color: #5B7088;"></i>
+                    <h6 class="fw-bold mb-3 d-flex align-items-center gap-2 dash-section-title">
+                        <i class="bi bi-bar-chart-fill dash-section-icon"></i>
                         {{ __('admin.dashboard.activities_chart') }}
                     </h6>
                     <canvas id="activitiesChart" height="70"></canvas>
@@ -159,8 +159,8 @@
         <div class="col-12 col-lg-{{ (auth()->user()->can('activity-logs.view') && $activitiesChart->count() > 0) ? '4' : '12' }} mb-3">
             <div class="card border-0 shadow-sm rounded-4 h-100">
                 <div class="card-body p-3">
-                    <h6 class="fw-bold mb-3 d-flex align-items-center gap-2" style="color: #24364A; font-size: 0.88rem;">
-                        <i class="bi bi-lightning-charge-fill" style="color: #5B7088;"></i>
+                    <h6 class="fw-bold mb-3 d-flex align-items-center gap-2 dash-section-title">
+                        <i class="bi bi-lightning-charge-fill dash-section-icon"></i>
                         {{ __('admin.dashboard_ui.quick_links') }}
                     </h6>
                     <div class="row g-2">
@@ -192,8 +192,8 @@
             <div class="card border-0 shadow-sm rounded-4 h-100">
                 <div class="card-body p-0">
                     <div class="d-flex justify-content-between align-items-center p-3 pb-2">
-                        <h6 class="fw-bold d-flex align-items-center gap-2 mb-0" style="color: #24364A; font-size: 0.88rem;">
-                            <i class="bi bi-newspaper" style="color: #5B7088;"></i>
+                        <h6 class="fw-bold d-flex align-items-center gap-2 mb-0 dash-section-title">
+                            <i class="bi bi-newspaper dash-section-icon"></i>
                             {{ __('admin.dashboard.recent_news') }}
                         </h6>
                         @can('news.view')
@@ -203,12 +203,12 @@
                     @forelse($recentNews as $news)
                         <div class="dash-list-item">
                             <div class="flex-grow-1">
-                                <div class="fw-semibold" style="font-size: 0.83rem; color: #24364A;">{{ \Illuminate\Support\Str::limit($news->title, 55) }}</div>
+                                <div class="fw-semibold dash-list-title">{{ \Illuminate\Support\Str::limit($news->title, 55) }}</div>
                                 <div class="d-flex align-items-center gap-2 mt-1">
-                                    <span class="stat-chip" style="font-size: 0.6rem; {{ $news->status === 'published' ? 'color: #16A34A;' : 'color: #D97706;' }}">
+                                    <span class="stat-chip {{ $news->status === 'published' ? 'chip-success' : 'chip-warning' }}">
                                         {{ $news->status === 'published' ? __('admin.dashboard.published') : __('admin.dashboard.draft') }}
                                     </span>
-                                    <small class="text-muted" style="font-size: 0.7rem;">{{ $news->created_at->diffForHumans() }}</small>
+                                    <small class="text-muted dash-list-time">{{ $news->created_at->diffForHumans() }}</small>
                                 </div>
                             </div>
                             @can('news.edit')
@@ -217,7 +217,7 @@
                         </div>
                     @empty
                         <div class="text-center py-4 text-muted">
-                            <i class="bi bi-folder2-open fs-3 d-block mb-2" style="color: #CDD9E3;"></i>
+                            <i class="bi bi-folder2-open fs-3 d-block mb-2 dash-empty-icon"></i>
                             <small>{{ __('admin.dashboard.no_recent_news') }}</small>
                         </div>
                     @endforelse
@@ -230,13 +230,13 @@
             <div class="card border-0 shadow-sm rounded-4 h-100">
                 <div class="card-body p-0">
                     <div class="d-flex justify-content-between align-items-center p-3 pb-2">
-                        <h6 class="fw-bold d-flex align-items-center gap-2 mb-0" style="color: #24364A; font-size: 0.88rem;">
-                            <i class="bi bi-activity" style="color: #5B7088;"></i>
+                        <h6 class="fw-bold d-flex align-items-center gap-2 mb-0 dash-section-title">
+                            <i class="bi bi-activity dash-section-icon"></i>
                             {{ __('admin.dashboard.recent_activities') }}
                         </h6>
                         <a href="{{ route('admin.activity-logs.index') }}" class="dash-view-all">{{ __('admin.dashboard.view_all') }} →</a>
                     </div>
-                    <div style="max-height: 380px; overflow-y: auto;">
+                    <div class="dash-activity-scroll">
                         @forelse($recentActivities as $activity)
                             <div class="dash-list-item">
                                 <div class="activity-avatar flex-shrink-0">
@@ -244,7 +244,7 @@
                                 </div>
                                 <div class="flex-grow-1 min-width-0">
                                     <div class="d-flex align-items-center gap-2 flex-wrap">
-                                        <span class="fw-semibold" style="font-size: 0.8rem; color: #24364A;">{{ $activity->user->display_name ?? __('admin.dashboard_ui.deleted_user') }}</span>
+                                        <span class="fw-semibold dash-activity-name">{{ $activity->user->display_name ?? __('admin.dashboard_ui.deleted_user') }}</span>
                                         @php
                                             $actionIcon = match($activity->action) {
                                                 'login' => 'bi-box-arrow-in-right',
@@ -256,17 +256,17 @@
                                                 default => 'bi-circle',
                                             };
                                         @endphp
-                                        <span class="stat-chip activity-badge-{{ $activity->action }}" style="font-size: 0.6rem;">
+                                        <span class="stat-chip activity-badge-{{ $activity->action }}">
                                             <i class="bi {{ $actionIcon }}"></i> {{ $activity->action }}
                                         </span>
                                     </div>
-                                    <p class="mb-0 text-muted text-truncate" style="font-size: 0.75rem;">{{ $activity->description }}</p>
-                                    <small class="text-muted" style="font-size: 0.68rem;">{{ $activity->created_at->diffForHumans() }}</small>
+                                    <p class="mb-0 text-muted text-truncate dash-activity-desc">{{ $activity->description }}</p>
+                                    <small class="text-muted dash-activity-time">{{ $activity->created_at->diffForHumans() }}</small>
                                 </div>
                             </div>
                         @empty
                             <div class="text-center py-4 text-muted">
-                                <i class="bi bi-folder2-open fs-3 d-block mb-2" style="color: #CDD9E3;"></i>
+                                <i class="bi bi-folder2-open fs-3 d-block mb-2 dash-empty-icon"></i>
                                 <small>{{ __('admin.dashboard.no_recent_activities') }}</small>
                             </div>
                         @endforelse

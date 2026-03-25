@@ -91,22 +91,22 @@ class TenderController extends Controller
 
     public function store(Request $request)
     {
-        // نفس السكيمة: كل شيء optional (nullable) لأن المصدر Excel متنوّع
         $data = $request->validate([
-            'mnews_id'      => ['nullable','integer'],
-            'column_name_1' => ['nullable','string','max:255'],
-            'old_value_1'   => ['nullable','string'], // HTML or long text
+            'column_name_1' => ['required','string','max:255'],
             'new_value_1'   => ['nullable','string'],
-            'the_date_1'    => ['nullable','string','max:50'], // as-is
-            'event_1'       => ['nullable','string','max:255'],
-            'the_user_1'    => ['nullable','string','max:255'],
-            'coulm_serial'  => ['nullable','integer'],
+            'the_date_1'    => ['nullable','string','max:50'],
         ]);
 
-        // لا نمرر id -> AUTO_INCREMENT
+        // Auto-fill system fields
+        $data['the_user_1']    = Auth::user()->display_name ?? Auth::user()->name ?? Auth::user()->email;
+        $data['event_1']       = 'create';
+        $data['the_date_1']    = $data['the_date_1'] ?: now('Asia/Hebron')->format('Y-m-d');
+        $data['mnews_id']      = (Tender::max('mnews_id') ?? 0) + 1;
+        $data['coulm_serial']  = (Tender::max('coulm_serial') ?? 0) + 1;
+
         Tender::create($data);
 
-        return redirect()->route('admin.tenders.index')->with('success', 'Tender created');
+        return redirect()->route('admin.tenders.index')->with('success', __('admin.tenders.created_success'));
     }
 
     public function show(int $id)
@@ -126,19 +126,19 @@ class TenderController extends Controller
         $tender = Tender::findOrFail($id);
 
         $data = $request->validate([
-            'mnews_id'      => ['nullable','integer'],
-            'column_name_1' => ['nullable','string','max:255'],
-            'old_value_1'   => ['nullable','string'],
+            'column_name_1' => ['required','string','max:255'],
             'new_value_1'   => ['nullable','string'],
             'the_date_1'    => ['nullable','string','max:50'],
-            'event_1'       => ['nullable','string','max:255'],
-            'the_user_1'    => ['nullable','string','max:255'],
-            'coulm_serial'  => ['nullable','integer'],
         ]);
+
+        // Save current content as old_value for history tracking
+        $data['old_value_1'] = $tender->new_value_1;
+        $data['the_user_1']  = Auth::user()->display_name ?? Auth::user()->name ?? Auth::user()->email;
+        $data['event_1']     = 'update';
 
         $tender->update($data);
 
-        return redirect()->route('admin.tenders.index')->with('success', 'Tender updated');
+        return redirect()->route('admin.tenders.index')->with('success', __('admin.tenders.updated_success'));
     }
 
     public function destroy(int $id)

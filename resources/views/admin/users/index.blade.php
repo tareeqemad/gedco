@@ -26,11 +26,11 @@
                 </x-slot:badge>
             </x-admin.card-header-index>
             <!-- Filter Section -->
-            <div class="card-body p-3">
+            <div class="card-body p-3 admin-filters">
                 <div class="users-filters">
                 <form id="usersFilterForm" method="GET" action="{{ route('admin.users.index') }}">
                     <div class="d-flex gap-2 align-items-center flex-wrap">
-                        <div class="search-input-wrap" style="flex: 1 1 45%;">
+                        <div class="search-input-wrap filter-field-wide">
                             <i class="bi bi-search"></i>
                             <input type="text"
                                    name="search"
@@ -39,7 +39,7 @@
                                    placeholder="{{ __('admin.users.search_placeholder') }}"
                                    value="{{ request('search') }}">
                         </div>
-                        <div style="flex: 0 1 25%;">
+                        <div class="filter-field-medium">
                             <select name="role" id="roleSelect" class="form-select rounded-3">
                                 <option value="">{{ __('admin.users.all_roles') }}</option>
                                 @foreach($roles as $role)
@@ -49,7 +49,7 @@
                                 @endforeach
                             </select>
                         </div>
-                        <div style="flex: 0 0 auto;">
+                        <div class="filter-field-auto">
                             <button type="submit" class="btn btn-outline-secondary rounded-3" id="searchBtn">
                                 <i class="bi bi-search me-1"></i> {{ __('admin.ui.query') }}
                             </button>

@@ -1,16 +1,13 @@
 /* ========== Users Index Page Styles ========== */
-.bg-gradient-primary {
-    background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%) !important;
-}
+/* .bg-gradient-primary defined globally in custom.css */
 
-/* Header Section */
+/* Header Section - uses global gradient */
 .users-header {
-    background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%);
     border-radius: 1rem;
     padding: 1rem 1.5rem;
     color: white;
     margin-bottom: 1.5rem;
-    box-shadow: 0 4px 15px rgba(0, 102, 204, 0.2);
+    box-shadow: 0 4px 15px rgba(15, 103, 198, 0.2);
 }
 
 .users-header h5 {
@@ -48,10 +45,10 @@
 }
 
 .users-card .card-header {
-    background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%);
     color: white;
     border: none;
     padding: 1rem 1.5rem;
+    /* gradient handled by global .bg-gradient-primary */
 }
 
 .users-card .card-header h6 {
@@ -81,8 +78,8 @@
 
 .users-filters .form-control:focus,
 .users-filters .form-select:focus {
-    border-color: #1ABC9C;
-    box-shadow: 0 0 0 3px rgba(26, 188, 156, 0.1);
+    border-color: #0F67C6;
+    box-shadow: 0 0 0 3px rgba(15, 103, 198, 0.1);
     background-color: white;
 }
 
@@ -93,26 +90,26 @@
 }
 
 .users-filters #roleSelect.role-selected {
-    background: linear-gradient(135deg, rgba(0, 102, 204, 0.1) 0%, rgba(0, 102, 204, 0.05) 100%);
-    border-color: #0066cc;
+    background: linear-gradient(135deg, rgba(15, 103, 198, 0.1) 0%, rgba(15, 103, 198, 0.05) 100%);
+    border-color: #0F67C6;
     font-weight: 600;
-    color: #0066cc;
+    color: #0F67C6;
 }
 
 .users-filters #roleSelect.role-selected option:checked {
-    background: #0066cc;
+    background: #0F67C6;
     color: white;
     font-weight: 600;
 }
 
 .users-filters #roleSelect option[selected] {
-    background: #0066cc;
+    background: #0F67C6;
     color: white;
     font-weight: 600;
 }
 
 .users-filters .input-group-text {
-    background: white;
+    background-color: white;
     border: 1px solid #dee2e6;
     border-radius: 0.5rem 0 0 0.5rem;
     height: 45px;
@@ -122,20 +119,7 @@
     border-radius: 0 0.5rem 0.5rem 0;
 }
 
-.users-filters .btn-primary {
-    background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%);
-    border: none;
-    height: 45px;
-    border-radius: 0.5rem;
-    font-weight: 600;
-    transition: all 0.3s ease;
-}
-
-.users-filters .btn-primary:hover {
-    background: linear-gradient(135deg, #0052a3 0%, #004080 100%);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 102, 204, 0.3);
-}
+/* .btn-primary styles handled by global custom.css */
 
 /* Table Styling */
 .users-table {
@@ -179,7 +163,7 @@
 }
 
 .users-table tbody tr:hover .users-avatar {
-    border-color: #0066cc;
+    border-color: #0F67C6;
     transform: scale(1.1);
 }
 
@@ -205,8 +189,8 @@
 }
 
 .users-actions .btn-outline-primary:hover {
-    background: #0066cc;
-    border-color: #0066cc;
+    background: #0F67C6;
+    border-color: #0F67C6;
     color: white;
 }
 
@@ -260,7 +244,7 @@
     width: 3rem;
     height: 3rem;
     border-width: 0.3rem;
-    color: #0066cc;
+    color: #0F67C6;
 }
 
 /* Pagination */
@@ -275,22 +259,22 @@
 }
 
 .users-pagination .page-link {
-    color: #0066cc;
+    color: #0F67C6;
     border-color: #dee2e6;
     padding: 0.5rem 1rem;
     transition: all 0.2s ease;
 }
 
 .users-pagination .page-link:hover {
-    background: #0066cc;
+    background: #0F67C6;
     color: white;
-    border-color: #0066cc;
+    border-color: #0F67C6;
     transform: translateY(-2px);
 }
 
 .users-pagination .page-item.active .page-link {
-    background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%);
-    border-color: #0066cc;
+    background: linear-gradient(135deg, #0F67C6 0%, #0C58A8 100%);
+    border-color: #0F67C6;
     color: white;
 }
 
@@ -406,7 +390,7 @@
 
 .permissions-container {
     scrollbar-width: thin;
-    scrollbar-color: #0066cc #e9ecef;
+    scrollbar-color: #0F67C6 #e9ecef;
     background: #ffffff;
 }
 
@@ -420,13 +404,13 @@
 }
 
 .permissions-container::-webkit-scrollbar-thumb {
-    background: #0066cc;
+    background: #0F67C6;
     border-radius: 6px;
     border: 2px solid #f8f9fa;
 }
 
 .permissions-container::-webkit-scrollbar-thumb:hover {
-    background: #0052a3;
+    background: #0C58A8;
 }
 
 .permission-checkbox-wrapper {
@@ -439,16 +423,16 @@
 }
 
 .permission-checkbox-wrapper:hover {
-    background: linear-gradient(135deg, rgba(0, 102, 204, 0.08) 0%, rgba(0, 102, 204, 0.04) 100%) !important;
-    border-color: #0066cc !important;
+    background: linear-gradient(135deg, rgba(15, 103, 198, 0.08) 0%, rgba(15, 103, 198, 0.04) 100%) !important;
+    border-color: #0F67C6 !important;
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 102, 204, 0.15) !important;
+    box-shadow: 0 4px 12px rgba(15, 103, 198, 0.15) !important;
 }
 
 .permission-checkbox-wrapper:has(.permission-checkbox:checked),
 .permission-checkbox-wrapper.permission-selected {
-    background: linear-gradient(135deg, rgba(0, 102, 204, 0.15) 0%, rgba(0, 102, 204, 0.08) 100%) !important;
-    border-color: #0066cc !important;
+    background: linear-gradient(135deg, rgba(15, 103, 198, 0.15) 0%, rgba(15, 103, 198, 0.08) 100%) !important;
+    border-color: #0F67C6 !important;
     border-width: 2px !important;
 }
 
@@ -463,18 +447,18 @@
 }
 
 .permission-item .form-check-input:hover {
-    border-color: #0066cc;
+    border-color: #0F67C6;
 }
 
 .permission-item .form-check-input:checked {
-    background-color: #0066cc;
-    border-color: #0066cc;
-    box-shadow: 0 0 0 0.2rem rgba(0, 102, 204, 0.25);
+    background-color: #0F67C6;
+    border-color: #0F67C6;
+    box-shadow: 0 0 0 0.2rem rgba(15, 103, 198, 0.25);
 }
 
 .permission-item .form-check-input:focus {
-    border-color: #0066cc;
-    box-shadow: 0 0 0 0.2rem rgba(0, 102, 204, 0.25);
+    border-color: #0F67C6;
+    box-shadow: 0 0 0 0.2rem rgba(15, 103, 198, 0.25);
 }
 
 .permission-item .form-check-label {
@@ -493,7 +477,7 @@
 
 .permission-checkbox-wrapper:has(.permission-checkbox:checked) .form-check-label span,
 .permission-checkbox-wrapper.permission-selected .form-check-label span {
-    color: #0066cc;
+    color: #0F67C6;
     font-weight: 600;
 }
 
@@ -509,14 +493,14 @@
 }
 
 .permission-group .border-bottom {
-    border-color: rgba(0, 102, 204, 0.15) !important;
+    border-color: rgba(15, 103, 198, 0.15) !important;
     border-width: 1px !important;
 }
 
 /* Accordion Styling for Permissions */
 .permissions-container .accordion-item {
     border: none !important;
-    border-bottom: 1px solid rgba(0, 102, 204, 0.15) !important;
+    border-bottom: 1px solid rgba(15, 103, 198, 0.15) !important;
 }
 
 .permissions-container .accordion-item:last-child {
@@ -533,8 +517,8 @@
 }
 
 .permissions-container .accordion-button:not(.collapsed) {
-    background: rgba(0, 102, 204, 0.05);
-    color: #0066cc;
+    background: rgba(15, 103, 198, 0.05);
+    color: #0F67C6;
 }
 
 .permissions-container .accordion-button:focus {
@@ -577,11 +561,11 @@
 }
 
 .permission-subgroup .form-check:hover {
-    background: rgba(0, 102, 204, 0.05);
+    background: rgba(15, 103, 198, 0.05);
 }
 
 .permission-subgroup .form-check-input:checked ~ .form-check-label {
-    color: #0066cc;
+    color: #0F67C6;
     font-weight: 600;
 }
 
@@ -636,25 +620,7 @@
     }
 }
 
-/* Form Controls Styling */
-.form-control:focus,
-.form-select:focus {
-    background: #ffffff !important;
-    border-color: #0066cc !important;
-    box-shadow: 0 0 0 0.2rem rgba(0, 102, 204, 0.15) !important;
-}
-
-.btn-primary {
-    background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%) !important;
-    border: none !important;
-    transition: all 0.3s ease;
-}
-
-.btn-primary:hover {
-    background: linear-gradient(135deg, #0052a3 0%, #004080 100%) !important;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(0, 102, 204, 0.3) !important;
-}
+/* Form Controls Styling - uses global styles from custom.css */
 
 /* Modal Alert Styling - Hide by default, show only when modal is opened */
 .password-change-alert,

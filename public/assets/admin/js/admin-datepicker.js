@@ -51,7 +51,7 @@
                 dateFormat: 'Y-m-d',
                 altInput: true,
                 altFormat: 'd/m/Y',
-                altInputClass: 'form-control border-0 bg-light admin-date-input',
+                altInputClass: 'form-control rounded-3 admin-date-input',
                 allowInput: false,
                 clickOpens: true,
                 rtl: isRTL,
@@ -59,25 +59,32 @@
                 disableMobile: false,
                 defaultDate: input.value || null,
                 onChange: function(selectedDates, dateStr, instance) {
-                    // تحديث القيمة الأصلية
                     input.value = dateStr;
-                    // إطلاق event للتحديث
-                    const event = new Event('change', { bubbles: true });
+                    var event = new Event('change', { bubbles: true });
                     input.dispatchEvent(event);
                 },
                 onReady: function(selectedDates, dateStr, instance) {
-                    // تحسين التصميم بعد التهيئة
                     if (instance.altInput) {
                         instance.altInput.style.cursor = 'pointer';
                         instance.altInput.setAttribute('readonly', 'readonly');
                     }
-                    // إخفاء input الأصلي
                     if (input) {
                         input.style.position = 'absolute';
                         input.style.opacity = '0';
                         input.style.width = '1px';
                         input.style.height = '1px';
                     }
+                },
+                onOpen: function(selectedDates, dateStr, instance) {
+                    // Force calendar to open below the input
+                    setTimeout(function() {
+                        var cal = instance.calendarContainer;
+                        var inputEl = instance.altInput || instance.input;
+                        var rect = inputEl.getBoundingClientRect();
+                        cal.style.top = (rect.bottom + window.scrollY + 2) + 'px';
+                        cal.classList.remove('arrowBottom');
+                        cal.classList.add('arrowTop');
+                    }, 0);
                 }
             };
 

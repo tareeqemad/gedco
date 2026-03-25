@@ -130,10 +130,10 @@
             </x-admin.card-header-index>
 
             {{-- Filters --}}
-            <div class="card-body p-3">
+            <div class="card-body p-3 admin-filters">
                 <form id="logsFilterForm">
                     <div class="d-flex gap-2 align-items-center flex-wrap">
-                        <div style="flex: 1 1 25%;">
+                        <div class="filter-field-wide">
                             <select name="user_id" id="filterUser" class="form-select rounded-3">
                                 <option value="">{{ __('admin.activity_logs.all_users') }}</option>
                                 @foreach($users as $u)
@@ -141,7 +141,7 @@
                                 @endforeach
                             </select>
                         </div>
-                        <div style="flex: 0 1 18%;">
+                        <div class="filter-field-medium">
                             <select name="action" id="filterAction" class="form-select rounded-3">
                                 <option value="">{{ __('admin.activity_logs.all_operations') }}</option>
                                 @foreach($actions as $a)
@@ -149,22 +149,19 @@
                                 @endforeach
                             </select>
                         </div>
-                        <div style="flex: 0 1 15%;">
-                            <div class="position-relative">
-                                <label class="form-label mb-0 position-absolute" style="font-size: 0.65rem; color: #7A8CA2; top: -0.55rem; {{ app()->getLocale() === 'ar' ? 'right' : 'left' }}: 0.75rem; background: #fff; padding: 0 0.25rem; z-index: 1;">{{ __('admin.activity_logs.date_from') }}</label>
-                                <input type="date" name="date_from" id="filterDateFrom"
-                                       class="form-control rounded-3"
-                                       value="{{ request('date_from') }}">
-                            </div>
+                        <div class="filter-field-date">
+                            <label class="date-field-label">{{ __('admin.activity_logs.date_from') }}</label>
+                            <input type="date" name="date_from" id="filterDateFrom"
+                                   class="form-control rounded-3"
+                                   value="{{ request('date_from') }}">
                         </div>
-                        <div style="flex: 0 1 15%;">
-                            <div class="position-relative">
-                                <label class="form-label mb-0 position-absolute" style="font-size: 0.65rem; color: #7A8CA2; top: -0.55rem; {{ app()->getLocale() === 'ar' ? 'right' : 'left' }}: 0.75rem; background: #fff; padding: 0 0.25rem; z-index: 1;">{{ __('admin.activity_logs.date_to') }}</label>
-                                <input type="date" name="date_to" id="filterDateTo"
-                                       class="form-control rounded-3"
-                                       value="{{ request('date_to') }}">
+                        <div class="filter-field-date">
+                            <label class="date-field-label">{{ __('admin.activity_logs.date_to') }}</label>
+                            <input type="date" name="date_to" id="filterDateTo"
+                                   class="form-control rounded-3"
+                                   value="{{ request('date_to') }}">
                         </div>
-                        <div style="flex: 0 0 auto;">
+                        <div class="filter-field-auto">
                             <button type="submit" class="btn btn-primary rounded-3" id="logsSearchBtn">
                                 <i class="bi bi-search me-1"></i> {{ __('admin.ui.query') }}
                             </button>

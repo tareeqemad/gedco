@@ -378,18 +378,7 @@ a.btn-light:not(.btn-sm):not(.card-header .btn-light) {
     opacity: 1;
 }
 
-/* --- Form page button overrides --- */
-.card-header-form ~ .card-body .btn-primary {
-    --btn-primary-bg: #1ABC9C;
-    --btn-primary-hover: #16A085;
-    background-color: var(--btn-primary-bg) !important;
-    border-color: var(--btn-primary-bg) !important;
-}
-
-.card-header-form ~ .card-body .btn-primary:hover {
-    background-color: var(--btn-primary-hover) !important;
-    border-color: var(--btn-primary-hover) !important;
-}
+/* Form page buttons now use the same primary blue as everywhere else */
 
 /* --- Override old Bootstrap colors --- */
 .bg-primary,
@@ -1027,6 +1016,227 @@ html {
     justify-content: center;
     font-size: 1.15rem;
     flex-shrink: 0;
+}
+
+/* KPI Icon Color Variants */
+.dash-kpi-icon.kpi-primary   { background: rgba(15, 103, 198, 0.08); color: #0F67C6; }
+.dash-kpi-icon.kpi-success   { background: rgba(22, 163, 74, 0.08);  color: #16A34A; }
+.dash-kpi-icon.kpi-info      { background: rgba(2, 132, 199, 0.08);  color: #0284C7; }
+.dash-kpi-icon.kpi-warning   { background: rgba(217, 119, 6, 0.08);  color: #D97706; }
+.dash-kpi-icon.kpi-danger    { background: rgba(220, 38, 38, 0.08);  color: #DC2626; }
+.dash-kpi-icon.kpi-purple    { background: rgba(124, 58, 237, 0.08); color: #7C3AED; }
+.dash-kpi-icon.kpi-teal      { background: rgba(13, 148, 136, 0.08); color: #0D9488; }
+.dash-kpi-icon.kpi-orange    { background: rgba(234, 88, 12, 0.08);  color: #EA580C; }
+
+/* Dashboard stat chip */
+.stat-chip {
+    font-size: 0.6rem;
+    font-weight: 600;
+}
+.stat-chip.chip-success { color: #16A34A; }
+.stat-chip.chip-warning { color: #D97706; }
+
+/* Dashboard section title */
+.dash-section-title {
+    color: #24364A;
+    font-size: 0.88rem;
+}
+.dash-section-icon {
+    color: #5B7088;
+}
+
+/* Dashboard hero subtitle */
+.dash-hero-subtitle {
+    color: rgba(255,255,255,0.6);
+    font-size: 0.82rem;
+}
+
+.dash-hero-alert-arrow {
+    font-size: 0.65rem;
+    opacity: 0.5;
+}
+
+/* Dashboard list styles */
+.dash-list-title {
+    font-size: 0.83rem;
+    color: #24364A;
+}
+.dash-list-time {
+    font-size: 0.7rem;
+}
+.dash-empty-icon {
+    color: #CDD9E3;
+}
+.dash-activity-scroll {
+    max-height: 380px;
+    overflow-y: auto;
+}
+.dash-activity-name {
+    font-size: 0.8rem;
+    color: #24364A;
+}
+.dash-activity-desc {
+    font-size: 0.75rem;
+}
+.dash-activity-time {
+    font-size: 0.68rem;
+}
+
+/* ========== Global Flatpickr + Date Picker Styles ========== */
+.admin-date-input {
+    cursor: pointer !important;
+    user-select: none !important;
+}
+
+input[type="date"][data-flatpickr-initialized] {
+    position: absolute !important;
+    opacity: 0 !important;
+    width: 1px !important;
+    height: 1px !important;
+    pointer-events: none !important;
+}
+
+.flatpickr-calendar {
+    font-family: "Tajawal", "Cairo", sans-serif !important;
+    border-radius: 0.75rem !important;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12) !important;
+    border: 1px solid #e9ecef !important;
+    overflow: hidden !important;
+    background-color: #ffffff !important;
+}
+
+.flatpickr-months {
+    background: #1E5F8A !important;
+    padding: 0.4rem 1rem !important;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.1) !important;
+    min-height: auto !important;
+    height: auto !important;
+}
+
+.flatpickr-month {
+    color: #ffffff !important;
+    font-weight: 700 !important;
+}
+
+.flatpickr-current-month {
+    color: #ffffff !important;
+    font-weight: 700 !important;
+    font-size: 0.95rem !important;
+}
+
+.flatpickr-prev-month,
+.flatpickr-next-month {
+    color: #ffffff !important;
+    fill: #ffffff !important;
+    padding: 0.5rem !important;
+    border-radius: 0.5rem !important;
+    transition: all 0.2s ease !important;
+}
+
+.flatpickr-prev-month:hover,
+.flatpickr-next-month:hover {
+    background: rgba(255, 255, 255, 0.2) !important;
+}
+
+.flatpickr-weekday {
+    color: #1E5F8A !important;
+    font-weight: 700 !important;
+    font-size: 0.85rem !important;
+}
+
+.flatpickr-day {
+    font-family: "Tajawal", "Cairo", sans-serif !important;
+    border-radius: 0.5rem !important;
+    font-weight: 500 !important;
+    transition: all 0.15s ease !important;
+}
+
+.flatpickr-day:hover {
+    background-color: rgba(26, 95, 122, 0.1) !important;
+    border-color: rgba(26, 95, 122, 0.3) !important;
+}
+
+.flatpickr-day.selected,
+.flatpickr-day.startRange,
+.flatpickr-day.endRange {
+    background: #1E5F8A !important;
+    border-color: #1E5F8A !important;
+    color: #ffffff !important;
+    font-weight: 700 !important;
+}
+
+.flatpickr-day.today {
+    border-color: #1E5F8A !important;
+    color: #1E5F8A !important;
+}
+
+.flatpickr-day.today:hover {
+    background-color: rgba(26, 95, 122, 0.15) !important;
+}
+
+.flatpickr-day.inRange {
+    background-color: rgba(26, 95, 122, 0.1) !important;
+    border-color: rgba(26, 95, 122, 0.2) !important;
+}
+
+/* ========== Unified Admin Filter Section ========== */
+.admin-filters .form-control,
+.admin-filters .form-select {
+    height: 42px;
+    border: 1px solid #CDD9E3;
+    border-radius: 0.5rem;
+    background-color: white;
+    transition: all 0.2s ease;
+    font-size: 0.9rem;
+}
+
+.admin-filters .form-control:focus,
+.admin-filters .form-select:focus {
+    border-color: #0F67C6;
+    box-shadow: 0 0 0 3px rgba(15, 103, 198, 0.1);
+    background-color: white;
+}
+
+/* Filter layout helpers */
+.filter-field-wide   { flex: 1 1 35%; min-width: 200px; }
+.filter-field-medium { flex: 0 1 18%; min-width: 140px; }
+.filter-field-date   { flex: 0 1 14%; min-width: 120px; position: relative; }
+.filter-field-auto   { flex: 0 0 auto; }
+
+.date-field-label {
+    font-size: 0.68rem;
+    color: #7A8CA2;
+    font-weight: 600;
+    position: absolute;
+    top: -0.25rem;
+    inset-inline-start: 0.5rem;
+    background: white;
+    padding: 0 0.25rem;
+    z-index: 1;
+    line-height: 1;
+}
+
+/* Advanced filters box */
+.admin-advanced-filters {
+    background: #F8FBFD;
+    border: 1px solid #E6ECF2;
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    font-size: 0.75rem;
+}
+
+.admin-advanced-filters .form-label {
+    font-size: 0.72rem;
+    color: #7A8CA2;
+    margin-bottom: 0;
+}
+
+.admin-advanced-filters .form-select-sm {
+    font-size: 0.78rem;
+}
+
+.admin-advanced-filters .form-check-label {
+    font-size: 0.72rem;
 }
 
 .dash-kpi-value {
@@ -1742,7 +1952,7 @@ html {
 .card-header-form ~ .card-body .form-select {
     border: 1.5px solid #CDD9E3 !important;
     color: #24364A !important;
-    background: #FFFFFF !important;
+    background-color: #FFFFFF !important;
     padding: 0.45rem 0.75rem !important;
     font-size: 0.88rem !important;
 }
@@ -1991,14 +2201,12 @@ html {
 }
 
 .bg-gradient-primary {
-    background: #2474A8 !important;
-    background-image: none !important;
+    background: #1E5F8A !important;
 }
 
 .card-header.bg-gradient-primary {
     padding: 0.6rem 1rem !important;
     background: #1E5F8A !important;
-    background-image: none !important;
 }
 
 .card-header.bg-gradient-primary h5 {
@@ -3156,10 +3364,7 @@ html {
     border-bottom: 1px solid #E6ECF2 !important;
 }
 
-/* Remove bg-gradient-primary remnants */
-.bg-gradient-primary {
-    background: #2474A8 !important;
-}
+/* bg-gradient-primary unified - uses global definition above */
 
 /* ========== Unified Button System ========== */
 /* Save/Submit button */

@@ -25,29 +25,29 @@
             </x-admin.card-header-index>
 
             <!-- Filter Section -->
-            <div class="card-body p-3">
+            <div class="card-body p-3 admin-filters">
                 <form method="GET" action="{{ route('admin.contact-messages.index') }}">
                     <div class="d-flex gap-2 align-items-center flex-wrap">
-                        <div style="flex: 1 1 40%;">
+                        <div class="filter-field-wide">
                             <input type="text" name="search" class="form-control rounded-3"
                                    placeholder="{{ __('admin.contact_messages.search_placeholder') }}"
                                    value="{{ request('search') }}">
                         </div>
-                        <div style="flex: 0 1 20%;">
+                        <div class="filter-field-medium">
                             <select name="is_read" class="form-select rounded-3">
                                 <option value="">{{ __('admin.ui.all_statuses') }}</option>
                                 <option value="0" {{ request('is_read') === '0' ? 'selected' : '' }}>{{ __('admin.ui.unread') }}</option>
                                 <option value="1" {{ request('is_read') === '1' ? 'selected' : '' }}>{{ __('admin.ui.read') }}</option>
                             </select>
                         </div>
-                        <div style="flex: 0 1 18%;">
+                        <div class="filter-field-medium">
                             <select name="sort" class="form-select rounded-3">
                                 <option value="created_at" {{ request('sort') === 'created_at' ? 'selected' : '' }}>{{ __('admin.ui.newest') }}</option>
                                 <option value="name" {{ request('sort') === 'name' ? 'selected' : '' }}>{{ __('admin.labels.name') }}</option>
                                 <option value="subject" {{ request('sort') === 'subject' ? 'selected' : '' }}>{{ __('admin.ui.subject') }}</option>
                             </select>
                         </div>
-                        <div style="flex: 0 0 auto;">
+                        <div class="filter-field-auto">
                             <button type="submit" class="btn btn-outline-secondary rounded-3">
                                 <i class="bi bi-search me-1"></i> {{ __('admin.ui.query') }}
                             </button>

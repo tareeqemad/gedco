@@ -22,16 +22,16 @@
             </x-admin.card-header-index>
 
             <!-- Filters Section -->
-            <div class="card-body p-3">
+            <div class="card-body p-3 admin-filters">
                 <form method="get" id="filterForm">
                     {{-- Basic filters --}}
                     <div class="d-flex gap-2 align-items-center flex-wrap">
-                        <div style="flex: 1 1 35%;">
+                        <div class="filter-field-wide">
                             <input type="text" name="q" value="{{ $q }}"
                                    class="form-control rounded-3"
                                    placeholder="{{ __('admin.advertisements.search_placeholder') }}">
                         </div>
-                        <div style="flex: 0 1 18%;">
+                        <div class="filter-field-medium">
                             <select name="user" class="form-select rounded-3">
                                 <option value="">{{ __('admin.advertisements.all_users') }}</option>
                                 @foreach($distinctUsers as $u)
@@ -39,17 +39,17 @@
                                 @endforeach
                             </select>
                         </div>
-                        <div style="flex: 0 1 14%; position: relative;">
+                        <div class="filter-field-date">
                             <label class="date-field-label">{{ __('admin.activity_logs.date_from') }}</label>
                             <input type="date" name="date_from" value="{{ $dateFrom }}"
                                    class="form-control rounded-3">
                         </div>
-                        <div style="flex: 0 1 14%; position: relative;">
+                        <div class="filter-field-date">
                             <label class="date-field-label">{{ __('admin.activity_logs.date_to') }}</label>
                             <input type="date" name="date_to" value="{{ $dateTo }}"
                                    class="form-control rounded-3">
                         </div>
-                        <div style="flex: 0 0 auto;">
+                        <div class="filter-field-auto">
                             <button type="submit" class="btn btn-primary rounded-3">
                                 <i class="bi bi-search me-1"></i> {{ __('admin.actions.query') }}
                             </button>
@@ -61,53 +61,53 @@
 
                     {{-- Advanced filters (collapsed) --}}
                     <div class="mt-2">
-                        <button type="button" class="btn btn-link btn-sm text-muted p-0" style="font-size: 0.75rem; text-decoration: none;"
+                        <button type="button" class="btn btn-link btn-sm text-muted p-0"
                                 data-bs-toggle="collapse" data-bs-target="#advancedFilters">
                             <i class="bi bi-sliders me-1"></i> {{ __('admin.advertisements.advanced_options') }}
                         </button>
                         <div class="collapse {{ ($sort !== 'DATE_NEWS' || $dir !== 'desc' || $perPage != 20) ? 'show' : '' }}" id="advancedFilters">
-                            <div class="d-flex gap-2 align-items-center flex-wrap mt-2 p-2 rounded-3" style="background: #F8FBFD; border: 1px solid #E6ECF2;">
-                                <div style="flex: 0 1 auto;">
-                                    <label class="form-label mb-0 me-1" style="font-size: 0.72rem; color: #7A8CA2;">{{ __('admin.advertisements.sort_label') }}</label>
-                                    <select name="sort" class="form-select form-select-sm rounded-3 d-inline-block" style="width: auto; font-size: 0.78rem;">
+                            <div class="d-flex gap-2 align-items-center flex-wrap mt-2 admin-advanced-filters">
+                                <div class="filter-field-auto">
+                                    <label class="admin-advanced-filters form-label mb-0 me-1">{{ __('admin.advertisements.sort_label') }}</label>
+                                    <select name="sort" class="form-select form-select-sm rounded-3 d-inline-block" style="width: auto;">
                                         <option value="DATE_NEWS" @selected($sort==='DATE_NEWS')>{{ __('admin.advertisements.sort_date_news') }}</option>
                                         <option value="INSERT_DATE" @selected($sort==='INSERT_DATE')>{{ __('admin.advertisements.sort_insert_date') }}</option>
                                         <option value="UPDATE_DATE" @selected($sort==='UPDATE_DATE')>{{ __('admin.advertisements.sort_update_date') }}</option>
                                         <option value="ID_ADVER" @selected($sort==='ID_ADVER')>{{ __('admin.advertisements.sort_id') }}</option>
                                     </select>
                                 </div>
-                                <div style="flex: 0 1 auto;">
-                                    <select name="dir" class="form-select form-select-sm rounded-3" style="width: auto; font-size: 0.78rem;">
+                                <div class="filter-field-auto">
+                                    <select name="dir" class="form-select form-select-sm rounded-3" style="width: auto;">
                                         <option value="desc" @selected($dir==='desc')>{{ __('admin.advertisements.sort_desc') }}</option>
                                         <option value="asc" @selected($dir==='asc')>{{ __('admin.advertisements.sort_asc') }}</option>
                                     </select>
                                 </div>
-                                <div style="flex: 0 1 auto;">
-                                    <label class="form-label mb-0 me-1" style="font-size: 0.72rem; color: #7A8CA2;">{{ __('admin.advertisements.per_page_label') }}</label>
-                                    <select name="per_page" class="form-select form-select-sm rounded-3 d-inline-block" style="width: auto; font-size: 0.78rem;">
+                                <div class="filter-field-auto">
+                                    <label class="admin-advanced-filters form-label mb-0 me-1">{{ __('admin.advertisements.per_page_label') }}</label>
+                                    <select name="per_page" class="form-select form-select-sm rounded-3 d-inline-block" style="width: auto;">
                                         @foreach([10,20,50,100] as $pp)
                                             <option value="{{ $pp }}" @selected($perPage==$pp)>{{ $pp }}</option>
                                         @endforeach
                                     </select>
                                 </div>
                                 <div class="vr mx-1" style="height: 20px;"></div>
-                                <div class="d-flex gap-2 flex-wrap" style="font-size: 0.75rem;">
+                                <div class="d-flex gap-2 flex-wrap">
                                     <span class="text-muted fw-semibold">{{ __('admin.advertisements.columns_label') }}</span>
                                     <label class="form-check form-check-inline mb-0">
                                         <input class="form-check-input col-toggle" type="checkbox" data-cols="3" checked>
-                                        <span class="form-check-label" style="font-size: 0.72rem;">{{ __('admin.advertisements.col_toggle_date_news') }}</span>
+                                        <span class="form-check-label">{{ __('admin.advertisements.col_toggle_date_news') }}</span>
                                     </label>
                                     <label class="form-check form-check-inline mb-0">
                                         <input class="form-check-input col-toggle" type="checkbox" data-cols="4" checked>
-                                        <span class="form-check-label" style="font-size: 0.72rem;">{{ __('admin.advertisements.col_toggle_added_by') }}</span>
+                                        <span class="form-check-label">{{ __('admin.advertisements.col_toggle_added_by') }}</span>
                                     </label>
                                     <label class="form-check form-check-inline mb-0">
                                         <input class="form-check-input col-toggle" type="checkbox" data-cols="5" checked>
-                                        <span class="form-check-label" style="font-size: 0.72rem;">{{ __('admin.advertisements.col_toggle_last_update') }}</span>
+                                        <span class="form-check-label">{{ __('admin.advertisements.col_toggle_last_update') }}</span>
                                     </label>
                                     <label class="form-check form-check-inline mb-0">
                                         <input class="form-check-input col-toggle" type="checkbox" data-cols="6" checked>
-                                        <span class="form-check-label" style="font-size: 0.72rem;">{{ __('admin.advertisements.col_toggle_file') }}</span>
+                                        <span class="form-check-label">{{ __('admin.advertisements.col_toggle_file') }}</span>
                                     </label>
                                 </div>
                             </div>

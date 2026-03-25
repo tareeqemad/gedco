@@ -1,13 +1,13 @@
 <div class="row g-3">
     <div class="col-md-6">
         <label class="form-label">{{ __('admin.labels.title') }} *</label>
-        <input type="text" name="title" class="form-control" value="{{ old('title', $job->title ?? '') }}" required>
+        <input type="text" name="title" class="form-control rounded-3" value="{{ old('title', $job->title ?? '') }}" required>
         @error('title')<div class="text-danger small">{{ $message }}</div>@enderror
     </div>
 
     <div class="col-md-3">
         <label class="form-label">{{ __('admin.labels.order') }}</label>
-        <input type="number" name="sort" class="form-control" value="{{ old('sort', $job->sort ?? 0) }}">
+        <input type="number" name="sort" class="form-control rounded-3" value="{{ old('sort', $job->sort ?? 0) }}">
     </div>
 
     <div class="col-md-3 d-flex align-items-center">
@@ -20,23 +20,23 @@
 
     <div class="col-12">
         <label class="form-label">{{ __('admin.jobs.link_label') }}</label>
-        <input type="url" name="link" class="form-control" value="{{ old('link', $job->link ?? '') }}" placeholder="https://...">
+        <input type="url" name="link" class="form-control rounded-3" value="{{ old('link', $job->link ?? '') }}" placeholder="https://...">
         @error('link')<div class="text-danger small">{{ $message }}</div>@enderror
     </div>
 
     <div class="col-12">
         <label class="form-label">{{ __('admin.jobs.description_label') }}</label>
-        <textarea name="description" class="form-control" rows="4">{{ old('description', $job->description ?? '') }}</textarea>
+        <textarea name="description" class="form-control rounded-3" rows="4">{{ old('description', $job->description ?? '') }}</textarea>
         @error('description')<div class="text-danger small">{{ $message }}</div>@enderror
     </div>
 
     <div class="col-md-6">
         <label class="form-label">{{ __('admin.labels.image') }} (webp/png/jpg)</label>
-        <input type="file" name="image" class="form-control" accept="image/*">
+        <input type="file" name="image" class="form-control rounded-3" accept="image/*">
         @error('image')<div class="text-danger small">{{ $message }}</div>@enderror
         @isset($job->image)
             <div class="mt-2">
-                <img src="{{ asset('storage/'.$job->image) }}" style="height:80px">
+                <img src="{{ asset('storage/'.$job->image) }}" class="rounded-3" style="height:80px">
             </div>
         @endisset
     </div>
