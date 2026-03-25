@@ -24,39 +24,47 @@
             <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
                 <div class="d-flex align-items-center gap-2">
                     <i class="bi bi-person-badge fs-5"></i>
-                    <div>
-                        <h5 class="mb-0 fw-bold text-white" style="font-size: 1.05rem;">{{ $profile->full_name }}</h5>
-                        <small class="opacity-75" style="font-size: 0.78rem;">
-                            {{ $profile->national_id }} &bull; #{{ $profile->employee_number }} &bull; {{ $loc[$profile->location] ?? $na }}
-                        </small>
-                    </div>
+                    <h5 class="mb-0 fw-bold text-white" style="font-size: 1.05rem;">{{ $profile->full_name }}</h5>
                 </div>
-                <div class="d-flex gap-2">
-                    @if($profile->status == 'displaced')
-                        <span class="badge bg-danger rounded-pill">{{ $status['displaced'] }}</span>
-                    @elseif($profile->status == 'resident')
-                        <span class="badge bg-success rounded-pill">{{ $status['resident'] }}</span>
-                    @endif
-                    @if($profile->readiness)
-                        <span class="badge {{ $profile->readiness == 'working' ? 'bg-success' : ($profile->readiness == 'ready' ? 'bg-info' : 'bg-warning text-dark') }} rounded-pill">
-                            {{ $ready[$profile->readiness] ?? '' }}
-                        </span>
-                    @endif
+                <div class="d-flex gap-2 no-print">
+                    <a href="{{ route('admin.staff-profiles.index') }}" class="btn btn-sm btn-light rounded-3">
+                        <i class="bi bi-arrow-right me-1"></i>{{ __('admin.common.back') }}
+                    </a>
+                    <a href="{{ route('admin.staff-profiles.edit', $profile) }}" class="btn btn-sm btn-warning rounded-3">
+                        <i class="bi bi-pencil-square me-1"></i>{{ __('admin.common.edit') }}
+                    </a>
+                    <button onclick="window.print()" class="btn btn-sm btn-light rounded-3">
+                        <i class="bi bi-printer me-1"></i>{{ __('admin.common.print') }}
+                    </button>
                 </div>
             </div>
         </div>
 
-        {{-- ── Actions ── --}}
-        <div class="px-3 py-2 d-flex gap-2 flex-wrap" style="background: #F8FBFD; border-bottom: 1px solid #E6ECF2;">
-            <a href="{{ route('admin.staff-profiles.index') }}" class="btn btn-sm btn-outline-secondary rounded-3">
-                <i class="bi bi-arrow-right me-1"></i>{{ __('admin.common.back') }}
-            </a>
-            <a href="{{ route('admin.staff-profiles.edit', $profile) }}" class="btn btn-sm btn-primary rounded-3">
-                <i class="bi bi-pencil-square me-1"></i>{{ __('admin.common.edit') }}
-            </a>
-            <button onclick="window.print()" class="btn btn-sm btn-outline-secondary rounded-3 no-print">
-                <i class="bi bi-printer me-1"></i>{{ __('admin.common.print') }}
-            </button>
+        {{-- ── Sub-header: ID + badges ── --}}
+        <div class="px-3 py-2 d-flex justify-content-between align-items-center flex-wrap gap-2" style="background: #F8FBFD; border-bottom: 1px solid #E6ECF2; font-size: 0.82rem;">
+            <div class="d-flex align-items-center gap-2 text-muted">
+                <span><i class="bi bi-card-text me-1"></i>{{ $profile->national_id }}</span>
+                <span>&bull;</span>
+                <span><i class="bi bi-hash me-1"></i>{{ $profile->employee_number }}</span>
+                <span>&bull;</span>
+                <span><i class="bi bi-geo-alt me-1"></i>{{ $loc[$profile->location] ?? $na }}</span>
+                @if($profile->job_title)
+                    <span>&bull;</span>
+                    <span><i class="bi bi-briefcase me-1"></i>{{ $profile->job_title }}</span>
+                @endif
+            </div>
+            <div class="d-flex gap-1">
+                @if($profile->status == 'displaced')
+                    <span class="badge bg-danger rounded-pill px-2 py-1">{{ $status['displaced'] }}</span>
+                @elseif($profile->status == 'resident')
+                    <span class="badge bg-success rounded-pill px-2 py-1">{{ $status['resident'] }}</span>
+                @endif
+                @if($profile->readiness)
+                    <span class="badge {{ $profile->readiness == 'working' ? 'bg-success' : ($profile->readiness == 'ready' ? 'bg-info' : 'bg-warning text-dark') }} rounded-pill px-2 py-1">
+                        {{ $ready[$profile->readiness] ?? '' }}
+                    </span>
+                @endif
+            </div>
         </div>
 
         <div class="card-body p-3">
@@ -70,16 +78,15 @@
                     <table class="table table-sm sp-table mb-4">
                         <tbody>
                             <tr>
-                                <th>{{ __('admin.staff_profiles.show_job_title') }}</th>
-                                <td>{{ $profile->job_title ?? $na }}</td>
                                 <th>{{ __('admin.staff_profiles.show_birth_date') }}</th>
                                 <td>{{ $profile->birth_date?->format('d/m/Y') ?? $na }}</td>
-                            </tr>
-                            <tr>
                                 <th>{{ __('admin.staff_profiles.show_marital_status') }}</th>
                                 <td>{{ $marital[$profile->marital_status] ?? $na }}</td>
+                            </tr>
+                            <tr>
                                 <th>{{ __('admin.staff_profiles.show_family_members') }}</th>
                                 <td>{{ $profile->family_members_count ?? $na }}</td>
+                                <th></th><td></td>
                             </tr>
                             @if($profile->department || $profile->directorate || $profile->section)
                             <tr>
@@ -240,5 +247,5 @@
 @endsection
 
 @push('styles')
-    <link rel="stylesheet" href="{{ asset('assets/admin/css/staff-profiles.css') }}?v=6">
+    <link rel="stylesheet" href="{{ asset('assets/admin/css/staff-profiles.css') }}?v=7">
 @endpush
