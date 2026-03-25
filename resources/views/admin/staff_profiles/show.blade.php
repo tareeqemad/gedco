@@ -206,16 +206,24 @@
                         @endif
                     </h6>
                     @if($profile->dependents?->count())
-                        <div class="sp-sidebar-card sp-family-scroll">
+                        <div class="sp-family-list">
                             @foreach($profile->dependents as $i => $d)
-                                <div class="sp-family-item">
-                                    <span class="sp-family-num">{{ $i + 1 }}</span>
+                                <div class="sp-family-card">
+                                    <div class="sp-family-num">{{ $i + 1 }}</div>
                                     <div class="flex-fill" style="min-width: 0;">
-                                        <div class="fw-bold text-truncate" style="font-size: 0.85rem; color: #24364A;">{{ $d->name }}</div>
-                                        <div style="font-size: 0.73rem; color: #6B7C93;">
-                                            {{ $relation[$d->relation] ?? $d->relation }}
-                                            &bull; {{ $d->birth_date ? \Carbon\Carbon::parse($d->birth_date)->format('d/m/Y') : '—' }}
-                                            @if($d->is_student) &bull; <span class="text-success">{{ __('admin.staff_profiles.show_yes') }}</span> @endif
+                                        <div class="fw-bold" style="font-size: 0.85rem; color: #24364A;">{{ $d->name }}</div>
+                                        <div class="d-flex flex-wrap gap-2 mt-1" style="font-size: 0.75rem; color: #6B7C93;">
+                                            <span class="sp-family-tag">
+                                                <i class="bi bi-person-badge"></i> {{ $relation[$d->relation] ?? $d->relation }}
+                                            </span>
+                                            <span class="sp-family-tag">
+                                                <i class="bi bi-calendar3"></i> {{ $d->birth_date ? \Carbon\Carbon::parse($d->birth_date)->format('d/m/Y') : '—' }}
+                                            </span>
+                                            @if($d->is_student)
+                                                <span class="sp-family-tag sp-family-tag-student">
+                                                    <i class="bi bi-mortarboard-fill"></i> {{ __('admin.staff_profiles.show_yes') }}
+                                                </span>
+                                            @endif
                                         </div>
                                     </div>
                                 </div>
@@ -232,5 +240,5 @@
 @endsection
 
 @push('styles')
-    <link rel="stylesheet" href="{{ asset('assets/admin/css/staff-profiles.css') }}?v=5">
+    <link rel="stylesheet" href="{{ asset('assets/admin/css/staff-profiles.css') }}?v=6">
 @endpush
