@@ -6,6 +6,7 @@
     background: linear-gradient(135deg, #1E5F8A 0%, #174E73 100%);
     padding: 1.15rem 1.25rem;
     color: #fff;
+    border-radius: 1rem 1rem 0 0;
 }
 
 .sp-avatar {
@@ -142,12 +143,18 @@
     flex-shrink: 0;
 }
 
+.sp-contact-row > div:last-child {
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
 .sp-contact-link {
     color: #1E5F8A;
     font-weight: 600;
     font-size: 0.88rem;
     text-decoration: none;
     transition: color 0.15s ease;
+    word-break: break-all;
 }
 
 .sp-contact-link:hover {
@@ -168,6 +175,12 @@
     padding: 0.6rem 1rem;
     border-bottom: 1px solid #F1F5F9;
     transition: background 0.15s ease;
+    min-width: 0;
+}
+
+.sp-family-row .flex-fill {
+    min-width: 0;
+    overflow-wrap: anywhere;
 }
 
 .sp-family-row:last-child {

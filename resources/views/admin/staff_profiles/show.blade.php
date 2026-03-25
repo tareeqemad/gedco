@@ -23,7 +23,7 @@
             <div class="col-12 col-lg-8">
 
                 {{-- Profile Card --}}
-                <div class="card border-0 shadow-sm rounded-4 mb-3 overflow-hidden">
+                <div class="card border-0 shadow-sm rounded-4 mb-3">
                     <div class="sp-hero">
                         <div class="d-flex align-items-center gap-3 flex-wrap">
                             <div class="sp-avatar">
