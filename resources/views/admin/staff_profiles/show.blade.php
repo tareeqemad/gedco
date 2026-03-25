@@ -159,57 +159,44 @@
 
                     {{-- Contact --}}
                     <h6 class="sp-section-title"><i class="bi bi-telephone"></i> {{ __('admin.staff_profiles.show_contact_info') }}</h6>
-                    <div class="sp-sidebar-card mb-4">
-                        @if($profile->mobile)
-                            <div class="sp-contact-item">
-                                <i class="bi bi-phone-fill text-success"></i>
-                                <div>
-                                    <small class="text-muted">{{ __('admin.staff_profiles.show_mobile') }}</small>
-                                    <div><a href="tel:{{ $profile->mobile }}">{{ $profile->mobile }}</a></div>
-                                </div>
-                            </div>
-                        @endif
-                        @if($profile->mobile_alt)
-                            <div class="sp-contact-item">
-                                <i class="bi bi-phone text-success"></i>
-                                <div>
-                                    <small class="text-muted">{{ __('admin.staff_profiles.show_mobile_alt') }}</small>
-                                    <div><a href="tel:{{ $profile->mobile_alt }}">{{ $profile->mobile_alt }}</a></div>
-                                </div>
-                            </div>
-                        @endif
-                        @if($profile->whatsapp)
-                            <div class="sp-contact-item">
-                                <i class="bi bi-whatsapp text-success"></i>
-                                <div>
-                                    <small class="text-muted">{{ __('admin.staff_profiles.show_whatsapp') }}</small>
-                                    @php
-                                        $wa = $profile->whatsapp;
-                                        $waF = str_starts_with($wa,'970') ? '+970 '.substr($wa,3) : (str_starts_with($wa,'972') ? '+972 '.substr($wa,3) : $wa);
-                                    @endphp
-                                    <div><a href="https://wa.me/{{ $wa }}" target="_blank">{{ $waF }}</a></div>
-                                </div>
-                            </div>
-                        @endif
-                        @if($profile->telegram)
-                            <div class="sp-contact-item">
-                                <i class="bi bi-telegram text-info"></i>
-                                <div>
-                                    <small class="text-muted">{{ __('admin.staff_profiles.show_telegram') }}</small>
-                                    <div><a href="https://t.me/{{ $profile->telegram }}" target="_blank">{{ $profile->telegram }}</a></div>
-                                </div>
-                            </div>
-                        @endif
-                        @if($profile->gmail)
-                            <div class="sp-contact-item">
-                                <i class="bi bi-envelope-fill text-danger"></i>
-                                <div>
-                                    <small class="text-muted">{{ __('admin.staff_profiles.show_email') }}</small>
-                                    <div><a href="mailto:{{ $profile->gmail }}">{{ $profile->gmail }}</a></div>
-                                </div>
-                            </div>
-                        @endif
-                    </div>
+                    <table class="table table-sm sp-table mb-4">
+                        <tbody>
+                            @if($profile->mobile)
+                            <tr>
+                                <th><i class="bi bi-phone-fill text-success me-1"></i>{{ __('admin.staff_profiles.show_mobile') }}</th>
+                                <td><a href="tel:{{ $profile->mobile }}">{{ $profile->mobile }}</a></td>
+                            </tr>
+                            @endif
+                            @if($profile->mobile_alt)
+                            <tr>
+                                <th><i class="bi bi-phone text-success me-1"></i>{{ __('admin.staff_profiles.show_mobile_alt') }}</th>
+                                <td><a href="tel:{{ $profile->mobile_alt }}">{{ $profile->mobile_alt }}</a></td>
+                            </tr>
+                            @endif
+                            @if($profile->whatsapp)
+                            <tr>
+                                <th><i class="bi bi-whatsapp text-success me-1"></i>{{ __('admin.staff_profiles.show_whatsapp') }}</th>
+                                @php
+                                    $wa = $profile->whatsapp;
+                                    $waF = str_starts_with($wa,'970') ? '+970 '.substr($wa,3) : (str_starts_with($wa,'972') ? '+972 '.substr($wa,3) : $wa);
+                                @endphp
+                                <td><a href="https://wa.me/{{ $wa }}" target="_blank">{{ $waF }}</a></td>
+                            </tr>
+                            @endif
+                            @if($profile->telegram)
+                            <tr>
+                                <th><i class="bi bi-telegram text-info me-1"></i>{{ __('admin.staff_profiles.show_telegram') }}</th>
+                                <td><a href="https://t.me/{{ $profile->telegram }}" target="_blank">{{ $profile->telegram }}</a></td>
+                            </tr>
+                            @endif
+                            @if($profile->gmail)
+                            <tr>
+                                <th><i class="bi bi-envelope-fill text-danger me-1"></i>{{ __('admin.staff_profiles.show_email') }}</th>
+                                <td><a href="mailto:{{ $profile->gmail }}">{{ $profile->gmail }}</a></td>
+                            </tr>
+                            @endif
+                        </tbody>
+                    </table>
 
                     {{-- Family Members --}}
                     <h6 class="sp-section-title">
@@ -245,5 +232,5 @@
 @endsection
 
 @push('styles')
-    <link rel="stylesheet" href="{{ asset('assets/admin/css/staff-profiles.css') }}?v=4">
+    <link rel="stylesheet" href="{{ asset('assets/admin/css/staff-profiles.css') }}?v=5">
 @endpush
