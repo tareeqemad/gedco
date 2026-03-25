@@ -92,7 +92,7 @@
                                     <div class="d-flex justify-content-between align-items-center mb-2">
                                         <span class="badge bg-light text-muted border">HTML</span>
                                         <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill px-3" onclick="copyHtml()">
-                                            <i class="bi bi-clipboard me-1"></i> {{ __('admin.labels.copy') }}
+                                            <i class="bi bi-clipboard me-1"></i> {{ __('admin.ui.copy') }}
                                         </button>
                                     </div>
                                     <pre class="news-show-pre" id="htmlContent"><code>{{ $item->body }}</code></pre>
@@ -400,7 +400,7 @@
             if (!content) return;
             navigator.clipboard.writeText(content).then(() => {
                 if (window.adminNotifications) {
-                    window.adminNotifications.success('{{ __('admin.labels.copied') }}');
+                    window.adminNotifications.success('{{ __('admin.ui.copied') }}');
                 }
             });
         }
