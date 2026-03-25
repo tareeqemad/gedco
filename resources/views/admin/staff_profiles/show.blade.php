@@ -319,7 +319,8 @@
         </div>
     </div>
 
-    @push('styles')
-        <link rel="stylesheet" href="{{ asset('assets/admin/css/staff-profiles.css') }}">
-    @endpush
 @endsection
+
+@push('styles')
+    <link rel="stylesheet" href="{{ asset('assets/admin/css/staff-profiles.css') }}">
+@endpush
