@@ -11,19 +11,35 @@ use Illuminate\Database\QueryException;
 
 class StaffProfileController extends Controller
 {
-
+    /**
+     * تطبيق الترتيب على الاستعلام حسب المعامل sort.
+     * القيم المدعومة: name_asc, name_desc, emp_asc, emp_desc, date_asc, date_desc (افتراضي)
+     */
+    private function applySort($query, ?string $sort)
+    {
+        return match ($sort) {
+            'name_asc'  => $query->orderBy('full_name', 'asc'),
+            'name_desc' => $query->orderBy('full_name', 'desc'),
+            'emp_asc'   => $query->orderByRaw('CAST(employee_number AS UNSIGNED) ASC'),
+            'emp_desc'  => $query->orderByRaw('CAST(employee_number AS UNSIGNED) DESC'),
+            'date_asc'  => $query->orderBy('created_at', 'asc'),
+            default     => $query->orderBy('created_at', 'desc'),
+        };
+    }
 
     public function index(Request $request)
     {
         $query = StaffProfile::query();
 
-        // البحث النصي
-        if ($search = $request->input('q')) {
-            $query->where(function ($q) use ($search) {
-                $q->where('full_name', 'like', "%{$search}%")
-                    ->orWhere('national_id', 'like', "%{$search}%")
-                    ->orWhere('employee_number', 'like', "%{$search}%");
-            });
+        // بحث منفصل لكل حقل (AND بين الحقول)
+        if ($nid = trim((string) $request->input('national_id'))) {
+            $query->where('national_id', 'like', "%{$nid}%");
+        }
+        if ($emp = trim((string) $request->input('employee_number'))) {
+            $query->where('employee_number', 'like', "%{$emp}%");
+        }
+        if ($name = trim((string) $request->input('name'))) {
+            $query->where('full_name', 'like', "%{$name}%");
         }
 
         // فلترة حسب الحالة (مقيم/نازح)
@@ -40,8 +56,47 @@ class StaffProfileController extends Controller
             }
         }
 
-        $profiles = $query->latest()->paginate(25)->withQueryString();
-        
+        // فلترة حسب عمر الأطفال (المعالين)
+        $ageFrom = $request->input('age_from');
+        $ageTo = $request->input('age_to');
+        if ($ageFrom !== null && $ageFrom !== '' || $ageTo !== null && $ageTo !== '') {
+            $query->whereHas('dependents', function ($q) use ($ageFrom, $ageTo) {
+                $q->whereIn('relation', ['son', 'daughter']);
+                $q->whereNotNull('birth_date');
+
+                $today = Carbon::today();
+                // العمر "من" يعني أقصى تاريخ ميلاد (الأصغر عمراً)
+                if ($ageFrom !== null && $ageFrom !== '') {
+                    $maxBirthDate = $today->copy()->subYears((int) $ageFrom);
+                    $q->where('birth_date', '<=', $maxBirthDate->format('Y-m-d'));
+                }
+                // العمر "إلى" يعني أدنى تاريخ ميلاد (الأكبر عمراً)
+                if ($ageTo !== null && $ageTo !== '') {
+                    $minBirthDate = $today->copy()->subYears((int) $ageTo + 1)->addDay();
+                    $q->where('birth_date', '>=', $minBirthDate->format('Y-m-d'));
+                }
+            });
+        }
+
+        $profiles = $this->applySort($query, $request->input('sort'))
+            ->paginate(200)
+            ->withQueryString();
+
+        // طلب AJAX لتحميل صفحة إضافية (infinite scroll)
+        if ($request->ajax() || $request->boolean('ajax')) {
+            $locations   = ['1'=>__('admin.staff_profiles_data.location_1'),'2'=>__('admin.staff_profiles_data.location_2'),'3'=>__('admin.staff_profiles_data.location_3'),'4'=>__('admin.staff_profiles_data.location_4'),'6'=>__('admin.staff_profiles_data.location_6'),'7'=>__('admin.staff_profiles_data.location_7'),'8'=>__('admin.staff_profiles_data.location_8')];
+            $statusMap   = ['resident'=>['label'=>__('admin.staff_profiles_data.status_resident_label'),'class'=>'bg-success-subtle text-success'], 'displaced'=>['label'=>__('admin.staff_profiles_data.status_displaced_label'),'class'=>'bg-danger-subtle text-danger']];
+            $readinessMap = ['working'=>['label'=>__('admin.staff_profiles_data.readiness_working_label'),'class'=>'bg-success text-white'], 'ready'=>['label'=>__('admin.staff_profiles_data.readiness_ready_label'),'class'=>'bg-primary text-white'], 'not_ready'=>['label'=>__('admin.staff_profiles_data.readiness_not_ready_label'),'class'=>'bg-warning text-dark']];
+
+            return response()->json([
+                'html'      => view('admin.staff_profiles._rows', compact('profiles', 'locations', 'statusMap', 'readinessMap'))->render(),
+                'has_more'  => $profiles->hasMorePages(),
+                'loaded_to' => $profiles->lastItem(),
+                'total'     => $profiles->total(),
+                'count'     => $profiles->count(),
+            ]);
+        }
+
         // حساب الإحصائيات - فقط الحالات المحددة
         $stats = [
             'total'       => StaffProfile::count(),
@@ -53,8 +108,8 @@ class StaffProfileController extends Controller
             'resident'    => StaffProfile::where('status', 'resident')->count(),
             'displaced'   => StaffProfile::where('status', 'displaced')->count(),
         ];
-        
-        return view('admin.staff_profiles.index', compact('profiles', 'search', 'stats'));
+
+        return view('admin.staff_profiles.index', compact('profiles', 'stats'));
     }
 
 
@@ -62,12 +117,14 @@ class StaffProfileController extends Controller
     {
         $query = StaffProfile::query();
 
-        if ($search = $request->input('q')) {
-            $query->where(function ($q) use ($search) {
-                $q->where('full_name', 'like', "%{$search}%")
-                    ->orWhere('national_id', 'like', "%{$search}%")
-                    ->orWhere('employee_number', 'like', "%{$search}%");
-            });
+        if ($nid = trim((string) $request->input('national_id'))) {
+            $query->where('national_id', 'like', "%{$nid}%");
+        }
+        if ($emp = trim((string) $request->input('employee_number'))) {
+            $query->where('employee_number', 'like', "%{$emp}%");
+        }
+        if ($name = trim((string) $request->input('name'))) {
+            $query->where('full_name', 'like', "%{$name}%");
         }
 
         if ($status = $request->input('status')) {
@@ -82,33 +139,93 @@ class StaffProfileController extends Controller
             }
         }
 
-        $profiles = $query->latest()->get();
+        // فلترة حسب عمر الأطفال
+        $ageFrom = $request->input('age_from');
+        $ageTo = $request->input('age_to');
+        if ($ageFrom !== null && $ageFrom !== '' || $ageTo !== null && $ageTo !== '') {
+            $query->whereHas('dependents', function ($q) use ($ageFrom, $ageTo) {
+                $q->whereIn('relation', ['son', 'daughter']);
+                $q->whereNotNull('birth_date');
+                $today = Carbon::today();
+                if ($ageFrom !== null && $ageFrom !== '') {
+                    $maxBirthDate = $today->copy()->subYears((int) $ageFrom);
+                    $q->where('birth_date', '<=', $maxBirthDate->format('Y-m-d'));
+                }
+                if ($ageTo !== null && $ageTo !== '') {
+                    $minBirthDate = $today->copy()->subYears((int) $ageTo + 1)->addDay();
+                    $q->where('birth_date', '>=', $minBirthDate->format('Y-m-d'));
+                }
+            });
+        }
+
+        $query->with(['dependents' => function ($q) use ($ageFrom, $ageTo) {
+            $q->whereIn('relation', ['son', 'daughter'])
+              ->orderBy('birth_date', 'asc');
+
+            // لو تم تحديد فلتر العمر، نعرض فقط الأبناء ضمن النطاق
+            if (($ageFrom !== null && $ageFrom !== '') || ($ageTo !== null && $ageTo !== '')) {
+                $q->whereNotNull('birth_date');
+                $today = Carbon::today();
+
+                if ($ageFrom !== null && $ageFrom !== '') {
+                    $maxBirthDate = $today->copy()->subYears((int) $ageFrom);
+                    $q->where('birth_date', '<=', $maxBirthDate->format('Y-m-d'));
+                }
+                if ($ageTo !== null && $ageTo !== '') {
+                    $minBirthDate = $today->copy()->subYears((int) $ageTo + 1)->addDay();
+                    $q->where('birth_date', '>=', $minBirthDate->format('Y-m-d'));
+                }
+            }
+        }]);
+
+        $profiles = $this->applySort($query, $request->input('sort'))->get();
 
         $statusMap = ['resident' => 'مقيم', 'displaced' => 'نازح'];
         $readinessMap = ['working' => 'باشر العمل', 'ready' => 'جاهز', 'not_ready' => 'غير جاهز'];
+        $relationMap = ['son' => 'ابن', 'daughter' => 'ابنة'];
         $locations = ['1'=>'المقر الرئيسي','2'=>'مقر غزة','3'=>'مقر الشمال','4'=>'مقر الوسطى','6'=>'مقر خانيونس','7'=>'مقر رفح','8'=>'مقر الصيانة - غزة'];
 
-        $filename = 'staff-profiles-' . now()->format('Y-m-d') . '.csv';
+        $filename = 'staff-profiles-' . now()->format('Y-m-d') . '.xls';
 
         $headers = [
-            'Content-Type' => 'text/csv; charset=UTF-8',
+            'Content-Type' => 'application/vnd.ms-excel; charset=UTF-8',
             'Content-Disposition' => "attachment; filename=\"{$filename}\"",
         ];
 
-        $callback = function () use ($profiles, $statusMap, $readinessMap, $locations) {
-            $file = fopen('php://output', 'w');
-            // BOM for Excel UTF-8
-            fprintf($file, chr(0xEF).chr(0xBB).chr(0xBF));
+        $columnHeaders = [
+            '#', 'الاسم الكامل', 'رقم الهوية', 'الرقم الوظيفي', 'المسمى الوظيفي',
+            'المقر', 'الإدارة', 'القسم', 'الحالة', 'الجاهزية',
+            'الجوال', 'جوال بديل', 'واتساب', 'البريد',
+            'العنوان الأصلي', 'العنوان الحالي', 'تاريخ التسجيل',
+            'عدد الأبناء', 'الأبناء وتواريخ الميلاد'
+        ];
 
-            fputcsv($file, [
-                '#', 'الاسم الكامل', 'رقم الهوية', 'الرقم الوظيفي', 'المسمى الوظيفي',
-                'المقر', 'الإدارة', 'القسم', 'الحالة', 'الجاهزية',
-                'الجوال', 'جوال بديل', 'واتساب', 'البريد',
-                'العنوان الأصلي', 'العنوان الحالي', 'تاريخ التسجيل'
-            ]);
+        $callback = function () use ($profiles, $statusMap, $readinessMap, $relationMap, $locations, $columnHeaders) {
+            echo chr(0xEF) . chr(0xBB) . chr(0xBF);
+            echo '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">';
+            echo '<head><meta charset="UTF-8"><style>td,th{mso-number-format:\@;text-align:right;vertical-align:top;}</style></head>';
+            echo '<body><table border="1">';
 
+            // Header row
+            echo '<tr>';
+            foreach ($columnHeaders as $h) {
+                echo '<th style="background:#4472C4;color:#fff;font-weight:bold;padding:6px 10px;">' . e($h) . '</th>';
+            }
+            echo '</tr>';
+
+            // صف واحد لكل موظف — الأبناء في عمودين منفصلين
             foreach ($profiles as $i => $p) {
-                fputcsv($file, [
+                $childrenCount = $p->dependents->count();
+
+                // بناء نص الأبناء: كل ابن بسطر داخل الخلية
+                $childrenText = $p->dependents->map(function ($child) use ($relationMap) {
+                    $rel   = $relationMap[$child->relation] ?? '';
+                    $birth = $child->birth_date?->format('Y-m-d') ?? '—';
+                    $name  = $child->name ?? '';
+                    return trim(($rel ? $rel . ': ' : '') . $name . ' (' . $birth . ')');
+                })->implode("\n");
+
+                $row = [
                     $i + 1,
                     $p->full_name,
                     $p->national_id,
@@ -126,10 +243,26 @@ class StaffProfileController extends Controller
                     $p->original_address,
                     $p->current_address,
                     $p->created_at?->format('Y-m-d'),
-                ]);
+                    $childrenCount,
+                    $childrenText,
+                ];
+
+                echo '<tr>';
+                foreach ($row as $idx => $cell) {
+                    $style = 'padding:4px 8px;';
+                    // العمود الأخير (الأبناء) — استخدم <br> للأسطر في إكسل
+                    if ($idx === count($row) - 1 && $cell) {
+                        $style .= 'mso-data-placement:same-cell;max-width:400px;';
+                        $html = nl2br(e($cell), false);
+                        echo '<td style="' . $style . '">' . $html . '</td>';
+                    } else {
+                        echo '<td style="' . $style . '">' . e($cell ?? '') . '</td>';
+                    }
+                }
+                echo '</tr>';
             }
 
-            fclose($file);
+            echo '</table></body></html>';
         };
 
         return response()->stream($callback, 200, $headers);
