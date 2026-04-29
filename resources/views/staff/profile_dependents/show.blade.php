@@ -47,7 +47,9 @@
 
 <div class="shell">
     <div class="header">
+        <img src="{{ asset('assets/site/images/logos/logo-dark.webp') }}" alt="GEDCO" style="height:52px;margin-bottom:.6rem;">
         <h1>عرض بيانات الموظف</h1>
+        <p style="color:#7a6b63;font-size:.88rem;margin:.3rem 0 0;">شركة توزيع كهرباء محافظات غزة</p>
     </div>
 
     @if (session('success'))

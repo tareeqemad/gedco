@@ -17,9 +17,9 @@ args = parser.parse_args()
 # ===== DB config (ENV first, then fallback) =====
 DB_HOST = os.getenv("DB_HOST", "127.0.0.1")
 DB_PORT = int(os.getenv("DB_PORT", "3306"))
-DB_NAME = os.getenv("DB_NAME", "gedco")
-DB_USER = os.getenv("DB_USER", "root")
-DB_PASS = os.getenv("DB_PASS", "")
+DB_NAME = os.getenv("DB_NAME", "gedcops_web_1")
+DB_USER = os.getenv("DB_USER", "gedcops_web")
+DB_PASS = os.getenv("DB_PASS", "aSeeB3m^8X")
 DB_CHARSET = os.getenv("DB_CHARSET", "utf8mb4")
 DB_COLLATE = os.getenv("DB_COLLATE", "utf8mb4_general_ci")
 

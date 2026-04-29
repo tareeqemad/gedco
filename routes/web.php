@@ -12,6 +12,7 @@ use App\Http\Controllers\Site\AdvertisementController;
 use App\Http\Controllers\Site\SearchController;
 use App\Http\Controllers\Site\ContactController;
 use App\Http\Controllers\Site\GcaCenterController;
+use App\Http\Controllers\Site\JoinRequestController;
 use App\Http\Controllers\DirectionController;
 
 // Direction toggle route
@@ -36,6 +37,9 @@ Route::prefix('/')->name('site.')->group(function () {
     Route::post('/contact', [ContactController::class, 'store'])->middleware('throttle:5,1')->name('contact.store');
     
    Route::get('/gca/center', [GcaCenterController::class, 'index'])->name('gca');
+   Route::post('/gca/join-request', [JoinRequestController::class, 'store'])
+        ->middleware('throttle:5,1')
+        ->name('gca.join-request');
 
 });
 

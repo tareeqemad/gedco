@@ -1011,6 +1011,62 @@ return [
         'showing_range' => 'Showing :first to :last of :total users',
     ],
 
+    // GCA Join Requests
+    'join_requests' => [
+        'title'              => 'GCA Join Requests',
+        'menu'               => 'Join Requests',
+        'entry'              => 'request',
+        'entry_details'      => 'Request Details',
+        'view_entry'         => 'View Request',
+        'applicant_info'     => 'Applicant information',
+        'applicant_name'     => 'Full name',
+        'applicant_phone'    => 'Phone number',
+        'applicant_email'    => 'Email',
+        'company_name'       => 'Company',
+        'source'             => 'Source',
+        'referrer_name'      => 'Referrer Name',
+        'locale'             => 'Language',
+        'arabic'             => 'Arabic',
+        'english'            => 'English',
+        'date'               => 'Date',
+        'submitted_at'       => 'Submitted At',
+        'ip_address'         => 'IP Address',
+        'summary'            => 'Request Summary',
+        'no_entries'         => 'No requests yet',
+        'all_sources'        => 'All sources',
+        'search_placeholder' => 'Search name, phone, email, company, or IP...',
+        'delete_confirm'     => 'Delete this request?',
+        'applicant'          => 'Applicant',
+        'contact'            => 'Contact',
+        'export_excel'       => 'Export Excel',
+        'sources' => [
+            'friend_employee' => 'Friend / Employee',
+            'social_media'    => 'Social Media',
+            'website'         => 'Website',
+            'advertisement'   => 'Advertisement',
+            'other'           => 'Other',
+        ],
+        'public' => [
+            'success' => 'Your request has been received. Thank you!',
+        ],
+        'flash' => [
+            'marked_read'   => 'Request marked as read',
+            'marked_unread' => 'Request marked as unread',
+            'deleted'       => 'Request deleted successfully',
+        ],
+        'validation' => [
+            'applicant_name_required'  => 'Please enter your full name.',
+            'applicant_name_max'       => 'Name must be less than 150 characters.',
+            'applicant_phone_required' => 'Please enter your phone number.',
+            'applicant_phone_invalid'  => 'Phone number is invalid.',
+            'applicant_email_invalid'  => 'Email is invalid.',
+            'source_required'          => 'Please select an option.',
+            'source_invalid'           => 'The selected option is invalid.',
+            'referrer_required'        => 'Please enter the person\'s name.',
+            'referrer_max'             => 'Name must be less than 150 characters.',
+        ],
+    ],
+
     // Contact Messages
     'contact_messages' => [
         'title' => 'Contact Messages',
@@ -1094,6 +1150,7 @@ return [
     // Sidebar extra items
     'sidebar' => [
         'contact_messages' => 'Contact Messages',
+        'join_requests'    => 'Join Requests',
         'activity_log' => 'Activity Log',
         'all_activities' => 'All Activities',
         'online_users' => 'Online Users',

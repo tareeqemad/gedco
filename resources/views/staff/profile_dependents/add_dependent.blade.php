@@ -58,11 +58,9 @@
 
 <div class="form-shell">
     <div class="form-header">
-        <h1>إقرار المعلومات الشخصية</h1>
-    </div>
-
-    <div class="alert alert-warning" style="margin: 1rem 2rem 0;">
-        يرجى تعبئة جميع الحقول الإلزامية المعلّمة بـ (<span style="color:#e63946">*</span>)
+        <img src="{{ asset('assets/site/images/logos/logo-dark.webp') }}" alt="GEDCO" style="height:52px;margin-bottom:.6rem;">
+        <h1>تحديث بيانات الموظفين</h1>
+        <p>شركة توزيع كهرباء محافظات غزة &mdash; يرجى تعبئة جميع الحقول المعلّمة بـ (<span style="color:#e63946;font-weight:700">*</span>)</p>
     </div>
 
     @if (session('locked'))
@@ -99,35 +97,41 @@
                 <div class="grid grid-3">
                     <label class="field required">
                         <span>رقم الهوية</span>
-                        <input type="text" name="national_id" id="national_id_input" value="{{ old('national_id') }}"
+                        <input type="text" name="national_id" id="national_id_input"
+                               value="{{ old('national_id', $verified['national_id'] ?? '') }}"
                                required maxlength="9" pattern="\d{9}" inputmode="numeric"
+                               readonly
                                class="@error('national_id') is-invalid @enderror">
                         @error('national_id') <small class="text-danger">{{ $message }}</small> @enderror
                     </label>
 
                     <label class="field required">
                         <span>الاسم رباعي</span>
-                        <input type="text" name="full_name" value="{{ old('full_name') }}" required
+                        <input type="text" name="full_name"
+                               value="{{ old('full_name', $verified['full_name'] ?? '') }}" required
+                               readonly
                                class="@error('full_name') is-invalid @enderror">
                         @error('full_name') <small class="text-danger">{{ $message }}</small> @enderror
                     </label>
 
                     <label class="field">
                         <span>تاريخ الميلاد</span>
-                        <input type="text" name="birth_date" value="{{ old('birth_date') }}"
-                               inputmode="numeric" pattern="\d{4}-\d{2}-\d{2}" autocomplete="off">
+                        <input type="date" name="birth_date" value="{{ old('birth_date') }}">
                     </label>
 
                     <label class="field required">
                         <span>الرقم الوظيفي</span>
-                        <input type="text" name="employee_number" value="{{ old('employee_number') }}" required
-                               maxlength="4" pattern="\d{1,4}" class="@error('employee_number') is-invalid @enderror">
+                        <input type="text" name="employee_number"
+                               value="{{ old('employee_number', $verified['employee_number'] ?? '') }}" required
+                               maxlength="4" pattern="\d{1,4}"
+                               readonly
+                               class="@error('employee_number') is-invalid @enderror">
                         @error('employee_number') <small class="text-danger">{{ $message }}</small> @enderror
                     </label>
 
                     <label class="field">
                         <span>الوظيفة الحالية</span>
-                        <input type="text" name="job_title" value="{{ old('job_title') }}">
+                        <input type="text" name="job_title" value="{{ old('job_title', $verified['job_title'] ?? '') }}">
                     </label>
 
                     <label class="field required">
@@ -170,7 +174,7 @@
                     <label class="field">
                         <span>عدد أفراد الأسرة حاليًا</span>
                         <input type="number" min="1" max="15" name="family_members_count" id="family-count-input"
-                               value="{{ old('family_members_count', 1) }}">
+                               value="{{ old('family_members_count', $verified['family_count'] ?? 1) }}">
                     </label>
                 </div>
             </section>
@@ -302,7 +306,7 @@
                 <div class="grid grid-3">
                     <label class="field required">
                         <span>رقم الجوال</span>
-                        <input type="tel" name="mobile" value="{{ old('mobile') }}" required maxlength="10"
+                        <input type="tel" name="mobile" value="{{ old('mobile', $verified['mobile'] ?? '') }}" required maxlength="10"
                                pattern="\d{8,10}" class="@error('mobile') is-invalid @enderror">
                         @error('mobile') <small class="text-danger">{{ $message }}</small> @enderror
                     </label>
@@ -339,8 +343,16 @@
                     </label>
 
                     <label class="field">
-                        <span>Gmail</span>
-                        <input type="email" name="gmail" value="{{ old('gmail') }}">
+                        <span>إيميل الشركة</span>
+                        <input type="email" value="{{ $verified['email'] ?? '' }}" readonly>
+                    </label>
+
+                    <label class="field required">
+                        <span>Gmail (بريد شخصي)</span>
+                        <input type="email" name="gmail" value="{{ old('gmail') }}" required
+                               placeholder="example@gmail.com"
+                               class="@error('gmail') is-invalid @enderror">
+                        @error('gmail') <small class="text-danger">{{ $message }}</small> @enderror
                     </label>
                 </div>
             </section>
@@ -385,9 +397,6 @@
     </form>
 </div>
 
-<link rel="stylesheet" href="{{ asset('assets/admin/libs/sweetalert2/sweetalert2.min.css') }}">
-<script src="{{ asset('assets/admin/libs/sweetalert2/sweetalert2.min.js') }}"></script>
-
 <script>
     (() => {
         const template = document.getElementById('family-row-template');
@@ -404,6 +413,10 @@
         const currentAddressEl         = document.getElementById('current-address-field');
 
         const oldFamily = @json(old('family', []));
+        const verifiedSpouse = @json([
+            'name' => $verified['spouse_name'] ?? null,
+            'relation' => 'wife',
+        ]);
 
         if (!template || !container) { return; }
 
@@ -509,6 +522,7 @@
         });
 
         if (Array.isArray(oldFamily) && oldFamily.filter(Boolean).length) {
+            // Validation failed - restore old input
             const normalized = oldFamily
                 .filter(Boolean)
                 .map(item => ({
@@ -520,8 +534,25 @@
             ensureRowCount(normalized.length, normalized);
             if (familyCountInput) familyCountInput.value = normalized.length;
         } else {
+            // First load - pre-fill spouse from directory if available
+            const initialFamily = [];
+            if (verifiedSpouse.name) {
+                initialFamily.push({
+                    name: verifiedSpouse.name,
+                    relation: verifiedSpouse.relation,
+                    birth_date: '',
+                    is_student: '',
+                });
+            }
+
             const startCount = parseInt(familyCountInput?.value ?? '1', 10) || 1;
-            ensureRowCount(startCount);
+            const targetCount = Math.max(startCount, initialFamily.length || 1);
+
+            if (initialFamily.length) {
+                ensureRowCount(targetCount, initialFamily);
+            } else {
+                ensureRowCount(targetCount);
+            }
             if (familyCountInput) familyCountInput.value = container.querySelectorAll('tr').length;
         }
 
@@ -546,244 +577,41 @@
         statusSelectEl?.addEventListener('change', () => toggleShow(statusSelectEl, currentAddressEl, 'displaced'));
         toggleShow(statusSelectEl, currentAddressEl, 'displaced');
 
-        // ===================== جلب تلقائي عبر رقم الهوية =====================
-
-        const nationalIdInput = document.querySelector('input[name="national_id"]');
-        const fullNameEl      = document.querySelector('input[name="full_name"]');
-        const birthDateEl     = document.querySelector('input[name="birth_date"]');
-        const maritalEl       = document.querySelector('select[name="marital_status"]');
-        const jobTitleEl      = document.querySelector('input[name="job_title"]');
-        const locationEl      = document.querySelector('select[name="location"]');
-        const departmentEl    = document.querySelector('input[name="department"]');
-        const employeeNoEl    = document.querySelector('input[name="employee_number"]');
-
-        function toEnglishDigits(str) {
-            if (!str) return '';
-            return String(str)
-                .replace(/[٠-٩]/g, d => '٠١٢٣٤٥٦٧٨٩'.indexOf(d))
-                .replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d));
-        }
-
-        function toISODate(v) {
-            const s = toEnglishDigits(v || '').trim();
-            if (!s) return '';
-
-            let m = s.match(/^(\d{4})[-\/](\d{1,2})[-\/](\d{1,2})$/);
-            if (m) return `${m[1]}-${m[2].padStart(2,'0')}-${m[3].padStart(2,'0')}`;
-
-            m = s.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})$/);
-            if (m) return `${m[3]}-${m[1].padStart(2,'0')}-${m[2].padStart(2,'0')}`;
-
-            const cleaned = s.replace(/[^\d]/g, '');
-            if (cleaned.length === 8) {
-                return `${cleaned.slice(0,4)}-${cleaned.slice(4,6)}-${cleaned.slice(6,8)}`;
-            }
-
-            return '';
-        }
-
-        function toDisplayDate(iso) {
-            const s = toISODate(iso);
-            if (!s) return '';
-            const [y, mo, d] = s.split('-');
-            return `${mo}/${d}/${y}`;
-        }
-
-        // تعامل أفضل مع حقل تاريخ الميلاد (لما يكتب يدوي)
-        const mainBirthInput  = document.querySelector('input[name="birth_date"]');
-        if (mainBirthInput) {
-            mainBirthInput.addEventListener('focus', () => {
-                const val = toISODate(mainBirthInput.value);
-                mainBirthInput.type = 'date';
-                if (val) mainBirthInput.value = val;
-            });
-            mainBirthInput.addEventListener('blur', () => {
-                const iso = toISODate(mainBirthInput.value);
-                mainBirthInput.type = 'text';
-                mainBirthInput.value = toDisplayDate(iso);
-            });
-            mainBirthInput.value = toDisplayDate(toISODate(mainBirthInput.value));
-        }
-
-        function lockImmutableFields() {
-            const fields = [fullNameEl, birthDateEl, employeeNoEl, jobTitleEl, departmentEl];
-            fields.forEach(el => {
-                if (el) {
-                    el.readOnly = true;
-                    el.setAttribute('aria-readonly', 'true');
-                }
-            });
-
-            if (locationEl) {
-                locationEl.disabled = true;
-                let mirror = document.querySelector('input[type="hidden"][name="location"]');
-                if (!mirror) {
-                    mirror = document.createElement('input');
-                    mirror.type = 'hidden';
-                    mirror.name = 'location';
-                    locationEl.insertAdjacentElement('afterend', mirror);
-                }
-                mirror.value = locationEl.value || '';
-            }
-        }
-
-        function clearFetchedFields() {
-            if (fullNameEl)    fullNameEl.value = '';
-            if (birthDateEl)   birthDateEl.value = '';
-            if (employeeNoEl)  employeeNoEl.value = '';
-            if (jobTitleEl)    jobTitleEl.value = '';
-            if (maritalEl)     maritalEl.value = '';
-            if (departmentEl)  departmentEl.value = '';
-            if (locationEl)    locationEl.value = '';
-
-            const mirror = document.querySelector('input[type="hidden"][name="location"]');
-            if (mirror) mirror.value = '';
-        }
-
-        function fillFromData(data) {
-            if (!data) return;
-
-            if (birthDateEl) {
-                const v = toDisplayDate(toISODate(data.birth_date));
-                birthDateEl.type = 'text';
-                birthDateEl.value = v;
-            }
-
-            if (fullNameEl)    fullNameEl.value    = data.full_name || '';
-            if (employeeNoEl)  employeeNoEl.value  = data.employee_number || '';
-            if (jobTitleEl)    jobTitleEl.value    = data.job_title || '';
-            if (departmentEl)  departmentEl.value  = data.department || '';
-
-            if (maritalEl && data.marital_status) {
-                if (Array.from(maritalEl.options).some(o => o.value === data.marital_status)) {
-                    maritalEl.value = data.marital_status;
-                }
-            }
-
-            if (locationEl && data.location) {
-                if (Array.from(locationEl.options).some(o => o.value === String(data.location))) {
-                    locationEl.value = String(data.location);
-                    const mirror = document.querySelector('input[type="hidden"][name="location"]');
-                    if (mirror) mirror.value = String(data.location);
-                }
-            }
-
-            lockImmutableFields();
-        }
-
-        async function fetchEmployeeById(id) {
-            const baseUrl = @json($lookupUrl); // مثال: "http://127.0.0.1:8000/staff/profile/lookup"
-            if (!baseUrl) {
-                throw new Error('lookup_url_missing');
-            }
-
-            const url = baseUrl + '?id=' + encodeURIComponent(id);
-
-            const resp = await fetch(url, {
-                method: 'GET',
-                headers: { 'Accept': 'application/json' }
-            });
-
-            if (!resp.ok) {
-                throw new Error('lookup_failed_' + resp.status);
-            }
-
-            const payload = await resp.json();
-            if (!payload?.ok || !payload.data) {
-                throw new Error(payload?.message || 'not_ok');
-            }
-
-            return payload.data;
-        }
-
-        let lookupInFlight = false;
-        let lastFetchedId  = '';
-        let debounceTimer  = null;
-
-        function sanitizeId(value) {
-            return (value || '').replace(/\D/g, '');
-        }
-
-        async function fetchAndFillByCurrentId() {
-            const id = sanitizeId(nationalIdInput?.value || '');
-
-            if (lookupInFlight) return;
-
-            if (id.length !== 9) {
-                clearFetchedFields();
-                lastFetchedId = '';
-                return;
-            }
-
-            if (id === lastFetchedId) return;
-
-            lookupInFlight = true;
-            nationalIdInput.disabled = true;
-            nationalIdInput.style.opacity = 0.7;
-
-            try {
-                const data = await fetchEmployeeById(id);
-                if (data && (data.full_name || data.employee_number)) {
-                    fillFromData(data);
-                    lastFetchedId = id;
-                } else {
-                    clearFetchedFields();
-                    lastFetchedId = '';
-                    if (typeof Swal !== 'undefined') {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'خطأ في رقم الهوية',
-                            text: 'لا توجد بيانات مطابقة لهذا الرقم',
-                            confirmButtonText: 'حسناً',
-                            confirmButtonColor: '#ef7c4c'
-                        });
-                    } else {
-                        alert('لا توجد بيانات مطابقة لهذا الرقم.');
-                    }
-                }
-            } catch (e) {
-                clearFetchedFields();
-                lastFetchedId = '';
-                if (typeof Swal !== 'undefined') {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'خطأ في رقم الهوية',
-                        text: 'تعذّر جلب بيانات الموظف، يرجى المحاولة لاحقًا',
-                        confirmButtonText: 'حسناً',
-                        confirmButtonColor: '#ef7c4c'
-                    });
-                } else {
-                    alert('تعذّر جلب بيانات الموظف، يرجى المحاولة لاحقًا.');
-                }
-            } finally {
-                nationalIdInput.disabled = false;
-                nationalIdInput.style.opacity = 1;
-                lookupInFlight = false;
-            }
-        }
-
-        function debounceFetch() {
-            clearTimeout(debounceTimer);
-            debounceTimer = setTimeout(fetchAndFillByCurrentId, 500);
-        }
-
-        if (nationalIdInput) {
-            nationalIdInput.addEventListener('input', function () {
-                this.value = this.value.replace(/\D/g, '').slice(0, 9);
-                debounceFetch();
-            });
-            nationalIdInput.addEventListener('change', fetchAndFillByCurrentId);
-            nationalIdInput.addEventListener('blur', fetchAndFillByCurrentId);
-        }
-
-        if (nationalIdInput && nationalIdInput.value && nationalIdInput.value.length === 9) {
-            fetchAndFillByCurrentId();
-        }
-        // Bootstrap client-side validation
+        // Bootstrap client-side validation + disable button on submit
         document.querySelectorAll('.needs-validation').forEach(form => {
             form.addEventListener('submit', (e) => {
-                if (!form.checkValidity()) { e.preventDefault(); e.stopPropagation(); }
-                form.classList.add('was-validated');
+                form.querySelectorAll('.field-error').forEach(el => el.classList.remove('field-error'));
+                form.querySelectorAll('.field-error-msg').forEach(el => el.remove());
+
+                if (!form.checkValidity()) {
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                    form.querySelectorAll(':invalid').forEach(el => {
+                        const field = el.closest('label.field') || el.closest('.field-group');
+                        if (field) {
+                            field.classList.add('field-error');
+                            if (!field.querySelector('.field-error-msg')) {
+                                const msg = document.createElement('small');
+                                msg.className = 'field-error-msg';
+                                msg.textContent = 'هذا الحقل مطلوب';
+                                field.appendChild(msg);
+                            }
+                        }
+                    });
+
+                    const first = form.querySelector(':invalid');
+                    if (first) {
+                        first.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        first.focus();
+                    }
+                } else {
+                    const btn = form.querySelector('button[type="submit"]');
+                    if (btn) {
+                        btn.disabled = true;
+                        btn.textContent = 'جارٍ الحفظ...';
+                    }
+                }
             }, false);
         });
     })();

@@ -1010,6 +1010,62 @@ return [
         'showing_range' => 'عرض :first إلى :last من :total مستخدم',
     ],
 
+    // GCA Join Requests
+    'join_requests' => [
+        'title'              => 'طلبات الانضمام (GCA)',
+        'menu'               => 'طلبات الانضمام',
+        'entry'              => 'طلب',
+        'entry_details'      => 'تفاصيل الطلب',
+        'view_entry'         => 'عرض الطلب',
+        'applicant_info'     => 'بيانات مقدّم الطلب',
+        'applicant_name'     => 'الاسم الكامل',
+        'applicant_phone'    => 'رقم الهاتف',
+        'applicant_email'    => 'البريد الإلكتروني',
+        'company_name'       => 'اسم الشركة',
+        'source'             => 'مصدر التعرف',
+        'referrer_name'      => 'الشخص الذي أوصى',
+        'locale'             => 'اللغة',
+        'arabic'             => 'العربية',
+        'english'            => 'الإنجليزية',
+        'date'               => 'التاريخ',
+        'submitted_at'       => 'تاريخ الإرسال',
+        'ip_address'         => 'عنوان IP',
+        'summary'            => 'ملخص الطلب',
+        'no_entries'         => 'لا توجد طلبات بعد',
+        'all_sources'        => 'كل المصادر',
+        'search_placeholder' => 'ابحث بالاسم، الهاتف، البريد، الشركة، أو IP...',
+        'delete_confirm'     => 'حذف هذا الطلب؟',
+        'applicant'          => 'مقدّم الطلب',
+        'contact'            => 'وسائل التواصل',
+        'export_excel'       => 'تصدير Excel',
+        'sources' => [
+            'friend_employee' => 'صديق / موظف',
+            'social_media'    => 'وسائل التواصل الاجتماعي',
+            'website'         => 'الموقع الإلكتروني',
+            'advertisement'   => 'إعلان',
+            'other'           => 'أخرى',
+        ],
+        'public' => [
+            'success' => 'تم استلام طلبك بنجاح. شكرًا لك!',
+        ],
+        'flash' => [
+            'marked_read'   => 'تم تحديد الطلب كمقروء',
+            'marked_unread' => 'تم تحديد الطلب كغير مقروء',
+            'deleted'       => 'تم حذف الطلب بنجاح',
+        ],
+        'validation' => [
+            'applicant_name_required'  => 'الرجاء كتابة الاسم الكامل.',
+            'applicant_name_max'       => 'الاسم يجب أن يكون أقل من 150 حرفًا.',
+            'applicant_phone_required' => 'الرجاء كتابة رقم الهاتف.',
+            'applicant_phone_invalid'  => 'رقم الهاتف غير صحيح.',
+            'applicant_email_invalid'  => 'البريد الإلكتروني غير صحيح.',
+            'source_required'          => 'الرجاء اختيار خيار من القائمة.',
+            'source_invalid'           => 'الخيار المحدد غير صالح.',
+            'referrer_required'        => 'الرجاء كتابة اسم الشخص.',
+            'referrer_max'             => 'الاسم يجب أن يكون أقل من 150 حرفًا.',
+        ],
+    ],
+
     // Contact Messages
     'contact_messages' => [
         'title' => 'رسائل الاتصال',
@@ -1093,6 +1149,7 @@ return [
     // Sidebar extra items
     'sidebar' => [
         'contact_messages' => 'رسائل الاتصال',
+        'join_requests'    => 'طلبات الانضمام',
         'activity_log' => 'سجل الأنشطة',
         'all_activities' => 'جميع الأنشطة',
         'online_users' => 'المستخدمون المتصلون',

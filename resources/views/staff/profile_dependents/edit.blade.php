@@ -76,7 +76,9 @@
 
 <div class="form-shell">
     <div class="form-header">
-        <h1>تعديل البيانات الشخصية</h1>
+        <img src="{{ asset('assets/site/images/logos/logo-dark.webp') }}" alt="GEDCO" style="height:52px;margin-bottom:.6rem;">
+        <h1>تعديل بيانات الموظف</h1>
+        <p style="color:#7a6b63;font-size:.88rem;margin:.3rem 0 0;">شركة توزيع كهرباء محافظات غزة</p>
     </div>
 
     @if(session('info'))    <div class="alert alert-info">{{ session('info') }}</div> @endif
@@ -91,12 +93,6 @@
         </div>
     @endif
 
-    <div class="alert alert-secondary" style="margin:1rem 2rem 0;">
-        لديك <b>{{ $profile->edits_remaining }}</b> محاولة تعديل متبقية.
-        @if($profile->edits_remaining == 1)
-            <span class="text-danger">⚠️ هذه آخر محاولة!</span>
-        @endif
-    </div>
 
     <form action="{{ route('staff.profile.update', ['profile' => $profile->getKey()]) }}"
           method="post" class="needs-validation" novalidate>
@@ -111,6 +107,7 @@
                     <span>الاسم رباعي <span class="req-star">*</span></span>
                     <input type="text" name="full_name"
                            value="{{ old('full_name',$profile->full_name) }}" required
+                           readonly
                            class="@error('full_name') is-invalid @enderror">
                     @error('full_name') <small class="text-danger">{{ $message }}</small> @enderror
                 </label>
@@ -127,6 +124,7 @@
                     <span>الرقم الوظيفي <span class="req-star">*</span></span>
                     <input type="text" name="employee_number"
                            value="{{ old('employee_number',$profile->employee_number) }}" required
+                           readonly
                            class="@error('employee_number') is-invalid @enderror">
                     @error('employee_number') <small class="text-danger">{{ $message }}</small> @enderror
                 </label>
@@ -135,6 +133,7 @@
                     <span>رقم الهوية <span class="req-star">*</span></span>
                     <input type="text" name="national_id"
                            value="{{ old('national_id',$profile->national_id) }}" required
+                           readonly
                            class="@error('national_id') is-invalid @enderror">
                     @error('national_id') <small class="text-danger">{{ $message }}</small> @enderror
                 </label>
@@ -221,6 +220,23 @@
             <button type="button" class="add-member-btn" id="add-family-member">
                 + إضافة فرد جديد
             </button>
+
+            <div class="grid grid-2" style="margin-top:1.25rem;">
+                <label class="field">
+                    <span>هل يوجد إصابات أو معتقلين في أفراد الأسرة؟</span>
+                    <select name="has_family_incidents" id="family-incidents-select">
+                        <option value="">_______</option>
+                        <option value="no"  @selected(old('has_family_incidents', $profile->has_family_incidents)==='no')>لا</option>
+                        <option value="yes" @selected(old('has_family_incidents', $profile->has_family_incidents)==='yes')>نعم</option>
+                    </select>
+                </label>
+            </div>
+
+            <label class="field {{ old('has_family_incidents', $profile->has_family_incidents)==='yes' ? '' : 'hidden' }}"
+                   id="family-incidents-notes" style="margin-top: 1rem;">
+                <span>تفاصيل الإصابات أو الاعتقالات</span>
+                <textarea name="family_notes">{{ old('family_notes', $profile->family_notes) }}</textarea>
+            </label>
 
             <template id="family-row-template">
                 <tr>
@@ -375,9 +391,17 @@
                 </label>
 
                 <label class="field">
-                    <span>Gmail</span>
+                    <span>إيميل الشركة</span>
+                    <input type="email" value="{{ $companyEmail ?? '' }}" readonly>
+                </label>
+
+                <label class="field required">
+                    <span>Gmail (بريد شخصي)</span>
                     <input type="email" name="gmail"
-                           value="{{ old('gmail',$profile->gmail) }}">
+                           value="{{ old('gmail',$profile->gmail) }}" required
+                           placeholder="example@gmail.com"
+                           class="@error('gmail') is-invalid @enderror">
+                    @error('gmail') <small class="text-danger">{{ $message }}</small> @enderror
                 </label>
             </div>
         </section>
@@ -419,10 +443,12 @@
         const container         = document.getElementById('family-rows');
         const addButton         = document.getElementById('add-family-member');
         const familyCountInput  = document.getElementById('family-count-input');
-        const readinessSelectEl = document.getElementById('readiness-select');
-        const readinessNotesEl  = document.getElementById('readiness-notes-field');
-        const statusSelectEl    = document.getElementById('status-select');
-        const currentAddressEl  = document.getElementById('current-address-field');
+        const readinessSelectEl       = document.getElementById('readiness-select');
+        const readinessNotesEl        = document.getElementById('readiness-notes-field');
+        const statusSelectEl          = document.getElementById('status-select');
+        const currentAddressEl        = document.getElementById('current-address-field');
+        const familyIncidentsSelectEl = document.getElementById('family-incidents-select');
+        const familyIncidentsNotesEl  = document.getElementById('family-incidents-notes');
         const MAX_FAMILY_MEMBERS = parseInt(familyCountInput?.getAttribute('max') ?? '10', 10);
 
         const serverFamily = @json($serverFamily);
@@ -555,13 +581,48 @@
         readinessSelectEl?.addEventListener('change', () => toggleShow(readinessSelectEl, readinessNotesEl, 'not_ready'));
         toggleShow(readinessSelectEl, readinessNotesEl, 'not_ready');
 
+        familyIncidentsSelectEl?.addEventListener('change', () => toggleShow(familyIncidentsSelectEl, familyIncidentsNotesEl, 'yes'));
+        toggleShow(familyIncidentsSelectEl, familyIncidentsNotesEl, 'yes');
+
         statusSelectEl?.addEventListener('change', () => toggleShow(statusSelectEl, currentAddressEl, 'displaced'));
         toggleShow(statusSelectEl, currentAddressEl, 'displaced');
 
         document.querySelectorAll('.needs-validation').forEach(form => {
             form.addEventListener('submit', (e) => {
-                if (!form.checkValidity()) { e.preventDefault(); e.stopPropagation(); }
-                form.classList.add('was-validated');
+                // Clear previous errors
+                form.querySelectorAll('.field-error').forEach(el => el.classList.remove('field-error'));
+                form.querySelectorAll('.field-error-msg').forEach(el => el.remove());
+
+                if (!form.checkValidity()) {
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                    // Mark invalid fields
+                    form.querySelectorAll(':invalid').forEach(el => {
+                        const field = el.closest('label.field') || el.closest('.field-group');
+                        if (field) {
+                            field.classList.add('field-error');
+                            if (!field.querySelector('.field-error-msg')) {
+                                const msg = document.createElement('small');
+                                msg.className = 'field-error-msg';
+                                msg.textContent = 'هذا الحقل مطلوب';
+                                field.appendChild(msg);
+                            }
+                        }
+                    });
+
+                    const first = form.querySelector(':invalid');
+                    if (first) {
+                        first.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        first.focus();
+                    }
+                } else {
+                    const btn = form.querySelector('button[type="submit"]');
+                    if (btn) {
+                        btn.disabled = true;
+                        btn.textContent = 'جارٍ الحفظ...';
+                    }
+                }
             }, false);
         });
     })();

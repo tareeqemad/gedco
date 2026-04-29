@@ -68,7 +68,7 @@ class UpdateDependentsRequest extends FormRequest
             'whatsapp_prefix' => ['nullable', 'in:970,972'],
             'whatsapp'        => ['nullable','digits_between:8,10'],
             'telegram'        => ['nullable','string','max:50'],
-            'gmail'           => ['nullable','email','max:150'],
+            'gmail'           => ['required','email','max:150'],
 
             // أحداث الأسرة
             'has_family_incidents' => ['nullable', Rule::in(['yes','no'])],

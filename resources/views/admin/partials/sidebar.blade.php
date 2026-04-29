@@ -203,6 +203,16 @@
                     </li>
                 @endcan
 
+                <!-- GCA Join Requests -->
+                @can('join-requests.view')
+                <li class="slide {{ $isActive('admin.join-requests.*') }}">
+                    <a href="{{ route('admin.join-requests.index') }}" class="side-menu__item">
+                        <i class="bi bi-person-plus-fill side-menu__icon"></i>
+                        <span class="side-menu__label">{{ __('admin.sidebar.join_requests') }}</span>
+                    </a>
+                </li>
+                @endcan
+
                 <!-- Contact Messages -->
                 @can('contact-messages.view')
                 <li class="slide {{ $isActive('admin.contact-messages.*') }}">

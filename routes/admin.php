@@ -23,6 +23,7 @@ use App\Http\Controllers\Admin\UploadController;
 use App\Http\Controllers\Admin\Staff\StaffProfileController;
 use App\Http\Controllers\Admin\ActivityLogController;
 use App\Http\Controllers\Admin\ContactMessageController;
+use App\Http\Controllers\Admin\JoinRequestController;
 
 
 Route::prefix('admin')->name('admin.')->group(function () {
@@ -152,6 +153,14 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::middleware('permission:contact-messages.edit')->patch('/contact-messages/{contactMessage}/mark-read', [ContactMessageController::class, 'markAsRead'])->name('contact-messages.mark-read');
         Route::middleware('permission:contact-messages.edit')->patch('/contact-messages/{contactMessage}/mark-unread', [ContactMessageController::class, 'markAsUnread'])->name('contact-messages.mark-unread');
         Route::middleware('permission:contact-messages.delete')->delete('/contact-messages/{contactMessage}', [ContactMessageController::class, 'destroy'])->name('contact-messages.destroy');
+
+        // === طلبات الانضمام GCA ===
+        Route::middleware('permission:join-requests.view')->get('/join-requests', [JoinRequestController::class, 'index'])->name('join-requests.index');
+        Route::middleware('permission:join-requests.view')->get('/join-requests/export', [JoinRequestController::class, 'export'])->name('join-requests.export');
+        Route::middleware('permission:join-requests.view')->get('/join-requests/{joinRequest}', [JoinRequestController::class, 'show'])->name('join-requests.show');
+        Route::middleware('permission:join-requests.edit')->patch('/join-requests/{joinRequest}/mark-read', [JoinRequestController::class, 'markAsRead'])->name('join-requests.mark-read');
+        Route::middleware('permission:join-requests.edit')->patch('/join-requests/{joinRequest}/mark-unread', [JoinRequestController::class, 'markAsUnread'])->name('join-requests.mark-unread');
+        Route::middleware('permission:join-requests.delete')->delete('/join-requests/{joinRequest}', [JoinRequestController::class, 'destroy'])->name('join-requests.destroy');
 
         // === فيديو الصفحة الرئيسية ===
         Route::middleware('permission:home-video.edit')->get('/home-video', [HomeVideoController::class, 'edit'])->name('homeVideo.edit');

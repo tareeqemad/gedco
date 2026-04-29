@@ -455,10 +455,10 @@
                                     For inquiries or to submit a GCA certification application, contact us.
                                 @endif
                             </p>
-                            <a href="https://gedco.ps/electricalCertification/admin/login"
-                               target="_blank"
-                               rel="noopener noreferrer"
-                               class="gca-join-btn">
+                            <button type="button"
+                                    class="gca-join-btn"
+                                    data-jr-open="jrModal"
+                                    style="border:none;cursor:pointer;">
                                 @if($isRtl)
                                     <span>طلب الانضمام</span>
                                     <i class="fas fa-arrow-left"></i>
@@ -466,7 +466,7 @@
                                     <span>Apply to Join</span>
                                     <i class="fas fa-arrow-right"></i>
                                 @endif
-                            </a>
+                            </button>
                         </div>
 
                     </div>{{-- /tab-intro --}}
@@ -760,6 +760,8 @@
         </div>
     </div>
 </section>
+
+@include('site.partials.join-request-modal', ['isRtl' => $isRtl])
 
 @push('scripts')
 <script>

@@ -21,11 +21,11 @@ from sqlalchemy.exc import SQLAlchemyError
 XLSX_PATH = "Job (1).xlsx"     # مسار ملف الإكسل
 CSV_PATH  = "jobs_export.csv"  # نسخة أرشيفية
 
-DB_USER = "root"
-DB_PASS = ""                   # كلمة المرور
+DB_USER = "gedcops_web"
+DB_PASS = "aSeeB3m^8X"                   # كلمة المرور
 DB_HOST = "localhost"
 DB_PORT = 3306
-DB_NAME = "gedco"
+DB_NAME = "gedcops_web_1"
 TABLE_NAME = "advertisements"
 
 CHUNKSIZE = 500
